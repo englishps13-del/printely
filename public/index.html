@@ -427,7 +427,7 @@
       <ul id="nav-links" class="hidden md:flex">
         <li><a href="index.html" class="active">Main page</a></li>
         <li><a href="section2.html">Templates</a></li>
-        <li><a href="section3.html">Sign up</a></li>
+        <li id="signup-nav-link"><a href="section3.html">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
       <div id="user-info" class="flex items-center gap-4 text-gray-700 dark:text-gray-300">
@@ -1308,6 +1308,8 @@ const commentTextarea = document.getElementById('comment-text');
 const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
 const loginPrompt = document.getElementById('login-prompt');
 const commentsContainer = document.getElementById('comments-container');
+// MODIFICATION: Get reference to the signup link
+const signupNavLink = document.getElementById('signup-nav-link');
 
 // --- Function to fetch and display comments in real-time ---
 const displayComments = () => {
@@ -1321,7 +1323,6 @@ const displayComments = () => {
       const commentElement = document.createElement('div');
       commentElement.className = 'p-6 rounded-xl bg-gray-100 dark:bg-gray-700/50 shadow-inner animate-fade-in-up';
       
-      // Format the timestamp for display
       const date = comment.timestamp ? comment.timestamp.toDate().toLocaleString() : 'Just now';
 
       commentElement.innerHTML = `
@@ -1341,54 +1342,62 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // --- USER IS LOGGED IN ---
     
-    // 1. Update UI for logged-in state
+    // 1. Hide the "Sign Up" navigation link
+    if (signupNavLink) {
+        signupNavLink.style.display = 'none';
+    }
+    
+    // 2. Update UI for logged-in state (enable feedback form)
     feedbackForm.style.display = 'block';
     loginPrompt.classList.add('hidden');
     commentTextarea.disabled = false;
     submitFeedbackBtn.disabled = false;
 
-    // 2. Fetch user's username from Firestore
+    // 3. Fetch user's username from Firestore
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
     const username = userDoc.exists() ? userDoc.data().username : user.email;
 
-    // 3. Display welcome message and logout button
+    // 4. Display welcome message and logout button
     userInfoDiv.innerHTML = `
-      Welcome, <strong>${username}</strong>!
-      <button id="logout-btn" class="ml-4 px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Logout</button>
+      <span class="font-medium text-sm md:text-base">Welcome, <strong>${username}</strong>!</span>
+      <button id="logout-btn" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Logout</button>
     `;
     document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
-    // 4. Handle feedback form submission
+    // 5. Handle feedback form submission
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const commentText = commentTextarea.value.trim();
         
-        if (commentText === '') return; // Don't submit empty comments
+        if (commentText === '') return;
 
         try {
-            // Add a new document with a generated ID to the 'comments' collection.
             await addDoc(collection(db, "comments"), {
                 userId: user.uid,
                 username: username,
                 commentText: commentText,
-                timestamp: serverTimestamp() // Use server timestamp for consistency
+                timestamp: serverTimestamp()
             });
-            // Clear the form after successful submission
             feedbackForm.reset();
         } catch (error) {
             console.error("Error adding document: ", error);
-            alert("Sorry, there was an error submitting your feedback. Please try again.");
+            alert("Sorry, there was an error submitting your feedback.");
         }
     });
 
   } else {
     // --- USER IS LOGGED OUT ---
 
-    // 1. Update UI for logged-out state
-    userInfoDiv.innerHTML = `<a href="login.html" class="text-purple-600 hover:underline">Login</a>`;
-    feedbackForm.style.display = 'none'; // Hide the form
-    loginPrompt.classList.remove('hidden'); // Show the login prompt
+    // 1. Show the "Sign Up" navigation link
+    if (signupNavLink) {
+        signupNavLink.style.display = 'block'; // Use 'block' or 'list-item'
+    }
+
+    // 2. Update UI for logged-out state
+    userInfoDiv.innerHTML = `<a href="login.html" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Login</a>`;
+    feedbackForm.style.display = 'none';
+    loginPrompt.classList.remove('hidden');
     commentTextarea.disabled = true;
     submitFeedbackBtn.disabled = true;
   }
