@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson Plan with Ribbon Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Rubik+Doodle+Shadow&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />  
+  <style>
+    :root {
+      --paper-color: #ffffff;
+      --background-color: #ffffff;
+      --primary-text: #2c3e50;
+      --secondary-text: #7f8c8d;
+      --header-color: #8e44ad;
+      --line-color: #dcdcdc;
+      --box-bg: #f9f9f9;
+      --box-border: #e0e0e0;
+      --title-font: 'Rubik Doodle Shadow', sans-serif;
+      --body-font: 'Quicksand', sans-serif;
+    }
+
+       /* Base styles with Doodle theme as default */
+        :root {
+            --paper-color: #ffffff;
+            --background-color: #ffffff;
+            --primary-text: #2c3e50;
+            --secondary-text: #7f8c8d;
+            --header-color: #8e44ad;
+            --line-color: #dcdcdc;
+            --box-bg-new: #f9f9f9;
+            --new-box-border: #e0e0e0;
+        }
+
+        /* Theme-specific variables */
+        .theme-minimalist {
+            --primary-text: #334e68;
+            --secondary-text: #6d8093;
+            --header-color: #5585b5;
+            --line-color: #e2e8f0;
+            --box-bg-new: #f7f9fc;
+            --new-box-border: #cdd9e8;
+   --title-font: 'Rubik Doodle Shadow', sans-serif;
+--body-font: 'Quicksand', sans-serif;
+        }
+
+        .theme-vibrant {
+            --primary-text: #2c3e50;
+            --secondary-text: #7f8c8d;
+            --header-color: #e74c3c;
+            --line-color: #f39c12;
+            --box-bg-new: #fdf3f0;
+            --new-box-border: #e74c3c;
+            --title-font: 'Quicksand', sans-serif;
+            --body-font: 'Quicksand', sans-serif;
+        }
+
+        /* 10 New Themes */
+        .theme-autumn {
+            --primary-text: #5D4037;
+            --secondary-text: #8D6E63;
+            --header-color: #E65100;
+            --line-color: #A5D6A7;
+            --box-bg-new: #FFF3E0;
+            --new-box-border: #FFAB91;
+        }
+        .theme-spring {
+            --primary-text: #6A1B9A;
+            --secondary-text: #9575CD;
+            --header-color: #C8E6C9;
+            --line-color: #B2EBF2;
+            --box-bg-new: #F1F8E9;
+            --new-box-border: #B9F6CA;
+        }
+        .theme-fire {
+            --primary-text: #BF360C;
+            --secondary-text: #FFAB91;
+            --header-color: #D32F2F;
+            --line-color: #FFCDD2;
+            --box-bg-new: #FFCDD2;
+            --new-box-border: #FF5252;
+        }
+        .theme-ice {
+            --primary-text: #283593;
+            --secondary-text: #5C6BC0;
+            --header-color: #81D4FA;
+            --line-color: #B3E5FC;
+            --box-bg-new: #E1F5FE;
+            --new-box-border: #4FC3F7;
+        }
+        .theme-grapevine {
+            --primary-text: #4A148C;
+            --secondary-text: #7B1FA2;
+            --header-color: #BA68C8;
+            --line-color: #D1C4E9;
+            --box-bg-new: #F3E5F5;
+            --new-box-border: #E1BEE7;
+        }
+        .theme-skyline {
+            --primary-text: #263238;
+            --secondary-text: #546E7A;
+            --header-color: #78909C;
+            --line-color: #9E9E9E;
+            --box-bg-new: #ECEFF1;
+            --new-box-border: #B0BEC5;
+        }
+        .theme-beach {
+            --primary-text: #795548;
+            --secondary-text: #BCAAA4;
+            --header-color: #FFB74D;
+            --line-color: #B3E5FC;
+            --box-bg-new: #FFFDE7;
+            --new-box-border: #FFE0B2;
+        }
+        .theme-cityscape {
+            --primary-text: #455A64;
+            --secondary-text: #9E9E9E;
+            --header-color: #607D8B;
+            --line-color: #CFD8DC;
+            --box-bg-new: #F5F5F5;
+            --new-box-border: #BDBDBD;
+        }
+        .theme-lavender {
+            --primary-text: #6A1B9A;
+            --secondary-text: #7B1FA2;
+            --header-color: #D1C4E9;
+            --line-color: #E1BEE7;
+            --box-bg-new: #F3E5F5;
+            --new-box-border: #E1BEE7;
+        }
+        .theme-mint {
+            --primary-text: #004D40;
+            --secondary-text: #26A69A;
+            --header-color: #4DB6AC;
+            --line-color: #B2DFDB;
+            --box-bg-new: #E0F2F1;
+            --new-box-border: #B9F6CA;
+        }
+
+
+    body {
+      font-family: var(--body-font);
+      background: var(--background-color);
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .lesson-plan-container {
+      width: 8.5in;
+      min-height: 11in;
+      background: var(--paper-color);
+      border: 1px solid var(--line-color);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-family: var(--title-font);
+      font-size: 3rem;
+      color: var(--header-color);
+      margin: 0;
+      line-height: 1;
+    }
+
+.meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* spacing between rows */
+}
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .meta-item label {
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--primary-text);
+      margin-right: 10px;
+    }
+
+    .meta-item input {
+      flex-grow: 1;
+      border: none;
+      border-bottom: 2px solid var(--header-color);
+      font-family: var(--body-font);
+      font-size: 1rem;
+      padding: 4px 0;
+      background: transparent;
+      font-weight: 500;
+      color: var(--primary-text);
+      outline: none;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      border: 1px solid var(--line-color);
+      border-radius: 8px;
+      padding: 25px 20px 20px;
+      position: relative;
+      background: var(--box-bg);
+    }
+
+    .section-title {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--paper-color);
+      padding: 5px 15px;
+      border: 1px solid var(--line-color);
+      border-radius: 5px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--header-color);
+      letter-spacing: 0.5px;
+    }
+
+    textarea, select, input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-family: var(--body-font);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: transparent;
+      color: var(--primary-text);
+      padding: 5px;
+      min-height: 40px;
+    }
+
+    .two-column-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .three-column-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 15px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--secondary-text);
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px dashed var(--line-color);
+    }
+
+    .controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .theme-switcher select, .action-button {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border: 1px solid var(--line-color);
+      border-radius: 5px;
+      background-color: var(--paper-color);
+      color: var(--primary-text);
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .action-button:hover {
+      background-color: var(--header-color);
+      color: var(--paper-color);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+   .new-box {
+      border: 1px solid var(--new-box-border);
+      border-radius: 8px;
+      background-color: var(--box-bg-new);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .new-box .new-title {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--header-color); /* stays theme-aware */
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--header-color);
+      padding-bottom: 4px;
+    }
+
+
+    .checkbox-inline {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--primary-text);
+    }
+
+    .checkbox-inline label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .new-box .new-title {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--header-color);   /* same purple as other titles */
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--header-color);
+      padding-bottom: 4px;
+    }
+    .checkbox-inline {
+      display: flex;
+      justify-content: center;   /* center them in the box */
+      gap: 20px;                 /* spacing between checkboxes */
+      font-size: 0.8rem;          /* smaller text */
+      flex-wrap: nowrap;          /* force single line */
+    }
+
+    .checkbox-inline label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;       /* prevent wrapping to new line */
+    }
+
+    .checkbox-inline input {
+      transform: scale(0.9);     /* slightly smaller checkboxes */
+    }
+
+    /* Smaller headers for compact sections */
+    .section-title.small-title {
+      font-size: 0.75rem;   /* smaller font */
+      padding: 2px 10px;
+      min-width: 150px;     /* force them a bit wider */
+      text-align: center;
+    }
+    .lesson-details-grid {
+      display: grid;
+      grid-template-columns: 30% 70%;
+      grid-template-rows: auto auto auto;
+      gap: 10px 15px;
+    }
+    .lesson-details-grid select {
+      width: 100%;
+      padding: 6px;
+      border: none;              /* remove border */
+      border-bottom: 2px solid var(--header-color); /* optional underline only */
+      border-radius: 0;          /* no rounded corners */
+      background: transparent;   /* match paper background */
+      font-size: 0.9rem;
+      outline: none;             /* remove focus border */
+    }
+	
+    /* Make second row and third row span full width */
+    .lesson-details-grid .full-width {
+      grid-column: 1 / span 2;
+    }
+    .meta-info {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+      align-items: center; /* make labels + inputs align vertically */
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center; /* keeps label and underline on same line */
+      gap: 5px;
+    }
+
+    .meta-item label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--primary-text);
+      white-space: nowrap; /* prevents breaking into 2 lines */
+    }
+
+    .meta-item input {
+      flex-grow: 1;
+      border: none;
+      border-bottom: 1px solid var(--header-color);
+      font-size: 0.95rem;
+      padding: 0px 0;
+      background: transparent;
+      outline: none;
+      font-weight: 500;
+      color: var(--primary-text);
+    }
+
+    /* Default / Doodle */
+    :root {
+      --checkbox1: #8e44ad;
+      --checkbox2: #2980b9;
+      --checkbox3: #27ae60;
+      --checkbox4: #d35400;
+    }
+
+    /* Minimalist */
+    .theme-minimalist {
+      --checkbox1: #5585b5;
+      --checkbox2: #334e68;
+      --checkbox3: #6d8093;
+      --checkbox4: #99aabb;
+    }
+
+    /* Vibrant */
+    .theme-vibrant {
+      --checkbox1: #e74c3c; /* red */
+      --checkbox2: #f39c12; /* orange */
+      --checkbox3: #27ae60; /* green */
+      --checkbox4: #2980b9; /* blue */
+    }
+
+    /* Autumn */
+    .theme-autumn {
+      --checkbox1: #E65100; /* deep orange */
+      --checkbox2: #FF7043; /* lighter orange */
+      --checkbox3: #5D4037; /* brown */
+      --checkbox4: #8D6E63; /* light brown */
+    }
+
+    /* Spring */
+    .theme-spring {
+      --checkbox1: #6A1B9A; /* purple */
+      --checkbox2: #9575CD; /* lavender */
+      --checkbox3: #43A047; /* green */
+      --checkbox4: #81C784; /* light green */
+    }
+
+    /* Fire */
+    .theme-fire {
+      --checkbox1: #BF360C; /* dark red */
+      --checkbox2: #D32F2F; /* strong red */
+      --checkbox3: #FF5722; /* orange red */
+      --checkbox4: #FFAB91; /* peach */
+    }
+
+    /* Ice */
+    .theme-ice {
+      --checkbox1: #81D4FA;
+      --checkbox2: #4FC3F7;
+      --checkbox3: #0288D1;
+      --checkbox4: #01579B;
+    }
+
+    /* Grapevine */
+    .theme-grapevine {
+      --checkbox1: #4A148C; /* dark purple */
+      --checkbox2: #7B1FA2; /* purple */
+      --checkbox3: #BA68C8; /* lighter purple */
+      --checkbox4: #E1BEE7; /* lavender */
+    }
+
+    /* Skyline */
+    .theme-skyline {
+      --checkbox1: #263238; /* dark gray */
+      --checkbox2: #455A64; /* medium gray-blue */
+      --checkbox3: #607D8B; /* blue gray */
+      --checkbox4: #90A4AE; /* light gray */
+    }
+
+    /* Beach */
+    .theme-beach {
+      --checkbox1: #FFB74D; /* orange sand */
+      --checkbox2: #4FC3F7; /* sea blue */
+      --checkbox3: #26A69A; /* aqua */
+      --checkbox4: #795548; /* brown driftwood */
+    }
+
+    /* Cityscape */
+    .theme-cityscape {
+      --checkbox1: #455A64; /* steel gray */
+      --checkbox2: #607D8B; /* gray-blue */
+      --checkbox3: #9E9E9E; /* neutral */
+      --checkbox4: #BDBDBD; /* light concrete */
+    }
+
+    /* Lavender */
+    .theme-lavender {
+      --checkbox1: #6A1B9A; /* deep purple */
+      --checkbox2: #8E24AA; /* medium purple */
+      --checkbox3: #BA68C8; /* soft purple */
+      --checkbox4: #E1BEE7; /* pastel lavender */
+    }
+
+    /* Mint */
+    .theme-mint {
+      --checkbox1: #004D40; /* deep teal */
+      --checkbox2: #26A69A; /* teal */
+      --checkbox3: #4DB6AC; /* mint green */
+      --checkbox4: #B9F6CA; /* light mint */
+    }
+
+    /* Apply per-checkbox coloring */
+    .checkbox-inline label:nth-child(1) input { accent-color: var(--checkbox1); }
+    .checkbox-inline label:nth-child(2) input { accent-color: var(--checkbox2); }
+    .checkbox-inline label:nth-child(3) input { accent-color: var(--checkbox3); }
+    .checkbox-inline label:nth-child(4) input { accent-color: var(--checkbox4); }
+
+
+    /* Make the paper exactly A4 with no browser margins */
+    /* A4 page with a tiny margin so borders always show */
+    @page { 
+      size: A4; 
+      margin: 0.1mm;   /* minimal margin so page border prints */
+    }
+
+    @media print {
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        background: transparent !important;
+      }
+
+      .controls, .no-print, .ribbon { display: none !important; }
+
+      .lesson-plan-container {
+        width: 210mm !important;
+        height: 296.5mm !important; 
+        margin: 0 auto !important;
+        padding: 8mm !important;   /* reduce padding slightly */
+        border: 2px solid var(--line-color) !important;
+        background: #fff !important;
+        box-sizing: border-box !important;
+
+        transform: scale(1);    /* shrink to fit */
+        transform-origin: top left;
+      }
+
+      /* prevent sections from forcing new page */
+      .section {
+        page-break-inside: avoid !important;
+      }
+
+      .section.install-resources,
+      .section:nth-of-type(3) {
+        min-height: 100px !important;  /* smaller for print */
+      }
+
+
+      /* Typography and spacing */
+      .header h1 { font-size: 2.4rem !important; }
+      .meta-info { gap: 10px !important; }
+      .meta-item label { font-size: 0.8rem !important; }
+      .meta-item input { font-size: 0.9rem !important; }
+
+      .section { margin-bottom: 10px !important; padding: 15px 10px !important; }
+      .section-title { font-size: 0.8rem !important; padding: 3px 10px !important; }
+      .section-title.small-title { font-size: 0.7rem !important; min-width: 120px !important; }
+      .two-column-layout, .three-column-layout { gap: 10px !important; }
+
+      /* Install resources box bigger */
+      .section.install-resources, .section:nth-of-type(3) { min-height: 150px !important; }
+
+      textarea, select, input, .editable-area { font-size: 0.8rem !important; min-height: 20px !important; }
+
+      /* Dropdowns: underline + hide arrow */
+      .lesson-details-grid select {
+        border: none !important;
+        border-bottom: 1px solid var(--header-color) !important;
+        background: transparent !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        box-shadow: none !important;
+        padding: 2px 0 !important;
+      }
+      select::-ms-expand { display: none !important; }
+
+      /* Ensure theme colors print */
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    
+    /* Resizable textarea */
+    .resizable-textarea {
+      resize: vertical;
+      overflow: auto;
+      min-height: 100px;
+    }
+	
+    /* One-line compressed textareas for Warmer & Assessment */
+    .small-textarea {
+      min-height: 15px !important;
+      height: 15px !important;
+      resize: none !important;
+      overflow: hidden !important;
+      line-height: 1.2;
+      font-size: 0.65rem;
+      padding: 2px 4px;
+    }
+    /* Wrapper: places General Info and Lesson Details side by side */
+    .top-split {
+      display: grid;
+      grid-template-columns: 44% 54%; /* 35% General Info, 65% Lesson Details */
+      gap: 10px;
+    }
+
+    /* Lesson details layout inside its box */
+    .lesson-details-grid {
+      display: grid;
+      grid-template-columns: 20% 75%;
+      gap: 10px 15px;
+    }
+
+    .lesson-details-grid .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* --- RIBBON & EDITABLE AREA STYLES --- */
+    .ribbon {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+        background: var(--box-bg-new);
+        border: 1px solid var(--new-box-border);
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 24px;
+    }
+
+    .group {
+        display: flex; align-items: center; gap: 6px;
+        padding: 6px;
+        border: 1px solid var(--line-color);
+        border-radius: 6px;
+        background: var(--paper-color);
+    }
+
+    .group .label { font-size: 12px; color: var(--secondary-text); margin-left: 4px; white-space: nowrap; }
+
+    .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+        appearance: none; border: 1px solid var(--line-color); background: var(--paper-color);
+        padding: 7px 10px; border-radius: 5px; font-size: 14px;
+        line-height: 1; cursor: pointer; color: var(--primary-text);
+        font-family: var(--body-font);
+    }
+
+    .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+
+    .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: var(--box-bg-new); }
+    .ribbon .btn.active, .ribbon .btn-square.active { 
+        background: var(--header-color); color: var(--paper-color); border-color: var(--header-color); 
+    }
+    .ribbon .sep { width: 1px; background: var(--line-color); margin: 0 6px; align-self: stretch; }
+    .ribbon .grow { flex: 1 1 auto; }
+    .ribbon .pill {
+        font-size: 12px; padding: 4px 8px; border-radius: 999px; 
+        border: 1px solid var(--line-color); 
+        background: var(--paper-color); color: var(--secondary-text);
+    }
+    
+    .editable-area {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-family: var(--body-font);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        background: transparent;
+        color: var(--primary-text);
+        padding: 5px;
+        min-height: 40px;
+        cursor: text;
+    }
+
+    .editable-area:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--header-color);
+        border-radius: 4px;
+    }
+
+    .editable-area[data-placeholder]:empty::before {
+        content: attr(data-placeholder);
+        color: var(--secondary-text);
+        pointer-events: none;
+        font-style: italic;
+    }
+  </style>
+</head>
+<body class="theme-doodle">
+  <div class="controls">
+    <div class="theme-switcher">
+        <label for="theme-selector">Theme:</label>
+        <select id="theme-selector">
+            <option value="doodle">Doodle</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="vibrant">Vibrant</option>
+            <option value="autumn">Autumn</option>
+            <option value="spring">Spring</option>
+            <option value="fire">Fire</option>
+            <option value="ice">Ice</option>
+            <option value="grapevine">Grapevine</option>
+            <option value="skyline">Skyline</option>
+            <option value="beach">Beach</option>
+            <option value="cityscape">Cityscape</option>
+            <option value="lavender">Lavender</option>
+            <option value="mint">Mint</option>
+        </select>
+    </div>
+    <button class="action-button" onclick="window.print()">
+      <i class="fas fa-print"></i> Print
+    </button>
+    <button class="action-button" id="pdf-button">
+      <i class="fas fa-file-pdf"></i> PDF
+    </button>
+	<button class="action-button" id="undo-button">
+      <i class="fas fa-undo"></i> Undo
+    </button>
+    <button class="action-button" id="redo-button">
+      <i class="fas fa-redo"></i> Redo
+    </button>
+    <button class="action-button" id="save-button">
+      <i class="fas fa-save"></i> Save
+    </button>
+    <button class="action-button" id="load-button">
+      <i class="fas fa-upload"></i> Load
+    </button>
+  </div>
+  
+  <div class="lesson-plan-container">
+    <div class="header">
+      </div>
+
+    <div class="ribbon" id="ribbon">
+        <div class="group" aria-label="Font">
+          <select id="fontFamily" title="Font family">
+            <option>Quicksand</option><option>Rubik Doodle Shadow</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
+          </select>
+          <select id="fontSize" title="Font size">
+            <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
+          </select>
+          <button class="btn-square" id="fontDec" title="Decrease font size">A-</button>
+          <button class="btn-square" id="fontInc" title="Increase font size">A+</button>
+        </div>
+
+        <div class="group" aria-label="Emphasis">
+          <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
+          <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
+        </div>
+
+        <div class="group" aria-label="Colors">
+          <label class="label" for="foreColor">Text</label>
+          <input type="color" id="foreColor" title="Text color" value="#3d4852">
+          <span class="sep"></span>
+          <label class="label" for="hiliteColor">Highlight</label>
+          <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+        </div>
+
+        <div class="group" aria-label="Paragraph">
+          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+          <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+          <span class="sep"></span>
+          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+          <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
+          <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
+        </div>
+
+        <div class="group" aria-label="Actions">
+          <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
+        </div>
+
+        <div class="grow"></div>
+
+        <div class="group">
+          <span class="pill" id="wordCount">0 words</span>
+          <span class="pill" id="selectionInfo">No selection</span>
+        </div>
+    </div>
+
+
+    <div class="top-split">
+      <div class="section">
+        <div class="section-title small-title" >General Information</div>
+        <div class="meta-info">
+          <div class="meta-item">
+            <label for="school">Primary School:</label>
+            <input type="text" id="school">
+          </div>
+          <div class="meta-item">
+            <label for="teacher">Teacher:</label>
+            <input type="text" id="teacher">
+          </div>
+          <div class="meta-item">
+            <label for="learners">Number of Learners:</label>
+            <input type="text" id="learners">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Lesson Details</div>
+        <div class="lesson-details-grid">
+          <select id="levelSelect"><option value="">Select Level</option></select>
+          <select id="sequenceSelect"><option value="">Select Sequence</option></select>
+          <select id="sectionSelect" class="full-width"><option value="">Select Section</option></select>
+          <select id="sessionSelect" class="full-width"><option value="">Select Session</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="new-box">
+      <div class="new-title">Learning Objectives</div>
+      <div class="editable-area" contenteditable="true" data-placeholder="Write learning objectives here..."></div>
+    </div>
+
+    <div class="two-column-layout">
+      <div class="section">
+        <div class="section-title small-title">Target Competencies</div>
+        <div class="checkbox-inline">
+          <label><input type="checkbox"> Interact</label>
+          <label><input type="checkbox"> Interpret</label>
+          <label><input type="checkbox"> Produce</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title small-title">Teaching Materials</div>
+        <div class="checkbox-inline">
+          <label><input type="checkbox"> Textbook</label>
+          <label><input type="checkbox"> W.B</label>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="section">
+        <div class="section-title">Warmer</div>
+        <div class="three-column-layout">
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
+        </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Install Resources</div>
+      <div class="three-column-layout">
+        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Time"></div>
+      </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Assessment</div>
+        <div class="three-column-layout">
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
+        </div>
+    </div>
+
+    <div class="new-box">
+      <div class="new-title">Activity / Summary</div>
+      <div class="editable-area" contenteditable="true" data-placeholder="Write activity or summary here..."></div>
+    </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // --- RICH TEXT EDITOR LOGIC ---
+    let activeEditor = null;
+    document.addEventListener('focusin', e => {
+        if (e.target.isContentEditable) {
+            activeEditor = e.target;
+            updateStatus();
+        }
+    });
+
+    const pxSteps = [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48];
+
+    function isSelectionInEditor() {
+      if (!activeEditor) return false;
+      const sel = window.getSelection();
+      return sel && sel.rangeCount > 0 && activeEditor.contains(sel.getRangeAt(0).commonAncestorContainer);
+    }
+
+    function exec(cmd, value = null) {
+      if (!isSelectionInEditor()) return;
+      document.execCommand(cmd, false, value);
+      activeEditor.focus();
+    }
+    
+    function applyStyle(style, value) {
+        if (!isSelectionInEditor()) return;
+        const sel = window.getSelection();
+        if (sel.rangeCount) {
+            const range = sel.getRangeAt(0);
+            if(range.collapsed) return;
+
+            const span = document.createElement("span");
+            span.style[style] = value;
+
+            try {
+                span.appendChild(range.extractContents());
+                range.insertNode(span);
+                range.selectNodeContents(span);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } catch(e) {
+                console.warn("surroundContents failed, using fallback execCommand.", e);
+                document.execCommand('styleWithCSS', false, true);
+                if (style === 'fontSize') exec('fontSize', '7');
+                if (style === 'fontFamily') exec('fontName', value);
+
+                const container = range.commonAncestorContainer;
+                const affectedNodes = (container.nodeType === 1 ? container : container.parentElement).getElementsByTagName("font");
+                Array.from(affectedNodes).forEach(font => {
+                    const newSpan = document.createElement('span');
+                    newSpan.innerHTML = font.innerHTML;
+                    newSpan.style[style] = value;
+                    font.parentNode.replaceChild(newSpan, font);
+                });
+            }
+        }
+    }
+
+    function applyFontFamily(family) { applyStyle('fontFamily', family); }
+    function applyFontSize(px) { applyStyle('fontSize', px + 'px'); }
+
+    function getComputedFontSizePxAtCaret(defaultPx = 14) {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return defaultPx;
+        let node = sel.anchorNode;
+        if (!node || !isSelectionInEditor()) return defaultPx;
+        const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+        return Math.round(parseFloat(window.getComputedStyle(element).fontSize));
+    }
+
+    function stepFontSize(delta) {
+        const current = getComputedFontSizePxAtCaret();
+        let idx = pxSteps.findIndex(v => v >= current);
+        if (idx === -1) idx = pxSteps.length - 1;
+        if (current < pxSteps[idx] && idx > 0) idx -= 1;
+        idx = Math.min(Math.max(idx + delta, 0), pxSteps.length - 1);
+        applyFontSize(pxSteps[idx]);
+    }
+    
+    document.getElementById('fontFamily').addEventListener('change', e => applyFontFamily(e.target.value));
+    document.getElementById('fontSize').addEventListener('change', e => applyFontSize(parseInt(e.target.value, 10)));
+    document.getElementById('fontInc').addEventListener('click', () => stepFontSize(+1));
+    document.getElementById('fontDec').addEventListener('click', () => stepFontSize(-1));
+    document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+    document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
+    
+    document.querySelectorAll('[data-cmd]').forEach(btn => {
+        btn.addEventListener('click', (e) => { 
+            e.preventDefault();
+            exec(btn.getAttribute('data-cmd')); 
+        });
+    });
+
+    function updateStatus() {
+      if (!activeEditor) {
+          document.getElementById('wordCount').textContent = '0 words';
+          document.getElementById('selectionInfo').textContent = 'No selection';
+          document.querySelectorAll('[data-cmd]').forEach(btn => btn.classList.remove('active'));
+          return;
+      }
+      const text = activeEditor.innerText.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
+
+      const sel = window.getSelection();
+      const selLen = (sel && sel.rangeCount) ? sel.toString().length : 0;
+      document.getElementById('selectionInfo').textContent = selLen > 0 ? `${selLen} chars selected` : 'No selection';
+
+      document.querySelectorAll('[data-cmd]').forEach(btn => {
+        const cmd = btn.getAttribute('data-cmd');
+        try {
+            btn.classList.toggle('active', document.queryCommandState(cmd));
+        } catch (e) {
+            btn.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('selectionchange', updateStatus);
+    document.querySelector('.lesson-plan-container').addEventListener('keyup', updateStatus);
+    document.querySelector('.lesson-plan-container').addEventListener('mouseup', updateStatus);
+    
+    // --- ORIGINAL PAGE LOGIC ---
+    const themeSelector = document.getElementById('theme-selector');
+    const root = document.documentElement;
+
+    themeSelector.addEventListener('change', (e) => {
+      root.className = '';
+      root.classList.add(`theme-${e.target.value}`);
+    });
+
+    const pdfButton = document.getElementById('pdf-button');
+    pdfButton.addEventListener('click', () => {
+      const element = document.querySelector('.lesson-plan-container');
+      const filename = 'lesson-plan-' + new Date().toISOString().slice(0, 10) + '.pdf';
+      
+      const controls = document.querySelector('.controls');
+      controls.style.display = 'none';
+      
+      const originalBodyPadding = document.body.style.padding;
+      document.body.style.padding = '0';
+      
+      const container = document.querySelector('.lesson-plan-container');
+      const originalContainerWidth = container.style.width;
+      const originalContainerMinHeight = container.style.minHeight;
+      const originalContainerPadding = container.style.padding;
+      const originalContainerBorder = container.style.border;
+      const originalContainerShadow = container.style.boxShadow;
+
+      container.style.width = '210mm';
+      container.style.minHeight = '297mm';
+      container.style.height = 'auto';
+      container.style.padding = '20mm';
+      container.style.border = '1px solid var(--line-color)';
+      container.style.boxShadow = 'none';
+      
+      document.body.classList.add('print-pdf-mode');
+
+      html2pdf(element, {
+        margin: 0,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).then(() => {
+        controls.style.display = 'flex';
+        document.body.style.padding = originalBodyPadding;
+        document.body.classList.remove('print-pdf-mode');
+        container.style.width = originalContainerWidth;
+        container.style.minHeight = originalContainerMinHeight;
+        container.style.padding = originalContainerPadding;
+        container.style.border = originalContainerBorder;
+        container.style.boxShadow = originalContainerShadow;
+      });
+    });
+
+    const curriculumData = { "3PS": { "Sequence 01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 02: School": { "Section 01: School Objects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: School Subjects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 03: Home": { "Section 01: Describing a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Location Rooms in a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 04: Play Time": { "Section 01: Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Favourite Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 05: Pets": { "Section 01: Pets": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Pets Body Parts": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 06: Birthday": { "Section 01: Party Invitation": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Party Celebration": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] } }, "4PS": { "Sequence 01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Sequence 02: School": { "Section 01: School Facilities": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Mapping": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Sequence 03: Fun Time and Games": { "Section 01: Fun Time": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Games": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] } }, "5PS": { "Sequence 01: Jobs, Occupations, and Hobbies": { "Section 01: Jobs and Occupations": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Hobbies": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Sequence 02: Hometown, City, Village Amenities": { "Section 01: Hometown, City, Village Amenities": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Directions": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Sequence 03: Holidays and Travelling": { "Section 01: Holidays": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Travelling": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] } } };
+
+    const levelSelect = document.getElementById("levelSelect");
+    const sequenceSelect = document.getElementById("sequenceSelect");
+    const sectionSelect = document.getElementById("sectionSelect");
+    const sessionSelect = document.getElementById("sessionSelect");
+
+    const specialOption = "REMEDIATION & STANDARDISATION";
+
+    function resetSelect(selectElement, placeholderText) {
+      selectElement.innerHTML = `<option value="">${placeholderText}</option>`;
+    }
+
+    function initializeLevels() {
+      resetSelect(levelSelect, "Select Level");
+      Object.keys(curriculumData).forEach(level => {
+        const option = new Option(level, level);
+        levelSelect.add(option);
+      });
+    }
+
+    levelSelect.addEventListener("change", () => {
+      const selectedLevel = levelSelect.value;
+      resetSelect(sequenceSelect, "Select Sequence");
+      resetSelect(sectionSelect, "Select Section");
+      resetSelect(sessionSelect, "Select Session");
+      if (!selectedLevel) return;
+      const sequences = Object.keys(curriculumData[selectedLevel]);
+      sequences.forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+      sequenceSelect.add(new Option(specialOption, specialOption));
+    });
+
+    sequenceSelect.addEventListener("change", () => {
+      const selectedLevel = levelSelect.value;
+      const selectedSeq = sequenceSelect.value;
+      resetSelect(sectionSelect, "Select Section");
+      resetSelect(sessionSelect, "Select Session");
+      if (!selectedSeq) return;
+      if (selectedSeq === specialOption) {
+        sectionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`;
+        sessionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`;
+        return;
+      }
+      const sections = Object.keys(curriculumData[selectedLevel][selectedSeq]);
+      sections.forEach(sec => sectionSelect.add(new Option(sec, sec)));
+    });
+
+    sectionSelect.addEventListener("change", () => {
+      const selectedLevel = levelSelect.value;
+      const selectedSeq = sequenceSelect.value;
+      const selectedSec = sectionSelect.value;
+      resetSelect(sessionSelect, "Select Session");
+      if (!selectedSec || selectedSec === specialOption) return;
+      const sessions = curriculumData[selectedLevel][selectedSeq][selectedSec];
+      sessions.forEach(session => sessionSelect.add(new Option(session, session)));
+    });
+
+    initializeLevels();
+
+    const planId = "default-plan";
+    let undoStack = [];
+    let redoStack = [];
+
+    function collectPlanData() {
+        const data = {};
+        document.querySelectorAll("input, select").forEach(el => {
+            if (el.id) data[el.id] = el.type === "checkbox" ? el.checked : el.value;
+        });
+        document.querySelectorAll(".editable-area").forEach((el, index) => {
+            const id = el.dataset.placeholder || `editable-${index}`;
+            data[id] = el.innerHTML;
+        });
+        return data;
+    }
+
+    function restorePlanData(data) {
+        document.querySelectorAll("input, select").forEach(el => {
+            if (el.id && data[el.id] !== undefined) {
+                el.type === "checkbox" ? el.checked = data[el.id] : el.value = data[el.id];
+            }
+        });
+        document.querySelectorAll(".editable-area").forEach((el, index) => {
+            const id = el.dataset.placeholder || `editable-${index}`;
+            if (data[id] !== undefined) el.innerHTML = data[id];
+        });
+    }
+
+    function pushUndoState() {
+      undoStack.push(JSON.stringify(collectPlanData()));
+      if (undoStack.length > 50) undoStack.shift();
+      redoStack = [];
+    }
+    
+    document.querySelector('.lesson-plan-container').addEventListener("input", pushUndoState);
+    document.getElementById("undo-button").addEventListener("click", () => { if (undoStack.length > 1) { redoStack.push(undoStack.pop()); restorePlanData(JSON.parse(undoStack[undoStack.length - 1])); } });
+    document.getElementById("redo-button").addEventListener("click", () => { if (redoStack.length > 0) { const nextState = redoStack.pop(); undoStack.push(nextState); restorePlanData(JSON.parse(nextState)); } });
+    document.getElementById("save-button").addEventListener("click", () => { localStorage.setItem(`lessonplan-${planId}`, JSON.stringify(collectPlanData())); alert("Plan saved!"); });
+    document.getElementById("load-button").addEventListener("click", () => {
+      const dataStr = localStorage.getItem(`lessonplan-${planId}`);
+      if (dataStr) {
+        const data = JSON.parse(dataStr);
+        restorePlanData(data);
+        undoStack = [JSON.stringify(data)];
+        redoStack = [];
+        alert("Plan loaded!");
+      } else { alert("No saved plan found."); }
+    });
+    
+    pushUndoState();
+
+  </script>
+</body>
+</html>

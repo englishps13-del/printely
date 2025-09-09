@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Section 2 – Template Gallery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      background: linear-gradient(to bottom right, #ede9fe, #d8b4fe);
+      overflow-x: hidden;
+      transition: background 0.5s ease;
+    }
+    body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
+
+    nav {
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      position: relative;
+      z-index: 20;
+      transition: background 0.3s ease;
+    }
+    body.dark nav { background: #1e1e2e; }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    #nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
+    #nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #44475a;
+      padding: 8px 0;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    body.dark #nav-links a { color: #cdd6f4; }
+    #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+
+    .underline {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      background-color: #7c3aed;
+      border-radius: 1px;
+      transition: left 0.3s ease, width 0.3s ease;
+      pointer-events: none;
+      z-index: 5;
+      left: 0;
+      width: 0;
+    }
+
+    /* Background shapes & Animations */
+    .shape {
+      position: absolute;
+      opacity: 0.15;
+      z-index: 0;
+      width: 2rem;
+      height: 2rem;
+      animation: float 10s ease-in-out infinite;
+    }
+    .shape.small { width: 1.25rem; height: 1.25rem; }
+    .shape.rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-delay: 2s; }
+    .shape.circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 12s; }
+    .shape.rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 9s; animation-delay: 3s; }
+    .shape.triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 11s; }
+    .shape.diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-delay: 4s; }
+    .shape.circle-gray { top: 80%; left: 20%; fill: #9ca3af; animation-duration: 13s; }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(10deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    /* Card and Link Effects */
+    .zoom-container {
+      overflow: hidden;
+      border-radius: 1rem;
+      cursor: pointer;
+      position: relative;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .zoom-container:hover {
+      box-shadow: 0 15px 30px rgba(131, 71, 255, 0.4);
+      transform: translateY(-5px);
+    }
+    .zoom-container img {
+      border-radius: 1rem;
+      display: block;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      transition: filter 0.5s ease;
+    }
+    .zoom-container:hover img {
+      filter: brightness(1.1);
+    }
+
+    .link-container {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .template-link {
+      background-color: #7c3aed;
+      padding: 0.5rem 1.75rem;
+      border-radius: 9999px;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 8px rgba(124, 58, 237, 0.5);
+      user-select: none;
+      display: inline-block;
+    }
+    .template-link:hover {
+      background-color: #5b21b6;
+      box-shadow: 0 5px 15px rgba(91, 33, 182, 0.7);
+    }
+    
+    /* Theme Switcher */
+    .theme-switcher { display: inline-block; position: relative; user-select: none; }
+    .switch {
+      display: flex; align-items: center;
+      width: 90px; height: 42px;
+      background: linear-gradient(to right, #d8b4fe, #a78bfa);
+      border-radius: 42px;
+      cursor: pointer; position: relative;
+    }
+    .icon { width: 30px; height: 30px; pointer-events: none; user-select: none; }
+    .sun { margin-left: 10px; }
+    .moon { margin-left: auto; margin-right: 10px; }
+    .slider {
+      position: absolute; width: 38px; height: 38px;
+      background: white; border-radius: 50%;
+      top: 2px; left: 3px;
+      transition: left 0.3s ease;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .slider img { width: 24px; height: 24px; }
+    #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { left: 49px; }
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+  <svg class="shape circle-purple-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape rect-purple-300" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
+  <svg class="shape triangle-violet-500" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+  <svg class="shape circle-indigo-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape circle-pink" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape rect-blue" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
+  <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+  <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+  <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+
+  <nav>
+    <div class="container">
+      <ul id="nav-links">
+        <li><a href="index.html">Main page</a></li>
+        <li><a href="section2.html" class="active">Templates</a></li>
+        <li><a href="section3.html">Sign up</a></li>
+        <li><a href="section4.html">Soon</a></li>
+      </ul>
+      <div class="theme-switcher">
+        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+        <label for="dm-toggle" class="switch">
+          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
+          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
+          <div class="slider">
+            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+          </div>
+        </label>
+      </div>
+      <div class="underline"></div>
+    </div>
+  </nav>
+
+  <div class="text-center py-12 px-6 relative z-10">
+    <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4">? Explore Stunning Templates</h1>
+    <p class="text-lg text-gray-800 dark:text-gray-300">Choose a template to get started with your lesson plan.</p>
+  </div>
+
+  <div class="bg-white/50 dark:bg-white/10 backdrop-blur-md mx-6 md:mx-12 p-8 md:p-14 rounded-3xl shadow-xl relative z-10">
+    <div class="grid gap-10 grid-cols-1 md:grid-cols-2">
+
+      <div class="zoom-container">
+        <img src="firstmodule.jpg" alt="Minimalist Planner" />
+        <div class="link-container">
+          <a href="interface.html" class="template-link">The Minimalist Planner</a>
+        </div>
+      </div>
+
+      <div class="zoom-container">
+        <img src="secondmodule.jpg" alt="Interactive Digital Board" />
+        <div class="link-container">
+          <a href="newest.html" class="template-link">Interactive Digital Board</a>
+        </div>
+      </div>
+	  
+      <div class="zoom-container">
+        <img src="The Artisan Planner.jpg" alt="The Artisan Planner" />
+        <div class="link-container">
+          <a href="design999.html" class="template-link">The Artisan Planner</a>
+        </div>
+      </div>
+
+      <div class="zoom-container">
+        <img src="4thmodule.jpg" alt="Project-Based Learning Map" />
+        <div class="link-container">
+          <a href="googledesign.html" class="template-link">Project-Based Learning Map</a>
+        </div>
+      </div>
+
+      <div class="zoom-container">
+        <img src="5thmodule.jpg" alt="Weekly Goals & Overview" />
+        <div class="link-container">
+          <a href="lesson_plan.html" class="template-link">Weekly Goals & Overview</a>
+        </div>
+      </div>
+
+      <div class="zoom-container">
+        <img src="Lesson Plan_00001.jpg" alt="Colorful Gradebook" />
+        <div class="link-container">
+          <a href="lesson_plan_stage_boxes_colored.html" class="template-link">The Colorful Gradebook</a>
+        </div>
+      </div>
+    </div> 
+  </div> 
+  <script>
+    // --- Nav & Theme Script ---
+    const menu = document.querySelector('nav .container');
+    const underline = document.querySelector('.underline');
+    const links = menu.querySelectorAll('a');
+    const body = document.body;
+    const dmToggle = document.getElementById('dm-toggle');
+    const sliderIcon = document.getElementById('slider-icon');
+
+    const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+    const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+
+    // Throttle function to limit how often a function can run
+    function throttle(func, limit) {
+      let inThrottle;
+      return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+          func.apply(context, args);
+          inThrottle = true;
+          setTimeout(() => inThrottle = false, limit);
+        }
+      };
+    }
+
+    function moveUnderline(element) {
+      const rect = element.getBoundingClientRect();
+      const parentRect = menu.getBoundingClientRect();
+      const left = rect.left - parentRect.left + menu.scrollLeft;
+      const width = rect.width;
+      underline.style.width = width + 'px';
+      underline.style.left = left + 'px';
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const active = menu.querySelector('a.active') || links[0];
+        moveUnderline(active);
+      }, 50);
+    });
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link));
+      link.addEventListener('mouseleave', () => {
+        const active = menu.querySelector('a.active') || links[0];
+        moveUnderline(active);
+      });
+      link.addEventListener('click', () => {
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // Use the throttled function for the resize event
+    window.addEventListener('resize', throttle(() => {
+      const active = menu.querySelector('a.active') || links[0];
+      moveUnderline(active);
+    }, 100)); // Limit to once every 100ms
+
+    document.fonts.ready.then(() => {
+      const active = menu.querySelector('a.active') || links[0];
+      moveUnderline(active);
+    });
+
+    function updateSliderIcon() {
+      if (body.classList.contains('dark')) {
+        sliderIcon.src = moonIcon;
+        sliderIcon.alt = 'Dark Mode Icon';
+      } else {
+        sliderIcon.src = sunIcon;
+        sliderIcon.alt = 'Light Mode Icon';
+      }
+    }
+
+    function setDarkMode(enabled) {
+      if (enabled) {
+        body.classList.add('dark');
+        dmToggle.checked = true;
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        dmToggle.checked = false;
+        localStorage.setItem('theme', 'light');
+      }
+      updateSliderIcon();
+    }
+
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+
+    dmToggle.addEventListener('change', () => {
+      setDarkMode(dmToggle.checked);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+  </script>
+
+  </body>
+</html>

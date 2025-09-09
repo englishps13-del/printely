@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lesson Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Patrick+Hand:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --line: #eaeaea;
+      --ink: #2d2d2d;
+
+      /* section palettes */
+      --ps-border: #b2dfdb; --ps-accent: #26a69a;
+      --level-border: #d1c4e9; --level-accent: #7e57c2;
+      --obj-border: #fff9c4; --obj-accent: #fbc02d;
+      --act-border: #f8bbd0; --act-accent: #ec407a;
+      --comp-border: #bbdefb; --comp-accent: #42a5f5;
+      --mat-border: #ffe0b2; --mat-accent: #fb8c00;
+
+      /* stage palettes */
+      --warmer-border: #c8e6c9; --warmer-accent: #66bb6a;
+      --install-border: #bbdefb; --install-accent: #42a5f5;
+      --assessment-border: #ffe0b2; --assessment-accent: #fb8c00;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f6f6f7;
+      font-family: 'Poppins', sans-serif;
+      color: var(--ink);
+    }
+
+    .page {
+      width: 184mm;
+      min-height: 262mm;
+      margin: 10mm auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 0 1px #e6e6e6 inset;
+      padding: 12mm;
+    }
+
+    .title-wrap { margin-bottom: 18px; }
+    .title-text {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .row { display: flex; gap: 12px; margin-top: 12px; }
+    .col-35 { flex: 0 0 34%; }
+    .col-65 { flex: 0 0 64%; }
+
+    /* unified box style */
+    .stage-box {
+      margin-top: 14px;
+      position: relative;
+      border: 2.5px solid;
+      border-radius: 14px;
+      background: #fff;
+      padding: 30px 12px 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stage-box:hover {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .stage-tag {
+      position: absolute;
+      top: -14px;
+      left: 14px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .stage-grid.three-cols { grid-template-columns: 65% 20% 13%; }
+
+    .lined {
+      border: 1.8px dashed;
+      border-radius: 8px;
+      padding: 2px 6px;
+      background: #fff;
+    }
+    .lined input,
+    .lined select,
+    .lined textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      line-height: 18px;
+      padding: 3px 4px;
+      resize: none;
+    }
+    .lined select,
+    .lined input {
+      height: 22px; /* compact */
+    }
+    .lined textarea {
+      min-height: 26px;
+    }
+
+    /* INSTALL PROCEDURE big */
+    .install .stage-grid .lined:first-child textarea {
+      min-height: 120px;
+    }
+
+    /* Checkbox row alignment */
+    .checkbox-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .checkbox-row label {
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    /* THEMES */
+    .ps      { border-color: var(--ps-border); }
+    .ps .stage-tag { background: var(--ps-accent); }
+    .ps .lined { border-color: var(--ps-border); }
+
+    .level   { border-color: var(--level-border); }
+    .level .stage-tag { background: var(--level-accent); }
+    .level .lined { border-color: var(--level-border); }
+
+    .objectives { border-color: var(--obj-border); }
+    .objectives .stage-tag { background: var(--obj-accent); }
+    .objectives .lined { border-color: var(--obj-border); }
+
+    .activity { border-color: var(--act-border); }
+    .activity .stage-tag { background: var(--act-accent); }
+    .activity .lined { border-color: var(--act-border); }
+
+    .competencies { border-color: var(--comp-border); }
+    .competencies .stage-tag { background: var(--comp-accent); }
+    .competencies .lined { border-color: var(--comp-border); }
+
+    .materials { border-color: var(--mat-border); }
+    .materials .stage-tag { background: var(--mat-accent); }
+    .materials .lined { border-color: var(--mat-border); }
+
+    .warmer { border-color: var(--warmer-border); }
+    .warmer .stage-tag { background: var(--warmer-accent); }
+    .warmer .lined { border-color: var(--warmer-border); }
+
+    .install { border-color: var(--install-border); }
+    .install .stage-tag { background: var(--install-accent); }
+    .install .lined { border-color: var(--install-border); }
+
+    .assessment { border-color: var(--assessment-border); }
+    .assessment .stage-tag { background: var(--assessment-accent); }
+    .assessment .lined { border-color: var(--assessment-border); }
+
+    .credit { text-align: center; margin-top: 16px; font-size: 11px; color: #888; }
+	/* Checkbox cells */
+.checkbox-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2px 6px;
+}
+
+/* Smaller custom checkboxes */
+.checkbox-cell input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  accent-color: currentColor; /* use label color */
+}
+.checkbox-cell label {
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+/* inline row of small boxes */
+.inline-boxes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+
+/* mini-box styled like table cells */
+.mini-box {
+  border: 1.6px dashed;
+  border-radius: 6px;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+}
+
+/* checkboxes compact */
+.mini-box input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  accent-color: currentColor;
+}
+
+/* match each section's border color */
+.competencies .mini-box { border-color: var(--comp-border); }
+.materials .mini-box    { border-color: var(--mat-border); }
+
+.competencies .mini-box:hover { background: #eef6ff; }
+.materials .mini-box:hover    { background: #fff6eb; }
+
+/* Hide the default checkbox */
+.mini-box input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  border: 1.6px dashed currentColor;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+/* When checked → fill with accent color + show tick */
+.mini-box input[type="checkbox"]:checked {
+  background-color: currentColor;
+}
+.mini-box input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  font-size: 12px;
+  color: #fff;
+}
+/* custom dashed checkboxes */
+.mini-box input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  border: 1.6px dashed currentColor; /* dashed border in section color */
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* when checked: fill with section accent color + tick */
+.mini-box input[type="checkbox"]:checked {
+  background-color: currentColor;
+}
+.mini-box input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  font-size: 12px;
+  color: #fff;
+}
+
+/* Competencies = blue */
+.competencies .mini-box label,
+.competencies .mini-box input[type="checkbox"] {
+  color: var(--comp-accent);
+}
+
+/* Materials = orange */
+.materials .mini-box label,
+.materials .mini-box input[type="checkbox"] {
+  color: var(--mat-accent);
+}
+.mini-box label {
+  display: flex;
+  align-items: center;   /* vertical centering */
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ensure the custom checkbox aligns perfectly */
+.mini-box input[type="checkbox"] {
+  flex-shrink: 0;         /* don’t squish */
+  display: inline-flex;   /* acts like flex item */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 0;                 /* no offset */
+}
+.install .stage-grid .lined:first-child textarea {
+  min-height: 120px;
+  resize: none;           /* disable native resizer */
+  overflow: auto;
+  padding-right: 18px;    /* space for custom icon */
+  position: relative;
+}
+
+/* custom dashed resize handle */
+.install .stage-grid .lined:first-child::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 12px;
+  height: 12px;
+  border-right: 2px dashed var(--install-border);
+  border-bottom: 2px dashed var(--install-border);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Custom resize icon */
+.install .stage-grid .lined:first-child {
+  position: relative;
+}
+
+.install .stage-grid .lined:first-child::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--install-border);
+  border-bottom: 2px solid var(--install-border);
+  opacity: 0.6;
+  pointer-events: none; /* so user can still grab to resize */
+}
+.level .stage-grid select {
+  width: 100%;
+  font-size: 12px;  /* slightly smaller for long titles */
+  line-height: 1.3;
+}
+
+.lined {
+  border: 1.8px dashed;
+  border-radius: 6px;
+  padding: 4px 6px;
+  /* default fallback */
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    rgba(0,0,0,0.08) 25px
+  );
+}
+
+/* make lined grids inherit their section color */
+.ps .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--ps-border) 40%, transparent) 25px
+  );
+}
+.level .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--level-border) 40%, transparent) 25px
+  );
+}
+.objectives .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--obj-border) 40%, transparent) 25px
+  );
+}
+.activity .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--act-border) 40%, transparent) 25px
+  );
+}
+.competencies .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--comp-border) 40%, transparent) 25px
+  );
+}
+.materials .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--mat-border) 40%, transparent) 25px
+  );
+}
+.warmer .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--warmer-border) 40%, transparent) 25px
+  );
+}
+.install .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--install-border) 40%, transparent) 25px
+  );
+}
+.assessment .lined {
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff,
+    #fff 24px,
+    color-mix(in srgb, var(--assessment-border) 40%, transparent) 25px
+  );
+}
+
+  border-radius: 6px;
+  padding: 4px 6px;
+  border: 1.8px dashed; /* keep dashed border */
+}
+.lined input,
+.lined textarea {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  line-height: 24px;   /* align text with lines */
+  resize: none;
+}
+@media print {
+  @page {
+    size: A4; /* Sets the page size to A4 */
+    margin: 0; /* Removes default page margins, allowing content to extend to the edges */
+  }
+
+  body {
+    width: 210mm; /* A4 width */
+    height: 297mm; /* A4 height */
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Optional: Add styles to manage content flow and breaks */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0; /* Adjust padding as needed for content within the page */
+    page-break-after: always; /* Forces a new page after elements with this class */
+  }
+
+  /* Prevent elements from breaking across pages awkwardly */
+  h1, h2, h3, p, img {
+    page-break-inside: avoid;
+  }
+}
+/* Make wide boxes fill ~98% of available width */
+.stage-box.wide {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  align-items: stretch; /* makes children equal height */
+}
+
+.row > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.row .stage-box {
+  flex: 1; /* force equal height inside each column */
+}
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="title-wrap">
+    </div>
+
+    <!-- First row: Primary School + Level -->
+    <div class="row">
+      <div class="col-35">
+        <div class="stage-box ps">
+          <span class="stage-tag">General Information</span>
+          <div class="stage-grid">
+            <div class="lined"><input type="text" placeholder="Primary School"></div>
+            <div class="lined"><input type="text" placeholder="Teacher"></div>
+            <div class="lined"><input type="text" placeholder="Date"></div>
+          </div>
+        </div>
+      </div>
+<div class="col-65">
+  <div class="stage-box level">
+    <span class="stage-tag">Lesson Details</span>
+    <div class="stage-grid" style="grid-template-columns: 25% 75%;">
+      <!-- Row 1 -->
+      <div class="lined">
+        <select id="levelSelect">
+          <option value="">Select Level</option>
+          <option value="3ps">3rd</option>
+          <option value="4ps">4th</option>
+          <option value="5ps">5th</option>
+        </select>
+      </div>
+      <div class="lined">
+        <select id="sequenceSelect">
+          <option value="">Select Sequence</option>
+        </select>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="lined" style="grid-column: 1 / span 2;">
+        <select id="sectionSelect">
+          <option value="">Select Section</option>
+        </select>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="lined" style="grid-column: 1 / span 2;">
+        <select id="sessionSelect">
+          <option value="">Select Session</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    </div>
+
+<div class="stage-box objectives wide">
+  <span class="stage-tag">Learning Objectives</span>
+  <div class="lined"><input type="text" placeholder="Objective"></div>
+</div>
+
+<div class="row">
+  <div class="col-65">
+    <div class="stage-box competencies">
+      <span class="stage-tag">Target Competencies</span>
+      <div class="inline-boxes">
+        <div class="mini-box"><label><input type="checkbox"> Interact</label></div>
+        <div class="mini-box"><label><input type="checkbox"> Interpret</label></div>
+        <div class="mini-box"><label><input type="checkbox"> Produce</label></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-35">
+    <div class="stage-box materials">
+      <span class="stage-tag">Teaching Materials</span>
+      <div class="inline-boxes">
+        <div class="mini-box"><label><input type="checkbox"> Textbook</label></div>
+        <div class="mini-box"><label><input type="checkbox"> W.B</label></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+   <!-- Stages -->
+<div class="stage-box warmer wide">
+  <span class="stage-tag">Warmer</span>
+  <div class="stage-grid three-cols">
+    <div class="lined"><input type="text" placeholder="Procedure"></div>
+    <div class="lined"><input type="text" placeholder="Interaction"></div>
+    <div class="lined"><input type="text" placeholder="Time"></div>
+  </div>
+</div>
+
+<div class="stage-box install wide">
+  <span class="stage-tag">Install resources</span>
+  <div class="stage-grid three-cols">
+    <div class="lined"><textarea placeholder="Procedure"></textarea></div>
+    <div class="lined"><input type="text" placeholder="Interaction"></div>
+    <div class="lined"><input type="text" placeholder="Time"></div>
+  </div>
+</div>
+
+<div class="stage-box assessment wide">
+  <span class="stage-tag">Assessment</span>
+  <div class="stage-grid three-cols">
+    <div class="lined"><input type="text" placeholder="Procedure"></div>
+    <div class="lined"><input type="text" placeholder="Interaction"></div>
+    <div class="lined"><input type="text" placeholder="Time"></div>
+  </div>
+</div>
+
+<!-- Activity -->
+<div class="stage-box activity wide">
+  <span class="stage-tag">Activity / Summary</span>
+  <div class="lined"><textarea></textarea></div>
+</div>
+
+   
+  </div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const linedBox = document.querySelector(".install .stage-grid .lined:first-child");
+  const textarea = linedBox.querySelector("textarea");
+
+  let isResizing = false;
+  let startY;
+  let startHeight;
+
+  linedBox.addEventListener("mousedown", (e) => {
+    const rect = linedBox.getBoundingClientRect();
+    // Check if click is in bottom-right 16px square
+    if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) {
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = textarea.offsetHeight;
+      document.body.style.userSelect = "none"; // disable text selection
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isResizing) return;
+    const newHeight = Math.max(100, startHeight + (e.clientY - startY));
+    textarea.style.height = newHeight + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    isResizing = false;
+    document.body.style.userSelect = "";
+  });
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const textarea = document.querySelector(".install .stage-grid .lined:first-child textarea");
+
+  function autoResize(el) {
+    el.style.height = "auto"; // reset
+    el.style.height = el.scrollHeight + "px"; // set to content
+  }
+
+  // Run once at start
+  autoResize(textarea);
+
+  // Auto-resize on every input
+  textarea.addEventListener("input", () => autoResize(textarea));
+});
+const curriculum = {
+  "3ps": {
+    "Seq01: Family and Friends": {
+      "Section 01: Family": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: Friends": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    },
+    "Seq02: School": {
+      "Section 01: School Objects": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: School Subjects": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    },
+    "Seq03: Home": {
+      "Section 01: Describing a House": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: Location Rooms in a House": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    },
+    "Seq04: Play Time": {
+      "Section 01: Toys": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: Favourite Toys": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    },
+    "Seq05: Pets": {
+      "Section 01: Pets": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: Pets Body Parts": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    },
+    "Seq06: Birthday": {
+      "Section 01: Party Invitation": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ],
+      "Section 02: Party Celebration": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and write",
+        "SESSION 04: I play roles"
+      ]
+    }
+  },
+
+  "4ps": {
+    "Seq01: Family and Friends": {
+      "Section 01: Family": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ],
+      "Section 02: Friends": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ]
+    },
+    "Seq02: School": {
+      "Section 01: School Facilities": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ],
+      "Section 02: Mapping": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ]
+    },
+    "Seq03: Fun Time and Games": {
+      "Section 01: Fun Time": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ],
+      "Section 02: Games": [
+        "SESSION 01: I sing and have fun, I listen and repeat",
+        "SESSION 02: I read and discover",
+        "SESSION 03: I read and enjoy",
+        "SESSION 04: I read and write",
+        "SESSION 05: I play roles"
+      ]
+    }
+  },
+
+  "5ps": {
+    "Seq01: Jobs, Occupations, and Hobbies": {
+      "Section 01: Jobs and Occupations": [
+        "SESSION 01: I get ready.",
+        "SESSION 02: I listen and interact",
+        "SESSION 03: I listen and discover",
+        "SESSION 04: I read and understand",
+        "SESSION 05: I read and discover",
+        "SESSION 06: I learn and enjoy",
+        "SESSION 07: I learn and write",
+        "SESSION 08: I write"
+      ],
+      "Section 02: Hobbies": [
+        "SESSION 01: I listen and interact",
+        "SESSION 02: I listen and discover",
+        "SESSION 03: I read and understand",
+        "SESSION 04: I read and discover",
+        "SESSION 05: I learn and enjoy",
+        "SESSION 06: I learn to write",
+        "SESSION 07: I write",
+        "SESSION 08: I check my progress"
+      ]
+    },
+    "Seq02: Hometown, City, Village Amenities": {
+      "Section 01: Hometown, City, Village Amenities": [
+        "SESSION 01: I get ready.",
+        "SESSION 02: I listen and interact",
+        "SESSION 03: I listen and discover",
+        "SESSION 04: I read and understand",
+        "SESSION 05: I read and discover",
+        "SESSION 06: I learn and enjoy",
+        "SESSION 07: I learn and write",
+        "SESSION 08: I write"
+      ],
+      "Section 02: Directions": [
+        "SESSION 01: I listen and interact",
+        "SESSION 02: I listen and discover",
+        "SESSION 03: I read and understand",
+        "SESSION 04: I read and discover",
+        "SESSION 05: I learn and enjoy",
+        "SESSION 06: I learn to write",
+        "SESSION 07: I write",
+        "SESSION 08: I check my progress"
+      ]
+    },
+    "Seq03: Holidays and Travelling": {
+      "Section 01: Holidays": [
+        "SESSION 01: I get ready.",
+        "SESSION 02: I listen and interact",
+        "SESSION 03: I listen and discover",
+        "SESSION 04: I read and understand",
+        "SESSION 05: I read and discover",
+        "SESSION 06: I learn and enjoy",
+        "SESSION 07: I learn and write",
+        "SESSION 08: I write"
+      ],
+      "Section 02: Travelling": [
+        "SESSION 01: I listen and interact",
+        "SESSION 02: I listen and discover",
+        "SESSION 03: I read and understand",
+        "SESSION 04: I read and discover",
+        "SESSION 05: I learn and enjoy",
+        "SESSION 06: I learn to write",
+        "SESSION 07: I write",
+        "SESSION 08: I check my progress"
+      ]
+    }
+  }
+};
+const levelSelect = document.getElementById("levelSelect");
+const sequenceSelect = document.getElementById("sequenceSelect");
+const sectionSelect = document.getElementById("sectionSelect");
+const sessionSelect = document.getElementById("sessionSelect");
+
+levelSelect.addEventListener("change", () => {
+  sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>";
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+  
+  if (curriculum[levelSelect.value]) {
+    Object.keys(curriculum[levelSelect.value]).forEach(seq => {
+      const opt = document.createElement("option");
+      opt.value = seq;
+      opt.textContent = seq;
+      sequenceSelect.appendChild(opt);
+    });
+  }
+});
+
+sequenceSelect.addEventListener("change", () => {
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+  if (seqData) {
+    Object.keys(seqData).forEach(sec => {
+      const opt = document.createElement("option");
+      opt.value = sec;
+      opt.textContent = sec;
+      sectionSelect.appendChild(opt);
+    });
+  }
+});
+
+sectionSelect.addEventListener("change", () => {
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
+  if (sessData) {
+    sessData.forEach(ses => {
+      const opt = document.createElement("option");
+      opt.value = ses;
+      opt.textContent = ses;
+      sessionSelect.appendChild(opt);
+    });
+  }
+});
+levelSelect.addEventListener("change", () => {
+  sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>";
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+  
+  if (curriculum[levelSelect.value]) {
+    Object.keys(curriculum[levelSelect.value]).forEach(seq => {
+      const opt = document.createElement("option");
+      opt.value = seq;
+      opt.textContent = seq;
+      sequenceSelect.appendChild(opt);
+    });
+    // Add the new option at the end of the sequence dropdown
+    const remediationOption = document.createElement("option");
+    remediationOption.value = "Remediation & Standardisation";
+    remediationOption.textContent = "Remediation & Standardisation";
+    sequenceSelect.appendChild(remediationOption);
+  }
+});
+
+sequenceSelect.addEventListener("change", () => {
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  if (sequenceSelect.value === "Remediation & Standardisation") {
+    const remediationSection = document.createElement("option");
+    remediationSection.value = "Remediation & Standardisation";
+    remediationSection.textContent = "Remediation & Standardisation";
+    sectionSelect.appendChild(remediationSection);
+    return;
+  }
+  
+  const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+  if (seqData) {
+    Object.keys(seqData).forEach(sec => {
+      const opt = document.createElement("option");
+      opt.value = sec;
+      opt.textContent = sec;
+      sectionSelect.appendChild(opt);
+    });
+  }
+});
+
+sectionSelect.addEventListener("change", () => {
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  if (sectionSelect.value === "Remediation & Standardisation") {
+    const remediationSession = document.createElement("option");
+    remediationSession.value = "Remediation & Standardisation";
+    remediationSession.textContent = "Remediation & Standardisation";
+    sessionSelect.appendChild(remediationSession);
+    return;
+  }
+
+  const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
+  if (sessData) {
+    sessData.forEach(ses => {
+      const opt = document.createElement("option");
+      opt.value = ses;
+      opt.textContent = ses;
+      sessionSelect.appendChild(opt);
+    });
+  }
+});
+</script>
+<!-- Theme Selector -->
+<div class="stage-box" style="margin-top:20px; border-color:#ccc;">
+  <span class="stage-tag" style="background:#666;">Theme</span>
+  <div class="lined">
+    <select id="themeSelect">
+      <option value="default">Default Theme</option>
+      <option value="alt">Alternative Theme</option>
+      <option value="sunset">Sunset Glow</option>
+      <option value="forest">Forest Green</option>
+      <option value="ocean">Ocean Blue</option>
+      <option value="candy">Candy Pop</option>
+      <option value="desert">Desert Sand</option>
+      <option value="pastel">Soft Pastel</option>
+      <option value="midnight">Midnight Dark</option>
+      <option value="neon">Neon Lights</option>
+    </select>
+  </div>
+</div>
+
+<script>
+const themes = {
+  default: {
+    "--ps-border": "#b2dfdb", "--ps-accent": "#26a69a",
+    "--level-border": "#d1c4e9", "--level-accent": "#7e57c2",
+    "--obj-border": "#fff9c4", "--obj-accent": "#fbc02d",
+    "--act-border": "#f8bbd0", "--act-accent": "#ec407a",
+    "--comp-border": "#bbdefb", "--comp-accent": "#42a5f5",
+    "--mat-border": "#ffe0b2", "--mat-accent": "#fb8c00",
+    "--warmer-border": "#c8e6c9", "--warmer-accent": "#66bb6a",
+    "--install-border": "#bbdefb", "--install-accent": "#42a5f5",
+    "--assessment-border": "#ffe0b2", "--assessment-accent": "#fb8c00"
+  },
+  alt: {
+    "--ps-border": "#ffcdd2", "--ps-accent": "#e53935",
+    "--level-border": "#b39ddb", "--level-accent": "#512da8",
+    "--obj-border": "#c5e1a5", "--obj-accent": "#7cb342",
+    "--act-border": "#b2ebf2", "--act-accent": "#00acc1",
+    "--comp-border": "#ffe082", "--comp-accent": "#ff8f00",
+    "--mat-border": "#d7ccc8", "--mat-accent": "#5d4037",
+    "--warmer-border": "#f48fb1", "--warmer-accent": "#c2185b",
+    "--install-border": "#80cbc4", "--install-accent": "#00796b",
+    "--assessment-border": "#ffccbc", "--assessment-accent": "#d84315"
+  },
+  sunset: {
+    "--ps-border": "#ffe0b2", "--ps-accent": "#fb8c00",
+    "--level-border": "#ffccbc", "--level-accent": "#e64a19",
+    "--obj-border": "#f8bbd0", "--obj-accent": "#d81b60",
+    "--act-border": "#f48fb1", "--act-accent": "#ad1457",
+    "--comp-border": "#ffab91", "--comp-accent": "#d84315",
+    "--mat-border": "#ffe082", "--mat-accent": "#ff6f00",
+    "--warmer-border": "#ffcc80", "--warmer-accent": "#ef6c00",
+    "--install-border": "#fbc02d", "--install-accent": "#f57f17",
+    "--assessment-border": "#ff7043", "--assessment-accent": "#bf360c"
+  },
+  forest: {
+    "--ps-border": "#c8e6c9", "--ps-accent": "#2e7d32",
+    "--level-border": "#a5d6a7", "--level-accent": "#388e3c",
+    "--obj-border": "#dcedc8", "--obj-accent": "#689f38",
+    "--act-border": "#c5e1a5", "--act-accent": "#33691e",
+    "--comp-border": "#81c784", "--comp-accent": "#1b5e20",
+    "--mat-border": "#aed581", "--mat-accent": "#558b2f",
+    "--warmer-border": "#b9f6ca", "--warmer-accent": "#00c853",
+    "--install-border": "#c8e6c9", "--install-accent": "#43a047",
+    "--assessment-border": "#a5d6a7", "--assessment-accent": "#2e7d32"
+  },
+  ocean: {
+    "--ps-border": "#bbdefb", "--ps-accent": "#1e88e5",
+    "--level-border": "#90caf9", "--level-accent": "#1565c0",
+    "--obj-border": "#b3e5fc", "--obj-accent": "#0288d1",
+    "--act-border": "#81d4fa", "--act-accent": "#0277bd",
+    "--comp-border": "#4fc3f7", "--comp-accent": "#01579b",
+    "--mat-border": "#29b6f6", "--mat-accent": "#0d47a1",
+    "--warmer-border": "#80deea", "--warmer-accent": "#00838f",
+    "--install-border": "#26c6da", "--install-accent": "#006064",
+    "--assessment-border": "#4dd0e1", "--assessment-accent": "#004d40"
+  },
+  candy: {
+    "--ps-border": "#f8bbd0", "--ps-accent": "#ec407a",
+    "--level-border": "#f48fb1", "--level-accent": "#d81b60",
+    "--obj-border": "#e1bee7", "--obj-accent": "#8e24aa",
+    "--act-border": "#d1c4e9", "--act-accent": "#5e35b1",
+    "--comp-border": "#ffccbc", "--comp-accent": "#e64a19",
+    "--mat-border": "#ffe0b2", "--mat-accent": "#fb8c00",
+    "--warmer-border": "#f06292", "--warmer-accent": "#ad1457",
+    "--install-border": "#ba68c8", "--install-accent": "#6a1b9a",
+    "--assessment-border": "#f48fb1", "--assessment-accent": "#880e4f"
+  },
+  desert: {
+    "--ps-border": "#ffe0b2", "--ps-accent": "#ff6f00",
+    "--level-border": "#ffcc80", "--level-accent": "#ef6c00",
+    "--obj-border": "#ffb74d", "--obj-accent": "#e65100",
+    "--act-border": "#ffe082", "--act-accent": "#f57f17",
+    "--comp-border": "#ffab91", "--comp-accent": "#d84315",
+    "--mat-border": "#ffccbc", "--mat-accent": "#bf360c",
+    "--warmer-border": "#ffecb3", "--warmer-accent": "#fbc02d",
+    "--install-border": "#ffe57f", "--install-accent": "#f9a825",
+    "--assessment-border": "#ffb300", "--assessment-accent": "#ff6f00"
+  },
+  pastel: {
+    "--ps-border": "#f8bbd0", "--ps-accent": "#f48fb1",
+    "--level-border": "#c5cae9", "--level-accent": "#7986cb",
+    "--obj-border": "#b2ebf2", "--obj-accent": "#4dd0e1",
+    "--act-border": "#c8e6c9", "--act-accent": "#81c784",
+    "--comp-border": "#ffe0b2", "--comp-accent": "#ffcc80",
+    "--mat-border": "#d1c4e9", "--mat-accent": "#9575cd",
+    "--warmer-border": "#b3e5fc", "--warmer-accent": "#4fc3f7",
+    "--install-border": "#fff9c4", "--install-accent": "#fbc02d",
+    "--assessment-border": "#dcedc8", "--assessment-accent": "#aed581"
+  },
+  midnight: {
+    "--ps-border": "#90a4ae", "--ps-accent": "#263238",
+    "--level-border": "#78909c", "--level-accent": "#37474f",
+    "--obj-border": "#546e7a", "--obj-accent": "#102027",
+    "--act-border": "#455a64", "--act-accent": "#1c313a",
+    "--comp-border": "#607d8b", "--comp-accent": "#263238",
+    "--mat-border": "#78909c", "--mat-accent": "#37474f",
+    "--warmer-border": "#90a4ae", "--warmer-accent": "#1c313a",
+    "--install-border": "#607d8b", "--install-accent": "#102027",
+    "--assessment-border": "#546e7a", "--assessment-accent": "#263238"
+  },
+  neon: {
+    "--ps-border": "#ff4081", "--ps-accent": "#f50057",
+    "--level-border": "#7c4dff", "--level-accent": "#651fff",
+    "--obj-border": "#18ffff", "--obj-accent": "#00e5ff",
+    "--act-border": "#69f0ae", "--act-accent": "#00c853",
+    "--comp-border": "#ffd740", "--comp-accent": "#ffab00",
+    "--mat-border": "#ff6e40", "--mat-accent": "#ff3d00",
+    "--warmer-border": "#40c4ff", "--warmer-accent": "#0091ea",
+    "--install-border": "#b388ff", "--install-accent": "#6200ea",
+    "--assessment-border": "#ff80ab", "--assessment-accent": "#c51162"
+  }
+};
+
+document.getElementById("themeSelect").addEventListener("change", (e) => {
+  const selectedTheme = themes[e.target.value];
+  Object.keys(selectedTheme).forEach(varName => {
+    document.documentElement.style.setProperty(varName, selectedTheme[varName]);
+  });
+});
+</script>
+
+</body>
+</html>

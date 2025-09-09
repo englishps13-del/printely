@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-sage">
+<head>
+    <meta charset="UTF-8">
+    <title>The Artisan Planner with Ribbon Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Montserrat:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+	
+    <style>
+        /*
+        ==========================================================================
+        == CORE AND THEME STYLES (FROM ORIGINAL design999.html)
+        ==========================================================================
+        */
+
+        :root {
+            --font-body: 'Poppins', sans-serif;
+            --font-heading: 'Lora', serif;
+        }
+
+        /* --- THEMES (Full list from original) --- */
+        html.theme-sage { --bg-main: #f9f8f6; --bg-paper: #ffffff; --text-primary: #3d4852; --text-secondary: #718096; --border-color: #e2e4e4; --accent-primary: #5A7D7C; --accent-light: #f0f3f3; }
+        html.theme-doodle { --bg-main: #f3f0f9; --bg-paper: #ffffff; --text-primary: #2d3748; --text-secondary: #6c567b; --border-color: #d3c3e1; --accent-primary: #8e44ad; --accent-light: #f4eff9; }
+        html.theme-sunset { --bg-main: #fff8f5; --bg-paper: #ffffff; --text-primary: #4a4a4a; --text-secondary: #b58d7a; --border-color: #f3e2e2; --accent-primary: #d95c5c; --accent-light: #fdedef; }
+        html.theme-ocean { --bg-main: #e8f4f8; --bg-paper: #ffffff; --text-primary: #2c3e50; --text-secondary: #5d6d7e; --border-color: #d1e1e9; --accent-primary: #3498db; --accent-light: #d6eaf8; }
+        html.theme-forest { --bg-main: #f0f4ec; --bg-paper: #ffffff; --text-primary: #4a5446; --text-secondary: #74886f; --border-color: #d8e2d4; --accent-primary: #5c845d; --accent-light: #e6f0e6; }
+        html.theme-midnight { --bg-main: #1c2331; --bg-paper: #2b3445; --text-primary: #eaf1f8; --text-secondary: #a4b3c4; --border-color: #3b4559; --accent-primary: #e0ac1a; --accent-light: #3d4a60; }
+        html.theme-berry { --bg-main: #fbf5f7; --bg-paper: #ffffff; --text-primary: #452a42; --text-secondary: #8c5b8b; --border-color: #e5d7df; --accent-primary: #c2527f; --accent-light: #fbebf1; }
+        html.theme-mono { --bg-main: #f4f4f6; --bg-paper: #ffffff; --text-primary: #333333; --text-secondary: #888888; --border-color: #dddddd; --accent-primary: #4a4a4a; --accent-light: #eeeeee; }
+        html.theme-lavender { --bg-main: #f9f5fb; --bg-paper: #ffffff; --text-primary: #3a2e40; --text-secondary: #6e5e7e; --border-color: #e8ddeb; --accent-primary: #9b72a8; --accent-light: #f1eaf2; }
+        html.theme-charcoal { --bg-main: #2f3640; --bg-paper: #3b4754; --text-primary: #e0e6eb; --text-secondary: #aab4be; --border-color: #4b5a68; --accent-primary: #eb5e5e; --accent-light: #4c5b6a; }
+        html.theme-mint { --bg-main: #f3f9f7; --bg-paper: #ffffff; --text-primary: #31423c; --text-secondary: #6b887d; --border-color: #d1e8e0; --accent-primary: #52b788; --accent-light: #d6f0e7; }
+        html.theme-coral { --bg-main: #fffaf7; --bg-paper: #ffffff; --text-primary: #4a423f; --text-secondary: #8b7d78; --border-color: #f7e6df; --accent-primary: #e58d7c; --accent-light: #f8e9e4; }
+        html.theme-tangerine { --bg-main: #fff7ec; --bg-paper: #ffffff; --text-primary: #4d443b; --text-secondary: #a27e57; --border-color: #f3e6d8; --accent-primary: #e88d3e; --accent-light: #fef1e5; }
+        html.theme-ocean-mint { --bg-main: #f5fbf6; --bg-paper: #ffffff; --text-primary: #58416d; --text-secondary: #92849c; --border-color: #d8e5db; --accent-primary: #94d3a8; --accent-light: #eaf1ed; }
+        html.theme-coral-aqua { --bg-main: #fbf7f6; --bg-paper: #ffffff; --text-primary: #4a423f; --text-secondary: #8b7d78; --border-color: #f7e6df; --accent-primary: #79c9c9; --accent-light: #e0f6f6; }
+        html.theme-gold-rush { --bg-main: #f8f8f4; --bg-paper: #ffffff; --text-primary: #2d3a4d; --text-secondary: #5e7390; --border-color: #dcdccf; --accent-primary: #f2c759; --accent-light: #f7f7e9; }
+        html.theme-forest-fire { --bg-main: #f0f4ec; --bg-paper: #ffffff; --text-primary: #4a5446; --text-secondary: #74886f; --border-color: #d8e2d4; --accent-primary: #d9534f; --accent-light: #fbe6e5; }
+        html.theme-plum-sunset { --bg-main: #f5f0f7; --bg-paper: #ffffff; --text-primary: #4c3c55; --text-secondary: #887494; --border-color: #e3d2e9; --accent-primary: #f28a7e; --accent-light: #f9e8e7; }
+        html.theme-ocean-dusk { --bg-main: #f0f3f6; --bg-paper: #ffffff; --text-primary: #2c3e50; --text-secondary: #5d6d7e; --border-color: #d1e1e9; --accent-primary: #4d82b3; --accent-light: #e4ebf0; }
+        html.theme-mint-chocolate { --bg-main: #f9f8f5; --bg-paper: #ffffff; --text-primary: #4a4a4a; --text-secondary: #8b8981; --border-color: #e6e3df; --accent-primary: #6c9a7d; --accent-light: #e6f0e6; }
+        html.theme-cherry-blossom { --bg-main: #fdf6f7; --bg-paper: #ffffff; --text-primary: #5c444a; --text-secondary: #8e747b; --border-color: #f1dfe3; --accent-primary: #e67390; --accent-light: #fbe7ec; }
+        html.theme-stone-sage { --bg-main: #f4f5f2; --bg-paper: #ffffff; --text-primary: #4b4b4b; --text-secondary: #8d9189; --border-color: #e2e4e4; --accent-primary: #5a7d7c; --accent-light: #f0f3f3; }
+        html.theme-tangerine-dream { --bg-main: #fff7ec; --bg-paper: #ffffff; --text-primary: #4d443b; --text-secondary: #a27e57; --border-color: #f3e6d8; --accent-primary: #6cc1d5; --accent-light: #e5f1f3; }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body); /* Restored original body font */
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 1.5rem; 
+        }
+
+        .planner-container {
+            max-width: 1200px; margin: auto;
+            background-color: var(--bg-paper);
+            padding: 2rem; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            border: 2px solid var(--accent-primary);
+            border-radius: 12px;
+        }
+
+        .main-header h1 {
+            font-family: var(--font-heading); /* Restored original heading font */
+            font-size: 2.75rem; font-weight: 500;
+            margin: 0 0 2rem 0; text-align: center;
+        }
+
+        .grid-container { display: grid; gap: 1.5rem; }
+        .three-col { grid-template-columns: repeat(3, 1fr); }
+        .two-col { grid-template-columns: repeat(2, 1fr); }
+
+        .block { padding: 0.001em 0; margin-bottom: 0.1rem; }
+        .block-header {
+            display: flex; align-items: center; gap: 0.75rem; font-size: 1.1rem;
+            font-weight: 600; margin: 0 0 1.25rem 0; padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color); color: var(--accent-primary);
+        }
+        
+        .form-group label {
+            display: block; font-size: 0.8rem; font-weight: 500;
+            margin-bottom: 0.35rem; color: var(--text-secondary);
+        }
+
+        input, select {
+            width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 0.9rem; background-color: var(--bg-main);
+            color: var(--text-primary); font-family: var(--font-body);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none; border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .checkbox-group { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+        .checkbox-group label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; margin-bottom: 0; }
+        .checkbox-group input { accent-color: var(--accent-primary); width: auto; }
+
+        .procedure-table { width: 100%; border-collapse: collapse; }
+        .procedure-table th, .procedure-table td { text-align: left; padding: 0; vertical-align: top; }
+        .procedure-table th { font-size: 0.8rem; color: var(--text-secondary); padding-bottom: 0.5rem; font-weight: 500; }
+        .procedure-table td { padding-right: 0.75rem; }
+        .procedure-table td:last-child { padding-right: 0; }
+        .procedure-table .col-procedure { width: 75%; }
+        .procedure-table .col-interaction { width: 15%; }
+        .procedure-table .col-time { width: 10%; }
+        
+        .controls {
+            position: fixed; top: 20px; right: 20px; display: flex; gap: 0.5rem;
+            background: var(--bg-paper); padding: 0.5rem; border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 2000;
+        }
+        .controls button { background-color: var(--accent-primary); color: #fff; border: none; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .controls button:hover { opacity: 0.8; }
+        .controls button i { margin-right: 0.4rem; }
+        :root {
+            --font-body: 'Poppins', sans-serif;
+            --font-heading: 'Lora', serif;
+        }
+        /* --- THEMES --- */
+        html.theme-sage {
+            --bg-main: #f9f8f6; --bg-paper: #ffffff; --text-primary: #3d4852;
+            --text-secondary: #718096; --border-color: #e2e4e4; --accent-primary: #5A7D7C;
+            --accent-light: #f0f3f3;
+        }
+        html.theme-doodle {
+            --bg-main: #f3f0f9; --bg-paper: #ffffff; --text-primary: #2d3748;
+            --text-secondary: #6c567b; --border-color: #d3c3e1; --accent-primary: #8e44ad;
+           --accent-light: #f4eff9;
+        }
+        html.theme-sunset {
+            --bg-main: #fff8f5; --bg-paper: #ffffff; --text-primary: #4a4a4a;
+            --text-secondary: #b58d7a;--border-color: #f3e2e2; --accent-primary: #d95c5c;
+           --accent-light: #fdedef;
+	   }
+html.theme-ocean {
+    --bg-main: #e8f4f8;
+    --bg-paper: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #5d6d7e;
+    --border-color: #d1e1e9;
+    --accent-primary: #3498db;
+    --accent-light: #d6eaf8;
+}
+
+html.theme-forest {
+    --bg-main: #f0f4ec;
+    --bg-paper: #ffffff;
+    --text-primary: #4a5446;
+    --text-secondary: #74886f;
+    --border-color: #d8e2d4;
+    --accent-primary: #5c845d;
+    --accent-light: #e6f0e6;
+}
+
+html.theme-midnight {
+    --bg-main: #1c2331;
+    --bg-paper: #2b3445;
+    --text-primary: #eaf1f8;
+    --text-secondary: #a4b3c4;
+    --border-color: #3b4559;
+    --accent-primary: #e0ac1a;
+    --accent-light: #3d4a60;
+}
+
+html.theme-berry {
+    --bg-main: #fbf5f7;
+    --bg-paper: #ffffff;
+    --text-primary: #452a42;
+    --text-secondary: #8c5b8b;
+    --border-color: #e5d7df;
+    --accent-primary: #c2527f;
+    --accent-light: #fbebf1;
+}
+
+html.theme-mono {
+    --bg-main: #f4f4f6;
+    --bg-paper: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #888888;
+    --border-color: #dddddd;
+    --accent-primary: #4a4a4a;
+    --accent-light: #eeeeee;
+}
+
+
+html.theme-lavender {
+    --bg-main: #f9f5fb;
+    --bg-paper: #ffffff;
+    --text-primary: #3a2e40;
+    --text-secondary: #6e5e7e;
+    --border-color: #e8ddeb;
+    --accent-primary: #9b72a8;
+    --accent-light: #f1eaf2;
+}
+
+html.theme-charcoal {
+    --bg-main: #2f3640;
+    --bg-paper: #3b4754;
+    --text-primary: #e0e6eb;
+    --text-secondary: #aab4be;
+    --border-color: #4b5a68;
+    --accent-primary: #eb5e5e;
+    --accent-light: #4c5b6a;
+}
+
+html.theme-mint {
+    --bg-main: #f3f9f7;
+    --bg-paper: #ffffff;
+    --text-primary: #31423c;
+    --text-secondary: #6b887d;
+    --border-color: #d1e8e0;
+    --accent-primary: #52b788;
+    --accent-light: #d6f0e7;
+}
+
+html.theme-coral {
+    --bg-main: #fffaf7;
+    --bg-paper: #ffffff;
+    --text-primary: #4a423f;
+    --text-secondary: #8b7d78;
+    --border-color: #f7e6df;
+    --accent-primary: #e58d7c;
+    --accent-light: #f8e9e4;
+}
+
+html.theme-tangerine {
+    --bg-main: #fff7ec;
+    --bg-paper: #ffffff;
+    --text-primary: #4d443b;
+    --text-secondary: #a27e57;
+    --border-color: #f3e6d8;
+    --accent-primary: #e88d3e;
+    --accent-light: #fef1e5;
+}
+html.theme-ocean-mint {
+    --bg-main: #f5fbf6; --bg-paper: #ffffff; --text-primary: #58416d;
+    --text-secondary: #92849c; --border-color: #d8e5db; --accent-primary: #94d3a8;
+    --accent-light: #eaf1ed;
+}
+html.theme-coral-aqua {
+    --bg-main: #fbf7f6; --bg-paper: #ffffff; --text-primary: #4a423f;
+    --text-secondary: #8b7d78; --border-color: #f7e6df; --accent-primary: #79c9c9;
+    --accent-light: #e0f6f6;
+}
+html.theme-gold-rush {
+    --bg-main: #f8f8f4; --bg-paper: #ffffff; --text-primary: #2d3a4d;
+    --text-secondary: #5e7390; --border-color: #dcdccf; --accent-primary: #f2c759;
+    --accent-light: #f7f7e9;
+}
+html.theme-forest-fire {
+    --bg-main: #f0f4ec; --bg-paper: #ffffff; --text-primary: #4a5446;
+    --text-secondary: #74886f; --border-color: #d8e2d4; --accent-primary: #d9534f;
+    --accent-light: #fbe6e5;
+}
+html.theme-plum-sunset {
+    --bg-main: #f5f0f7; --bg-paper: #ffffff; --text-primary: #4c3c55;
+    --text-secondary: #887494; --border-color: #e3d2e9; --accent-primary: #f28a7e;
+    --accent-light: #f9e8e7;
+}
+html.theme-ocean-dusk {
+    --bg-main: #f0f3f6; --bg-paper: #ffffff; --text-primary: #2c3e50;
+    --text-secondary: #5d6d7e; --border-color: #d1e1e9; --accent-primary: #4d82b3;
+    --accent-light: #e4ebf0;
+}
+html.theme-mint-chocolate {
+    --bg-main: #f9f8f5; --bg-paper: #ffffff; --text-primary: #4a4a4a;
+    --text-secondary: #8b8981; --border-color: #e6e3df; --accent-primary: #6c9a7d;
+    --accent-light: #e6f0e6;
+}
+html.theme-cherry-blossom {
+    --bg-main: #fdf6f7; --bg-paper: #ffffff; --text-primary: #5c444a;
+    --text-secondary: #8e747b; --border-color: #f1dfe3; --accent-primary: #e67390;
+    --accent-light: #fbe7ec;
+}
+html.theme-stone-sage {
+    --bg-main: #f4f5f2; --bg-paper: #ffffff; --text-primary: #4b4b4b;
+    --text-secondary: #8d9189; --border-color: #e2e4e4; --accent-primary: #5a7d7c;
+    --accent-light: #f0f3f3;
+}
+html.theme-tangerine-dream {
+    --bg-main: #fff7ec; --bg-paper: #ffffff; --text-primary: #4d443b;
+    --text-secondary: #a27e57; --border-color: #f3e6d8; --accent-primary: #6cc1d5;
+    --accent-light: #e5f1f3;
+}
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 1.5rem; 
+        }
+
+        .planner-container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: var(--bg-paper);
+            border-radius: 12px;
+            padding: 2rem; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        }
+
+        .main-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.75rem;
+            font-weight: 500;
+            margin: 0 0 2rem 0;
+            text-align: center;
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .three-col { grid-template-columns: repeat(3, 1fr); }
+        .two-col { grid-template-columns: repeat(2, 1fr); }
+
+     .block {
+    border: none;          /* ?? no borders */
+    border-radius: 0;      /* flat edges */
+    padding: 0.001em 0;    /* only vertical spacing */
+    margin-bottom: 0.1rem; /* extra white space between sections */
+}
+
+        
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 1.25rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--accent-primary);
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+        textarea {
+            resize: vertical;
+            overflow-y: hidden;
+            min-height: 100px; 
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 0; /* Override default label margin */
+        }
+        .checkbox-group input { accent-color: var(--accent-primary); width: auto; }
+
+        .procedure-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .procedure-table th, .procedure-table td {
+            text-align: left;
+            padding: 0;
+            vertical-align: top;
+        }
+        .procedure-table th {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .procedure-table td { padding-right: 0.75rem; }
+        .procedure-table td:last-child { padding-right: 0; }
+        .procedure-table input, .procedure-table textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0;
+        }
+        .procedure-table .col-procedure { width: 75%; }
+        .procedure-table .col-interaction { width: 15%; }
+        .procedure-table .col-time { width: 10%; }
+
+        .controls {
+            position: fixed; top: 20px; right: 20px; display: flex; gap: 0.5rem;
+            background: var(--bg-paper); padding: 0.5rem; border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            body { padding: 0; background: #fff; }
+            .planner-container { box-shadow: none; padding: 15mm; }
+            .controls { display: none !important; }
+            textarea { resize: none !important; overflow: hidden !important; }
+        }
+		/* --- Compact A4 Print Styles --- */
+@media print {
+  body {
+    padding: 0;
+    margin: 0;
+    background: #fff;
+    font-size: 9pt; /* smaller base font */
+  }
+
+  .planner-container {
+    max-width: 100%;
+    padding: 8mm; /* safe A4 margins */
+    box-shadow: none;
+  }
+
+  .block {
+    padding: 0.4rem 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .block-header {
+    font-size: 10pt; /* smaller headers */
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+  .block-header i {
+    font-size: 9pt; /* shrink icons */
+  }
+
+  .form-group label {
+    font-size: 8pt;
+    margin-bottom: 0.15rem;
+  }
+
+  input, select, textarea {
+    padding: 0.2rem 0.3rem;
+    font-size: 8.5pt;
+  }
+
+  textarea {
+    min-height: 35px; /* smaller default */
+  }
+
+  .procedure-table th {
+    font-size: 8pt;
+    padding-bottom: 0.15rem;
+  }
+  .procedure-table td {
+    padding-right: 0.25rem;
+  }
+
+  .controls {
+    display: none !important; /* hide theme/print buttons */
+  }
+}
+/* --- Compact Layout (screen + print) --- */
+body {
+  font-size: 0.8rem;       /* smaller base font */
+  padding: 0.5rem;         /* less outer padding */
+}
+
+.planner-container {
+  max-width: 1000px;
+  padding: 0.8rem;         /* reduce inner padding */
+  border-radius: 6px;      /* flatter corners */
+}
+
+.main-header h1 {
+  font-size: 1.5rem;       /* smaller title */
+  margin-bottom: 0.75rem;
+}
+
+.grid-container {
+  gap: 0.5rem;             /* less spacing between grid items */
+}
+
+.block {
+  padding: 0.25rem 0;      
+  margin-bottom: 0.4rem;   /* reduce block spacing */
+}
+
+.block-header {
+  font-size: 0.9rem;       
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.2rem;
+}
+
+.form-group label {
+  font-size: 0.7rem;       
+  margin-bottom: 0.2rem;
+}
+
+input, select, textarea {
+  padding: 0.25rem 0.35rem;
+  font-size: 0.75rem;
+}
+
+textarea {
+  min-height: 40px;        /* smaller default */
+}
+
+.procedure-table th {
+  font-size: 0.7rem;
+  padding-bottom: 0.2rem;
+}
+.procedure-table td {
+  padding-right: 0.25rem;
+}
+/* --- Force print same as screen and fit one page --- */
+@media print {
+  html, body {
+    zoom: 0.75;               /* scale everything smaller */
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .planner-container {
+    max-width: 100%;
+    padding: 5mm;
+    box-shadow: none;
+  }
+
+  .controls {
+    display: none !important; /* hide theme/print buttons */
+  }
+
+  /* prevent page breaks inside blocks */
+  .block {
+    page-break-inside: avoid;
+  }
+}
+/* --- Page border for print and screen --- */
+.planner-container {
+  border: 1px solid #333;    /* dark grey border */
+  position: relative;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .planner-container {
+    border: 1px solid #000;  /* solid black when printing */
+    padding: 8mm;            /* keep spacing inside border */
+    box-shadow: none;
+  }
+}
+/* --- Page border follows theme accent color --- */
+.planner-container {
+  border: 2px solid var(--accent-primary); /* border color from theme */
+  position: relative;
+}
+
+/* Print version */
+@media print {
+  .planner-container {
+    border: 1.5pt solid var(--accent-primary); /* themed border when printing */
+    padding: 8mm;
+    box-shadow: none;
+  }
+}
+textarea.fixed-height {
+  min-height: calc(1.5em * 23); /* Sets the minimum height for 15 lines */
+  height: auto; /* Allows it to grow if needed (optional) */
+  max-height: calc(1.5em * 23); /* Sets the maximum height to 15 lines */
+  overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
+  line-height: 1.5em; /* Sets the line height for consistent sizing */
+  resize: vertical; /* Allows manual resizing, but respects the max-height */
+}
+/* --- Force print to one A4 page while keeping theme --- */
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  body {
+    zoom: 0.72;   /* scale everything down ~72% so it fits one page */
+    font-size: 9pt;
+  }
+
+  .planner-container {
+    background-color: var(--bg-paper);
+    border: 1.5pt solid var(--accent-primary);
+    border-radius: 0;
+    padding: 6mm;
+    box-shadow: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  textarea, input, select {
+    background-color: var(--bg-main);
+    border: 1pt solid var(--accent-primary);
+    font-size: 8pt;
+    padding: 0.2rem 0.3rem;
+  }
+
+  .controls {
+    display: none !important;
+  }
+
+  .block {
+    page-break-inside: avoid;  /* don’t split blocks */
+    margin-bottom: 0.4rem;
+  }
+}
+/* --- Universal sharp edges --- */
+.planner-container,
+textarea,
+input,
+select,
+.editable-area,
+.procedure-table,
+.block {
+  border-radius: 0 !important;   /* force sharp corners */
+}
+
+/* --- Page border & background follows theme --- */
+.planner-container {
+  background-color: var(--bg-paper);
+  border: 2px solid var(--accent-primary);
+  padding: 10mm;
+  box-sizing: border-box;
+}
+
+/* --- Form fields follow theme --- */
+textarea, input, select, .editable-area {
+  background-color: var(--bg-main);
+  border: 1px solid var(--accent-primary);
+  padding: 0.3rem 0.4rem;
+  color: var(--text-primary);
+}
+
+/* --- Compact print, 1 A4 page --- */
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  body {
+    zoom: 0.72;   /* scale to fit one page */
+    font-size: 9pt;
+  }
+
+  .planner-container {
+    border: 1.5pt solid var(--accent-primary);
+    border-radius: 0 !important;
+    padding: 6mm;
+    box-shadow: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  textarea, input, select {
+    border: 1pt solid var(--accent-primary);
+    border-radius: 0 !important;
+    background-color: var(--bg-main);
+    font-size: 8pt;
+    padding: 0.2rem 0.3rem;
+  }
+
+  .controls {
+    display: none !important;
+  }
+
+  .block {
+    page-break-inside: avoid;
+    margin-bottom: 0.4rem;
+  }
+}
+/* --- Themed Action Buttons --- */
+.controls button {
+  background-color: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.controls button:hover {
+  background-color: var(--accent-secondary); /* use secondary accent on hover */
+  transform: scale(1.05);
+}
+
+.controls button i {
+  margin-right: 0.4rem;
+}
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  background: var(--bg-paper);
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--accent-primary);
+}
+/* --- Toolbar --- */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: var(--bg-paper);
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--accent-primary);
+}
+
+.controls button {
+  background-color: var(--accent-primary);
+  color: var(--text-primary);   /* dark text that adapts to theme */
+  border: 1px solid var(--accent-primary);
+  border-radius: 0;                /* sharp corners */
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.controls button:hover {
+  background-color: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: var(--text-primary);   /* stays dark and readable */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.controls button i {
+  font-size: 0.9rem;
+}
+
+
+        /*
+		
+        ==========================================================================
+        == IMPROVED RIBBON STYLES
+        ==========================================================================
+        */
+        .ribbon {
+            display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+            background: var(--bg-main); /* Match main background */
+            border: 2px solid var(--accent-primary); /* Match container border */
+            border-radius: 12px; /* Match container radius */
+            padding: 10px;
+            margin-bottom: 24px;
+        }
+
+        .group {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-paper); /* Match container background */
+        }
+
+        .group .label { font-size: 12px; color: var(--text-secondary); margin-left: 4px; white-space: nowrap; }
+
+        .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+            appearance: none; border: 1px solid var(--border-color); background: var(--bg-main);
+            padding: 7px 10px; border-radius: 6px; font-size: 14px;
+            line-height: 1; cursor: pointer; color: var(--text-primary);
+        }
+
+        .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+
+        .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: var(--accent-light); }
+        .ribbon .btn.active, .ribbon .btn-square.active { 
+            background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); 
+        }
+        .ribbon .sep { width: 1px; background: var(--border-color); margin: 0 6px; align-self: stretch; }
+        .ribbon .grow { flex: 1 1 auto; }
+        .ribbon .pill {
+            font-size: 12px; padding: 4px 8px; border-radius: 999px; 
+            border: 1px solid var(--border-color); 
+            background: var(--bg-paper); color: var(--text-secondary);
+        }
+        [title] { position: relative; }
+        
+        /*
+        ==========================================================================
+        == EDITABLE AREA STYLES
+        ==========================================================================
+        */
+        .editable-area {
+            width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 0.9rem; background-color: var(--bg-main);
+            color: var(--text-primary); font-family: var(--font-body);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            min-height: 20px; overflow-y: auto; line-height: 1.5;
+        }
+        .editable-area.single-line { /* Style for former input[type=text] */
+             min-height: auto;
+             height: 38px; /* Matches original input height */
+             overflow: hidden; /* Hides overflow for single line */
+             white-space: nowrap; /* Prevents wrapping */
+        }
+        .editable-area.single-line br { display: none; } /* Hide line breaks */
+        .editable-area.single-line * { display: inline; } /* Force inline content */
+
+
+        .editable-area:focus {
+            outline: none; border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+        .editable-area[data-placeholder]:empty::before {
+            content: attr(data-placeholder);
+            color: var(--text-secondary); pointer-events: none;
+        }
+        .editable-area.fixed-height {
+            min-height: calc(1.5em * 23);
+            max-height: calc(1.5em * 23);
+        }
+
+        /*
+        ==========================================================================
+        == PRINT STYLES (Original)
+        ==========================================================================
+        */
+        @media print {
+            html, body { margin: 0; padding: 0; background: #fff; }
+            body { zoom: 0.72; font-size: 9pt; }
+            .planner-container {
+                background-color: var(--bg-paper); border: 1.5pt solid var(--accent-primary);
+                border-radius: 0; padding: 6mm; box-shadow: none; max-width: 100%; height: auto;
+            }
+            .editable-area, textarea, input, select {
+                background-color: var(--bg-main); border: 1pt solid var(--accent-primary);
+                font-size: 8pt; padding: 0.2rem 0.3rem;
+            }
+            .controls, .ribbon { display: none !important; } /* Hide both controls and ribbon */
+            .block { page-break-inside: avoid; margin-bottom: 0.4rem; }
+        }
+		 @media print {
+            body { padding: 0; background: #fff; }
+            .planner-container { box-shadow: none; padding: 15mm; }
+            .controls { display: none !important; }
+            textarea { resize: none !important; overflow: hidden !important; }
+        }
+		/* --- Compact A4 Print Styles --- */
+@media print {
+  body {
+    padding: 0;
+    margin: 0;
+    background: #fff;
+    font-size: 9pt; /* smaller base font */
+  }
+
+  .planner-container {
+    max-width: 100%;
+    padding: 8mm; /* safe A4 margins */
+    box-shadow: none;
+  }
+
+  .block {
+    padding: 0.4rem 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .block-header {
+    font-size: 10pt; /* smaller headers */
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+  .block-header i {
+    font-size: 9pt; /* shrink icons */
+  }
+
+  .form-group label {
+    font-size: 8pt;
+    margin-bottom: 0.15rem;
+  }
+
+  input, select, textarea {
+    padding: 0.2rem 0.3rem;
+    font-size: 8.5pt;
+  }
+
+  textarea {
+    min-height: 35px; /* smaller default */
+  }
+
+  .procedure-table th {
+    font-size: 8pt;
+    padding-bottom: 0.15rem;
+  }
+  .procedure-table td {
+    padding-right: 0.25rem;
+  }
+
+  .controls {
+    display: none !important; /* hide theme/print buttons */
+  }
+}
+/* --- Compact Layout (screen + print) --- */
+body {
+  font-size: 0.8rem;       /* smaller base font */
+  padding: 0.5rem;         /* less outer padding */
+}
+
+.planner-container {
+  max-width: 1000px;
+  padding: 0.8rem;         /* reduce inner padding */
+  border-radius: 6px;      /* flatter corners */
+}
+
+.main-header h1 {
+  font-size: 1.5rem;       /* smaller title */
+  margin-bottom: 0.75rem;
+}
+
+.grid-container {
+  gap: 0.5rem;             /* less spacing between grid items */
+}
+
+.block {
+  padding: 0.25rem 0;      
+  margin-bottom: 0.4rem;   /* reduce block spacing */
+}
+
+.block-header {
+  font-size: 0.9rem;       
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.2rem;
+}
+
+.form-group label {
+  font-size: 0.7rem;       
+  margin-bottom: 0.2rem;
+}
+
+input, select, textarea {
+  padding: 0.25rem 0.35rem;
+  font-size: 0.75rem;
+}
+
+textarea {
+  min-height: 40px;        /* smaller default */
+}
+
+.procedure-table th {
+  font-size: 0.7rem;
+  padding-bottom: 0.2rem;
+}
+.procedure-table td {
+  padding-right: 0.25rem;
+}
+/* --- Force print same as screen and fit one page --- */
+@media print {
+  html, body {
+    zoom: 0.75;               /* scale everything smaller */
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .planner-container {
+    max-width: 100%;
+    padding: 5mm;
+    box-shadow: none;
+  }
+
+  .controls {
+    display: none !important; /* hide theme/print buttons */
+  }
+
+  /* prevent page breaks inside blocks */
+  .block {
+    page-break-inside: avoid;
+  }
+}
+/* --- Page border for print and screen --- */
+.planner-container {
+  border: 1px solid #333;    /* dark grey border */
+  position: relative;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .planner-container {
+    border: 1px solid #000;  /* solid black when printing */
+    padding: 8mm;            /* keep spacing inside border */
+    box-shadow: none;
+  }
+}
+/* --- Page border follows theme accent color --- */
+.planner-container {
+  border: 2px solid var(--accent-primary); /* border color from theme */
+  position: relative;
+}
+
+/* Print version */
+@media print {
+  .planner-container {
+    border: 1.5pt solid var(--accent-primary); /* themed border when printing */
+    padding: 8mm;
+    box-shadow: none;
+  }
+}
+textarea.fixed-height {
+  min-height: calc(1.5em * 23); /* Sets the minimum height for 15 lines */
+  height: auto; /* Allows it to grow if needed (optional) */
+  max-height: calc(1.5em * 23); /* Sets the maximum height to 15 lines */
+  overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
+  line-height: 1.5em; /* Sets the line height for consistent sizing */
+  resize: vertical; /* Allows manual resizing, but respects the max-height */
+}
+/* --- Force print to one A4 page while keeping theme --- */
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  body {
+    zoom: 0.72;   /* scale everything down ~72% so it fits one page */
+    font-size: 9pt;
+  }
+
+  .planner-container {
+    background-color: var(--bg-paper);
+    border: 1.5pt solid var(--accent-primary);
+    border-radius: 0;
+    padding: 6mm;
+    box-shadow: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  textarea, input, select {
+    background-color: var(--bg-main);
+    border: 1pt solid var(--accent-primary);
+    font-size: 8pt;
+    padding: 0.2rem 0.3rem;
+  }
+
+  .controls {
+    display: none !important;
+  }
+
+  .block {
+    page-break-inside: avoid;  /* don’t split blocks */
+    margin-bottom: 0.4rem;
+  }
+}
+/* --- Universal sharp edges --- */
+.planner-container,
+textarea,
+input,
+select,
+.editable-area,
+.procedure-table,
+.block {
+  border-radius: 0 !important;   /* force sharp corners */
+}
+
+/* --- Page border & background follows theme --- */
+.planner-container {
+  background-color: var(--bg-paper);
+  border: 2px solid var(--accent-primary);
+  padding: 10mm;
+  box-sizing: border-box;
+}
+
+/* --- Form fields follow theme --- */
+textarea, input, select, .editable-area {
+  background-color: var(--bg-main);
+  border: 1px solid var(--accent-primary);
+  padding: 0.3rem 0.4rem;
+  color: var(--text-primary);
+}
+
+/* --- Compact print, 1 A4 page --- */
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  body {
+    zoom: 0.72;   /* scale to fit one page */
+    font-size: 9pt;
+  }
+
+  .planner-container {
+    border: 1.5pt solid var(--accent-primary);
+    border-radius: 0 !important;
+    padding: 6mm;
+    box-shadow: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  textarea, input, select {
+    border: 1pt solid var(--accent-primary);
+    border-radius: 0 !important;
+    background-color: var(--bg-main);
+    font-size: 8pt;
+    padding: 0.2rem 0.3rem;
+  }
+
+  .controls {
+    display: none !important;
+  }
+
+  .block {
+    page-break-inside: avoid;
+    margin-bottom: 0.4rem;
+  }
+}
+/* --- Themed Action Buttons --- */
+.controls button {
+  background-color: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.controls button:hover {
+  background-color: var(--accent-secondary); /* use secondary accent on hover */
+  transform: scale(1.05);
+}
+
+.controls button i {
+  margin-right: 0.4rem;
+}
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  background: var(--bg-paper);
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--accent-primary);
+}
+/* --- Toolbar --- */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: var(--bg-paper);
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--accent-primary);
+}
+
+.controls button {
+  background-color: var(--accent-primary);
+  color: var(--text-primary);   /* dark text that adapts to theme */
+  border: 1px solid var(--accent-primary);
+  border-radius: 0;                /* sharp corners */
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.controls button:hover {
+  background-color: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: var(--text-primary);   /* stays dark and readable */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.controls button i {
+  font-size: 0.9rem;
+}
+
+    </style>
+</head>
+<body>
+
+   <div class="controls">
+    <select id="theme-selector">
+        <option value="theme-sage">Artisan Sage</option>
+        <option value="theme-doodle">Doodle Pad</option>
+        <option value="theme-sunset">Sunset</option>
+        <option value="theme-ocean">Ocean Breeze</option>
+        <option value="theme-forest">Forest Floor</option>
+        <option value="theme-berry">Berry Blast</option>
+        <option value="theme-mono">Monochrome</option>
+        <option value="theme-tangerine">Tangerine</option>
+        <option value="theme-lavender">Lavender Fields</option>
+        <option value="theme-mint">Mint Mojito</option>
+        <option value="theme-coral">Coral Reef</option>
+        <option value="theme-ocean-mint">Lavender Mint</option>
+        <option value="theme-coral-aqua">Coral Aqua</option>
+        <option value="theme-gold-rush">Gold Rush</option>
+        <option value="theme-forest-fire">Forest Fire</option>
+        <option value="theme-plum-sunset">Plum Sunset</option>
+        <option value="theme-ocean-dusk">Ocean Dusk</option>
+        <option value="theme-mint-chocolate">Mint Chocolate</option>
+        <option value="theme-cherry-blossom">Cherry Blossom</option>
+        <option value="theme-stone-sage">Stone & Sage</option>
+        <option value="theme-tangerine-dream">Tangerine Dream</option>
+    </select>
+     <button id="print-btn"><i class="fas fa-print"></i> Print</button>
+     <button id="save-button"><i class="fas fa-save"></i> Save</button>
+     <button id="load-button"><i class="fas fa-upload"></i> Load</button>
+     <button id="undo-button"><i class="fas fa-undo"></i> Undo</button>
+     <button id="redo-button"><i class="fas fa-redo"></i> Redo</button>
+    </div>
+
+    <div class="planner-container">
+ 
+
+        <div class="ribbon" id="ribbon">
+          <div class="group" aria-label="Font">
+            <select id="fontFamily" title="Font family">
+              <option>Poppins</option><option>Lora</option><option>Inter</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Garamond</option><option>Cambria</option><option>Calibri</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option><option>Courier New</option><option>Consolas</option><option>Lucida Sans Unicode</option><option>Roboto</option><option>Open Sans</option><option>Montserrat</option><option>Impact</option><option>Comic Sans MS</option>
+            </select>
+            <select id="fontSize" title="Font size">
+              <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
+            </select>
+            <button class="btn-square" id="fontDec" title="Decrease font size">A-</button>
+            <button class="btn-square" id="fontInc" title="Increase font size">A+</button>
+          </div>
+
+          <div class="group" aria-label="Emphasis">
+            <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+            <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+            <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+            <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+            <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
+            <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
+          </div>
+
+          <div class="group" aria-label="Colors">
+            <label class="label" for="foreColor">Text</label>
+            <input type="color" id="foreColor" title="Text color" value="#3d4852">
+            <span class="sep"></span>
+            <label class="label" for="hiliteColor">Highlight</label>
+            <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+          </div>
+
+          <div class="group" aria-label="Paragraph">
+            <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+            <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+            <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+            <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+            <span class="sep"></span>
+            <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+            <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+            <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
+            <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
+          </div>
+
+          <div class="group" aria-label="Actions">
+            <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
+          </div>
+
+          <div class="grow"></div>
+
+          <div class="group">
+            <span class="pill" id="wordCount">0 words</span>
+            <span class="pill" id="selectionInfo">No selection</span>
+          </div>
+        </div>
+
+        <div class="block" style="margin-bottom: 1rem;">
+            <h2 class="block-header"><i class="fas fa-clipboard-list"></i> Lesson Details</h2>
+            <div class="grid-container two-col" style="margin-bottom: 1rem;">
+                <div class="form-group"><label for="school">Primary School</label><div id="school" class="editable-area single-line" contenteditable="true"></div></div>
+                <div class="form-group"><label for="teacher">Teacher</label><div id="teacher" class="editable-area single-line" contenteditable="true"></div></div>
+            </div>
+            <div class="grid-container three-col" style="margin-bottom: 1rem;">
+                <div class="form-group"><label for="date">Date</label><input type="date" id="date"></div>
+                <div class="form-group"><label for="learners">Number of Learners</label><input type="number" id="learners"></div>
+                <div class="form-group"><label for="level">Level</label><select id="levelSelect">
+				    <option value="">Select Level</option><option value="3ps">3rd</option><option value="4ps">4th</option><option value="5ps">5th</option></select></div>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="sequence">Sequence</label><select id="sequenceSelect"><option value="">Select Sequence</option></select>
+            </div>
+            <div class="grid-container two-col">
+                <div class="form-group"><label for="section">Section</label><select id="sectionSelect"><option value="">Select Section</option></select></div>
+                <div class="form-group"><label for="session">Session</label><select id="sessionSelect"><option value="">Select Session</option></select></div>
+            </div>
+        </div>
+
+        <div class="block" style="margin-bottom: 1rem;">
+            <h2 class="block-header"><i class="fas fa-bullseye"></i> Learning Objectives</h2>
+            <div id="objectives-editor" class="editable-area" contenteditable="true" data-placeholder="By the end of the lesson, learners will be able to..."></div>
+        </div>
+
+        <div class="grid-container two-col" style="margin-bottom: 1rem;">
+            <div class="block">
+                <h2 class="block-header"><i class="fas fa-tasks"></i> Target Competencies</h2>
+                <div class="checkbox-group"><label><input type="checkbox" id="comp-interact"> Interact</label><label><input type="checkbox" id="comp-interpret"> Interpret</label><label><input type="checkbox" id="comp-produce"> Produce</label></div>
+            </div>
+            <div class="block">
+                <h2 class="block-header"><i class="fas fa-paperclip"></i> Teaching Materials</h2>
+                <div class="checkbox-group"><label><input type="checkbox" id="mat-textbook"> Textbook</label><label><input type="checkbox" id="mat-wb"> W.B</label><label><input type="checkbox" id="mat-whiteboard"> Whiteboard</label></div>
+            </div>
+        </div>
+
+        <div class="block" style="margin-bottom: 1rem;">
+            <h2 class="block-header"><i class="fas fa-coffee"></i> Warmer</h2>
+            <table class="procedure-table">
+                <thead><tr><th class="col-procedure">Procedure</th><th class="col-interaction">Interaction</th><th class="col-time">Time</th></tr></thead>
+                <tbody><tr>
+                    <td><div id="warmer-proc" class="editable-area single-line" contenteditable="true"></div></td>
+                    <td><div id="warmer-interact" class="editable-area single-line" contenteditable="true"></div></td>
+                    <td><div id="warmer-time" class="editable-area single-line" contenteditable="true"></div></td>
+                </tr></tbody>
+            </table>
+        </div>
+        
+       <div class="block" style="margin-bottom: 1rem;">
+            <h2 class="block-header"><i class="fas fa-chalkboard-teacher"></i> Procedure / Tasks</h2>
+            <table class="procedure-table">
+                <thead><tr><th class="col-procedure">Procedure</th><th class="col-interaction">Interaction</th><th class="col-time">Time</th></tr></thead>
+                <tbody><tr>
+                    <td><div id="tasks-proc" class="editable-area fixed-height" contenteditable="true"></div></td>
+                    <td><div id="tasks-interact" class="editable-area fixed-height" contenteditable="true"></div></td>
+                    <td><div id="tasks-time" class="editable-area fixed-height" contenteditable="true"></div></td>
+                </tr></tbody>
+            </table>
+        </div>
+        
+        <div class="block" style="margin-bottom: 1rem;">
+            <h2 class="block-header"><i class="fas fa-check-double"></i> Assessment</h2>
+            <table class="procedure-table">
+                <thead><tr><th class="col-procedure">Procedure</th><th class="col-interaction">Interaction</th><th class="col-time">Time</th></tr></thead>
+                <tbody><tr>
+                    <td><div id="assess-proc" class="editable-area single-line" contenteditable="true"></div></td>
+                    <td><div id="assess-interact" class="editable-area single-line" contenteditable="true"></div></td>
+                    <td><div id="assess-time" class="editable-area single-line" contenteditable="true"></div></td>
+                </tr></tbody>
+            </table>
+        </div>
+        
+        <div class="block">
+            <h2 class="block-header"><i class="fas fa-lightbulb"></i> Self-Reflection</h2>
+            <div class="grid-container three-col">
+                <div class="form-group"><label>What Worked Well?</label><div id="reflect-well" class="editable-area" style="min-height: 40px;" contenteditable="true"></div></div>
+                <div class="form-group"><label>What Was Challenging?</label><div id="reflect-challenge" class="editable-area" style="min-height: 40px;" contenteditable="true"></div></div>
+                <div class="form-group"><label>Action Points for Next Time</label><div id="reflect-actions" class="editable-area" style="min-height: 40px;" contenteditable="true"></div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- SCRIPT SECTION 1: RICH TEXT EDITOR LOGIC ---
+
+        let activeEditor = null;
+        document.addEventListener('focusin', e => {
+            if (e.target.isContentEditable) {
+                activeEditor = e.target;
+                updateStatus();
+            }
+        });
+
+        const pxSteps = [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48];
+
+        function isSelectionInEditor() {
+          if (!activeEditor) return false;
+          const sel = window.getSelection();
+          return sel && sel.rangeCount > 0 && activeEditor.contains(sel.getRangeAt(0).commonAncestorContainer);
+        }
+
+        function exec(cmd, value = null) {
+          if (!isSelectionInEditor()) return;
+          document.execCommand(cmd, false, value);
+          activeEditor.focus();
+        }
+        
+        function applyStyle(style, value) {
+            if (!isSelectionInEditor()) return;
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const range = sel.getRangeAt(0);
+                if(range.collapsed) return;
+
+                const span = document.createElement("span");
+                span.style[style] = value;
+
+                try {
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    range.selectNodeContents(span);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                } catch(e) {
+                    console.warn("surroundContents failed, using fallback execCommand.", e);
+                    document.execCommand('styleWithCSS', false, true);
+                    if (style === 'fontSize') exec('fontSize', '7');
+                    if (style === 'fontFamily') exec('fontName', value);
+
+                    const container = range.commonAncestorContainer;
+                    const affectedNodes = (container.nodeType === 1 ? container : container.parentElement).getElementsByTagName("font");
+                    Array.from(affectedNodes).forEach(font => {
+                        const newSpan = document.createElement('span');
+                        newSpan.innerHTML = font.innerHTML;
+                        newSpan.style[style] = value;
+                        font.parentNode.replaceChild(newSpan, font);
+                    });
+                }
+            }
+        }
+
+        function applyFontFamily(family) { applyStyle('fontFamily', family); }
+        function applyFontSize(px) { applyStyle('fontSize', px + 'px'); }
+
+        function getComputedFontSizePxAtCaret(defaultPx = 14) {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return defaultPx;
+            let node = sel.anchorNode;
+            if (!node || !isSelectionInEditor()) return defaultPx;
+            const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+            return Math.round(parseFloat(window.getComputedStyle(element).fontSize));
+        }
+
+        function stepFontSize(delta) {
+            const current = getComputedFontSizePxAtCaret();
+            let idx = pxSteps.findIndex(v => v >= current);
+            if (idx === -1) idx = pxSteps.length - 1;
+            if (current < pxSteps[idx] && idx > 0) idx -= 1;
+            idx = Math.min(Math.max(idx + delta, 0), pxSteps.length - 1);
+            applyFontSize(pxSteps[idx]);
+        }
+        
+        function updateStatus() {
+          if (!activeEditor) {
+              document.getElementById('wordCount').textContent = '0 words';
+              document.getElementById('selectionInfo').textContent = 'No selection';
+              document.querySelectorAll('[data-cmd]').forEach(btn => btn.classList.remove('active'));
+              return;
+          }
+          const text = activeEditor.innerText.trim();
+          const words = text ? text.split(/\s+/).length : 0;
+          document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
+
+          const sel = window.getSelection();
+          const selLen = (sel && sel.rangeCount) ? sel.toString().length : 0;
+          document.getElementById('selectionInfo').textContent = selLen > 0 ? `${selLen} chars selected` : 'No selection';
+
+          document.querySelectorAll('[data-cmd]').forEach(btn => {
+            const cmd = btn.getAttribute('data-cmd');
+            try {
+                btn.classList.toggle('active', document.queryCommandState(cmd));
+            } catch (e) {
+                btn.classList.remove('active');
+            }
+          });
+        }
+        
+        document.getElementById('fontFamily').addEventListener('change', e => applyFontFamily(e.target.value));
+        document.getElementById('fontSize').addEventListener('change', e => applyFontSize(parseInt(e.target.value, 10)));
+        document.getElementById('fontInc').addEventListener('click', () => stepFontSize(+1));
+        document.getElementById('fontDec').addEventListener('click', () => stepFontSize(-1));
+        document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+        document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
+        
+        document.querySelectorAll('[data-cmd]').forEach(btn => {
+            btn.addEventListener('click', (e) => { 
+                e.preventDefault();
+                exec(btn.getAttribute('data-cmd')); 
+            });
+        });
+
+        document.addEventListener('selectionchange', updateStatus);
+        document.addEventListener('keyup', updateStatus);
+        document.addEventListener('mouseup', updateStatus);
+        
+        updateStatus();
+
+        // --- SCRIPT SECTION 2: PLANNER LOGIC ---
+
+        const themeSelector = document.getElementById('theme-selector');
+        themeSelector.addEventListener('change', (e) => {
+            document.documentElement.className = e.target.value;
+        });
+
+        const curriculum = { "3ps": { "Seq01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Seq02: School": { "Section 01: School Objects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: School Subjects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Seq03: Home": { "Section 01: Describing a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Location Rooms in a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Seq04: Play Time": { "Section 01: Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Favourite Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Seq05: Pets": { "Section 01: Pets": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Pets Body Parts": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Seq06: Birthday": { "Section 01: Party Invitation": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Party Celebration": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] } }, "4ps": { "Seq01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Seq02: School": { "Section 01: School Facilities": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Mapping": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Seq03: Fun Time and Games": { "Section 01: Fun Time": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Games": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] } }, "5ps": { "Seq01: Jobs, Occupations, and Hobbies": { "Section 01: Jobs and Occupations": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Hobbies": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Seq02: Hometown, City, Village Amenities": { "Section 01: Hometown, City, Village Amenities": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Directions": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Seq03: Holidays and Travelling": { "Section 01: Holidays": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Travelling": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] } } };
+        const levelSelect = document.getElementById("levelSelect"), sequenceSelect = document.getElementById("sequenceSelect"), sectionSelect = document.getElementById("sectionSelect"), sessionSelect = document.getElementById("sessionSelect"), specialOption = "REMEDIATION & STANDARDISATION";
+        levelSelect.addEventListener("change",()=>{sequenceSelect.innerHTML="<option value=''>Select Sequence</option>",sectionSelect.innerHTML="<option value=''>Select Section</option>",sessionSelect.innerHTML="<option value=''>Select Session</option>",curriculum[levelSelect.value]&&(Object.keys(curriculum[levelSelect.value]).forEach(e=>{const t=document.createElement("option");t.value=e,t.textContent=e,sequenceSelect.appendChild(t)}),special=document.createElement("option"),special.value=specialOption,special.textContent=specialOption,sequenceSelect.appendChild(special))}),sequenceSelect.addEventListener("change",()=>{sectionSelect.innerHTML="<option value=''>Select Section</option>",sessionSelect.innerHTML="<option value=''>Select Session</option>";if(sequenceSelect.value===specialOption){const e=document.createElement("option");return e.value=specialOption,e.textContent=specialOption,void sectionSelect.appendChild(e)}const e=curriculum[levelSelect.value]?.[sequenceSelect.value];e&&Object.keys(e).forEach(e=>{const t=document.createElement("option");t.value=e,t.textContent=e,sectionSelect.appendChild(t)})}),sectionSelect.addEventListener("change",()=>{sessionSelect.innerHTML="<option value=''>Select Session</option>";if(sectionSelect.value===specialOption){const e=document.createElement("option");return e.value=specialOption,e.textContent=specialOption,void sessionSelect.appendChild(e)}const e=curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];e&&e.forEach(e=>{const t=document.createElement("option");t.value=e,t.textContent=e,sessionSelect.appendChild(t)})});
+        
+        document.getElementById("print-btn").addEventListener("click", () => window.print());
+        
+        const planId = "default-plan";
+        let undoStack = [], redoStack = [];
+
+        function collectPlanData() {
+            const data = {};
+            document.querySelectorAll("input, select").forEach(el => {
+                if (el.id) data[el.id] = el.type === "checkbox" ? el.checked : el.value;
+            });
+            document.querySelectorAll(".editable-area").forEach(el => {
+                if (el.id) data[el.id] = el.innerHTML;
+            });
+            return data;
+        }
+
+        function restorePlanData(data) {
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) {
+                    if (el.type === "checkbox") el.checked = data[key];
+                    else if (el.classList.contains('editable-area')) el.innerHTML = data[key];
+                    else el.value = data[key];
+                }
+            });
+        }
+        
+        function pushUndoState() {
+          undoStack.push(JSON.stringify(collectPlanData()));
+          if (undoStack.length > 50) undoStack.shift();
+          redoStack = [];
+        }
+        
+        document.querySelector('.planner-container').addEventListener("input", pushUndoState);
+        document.getElementById("undo-button").addEventListener("click", () => { if (undoStack.length > 1) { redoStack.push(undoStack.pop()); restorePlanData(JSON.parse(undoStack[undoStack.length - 1])); } });
+        document.getElementById("redo-button").addEventListener("click", () => { if (redoStack.length > 0) { const nextState = redoStack.pop(); undoStack.push(nextState); restorePlanData(JSON.parse(nextState)); } });
+        document.getElementById("save-button").addEventListener("click", () => { localStorage.setItem(`lessonplan-${planId}`, JSON.stringify(collectPlanData())); alert("Plan saved!"); });
+        document.getElementById("load-button").addEventListener("click", () => {
+          const dataStr = localStorage.getItem(`lessonplan-${planId}`);
+          if (dataStr) {
+            const data = JSON.parse(dataStr);
+            restorePlanData(data);
+            undoStack = [JSON.stringify(data)];
+            redoStack = [];
+            alert("Plan loaded!");
+          } else { alert("No saved plan found."); }
+        });
+        
+        pushUndoState();
+    </script>
+</body>
+</html>

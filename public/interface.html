@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lesson Plan</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+ <!-- Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Quill JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #222;
+    }
+    h1, h2, h3, label, .header, .section-title, .highlight-pink b, .highlight-blue b {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    select, input, textarea { font-family: 'Roboto', sans-serif; }
+    .section-title td {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    /* Controls bar */
+    .controls {
+      padding: 10px;
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+    }
+    button, select {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    /* Hide controls when printing */
+    @media print {
+      .controls { display: none !important; }
+    }
+	/* ===== Default (Gray) ===== */
+.theme-default table {
+  background-color: #fafafa;
+}
+.theme-default .section-title td {
+  background-color: #e0e0e0;
+  color: #222;
+}
+.theme-default textarea,
+.theme-default input,
+.theme-default select {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  color: #000;
+}
+
+/* ===== Theme 1 – Soft Blues ===== */
+.theme1 table {
+  background-color: #f2f8ff;
+}
+.theme1 .section-title td {
+  background-color: #cce5ff;
+  color: #003366;
+}
+.theme1 textarea,
+.theme1 input,
+.theme1 select {
+  background-color: #e6f2ff;
+  border: 1px solid #99ccff;
+  color: #002244;
+}
+
+/* ===== Theme 2 – Warm Sunrise ===== */
+.theme2 table {
+  background-color: #fff6f0;
+}
+.theme2 .section-title td {
+  background-color: #ffd9b3;
+  color: #663300;
+}
+.theme2 textarea,
+.theme2 input,
+.theme2 select {
+  background-color: #fff6f0;  /* same as table background */
+  border: 1px solid #ffb366;
+  color: #442200;
+}
+
+
+/* ===== Theme 3 – Calm Greens ===== */
+.theme3 table {
+  background-color: #f2fff2;
+}
+.theme3 .section-title td {
+  background-color: #c6f2c6;
+  color: #003300;
+}
+.theme3 textarea,
+.theme3 input,
+.theme3 select {
+  background-color: #e0ffe0;
+  border: 1px solid #80d980;
+  color: #002200;
+}
+
+/* ===== Theme 4 – Lavender Dream ===== */
+.theme4 table {
+  background-color: #faf2ff;
+}
+.theme4 .section-title td {
+  background-color: #e0ccff;
+  color: #330066;
+}
+.theme4 textarea,
+.theme4 input,
+.theme4 select {
+  background-color: #FFFFFF;
+  border: 1px solid #b366ff;
+  color: #220044;
+}
+
+/* ===== Theme 5 – Peachy Pastel ===== */
+.theme5 table {
+  background-color: #fff5f7;
+}
+.theme5 .section-title td {
+  background-color: #F28A29;
+  color: #660022;
+}
+.theme5 textarea,
+.theme5 input,
+.theme5 select {
+  background-color: #FFFFFF;
+  border: 1px solid #F5DFC6;
+  color: #440011;
+}
+
+/* ===== Theme 6 – Mint Breeze ===== */
+.theme6 table {
+  background-color: #f0fffa;
+}
+.theme6 .section-title td {
+  background-color: #b3ffe0;
+  color: #004d33;
+}
+.theme6 textarea,
+.theme6 input,
+.theme6 select {
+  background-color: #FFFFFF;
+  border: 1px solid #66ffcc;
+  color: #003322;
+}
+
+/* ===== Theme 7 – Golden Glow ===== */
+.theme7 table {
+  background-color: #fffdf2;
+}
+.theme7 .section-title td {
+  background-color: #9BF279;
+  color: #664d00;
+}
+.theme7 textarea,
+.theme7 input,
+.theme7 select {
+  background-color: #FFFFFF;
+  border: 1px solid #CDE3C3;
+  color: #332200;
+}
+
+/* ===== Theme 8 – Rose Mist ===== */
+.theme8 table {
+  background-color: #fff5f9;
+}
+.theme8 .section-title td {
+  background-color: #ffb3d9;
+  color: #660033;
+}
+.theme8 textarea,
+.theme8 input,
+.theme8 select {
+  background-color: #FFFFFF;
+  border: 1px solid #ff80bf;
+  color: #33001a;
+}
+
+/* ===== Theme 9 – Ocean Wave ===== */
+.theme9 table {
+  background-color: #f2fbff;
+}
+.theme9 .section-title td {
+  background-color: #FAE37A;
+  color: #003344;
+}
+.theme9 textarea,
+.theme9 input,
+.theme9 select {
+  background-color: #FFFFFF;
+  border: 1px solid #F2ECCE;
+  color: #002233;
+}
+
+/* ===== Theme 10 – Coffee Cream ===== */
+.theme10 table {
+  background-color: #fffaf5;
+}
+.theme10 .section-title td {
+  background-color: #928AF2;
+  color: #332211;
+}
+.theme10 textarea,
+.theme10 input,
+.theme10 select {
+  background-color: #FFFFFF;
+  border: 1px solid #E4D8F0;
+  color: #221100;
+}
+  <style>
+  .input-no-border {
+    border: none;
+    background: none;   /* no background at all */
+    width: 100%;        /* fill the cell nicely */
+    font-family: 'Poppins', sans-serif; /* match your page font */
+    font-size: 14px;
+    color: inherit;     /* same color as surrounding text */
+    outline: none;      /* remove highlight border on focus */
+  }
+
+  .input-no-border::placeholder {
+    color: #999;        /* subtle placeholder */
+    font-style: italic;
+  }
+  </style>
+</head>
+<body>
+
+  <!-- Controls (Theme + Print + PDF) -->
+  <div class="controls">
+    <label for="themeSwitcher" style="font-weight:bold;">Select Theme:</label>
+    <select id="themeSwitcher">
+      <option value="default" selected>Default (Current)</option>
+      <option value="theme1">Soft Blues</option>
+      <option value="theme2">Warm Sunrise</option>
+      <option value="theme3">Calm Greens</option>
+      <option value="theme4">Lavender Dream</option>
+      <option value="theme5">Peachy Pastel</option>
+	  <option value="theme6">Ocean Breeze</option>
+      <option value="theme7">Minty Fresh</option>
+      <option value="theme8">Rose Garden</option>
+      <option value="theme9">Golden Glow</option>
+      <option value="theme10">Twilight</option>
+
+    </select>
+    <button onclick="window.print()"> Print</button>
+    <button onclick="downloadPDF()"> Download PDF</button>
+  <div style="text-align: left ; padding: 10px;">
+   <a href="index.html" style="text-decoration: none; font-weight: bold; color: #007BFF;"> Go back</a>
+  </div>
+   </div>
+  <!-- Container -->
+  <div id="table-container" class="theme-default">
+
+ <!-- Row 1: Primary School + Teacher -->
+<table>
+  <tr>
+    <td class="header c1">
+      <b>Primary School:</b>
+      <input type="text" placeholder="Enter school name" class="input-no-border" />
+    </td>
+    <td class="header c2">
+      <b>Teacher:</b>
+      <input type="text" placeholder="Enter teacher name" class="input-no-border" />
+    </td>
+  </tr>
+</table>
+
+    <!-- Row 2: Level + Learners + Sequence + Section -->
+    <table>
+      <tr>
+        <td class="header c3">
+          Level:
+          <select id="levelSelect" class="level-select">
+            <option value="">-- Select Level --</option>
+            <option value="3PS">3PS</option>
+            <option value="4PS">4PS</option>
+            <option value="5PS">5PS</option>
+          </select>
+        </td>
+
+        <td class="header c4">
+          Number of learners:
+          <input type="number" min="1" class="input-no-border" placeholder="0" />
+        </td>
+
+        <td class="header c5">
+          Sequence:
+          <select id="sequenceSelect" class="level-select">
+            <option value="">-- Select Sequence --</option>
+          </select>
+        </td>
+
+        <td class="header c6">
+          Section:
+          <select id="sectionSelect" class="level-select">
+            <option value="">-- Select Section --</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Row 3: Session + Teaching Materials -->
+    <table>
+      <tr>
+        <td class="header c6">
+          Session:
+          <select id="sessionSelect" class="level-select">
+            <option value="">-- Select Session --</option>
+          </select>
+        </td>
+
+        <td class="highlight-blue">
+          <b style="margin-right: 10px;">Teaching materials:</b>
+          <div class="competency-group-inline">
+            <label class="competency-option">
+              <input type="checkbox" class="competency-checkbox" value="Textbook" /> Textbook
+            </label>
+            <label class="competency-option">
+              <input type="checkbox" class="competency-checkbox" value="Workbook" /> W.B
+            </label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+ <!-- Row 4: Session Objective -->
+<table>
+  <tr>
+    <td class="highlight-pink">
+      <b>Session objective(s):</b>
+      <input type="text" 
+             value="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." 
+             style="width: 90%; border: none; background: transparent; 
+                    font-family: 'Poppins', sans-serif; 
+                    font-size: 14px; 
+                    color: inherit;" />
+    </td>
+  </tr>
+</table>
+
+    <!-- Row 5: Competencies & Subsidiary Objectives -->
+    <table>
+      <tr>
+        <td class="highlight-blue">
+          <b style="margin-right: 10px;">Target competencies:</b>
+          <div class="competency-group-inline">
+            <label class="competency-option">
+              <input type="checkbox" class="competency-checkbox" value="Interact" /> Interact
+            </label>
+            <label class="competency-option">
+              <input type="checkbox" class="competency-checkbox" value="Interpret" /> Interpret
+            </label>
+            <label class="competency-option">
+              <input type="checkbox" class="competency-checkbox" value="Produce" /> Produce
+            </label>
+          </div>
+        </td>
+
+        <td class="highlight-green"><b>Subsidiary objectives:</b> Building Confidence in Language Use.</td>
+      </tr>
+    </table>
+
+    <!-- Main Content -->
+    <br />
+    <table>
+      <tr class="section-title">
+        <td class="stage-col">Stages</td>
+        <td class="procedure">Procedure / Tasks</td>
+        <td class="interaction-col">Interaction</td>
+        <td class="time-col">Time ?</td>
+      </tr>
+      <tr>
+        <td class="stage-col">Warmer</td>
+        <td class="procedure"><textarea class="procedure-textarea small" placeholder="Write your warmer procedure here..."></textarea></td>
+        <td class="interaction-col">T -> L</td>
+        <td class="time-col">10 min</td>
+      </tr>
+      <tr>
+        <td class="stage-col">Install resources</td>
+		
+        <td class="procedure"><div id="editor" class="procedure-textarea" style="height: 200px;"></div></td>
+        <td class="interaction-col">T -> T</td>
+        <td class="time-col">20 min</td>
+      </tr>
+      <tr>
+        <td class="stage-col">Assessment</td>
+        <td class="procedure"><textarea class="procedure-textarea small" placeholder="Write your assessment procedure here..."></textarea></td>
+        <td class="interaction-col">L -> L</td>
+        <td class="time-col">15 min</td>
+      </tr>
+    </table>
+
+    <!-- Self Reflection -->
+    <br />
+    <table>
+      <tr>
+        <td colspan="3" class="highlight-yellow" style="text-align: center; font-weight: bold;">
+          Self-reflection
+        </td>
+      </tr>
+      <tr>
+        <td class="highlight-pink" style="text-align: center; vertical-align: middle;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <label style="font-weight: bold; margin-bottom: 6px;">What Worked:</label>
+            <textarea class="input-no-border" placeholder="Enter what worked..." rows="3" style="width: 90%; text-align: center;"></textarea>
+          </div>
+        </td>
+        <td class="highlight-red" style="text-align: center; vertical-align: middle;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <label style="font-weight: bold; margin-bottom: 6px;">What hindered:</label>
+            <textarea class="input-no-border" placeholder="Enter what hindered..." rows="3" style="width: 90%; text-align: center;"></textarea>
+          </div>
+        </td>
+        <td class="highlight-green" style="text-align: center; vertical-align: middle;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <label style="font-weight: bold; margin-bottom: 6px;">Action Points:</label>
+            <textarea class="input-no-border" placeholder="Enter action points..." rows="3" style="width: 90%; text-align: center;"></textarea>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

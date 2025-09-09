@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Section 2 – Template Gallery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      background: linear-gradient(to bottom right, #ede9fe, #d8b4fe);
+      overflow-x: hidden;
+      transition: background 0.5s ease;
+    }
+    body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
+
+    nav {
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      position: relative;
+      z-index: 20;
+      transition: background 0.3s ease;
+    }
+    body.dark nav { background: #1e1e2e; }
+
+    nav .container {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem; max-width: 1000px; margin: 0 auto; position: relative;
+    }
+
+    #nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
+    #nav-links a {
+      text-decoration: none; font-weight: 500; font-size: 1.1rem;
+      color: #44475a; padding: 8px 0; transition: color 0.3s ease; white-space: nowrap; cursor: pointer;
+    }
+    body.dark #nav-links a { color: #cdd6f4; }
+    #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+
+    .underline {
+      position: absolute; bottom: 0; height: 3px; background-color: #7c3aed;
+      border-radius: 1px; transition: left 0.3s ease, width 0.3s ease;
+      pointer-events: none; z-index: 5; left: 0; width: 0;
+    }
+
+    /* Background shapes */
+
+    /* Background shapes */
+    .shape { position: absolute; opacity: 0.15; z-index: 0; width: 2rem; height: 2rem ;   animation: float-rotate 20s linear infinite;
+}
+.circle-purple-400 { top: 2rem; left: 2rem; fill: #a78bfa; animation-duration: 25s; }
+.rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-duration: 35s; animation-direction: reverse; }
+.triangle-violet-500 { bottom: 2rem; left: 15%; fill: #8b5cf6; animation-duration: 40s; }
+.circle-indigo-400 { bottom: 4rem; right: 2rem; fill: #818cf8; animation-duration: 30s; animation-direction: reverse; }
+.circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 50s; }
+.rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 45s; }
+.triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 55s; }
+.diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-duration: 60s; animation-direction: reverse; }
+.circle-gray { bottom: 2rem; right: 38%; fill: #9ca3af; animation-duration: 70s; }
+/* New shapes */
+.circle-green   { top: 10%; left: 45%; fill: #22c55e; animation-duration: 65s; }
+.rect-orange    { top: 30%; right: 20%; fill: #f97316; animation-duration: 55s; animation-direction: reverse; }
+.triangle-red   { bottom: 25%; left: 25%; fill: #ef4444; animation-duration: 60s; }
+.diamond-purple { top: 70%; right: 10%; fill: #a855f7; animation-duration: 50s; }
+.circle-cyan    { top: 5%; right: 40%; fill: #06b6d4; animation-duration: 80s; animation-direction: reverse; }
+.rect-lime      { bottom: 15%; right: 30%; fill: #84cc16; animation-duration: 75s; }
+.triangle-pink  { top: 40%; left: 60%; fill: #ec4899; animation-duration: 58s; }
+.diamond-blue   { bottom: 40%; right: 50%; fill: #3b82f6; animation-duration: 90s; }
+.circle-orange  { top: 80%; left: 35%; fill: #f59e0b; animation-duration: 68s; animation-direction: reverse; }
+.rect-gray      { bottom: 5%; left: 5%; fill: #6b7280; animation-duration: 85s; }
+
+@keyframes float-rotate {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  50% { transform: rotate(180deg) translate(5px, -5px); }
+  100% { transform: rotate(360deg) translate(0, 0); }
+}
+
+
+    /* Theme Switcher */
+    .theme-switcher { display: inline-block; position: relative; user-select: none; }
+    .switch {
+      display: flex; align-items: center; width: 90px; height: 42px;
+      background: linear-gradient(to right, #d8b4fe, #a78bfa);
+      border-radius: 42px; cursor: pointer; position: relative;
+    }
+    .icon { width: 30px; height: 30px; pointer-events: none; }
+    .sun { margin-left: 10px; }
+    .moon { margin-left: auto; margin-right: 10px; }
+    .slider {
+      position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%;
+      top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .slider img { width: 24px; height: 24px; }
+    #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { left: 49px; }
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+  <!-- Background Shapes -->
+  <svg class="shape circle-purple-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape rect-purple-300" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
+  <svg class="shape triangle-violet-500" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+  <svg class="shape circle-indigo-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape circle-pink" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+  <svg class="shape rect-blue" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
+  <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+  <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+  <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+<!-- Extra background shapes -->
+<svg class="shape circle-green" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+<svg class="shape rect-orange" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+<svg class="shape triangle-red" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+<svg class="shape diamond-purple" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
+<svg class="shape circle-cyan" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+<svg class="shape rect-lime" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+<svg class="shape triangle-pink" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+<svg class="shape diamond-blue" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
+<svg class="shape circle-orange" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+<svg class="shape rect-gray" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="container">
+      <ul id="nav-links">
+        <li><a href="index.html">Main page</a></li>
+        <li><a href="section2.html">Templates</a></li>
+        <li><a href="section3.html"class="active">Sign up</a></li>
+        <li><a href="section4.html">Soon</a></li>
+      </ul>
+      <div class="theme-switcher">
+        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+        <label for="dm-toggle" class="switch">
+          <!-- Static rail icons -->
+          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
+          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
+          <!-- Moving slider icon (changes with theme) -->
+          <div class="slider">
+            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+          </div>
+        </label>
+      </div>
+      <div class="underline"></div>
+    </div>
+  </nav>
+
+
+ 
+      <!-- Cards would go here -->
+    </div>
+  </div>
+
+  <!-- SIGN-UP FORM -->
+  <section class="max-w-lg mx-auto mt-16 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
+    <h2 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-6">Create Your Account</h2>
+    <form action="#" method="POST" class="space-y-5">
+      <input type="text" name="username" placeholder="Full Name" required 
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+      <input type="email" name="email" placeholder="Email Address" required 
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+      <input type="password" name="password" placeholder="Password" required 
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required 
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+      <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-lg transition duration-200">Sign Up</button>
+    </form>
+    <p class="text-center text-sm text-gray-700 dark:text-gray-400 mt-4">Already have an account? 
+	  <a href="login.html" class="text-purple-600 dark:text-purple-400 hover:underline">Log in</a>
+
+    </p>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    const menu = document.querySelector('nav .container');
+    const underline = document.querySelector('.underline');
+    const links = menu.querySelectorAll('a');
+    const body = document.body;
+    const dmToggle = document.getElementById('dm-toggle');
+    const sliderIcon = document.getElementById('slider-icon');
+
+    const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+    const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+
+    function moveUnderline(element) {
+      const rect = element.getBoundingClientRect();
+      const parentRect = menu.getBoundingClientRect();
+      const left = rect.left - parentRect.left + menu.scrollLeft;
+      const width = rect.width;
+      underline.style.width = width + 'px';
+      underline.style.left = left + 'px';
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const active = menu.querySelector('a.active') || links[0];
+        moveUnderline(active);
+      }, 50);
+    });
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link));
+      link.addEventListener('mouseleave', () => {
+        const active = menu.querySelector('a.active') || links[0];
+        moveUnderline(active);
+      });
+      link.addEventListener('click', () => {
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      const active = menu.querySelector('a.active') || links[0];
+      moveUnderline(active);
+    });
+
+    document.fonts.ready.then(() => {
+      const active = menu.querySelector('a.active') || links[0];
+      moveUnderline(active);
+    });
+
+    function updateSliderIcon() {
+      if (body.classList.contains('dark')) {
+        sliderIcon.src = moonIcon;
+        sliderIcon.alt = 'Dark Mode Icon';
+      } else {
+        sliderIcon.src = sunIcon;
+        sliderIcon.alt = 'Light Mode Icon';
+      }
+    }
+
+    function setDarkMode(enabled) {
+      if (enabled) {
+        body.classList.add('dark');
+        dmToggle.checked = true;
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        dmToggle.checked = false;
+        localStorage.setItem('theme', 'light');
+      }
+      updateSliderIcon();
+    }
+
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') setDarkMode(true);
+    else setDarkMode(false);
+
+    dmToggle.addEventListener('change', () => {
+      setDarkMode(dmToggle.checked);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+  <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"></script>
+
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
+
+</body>
+</html>

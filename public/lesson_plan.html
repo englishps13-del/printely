@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson Plan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    /* Import fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Sacramento&display=swap');
+
+    :root {
+      /* Default theme shades */
+      --level: #5d4a9c;
+      --target: #8e44ad;
+      --materials: #a86cc1;
+      --activity1: #e75480;
+      --activity2: #f79c42;
+      --table-header: #c39bd3;
+      --table-row: #ffffff;
+      --section: #6aaedf;
+      --subject: #e75480;
+      --learners: #f79c42;
+      --sequence: #6a9e3f;
+      --objective: #5d4a9c;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: white;
+      font-family: 'Poppins', sans-serif;
+      width: 210mm;
+      min-height: 297mm;
+    }
+
+    .container {
+      width: 190mm;
+      min-height: 277mm;
+      margin: 0 auto;
+      padding: 10mm;
+      box-sizing: border-box;
+    }
+
+    /* Title */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .header .sub {
+      font-family: 'Sacramento', cursive;
+      font-size: 28px;
+      color: var(--activity1);
+      display: block;
+      margin-bottom: -5px;
+    }
+
+    /* Top info */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .row span {
+      flex: 1;
+    }
+    .row span input {
+      border: none;
+      border-bottom: 1px solid #000;
+      width: 90%;
+      outline: none;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* Section */
+    .section {
+      border: 1px solid #000;
+      margin: 10px 0;
+    }
+    .section h2 {
+      margin: 0;
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: white;
+    }
+    .section .content {
+      min-height: 80px;
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    /* Two-column */
+    .two-col {
+      display: flex;
+      gap: 10px;
+    }
+    .two-col .section {
+      flex: 1;
+    }
+
+    /* Three-column */
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    /* Compact mini sections */
+    .section.mini {
+      border: 1px solid #000;
+    }
+.section.mini h2 {
+  font-size: 11px;
+  padding: 2px 6px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  font-weight: bold;
+  border-bottom: 1px solid #000; /* ? black underline */
+}
+.lesson-plan th {
+  color: white;
+  padding: 4px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  border: 1px solid #000;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* shadow on the text */
+}
+
+
+    .section.mini .content {
+      padding: 4px 6px;
+      min-height: auto;
+    }
+    .section.mini select,
+    .section.mini input {
+      font-size: 11px;
+      padding: 2px;
+      height: 22px;
+      width: 100%;
+      border: none;
+      border-bottom: 0px solid #000;
+      background: transparent;
+      outline: none;
+    }
+
+    /* Checkboxes style */
+    .checkboxes label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+
+    .checkboxes input[type="checkbox"] {
+      margin-right: 6px;
+      transform: scale(0.9);
+    }
+
+    /* Make checkboxes inline */
+    .checkboxes.inline label {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Lesson plan table */
+    .lesson-plan {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      margin: 15px 0;
+    }
+
+    .lesson-plan th,
+    .lesson-plan td {
+      border: 1px solid #333;
+      padding: 2px 6px;
+      text-align: left;
+    }
+
+.lesson-plan th {
+  color: white;
+  padding: 4px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  border: 1px solid #000;   /* full box */
+}
+.lesson-plan {
+  border-collapse: separate;  /* important */
+  border-spacing: 2px;        /* little gap between cells */
+}
+	
+    .lesson-plan input,
+    .lesson-plan textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 4px;
+      font-family: inherit;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    /* Column widths */
+    .lesson-plan th:nth-child(1),
+    .lesson-plan td:nth-child(1) { width: 10%; }
+    .lesson-plan th:nth-child(2),
+    .lesson-plan td:nth-child(2) { width: 70%; }
+    .lesson-plan th:nth-child(3),
+    .lesson-plan td:nth-child(3) { width: 10%; }
+    .lesson-plan th:nth-child(4),
+    .lesson-plan td:nth-child(4) { width: 10%; }
+
+    /* Short rows (single line) */
+    .lesson-plan .stage-row.short textarea, .lesson-plan .stage-row.short .editable-area {
+      height: 24px;
+      min-height: 24px;
+      resize: none;
+    }
+
+    /* Tall rows (multi-line) */
+    .lesson-plan .stage-row.tall textarea, .lesson-plan .stage-row.tall .editable-area {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Placeholder color */
+    .lesson-plan input::placeholder,
+    .lesson-plan textarea::placeholder {
+      color: #999;
+    }
+
+    /* Theme-specific colors */
+    .section.teal.mini:first-child h2 { background: var(--level); }
+    .section.orange.mini h2 { background: var(--learners); }
+    .section.green.mini h2 { background: var(--sequence); }
+    .section.blue.mini h2 { background: var(--section); }
+    .section.pink.mini h2 { background: var(--subject); }
+    .section.violet.mini h2 { background: var(--objective); }
+    .section.purple.mini h2 { background: var(--target); }
+    .section.teal.mini h2 { background: var(--materials); }
+    .section.violet h2 { background: var(--activity1); }
+    .section.pink h2 { background: var(--activity2); }
+    
+    .lesson-plan th { background: var(--table-header); }
+    .lesson-plan tbody .stage-row td { background: var(--table-row); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-family: 'Sacramento', cursive;
+      font-size: 18px;
+    }
+
+    /* Theme selector */
+    #theme-select {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .container {
+        width: 190mm;
+        height: 277mm;
+        padding: 10mm;
+        box-sizing: border-box;
+        page-break-inside: avoid;
+      }
+
+      table, tr, td, th {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+ /* Default: underline all inputs in print */
+input, textarea, select {
+  border: none !important;
+  border-bottom: 1px solid #000 !important;
+  background: transparent !important;
+}
+
+/* Remove underline for specific fields */
+.no-underline-print {
+  border: none !important;
+}
+
+      .no-print, .ribbon {
+        display: none !important;
+      }
+      
+      #theme-select {
+        display: none;
+      }
+    }
+
+    select,
+    input[type="number"] {
+      border: none !important;
+      outline: none !important;
+      background: transparent;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      box-shadow: none !important;
+    }
+
+    /* Keep underline style for normal text fields */
+    input[type="text"] {
+      border: none;
+      border-bottom: 1px solid #333;
+      background: transparent;
+      outline: none;
+      padding: 2px 4px;
+      font-family: inherit;
+      font-size: inherit;
+    }
+/* Stronger shadow for bar text */
+.section.mini h2 {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  font-weight: bold;
+}
+
+select, option {
+  font-family: 'Poppins', sans-serif; /* Or your lesson plan font */
+  font-size: 14px;  /* Adjust size */
+  font-weight: 500; /* Medium weight for readability */
+  color: #333;      /* Dark text */
+  background: #fff; /* White background */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 8px;
+  outline: none;
+}
+select {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+
+@media screen {
+  body {
+    transform: scale(1.75);
+    transform-origin: top left;
+    width: calc(210mm / 1.75);
+    height: calc(297mm / 1.75);
+  }
+}
+textarea {
+  resize: none;       /* disables the arrows/resize handle */
+  overflow: auto;     /* allow scrolling if text overflows */
+}
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+textarea:focus, textarea:not(:placeholder-shown) {
+  height: auto;
+  min-height: 24px;     /* adjust for short rows */
+}
+
+/* --- Ribbon Editor Styles --- */
+.ribbon {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.ribbon .group {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+}
+.ribbon .group .label { font-size: 12px; color: #6b7280; margin-left: 4px; white-space: nowrap; }
+.ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+    appearance: none; border: 1px solid #d1d5db; background: #ffffff;
+    padding: 7px 10px; border-radius: 5px; font-size: 14px;
+    line-height: 1; cursor: pointer; color: #1f2937;
+    font-family: 'Poppins', sans-serif;
+}
+.ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+.ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f9fafb; }
+.ribbon .btn.active, .ribbon .btn-square.active {
+    background: var(--objective, #5d4a9c); color: white; border-color: var(--objective, #5d4a9c);
+}
+.ribbon .sep { width: 1px; background: #d1d5db; margin: 0 6px; align-self: stretch; }
+.ribbon .grow { flex: 1 1 auto; }
+.ribbon .pill {
+    font-size: 12px; padding: 4px 8px; border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #ffffff; color: #6b7280;
+}
+.editable-area {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    background: transparent;
+    padding: 4px;
+    min-height: 24px; /* Matches short row height */
+    cursor: text;
+    box-sizing: border-box;
+}
+.editable-area:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--objective, #5d4a9c);
+    border-radius: 4px;
+}
+.editable-area[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #999;
+    pointer-events: none;
+    font-style: italic;
+}
+/* Ensure tall editable areas grow */
+.stage-row.tall .editable-area {
+    min-height: 80px;
+}
+
+  </style>
+</head>
+<body>
+
+<select id="theme-select" class="no-print">
+  <option value="">Select Theme</option>
+  <option value="green">Green</option>
+  <option value="red">Red</option>
+  <option value="blue">Blue</option>
+  <option value="purple">Purple</option>
+  <option value="orange">Orange</option>
+  <option value="teal">Teal</option>
+  <option value="pink">Pink</option>
+  <option value="brown">Brown</option>
+  <option value="grey">Grey</option>
+  <option value="cyan">Cyan</option>
+  <option value="indigo">Indigo</option>
+  <option value="lime">Lime</option>
+  <option value="amber">Amber</option>
+  <option value="olive">Olive</option>
+  <option value="rainbow">Rainbow</option>
+  <option value="pastelMix">Pastel Mix</option>
+  <option value="earthy">Earthy</option>
+  <option value="neon">Neon</option>
+  <option value="elegant">Elegant</option>
+
+</select>
+
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>LESSON PLAN</h1>
+      <span class="sub">Teaching is an art</span>
+    </div>
+
+    <!-- Ribbon Editor -->
+    <div class="ribbon" id="ribbon">
+        <div class="group" aria-label="Font">
+          <select id="fontFamily" title="Font family">
+            <option>Poppins</option><option>Sacramento</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
+          </select>
+          <select id="fontSize" title="Font size">
+            <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
+          </select>
+          <button class="btn-square" id="fontDec" title="Decrease font size">A-</button>
+          <button class="btn-square" id="fontInc" title="Increase font size">A+</button>
+        </div>
+
+        <div class="group" aria-label="Emphasis">
+          <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
+          <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
+        </div>
+
+        <div class="group" aria-label="Colors">
+          <label class="label" for="foreColor">Text</label>
+          <input type="color" id="foreColor" title="Text color" value="#3d4852">
+          <span class="sep"></span>
+          <label class="label" for="hiliteColor">Highlight</label>
+          <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+        </div>
+
+        <div class="group" aria-label="Paragraph">
+          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+          <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+          <span class="sep"></span>
+          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+          <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
+          <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
+        </div>
+
+        <div class="group" aria-label="Actions">
+          <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
+        </div>
+
+        <div class="grow"></div>
+
+        <div class="group">
+          <span class="pill" id="wordCount">0 words</span>
+          <span class="pill" id="selectionInfo">No selection</span>
+        </div>
+    </div>
+
+
+    <!-- Lesson field -->
+    <div class="row">
+      <span>Primary school: <input type="text"></span>
+      <span>Teacher <input type="text"></span>
+    </div>
+
+    <!-- Three mini sections -->
+<div class="three-col">
+  <div class="section teal mini">
+    <h2>LEVEL</h2>
+    <div class="content">
+      <select id="level">
+        <option value="">Select level</option>
+        <option value="3PS">3rd Level PS</option>
+        <option value="4PS">4th Level PS</option>
+        <option value="5PS">5th Level PS</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section orange mini">
+    <h2>NUMBER OF LEARNERS</h2>
+    <div class="content">
+      <input type="number" placeholder="e.g. 30">
+    </div>
+  </div>
+
+  <div class="section green mini">
+    <h2>SEQUENCE</h2>
+    <div class="content">
+      <select id="sequence">
+        <option value="">Select sequence</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Other sections -->
+<div class="two-col">
+  <div class="section blue mini">
+    <h2>SECTION</h2>
+    <div class="content">
+      <select id="section">
+        <option value="">Select section</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section pink mini">
+    <h2>SESSION</h2>
+    <div class="content">
+      <select id="session">
+        <option value="">Select session</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Full Curriculum Data */
+const curriculum = {
+  "3PS": {
+    "Sequence 01: Family and Friends": {
+      "Section 01: Family": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: Friends": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "Sequence 02: School": {
+      "Section 01: School Objects": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: School Subjects": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "Sequence 03: Home": {
+      "Section 01: Describing a House": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: Location Rooms in a House": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "Sequence 04: Play Time": {
+      "Section 01: Toys": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: Favourite Toys": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "Sequence 05: Pets": {
+      "Section 01: Pets": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: Pets Body Parts": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "Sequence 06: Birthday": {
+      "Section 01: Party Invitation": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ],
+      "Section 02: Party Celebration": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and write",
+        "Session 04: I play roles"
+      ]
+    },
+    "REMEDIATION & STANDARDISATION": {
+      "REMEDIATION & STANDARDISATION": [
+        "REMEDIATION & STANDARDISATION"
+      ]
+    }
+  },
+
+  "4PS": {
+    "Sequence 01: Family and Friends": {
+      "Section 01: Family": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ],
+      "Section 02: Friends": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ]
+    },
+    "Sequence 02: School": {
+      "Section 01: School Facilities": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ],
+      "Section 02: Mapping": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ]
+    },
+    "Sequence 03: Fun Time and Games": {
+      "Section 01: Fun Time": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ],
+      "Section 02: Games": [
+        "Session 01: I sing and have fun, I listen and repeat",
+        "Session 02: I read and discover",
+        "Session 03: I read and enjoy",
+        "Session 04: I read and write",
+        "Session 05: I play roles"
+      ]
+    },
+    "Sequence 04": {
+      "Section 01": [],
+      "Section 02": []
+    },
+    "Sequence 05": {
+      "Section 01": [],
+      "Section 02": []
+    },
+    "Sequence 06": {
+      "Section 01": [],
+      "Section 02": []
+    },
+    "REMEDIATION & STANDARDISATION": {
+      "REMEDIATION & STANDARDISATION": [
+        "REMEDIATION & STANDARDISATION"
+      ]
+    }
+  },
+
+  "5PS": {
+    "Sequence 01: Jobs, Occupations, and Hobbies": {
+      "Section 01: Jobs and Occupations": [
+        "Session 01: I get ready",
+        "Session 02: I listen and intract",
+        "Session 03: I listen and discover",
+        "Session 04: I read and understand",
+        "Session 05: I read and discover",
+        "Session 06: I learn and enjoy",
+        "Session 07: I learn and write",
+        "Session 08: I write"
+      ],
+      "Section 02: Hobbies": [
+        "Session 01: I listen and intract",
+        "Session 02: I listen and discover",
+        "Session 03: I read and understand",
+        "Session 04: I read and discover",
+        "Session 05: I learn and enjoy",
+        "Session 06: I learn to write",
+        "Session 07: I write",
+        "Session 08: I check my progress"
+      ]
+    },
+    "Sequence 02: Hometown, City, Village Amenities": {
+      "Section 01: Hometown, City, Village Amenities": [
+        "Session 01: I get ready",
+        "Session 02: I listen and intract",
+        "Session 03: I listen and discover",
+        "Session 04: I read and understand",
+        "Session 05: I read and discover",
+        "Session 06: I learn and enjoy",
+        "Session 07: I learn and write",
+        "Session 08: I write"
+      ],
+      "Section 02: Directions": [
+        "Session 01: I listen and intract",
+        "Session 02: I listen and discover",
+        "Session 03: I read and understand",
+        "Session 04: I read and discover",
+        "Session 05: I learn and enjoy",
+        "Session 06: I learn to write",
+        "Session 07: I write",
+        "Session 08: I check my progress"
+      ]
+    },
+    "Sequence 03: Holidays and Travelling": {
+      "Section 01: Holidays": [
+        "Session 01: I get ready",
+        "Session 02: I listen and intract",
+        "Session 03: I listen and discover",
+        "Session 04: I read and understand",
+        "Session 05: I read and discover",
+        "Session 06: I learn and enjoy",
+        "Session 07: I learn and write",
+        "Session 08: I write"
+      ],
+      "Section 02: Travelling": [
+        "Session 01: I listen and intract",
+        "Session 02: I listen and discover",
+        "Session 03: I read and understand",
+        "Session 04: I read and discover",
+        "Session 05: I learn and enjoy",
+        "Session 06: I learn to write",
+        "Session 07: I write",
+        "Session 08: I check my progress"
+      ]
+    },
+    "REMEDIATION & STANDARDISATION": {
+      "REMEDIATION & STANDARDISATION": [
+        "REMEDIATION & STANDARDISATION"
+      ]
+    }
+  }
+};
+
+/* Dropdown handling */
+const levelSelect = document.getElementById("level");
+const sequenceSelect = document.getElementById("sequence");
+const sectionSelect = document.getElementById("section");
+const sessionSelect = document.getElementById("session");
+
+levelSelect.addEventListener("change", () => {
+  sequenceSelect.innerHTML = '<option value="">Select sequence</option>';
+  sectionSelect.innerHTML = '<option value="">Select section</option>';
+  sessionSelect.innerHTML = '<option value="">Select session</option>';
+
+  if (levelSelect.value) {
+    Object.keys(curriculum[levelSelect.value]).forEach(seq => {
+      const opt = document.createElement("option");
+      opt.value = seq;
+      opt.textContent = seq;
+      sequenceSelect.appendChild(opt);
+    });
+  }
+});
+
+sequenceSelect.addEventListener("change", () => {
+  sectionSelect.innerHTML = '<option value="">Select section</option>';
+  sessionSelect.innerHTML = '<option value="">Select session</option>';
+
+  if (sequenceSelect.value) {
+    Object.keys(curriculum[levelSelect.value][sequenceSelect.value]).forEach(sec => {
+      const opt = document.createElement("option");
+      opt.value = sec;
+      opt.textContent = sec;
+      sectionSelect.appendChild(opt);
+    });
+  }
+});
+
+sectionSelect.addEventListener("change", () => {
+  sessionSelect.innerHTML = '<option value="">Select session</option>';
+
+  if (sectionSelect.value) {
+    curriculum[levelSelect.value][sequenceSelect.value][sectionSelect.value].forEach(sess => {
+      const opt = document.createElement("option");
+      opt.value = sess;
+      opt.textContent = sess;
+      sessionSelect.appendChild(opt);
+    });
+  }
+});
+</script>
+
+    <div class="section violet mini">
+      <h2>Session objective(s):</h2>
+      <div class="content">
+        <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="By the end of the lesson..."></div>
+      </div>
+    </div>
+
+    <!-- Competencies & Materials -->
+    <div class="two-col">
+      <div class="section purple mini">
+        <h2>TARGET COMPETENCIES</h2>
+        <div class="content checkboxes inline">
+          <label><input type="checkbox"> Interact</label>
+          <label><input type="checkbox"> Interpret</label>
+          <label><input type="checkbox"> Produce</label>
+        </div>
+      </div>
+
+      <div class="section teal mini">
+        <h2>TEACHING MATERIALS</h2>
+        <div class="content checkboxes inline">
+          <label><input type="checkbox"> Textbook</label>
+          <label><input type="checkbox"> W.B</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson plan table -->
+    <table class="lesson-plan">
+      <thead>
+        <tr>
+          <th>STAGES</th>
+          <th>PROCEDURE / TASKS</th>
+          <th>INTERACTION</th>
+          <th>TIME</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="stage-row short">
+          <td>Warmer</td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your Warmer procedure here..."></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="T -> T"></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="5 min"></div></td>
+        </tr>
+        <tr class="stage-row tall">
+          <td>Install resources</td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your Install resources procedure here..."></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="T -> Ps"></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="20 min"></div></td>
+        </tr>
+        <tr class="stage-row short">
+          <td>Assessment</td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your assessment procedure here..."></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="P -> P"></div></td>
+          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="15 min"></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Activities -->
+    <div class="two-col">
+      <div class="section violet mini">
+        <h2>ACTIVITY 1</h2>
+        <div class="content">
+         <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write activity 1 here..."></div>
+        </div>
+      </div>
+
+      <div class="section pink mini">
+        <h2>ACTIVITY 2</h2>
+        <div class="content">
+         <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write activity 2 here..."></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Success is the sum of small efforts, repeated day in and day out.
+    </div>
+  </div>
+
+  <script>
+ const themes = {
+  green: {
+    '--level': '#2e7d32',
+    '--target': '#388e3c',
+    '--materials': '#43a047',
+    '--activity1': '#4caf50',
+    '--activity2': '#66bb6a',
+    '--table-header': '#a5d6a7',
+    '--table-row': '#e8f5e9',
+    '--section': '#5da463',
+    '--subject': '#3fa047',
+    '--learners': '#4caf50',
+    '--sequence': '#57b157',
+    '--objective': '#3d8e3d'
+  },
+
+  red: {
+    '--level': '#c62828',
+    '--target': '#d32f2f',
+    '--materials': '#e53935',
+    '--activity1': '#f44336',
+    '--activity2': '#ef5350',
+    '--table-header': '#ef9a9a',
+    '--table-row': '#ffebee',
+    '--section': '#e04e4e',
+    '--subject': '#d64545',
+    '--learners': '#ff5252',
+    '--sequence': '#f06260',
+    '--objective': '#cc3c3c'
+  },
+
+  blue: {
+    '--level': '#1565c0',
+    '--target': '#1976d2',
+    '--materials': '#1e88e5',
+    '--activity1': '#2196f3',
+    '--activity2': '#42a5f5',
+    '--table-header': '#90caf9',
+    '--table-row': '#e3f2fd',
+    '--section': '#4b9fea',
+    '--subject': '#3686d1',
+    '--learners': '#64b5f6',
+    '--sequence': '#5a9be0',
+    '--objective': '#3b7bc2'
+  },
+
+  purple: {
+    '--level': '#6a1b9a',
+    '--target': '#7b1fa2',
+    '--materials': '#8e24aa',
+    '--activity1': '#9c27b0',
+    '--activity2': '#ab47bc',
+    '--table-header': '#ce93d8',
+    '--table-row': '#f3e5f5',
+    '--section': '#9b4bb4',
+    '--subject': '#8942a5',
+    '--learners': '#ba68c8',
+    '--sequence': '#a052b7',
+    '--objective': '#8040a0'
+  },
+
+  orange: {
+    '--level': '#ef6c00',
+    '--target': '#f57c00',
+    '--materials': '#fb8c00',
+    '--activity1': '#ff9800',
+    '--activity2': '#ffa726',
+    '--table-header': '#ffcc80',
+    '--table-row': '#fff3e0',
+    '--section': '#ff9f33',
+    '--subject': '#e8872e',
+    '--learners': '#ffb74d',
+    '--sequence': '#f5a13b',
+    '--objective': '#d9822c'
+  },
+
+  teal: {
+    '--level': '#00695c',
+    '--target': '#00796b',
+    '--materials': '#00897b',
+    '--activity1': '#009688',
+    '--activity2': '#26a69a',
+    '--table-header': '#80cbc4',
+    '--table-row': '#e0f2f1',
+    '--section': '#2fa39b',
+    '--subject': '#1c8a82',
+    '--learners': '#4db6ac',
+    '--sequence': '#3daaa1',
+    '--objective': '#2a7e77'
+  },
+
+  pink: {
+    '--level': '#ad1457',
+    '--target': '#c2185b',
+    '--materials': '#d81b60',
+    '--activity1': '#e91e63',
+    '--activity2': '#ec407a',
+    '--table-header': '#f48fb1',
+    '--table-row': '#fce4ec',
+    '--section': '#e36285',
+    '--subject': '#d24d72',
+    '--learners': '#f06292',
+    '--sequence': '#e27397',
+    '--objective': '#c94b6f'
+  },
+
+
+  brown: {
+    '--level': '#4e342e',
+    '--target': '#5d4037',
+    '--materials': '#6d4c41',
+    '--activity1': '#795548',
+    '--activity2': '#8d6e63',
+    '--table-header': '#bcaaa4',
+    '--table-row': '#efebe9',
+    '--section': '#846659',
+    '--subject': '#75594e',
+    '--learners': '#a1887f',
+    '--sequence': '#927469',
+    '--objective': '#6e5248'
+  },
+
+  grey: {
+    '--level': '#424242',
+    '--target': '#616161',
+    '--materials': '#757575',
+    '--activity1': '#9e9e9e',
+    '--activity2': '#bdbdbd',
+    '--table-header': '#e0e0e0',
+    '--table-row': '#f5f5f5',
+    '--section': '#8a8a8a',
+    '--subject': '#707070',
+    '--learners': '#b0bec5',
+    '--sequence': '#9c9c9c',
+    '--objective': '#666666'
+  },
+
+  cyan: {
+    '--level': '#00acc1',
+    '--target': '#26c6da',
+    '--materials': '#4dd0e1',
+    '--activity1': '#26d6d6',
+    '--activity2': '#80deea',
+    '--table-header': '#b2ebf2',
+    '--table-row': '#e0f7fa',
+    '--section': '#4dc4d6',
+    '--subject': '#33bcd1',
+    '--learners': '#4dd0e1',
+    '--sequence': '#29c5d3',
+    '--objective': '#1baebd'
+  },
+
+  indigo: {
+    '--level': '#3949ab',
+    '--target': '#3f51b5',
+    '--materials': '#5c6bc0',
+    '--activity1': '#6573c3',
+    '--activity2': '#7986cb',
+    '--table-header': '#9fa8da',
+    '--table-row': '#e8eaf6',
+    '--section': '#6b74c0',
+    '--subject': '#5662b6',
+    '--learners': '#7986cb',
+    '--sequence': '#6571bd',
+    '--objective': '#4b55a8'
+  },
+
+  lime: {
+    '--level': '#9e9d24',
+    '--target': '#afb42b',
+    '--materials': '#c0ca33',
+    '--activity1': '#d4e157',
+    '--activity2': '#dce775',
+    '--table-header': '#e6ee9c',
+    '--table-row': '#f9fbe7',
+    '--section': '#c7cf54',
+    '--subject': '#b7b63c',
+    '--learners': '#d4e157',
+    '--sequence': '#c2c941',
+    '--objective': '#a6a931'
+  },
+
+  amber: {
+    '--level': '#ff8f00',
+    '--target': '#ffa000',
+    '--materials': '#ffb300',
+    '--activity1': '#ffc107',
+    '--activity2': '#ffca28',
+    '--table-header': '#ffe082',
+    '--table-row': '#fff8e1',
+    '--section': '#ffb833',
+    '--subject': '#f5a623',
+    '--learners': '#ffca28',
+    '--sequence': '#ffb833',
+    '--objective': '#e09b20'
+  },
+
+  olive: {
+    '--level': '#827717',
+    '--target': '#9e9d24',
+    '--materials': '#afb42b',
+    '--activity1': '#c0ca33',
+    '--activity2': '#d4e157',
+    '--table-header': '#dce775',
+    '--table-row': '#f9fbe7',
+    '--section': '#b6b73d',
+    '--subject': '#9c9e2a',
+    '--learners': '#cddc39',
+    '--sequence': '#b2b833',
+    '--objective': '#8a8d22'
+  },
+    rainbow: {
+    '--level': '#1976d2',      // blue
+    '--target': '#d81b60',     // pink
+    '--materials': '#8e24aa',  // violet
+    '--activity1': '#e53935',  // red
+    '--activity2': '#fbc02d',  // yellow
+    '--table-header': '#b3e5fc',
+    '--table-row': '#e1f5fe',
+    '--section': '#43a047',    // green
+    '--subject': '#fb8c00',    // orange
+    '--learners': '#ab47bc',   // purple
+    '--sequence': '#00acc1',   // teal
+    '--objective': '#c2185b'   // magenta
+  },
+
+  pastelMix: {
+    '--level': '#81d4fa',      // light blue
+    '--target': '#f48fb1',     // pastel pink
+    '--materials': '#ce93d8',  // pastel violet
+    '--activity1': '#ffab91',  // pastel orange
+    '--activity2': '#fff59d',  // pastel yellow
+    '--table-header': '#fce4ec',
+    '--table-row': '#f9fbe7',
+    '--section': '#aed581',    // pastel green
+    '--subject': '#80cbc4',    // pastel teal
+    '--learners': '#bcaaa4',   // taupe
+    '--sequence': '#b39ddb',   // lilac
+    '--objective': '#ffccbc'   // light peach
+  },
+
+  earthy: {
+    '--level': '#6d4c41',      // brown
+    '--target': '#8d6e63',     // clay
+    '--materials': '#a1887f',  // warm grey
+    '--activity1': '#7cb342',  // olive green
+    '--activity2': '#6b8a4a',  // mustard
+    '--table-header': '#d7ccc8',
+    '--table-row': '#f1f8e9',
+    '--section': '#5d4037',    // deep brown
+    '--subject': '#3d4f1b',    // dark olive
+    '--learners': '#8d6e33',  
+    '--sequence': '#9e9d24',   // muted lime
+    '--objective': '#4e342e'   // espresso
+  },
+
+  neon: {
+    '--level': '#00e5ff',      // cyan neon
+    '--target': '#ff1744',     // neon pink-red
+    '--materials': '#d500f9',  // neon purple
+    '--activity1': '#00e676',  // neon green
+    '--activity2': '#ffea00',  // neon yellow
+    '--table-header': '#ccff90',
+    '--table-row': '#f1f8ff',
+    '--section': '#ff9100',    // neon orange
+    '--subject': '#2979ff',    // bright blue
+    '--learners': '#f50057',   // neon magenta
+    '--sequence': '#1de9b6',   // neon aqua
+    '--objective': '#651fff'   // bright indigo
+  },
+
+  elegant: {
+    '--level': '#283593',      // navy
+    '--target': '#b71c1c',     // burgundy
+    '--materials': '#00695c',  // deep teal
+    '--activity1': '#f9a825',  // gold
+    '--activity2': '#c2185b',  // wine rose
+    '--table-header': '#e0e0e0',
+    '--table-row': '#fafafa',
+    '--section': '#1b5e20',    // dark green
+    '--subject': '#4a148c',    // royal purple
+    '--learners': '#ff6f00',   // amber
+    '--sequence': '#37474f',   // slate grey
+    '--objective': '#880e4f'   // deep magenta
+  }
+
+};
+
+    const select = document.getElementById('theme-select');
+    select.addEventListener('change', function() {
+      const theme = themes[this.value];
+      if (theme) {
+        for (let prop in theme) {
+          document.documentElement.style.setProperty(prop, theme[prop]);
+        }
+      }
+    });
+  </script>
+  <script>
+    // --- RICH TEXT EDITOR LOGIC ---
+    let activeEditor = null;
+    document.addEventListener('focusin', e => {
+        if (e.target.isContentEditable) {
+            activeEditor = e.target;
+            updateStatus();
+        }
+    });
+
+    const pxSteps = [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48];
+
+    function isSelectionInEditor() {
+      if (!activeEditor) return false;
+      const sel = window.getSelection();
+      return sel && sel.rangeCount > 0 && activeEditor.contains(sel.getRangeAt(0).commonAncestorContainer);
+    }
+
+    function exec(cmd, value = null) {
+      if (!isSelectionInEditor()) return;
+      document.execCommand(cmd, false, value);
+      activeEditor.focus();
+    }
+    
+    function applyStyle(style, value) {
+        if (!isSelectionInEditor()) return;
+        const sel = window.getSelection();
+        if (sel.rangeCount) {
+            const range = sel.getRangeAt(0);
+            if(range.collapsed) return;
+
+            const span = document.createElement("span");
+            span.style[style] = value;
+
+            try {
+                span.appendChild(range.extractContents());
+                range.insertNode(span);
+                range.selectNodeContents(span);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } catch(e) {
+                console.warn("surroundContents failed, using fallback execCommand.", e);
+                document.execCommand('styleWithCSS', false, true);
+                if (style === 'fontSize') exec('fontSize', '7');
+                if (style === 'fontFamily') exec('fontName', value);
+
+                const container = range.commonAncestorContainer;
+                const affectedNodes = (container.nodeType === 1 ? container : container.parentElement).getElementsByTagName("font");
+                Array.from(affectedNodes).forEach(font => {
+                    const newSpan = document.createElement('span');
+                    newSpan.innerHTML = font.innerHTML;
+                    newSpan.style[style] = value;
+                    font.parentNode.replaceChild(newSpan, font);
+                });
+            }
+        }
+    }
+
+    function applyFontFamily(family) { applyStyle('fontFamily', family); }
+    function applyFontSize(px) { applyStyle('fontSize', px + 'px'); }
+
+    function getComputedFontSizePxAtCaret(defaultPx = 14) {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return defaultPx;
+        let node = sel.anchorNode;
+        if (!node || !isSelectionInEditor()) return defaultPx;
+        const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+        return Math.round(parseFloat(window.getComputedStyle(element).fontSize));
+    }
+
+    function stepFontSize(delta) {
+        const current = getComputedFontSizePxAtCaret();
+        let idx = pxSteps.findIndex(v => v >= current);
+        if (idx === -1) idx = pxSteps.length - 1;
+        if (current < pxSteps[idx] && idx > 0) idx -= 1;
+        idx = Math.min(Math.max(idx + delta, 0), pxSteps.length - 1);
+        applyFontSize(pxSteps[idx]);
+    }
+    
+    document.getElementById('fontFamily').addEventListener('change', e => applyFontFamily(e.target.value));
+    document.getElementById('fontSize').addEventListener('change', e => applyFontSize(parseInt(e.target.value, 10)));
+    document.getElementById('fontInc').addEventListener('click', () => stepFontSize(+1));
+    document.getElementById('fontDec').addEventListener('click', () => stepFontSize(-1));
+    document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+    document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
+    
+    document.querySelectorAll('[data-cmd]').forEach(btn => {
+        btn.addEventListener('click', (e) => { 
+            e.preventDefault();
+            exec(btn.getAttribute('data-cmd')); 
+        });
+    });
+
+    function updateStatus() {
+      if (!activeEditor) {
+          document.getElementById('wordCount').textContent = '0 words';
+          document.getElementById('selectionInfo').textContent = 'No selection';
+          document.querySelectorAll('[data-cmd]').forEach(btn => btn.classList.remove('active'));
+          return;
+      }
+      const text = activeEditor.innerText.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
+
+      const sel = window.getSelection();
+      const selLen = (sel && sel.rangeCount) ? sel.toString().length : 0;
+      document.getElementById('selectionInfo').textContent = selLen > 0 ? `${selLen} chars selected` : 'No selection';
+
+      document.querySelectorAll('[data-cmd]').forEach(btn => {
+        const cmd = btn.getAttribute('data-cmd');
+        try {
+            btn.classList.toggle('active', document.queryCommandState(cmd));
+        } catch (e) {
+            btn.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('selectionchange', updateStatus);
+    document.querySelector('.container').addEventListener('keyup', updateStatus);
+    document.querySelector('.container').addEventListener('mouseup', updateStatus);
+  </script>
+</body>
+</html>

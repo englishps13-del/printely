@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson Plan</title>
+  <!-- Import nice Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+ <!-- Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Quill JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+<style>
+  body {
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    margin: 15px;
+    background: #fff;
+    font-size: 13px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .lesson-plan {
+    margin-top: 10px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  th, td {
+    border: 2px solid #000;
+    padding: 6px 8px;
+    vertical-align: middle;
+  }
+  th {
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Inputs & selects clean */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 3px;
+    resize: vertical;
+    appearance: none;
+  }
+
+  select {
+    padding-right: 18px;
+    background: transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><polyline points='1,1 6,6 11,1' stroke='%23000' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") no-repeat right center;
+    background-size: 12px 8px;
+  }
+
+  textarea::placeholder,
+  input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+
+  /* ---------- PRINT FIX ---------- */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .lesson-plan {
+    width: 95%;
+    margin: auto;
+    transform: scale(0.98);
+    transform-origin: top center;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    font-size: 12px;
+    padding: 0;
+    width: 100%;
+  }
+
+  select {
+    background: transparent !important;
+  }
+@media print {
+  /* Ensure Quill content is visible and printable */
+  #installResourcesEditor,
+  #installResourcesEditor .ql-editor {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    min-height: 50px !important;
+    overflow: visible !important;
+  }
+
+  /* Remove toolbar */
+  .ql-toolbar {
+    display: none !important;
+  }
+}
+
+  /* Theme-specific table borders and headers */
+  body.default-theme table,
+  body.default-theme th,
+  body.default-theme td {
+    border: 1px solid #000 !important;
+  }
+  body.default-theme table th {
+    background-color: #f3f3f3 !important;
+    color: #000 !important;
+  }
+
+  body.theme-blue table,
+  body.theme-blue th,
+  body.theme-blue td {
+    border: 1px solid #2c3e99 !important;
+  }
+  body.theme-blue table th {
+    background-color: #d6e3ff !important;
+    color: #2c3e99 !important;
+  }
+
+  /* Repeat for other themes */
+  body.theme-green table, body.theme-green th, body.theme-green td { border: 1px solid #2d7a33 !important; }
+  body.theme-green table th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
+
+  body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border: 1px solid #b39700 !important; }
+  body.theme-yellow table th { background-color: #fff2cc !important; color: #b39700 !important; }
+
+  body.theme-pink table, body.theme-pink th, body.theme-pink td { border: 1px solid #cc3366 !important; }
+  body.theme-pink table th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
+
+  body.theme-purple table, body.theme-purple th, body.theme-purple td { border: 1px solid #5e2d91 !important; }
+  body.theme-purple table th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
+
+  body.theme-gray table, body.theme-gray th, body.theme-gray td { border: 1px solid #444 !important; }
+  body.theme-gray table th { background-color: #dddddd !important; color: #333 !important; }
+
+  .bottom-buttons {
+    display: none !important;
+  }
+}
+
+  /* Buttons */
+  .bottom-buttons {
+    margin-top: 15px;
+    text-align: center;
+  }
+ /* ---------- Bottom buttons: new bordered style ---------- */
+.bottom-buttons button,
+.bottom-buttons select {
+  background: transparent;        /* transparent instead of solid */
+  color: inherit;                 /* inherit text color from theme */
+  border: 2px solid currentColor; /* border matches text color */
+  padding: 8px 14px;
+  margin: 6px;
+  border-radius: 0px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  transition: all 0.3s ease;
+}
+
+/* Match table theme colors */
+body.default-theme .bottom-buttons { color: #000; }
+body.theme-blue .bottom-buttons { color: #2c3e99; }
+body.theme-green .bottom-buttons { color: #2d7a33; }
+body.theme-yellow .bottom-buttons { color: #b39700; }
+body.theme-pink .bottom-buttons { color: #cc3366; }
+body.theme-purple .bottom-buttons { color: #5e2d91; }
+body.theme-gray .bottom-buttons { color: #333; }
+
+
+/* Checkboxes */
+.custom-checkbox { 
+  position: relative; 
+  cursor: pointer; 
+  font-size: 13px; 
+  font-weight: 500; 
+  display: inline-flex; 
+  align-items: center; 
+}
+
+.custom-checkbox input { 
+  position: absolute; 
+  opacity: 0; 
+  cursor: pointer; 
+}
+
+.custom-checkbox span {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  border: 1.5px solid #000;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-right: 6px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Default checkmark hidden */
+.custom-checkbox span::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 3px;
+  top: 0px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Show checkmark when checked */
+.custom-checkbox input:checked ~ span {
+  background-color: #000;
+  border-color: #000;
+}
+.custom-checkbox input:checked ~ span::after {
+  display: block;
+}
+.checkbox-inline { 
+  display: flex; 
+  flex-direction: row; /* keep them in one line */
+  gap: 60px;          /* increase spacing between options */
+  align-items: center; 
+  flex-wrap: wrap;    /* allows wrapping if screen is too small */
+  margin-top: 6px; 
+}
+
+
+/* Theme overrides: use theme color for fill + checkmark bg */
+body.theme-blue .custom-checkbox input:checked ~ span {
+  background-color: #4a6cff;
+  border-color: #4a6cff;
+}
+body.theme-green .custom-checkbox input:checked ~ span {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+body.theme-yellow .custom-checkbox input:checked ~ span {
+  background-color: #e6c200;
+  border-color: #e6c200;
+}
+body.theme-pink .custom-checkbox input:checked ~ span {
+  background-color: #ff4d88;
+  border-color: #ff4d88;
+}
+body.theme-purple .custom-checkbox input:checked ~ span {
+  background-color: #8e44ad;
+  border-color: #8e44ad;
+}
+body.theme-gray .custom-checkbox input:checked ~ span {
+  background-color: #555;
+  border-color: #555;
+}
+
+ 
+  /* ---------- THEMES (tables only) ---------- */
+  body.default-theme table th { background: #f3f3f3; }
+  body.default-theme table td { background: #fff; }
+
+  body.theme-blue table th { background: #e6f0ff; }
+  body.theme-blue table td { background: #f9fbff; }
+  body.theme-blue .custom-checkbox input:checked ~ span { background-color: #4a6cff; border-color: #4a6cff; }
+
+  body.theme-green table th { background: #e9f9e9; }
+  body.theme-green table td { background: #fafffa; }
+  body.theme-green .custom-checkbox input:checked ~ span { background-color: #4caf50; border-color: #4caf50; }
+
+  body.theme-yellow table th { background: #fff9e6; }
+  body.theme-yellow table td { background: #fffdf5; }
+  body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #e6c200; border-color: #e6c200; }
+
+  body.theme-pink table th { background: #ffe6f0; }
+  body.theme-pink table td { background: #fff5fa; }
+  body.theme-pink .custom-checkbox input:checked ~ span { background-color: #ff4d88; border-color: #ff4d88; }
+
+  body.theme-purple table th { background: #f0e6ff; }
+  body.theme-purple table td { background: #faf5ff; }
+  body.theme-purple .custom-checkbox input:checked ~ span { background-color: #8e44ad; border-color: #8e44ad; }
+
+  body.theme-gray table th { background: #eeeeee; }
+  body.theme-gray table td { background: #fafafa; }
+  body.theme-gray .custom-checkbox input:checked ~ span { background-color: #555; border-color: #555; }
+  /* ---------- THEMES (tables + borders + headers) ---------- */
+body.default-theme table, 
+body.default-theme th, 
+body.default-theme td { border-color: #000; }
+body.default-theme table th { background: #f3f3f3; color: #000; }
+body.default-theme table td { background: #fff; }
+
+/* Blue Theme */
+body.theme-blue table, 
+body.theme-blue th, 
+body.theme-blue td { border-color: #2c3e99; }
+body.theme-blue table th { background: #d6e3ff; color: #2c3e99; }
+body.theme-blue table td { background: #f9fbff; }
+
+/* Green Theme */
+body.theme-green table, 
+body.theme-green th, 
+body.theme-green td { border-color: #2d7a33; }
+body.theme-green table th { background: #d9f5d9; color: #2d7a33; }
+body.theme-green table td { background: #fafffa; }
+
+/* Yellow Theme */
+body.theme-yellow table, 
+body.theme-yellow th, 
+body.theme-yellow td { border-color: #b39700; }
+body.theme-yellow table th { background: #fff2cc; color: #b39700; }
+body.theme-yellow table td { background: #fffdf5; }
+
+/* Pink Theme */
+body.theme-pink table, 
+body.theme-pink th, 
+body.theme-pink td { border-color: #cc3366; }
+body.theme-pink table th { background: #ffd6e6; color: #cc3366; }
+body.theme-pink table td { background: #fff5fa; }
+
+/* Purple Theme */
+body.theme-purple table, 
+body.theme-purple th, 
+body.theme-purple td { border-color: #5e2d91; }
+body.theme-purple table th { background: #e6d6ff; color: #5e2d91; }
+body.theme-purple table td { background: #faf5ff; }
+
+/* Gray Theme */
+body.theme-gray table, 
+body.theme-gray th, 
+body.theme-gray td { border-color: #444; }
+body.theme-gray table th { background: #dddddd; color: #333; }
+body.theme-gray table td { background: #fafafa; }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  /* Hide Quill toolbar (already no-print) */
+  .ql-toolbar {
+    display: none !important;
+  }
+
+  /* Remove Quill editor borders for print */
+  #installResourcesEditor,
+  .ql-container {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Optional: make text fully visible and scale font */
+  #installResourcesEditor {
+    height: auto !important;
+    min-height: 50px;
+  }
+}
+	@media print {
+  /* Make Quill editor content visible */
+  .ql-editor {
+    height: auto !important;
+    min-height: 50px !important;
+    overflow: visible !important;
+  }
+
+  /* Optional: remove extra borders and padding */
+  #installResourcesEditor {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
+@media print {
+  /* Show Quill content in print */
+  #installResourcesEditor .ql-editor {
+    height: auto !important;
+    min-height: 50px !important;
+    overflow: visible !important;
+  }
+
+  /* Remove borders/shadows for clean print */
+  #installResourcesEditor {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Hide the toolbar */
+  .ql-toolbar {
+    display: none !important;
+  }
+}
+#installResourcesEditor .ql-editor {
+  white-space: pre-wrap !important; /* wrap long lines */
+  word-break: break-word !important; /* break words if too long */
+}
+
+#installResourcesEditor {
+  min-height: 120px;   /* small starting height */
+  height: auto !important;
+}
+#installResourcesEditor .ql-editor {
+  min-height: 120px;
+  height: auto !important;
+  overflow-y: visible !important;
+}
+@media print {
+  body {
+    margin: 0;
+    padding: 20px;   /* add some breathing space */
+    font-size: 13px;
+  }
+
+  #installResourcesEditor,
+  #installResourcesEditor .ql-editor {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+
+  /* Hide editor toolbar when printing */
+  #installResourcesToolbar {
+    display: none !important;
+  }
+
+  /* Ensure each section uses full width of the page */
+  .lesson-plan {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+@media print {
+  @page {
+    size: A4; /* Sets the page size to A4 */
+    margin: 0; /* Removes default page margins, allowing content to extend to the edges */
+  }
+
+  body {
+    width: 210mm; /* A4 width */
+    height: 297mm; /* A4 height */
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Optional: Add styles to manage content flow and breaks */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0; /* Adjust padding as needed for content within the page */
+    page-break-after: always; /* Forces a new page after elements with this class */
+  }
+
+  /* Prevent elements from breaking across pages awkwardly */
+  h1, h2, h3, p, img {
+    page-break-inside: avoid;
+  }
+}
+</style>
+</head>
+<body class="default-theme">
+  <div class="lesson-plan">
+    <!-- your existing tables unchanged ... -->
+<!-- Row 1 -->
+    <table>
+      <tr>
+        <td style="width:50%"><strong>Primary School:</strong> <input type="text" placeholder="Enter school name"></td>
+        <td style="width:50%"><strong>Teacher:</strong> <input type="text" placeholder="Enter teacher name"></td>
+      </tr>
+    </table>
+
+  <!-- Row 2: Level and Section -->
+<table>
+  <tr>
+    <td style="width:33%"><strong>Level:</strong> 
+      <select id="levelSelect">
+        <option value="">-- Select Level --</option>
+        <option value="3PS">3PS</option>
+        <option value="4PS">4PS</option>
+        <option value="5PS">5PS</option>
+      </select>
+    </td>
+    <td style="width:33%"><strong>Number of learners:</strong> 
+      <input type="number" placeholder="0">
+    </td>
+	<td style="width:34%"><strong>Sequence:</strong> 
+      <select id="sequenceSelect">
+        <option value="">-- Select Sequence --</option>
+      </select>
+    </td>
+    
+  </tr>
+</table>
+
+<!-- Row 3: Sequence and Session -->
+<table>
+  <tr>
+ <td style="width:50%"><strong>Section:</strong> 
+      <select id="sectionSelect">
+        <option value="">-- Select Section --</option>
+      </select>
+    </td>
+    <td style="width:50%"><strong>Session:</strong> 
+      <select id="sessionSelect">
+        <option value="">-- Select Session --</option>
+      </select>
+    </td>
+  </tr>
+</table>
+
+
+    <!-- Row 4: Session Objective -->
+    <table>
+      <tr>
+        <td>
+          <strong>Session objective(s):</strong> 
+          <input type="text" placeholder="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." style="width:80%">
+        </td>
+      </tr>
+    </table>
+
+    <!-- Row 5: Target Competencies & Teaching Materials -->
+    <table>
+      <tr>
+        <td style="width:60%">
+          <strong>Target competencies:</strong>
+          <div class="checkbox-inline">
+            <label class="custom-checkbox">
+              <input type="checkbox"><span></span> Interact
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox"><span></span> Interpret
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox"><span></span> Produce
+            </label>
+          </div>
+        </td>
+        <td style="width:40%">
+          <strong>Teaching materials:</strong>
+          <div class="checkbox-inline">
+            <label class="custom-checkbox">
+              <input type="checkbox"><span></span> Textbook
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox"><span></span> W.B
+            </label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Row 6: Lesson Plan Table -->
+    <table>
+      <tr>
+        <th style="width:15%">STAGES</th>
+        <th style="width:55%">PROCEDURE / TASKS</th>
+        <th style="width:15%">INTERACTION</th>
+        <th style="width:15%">TIME ?</th>
+      </tr>
+      <tr>
+       <tr>
+  <td>Warmer</td>
+  <td><textarea rows="1" placeholder="Write your Warmer procedure here..." style="width:100%;"></textarea></td>
+  <td><input type="text" placeholder="T -> T"></td>
+  <td><input type="text" placeholder="20 min"></td>
+</tr>
+
+
+<tr>
+  <td>Install resources</td>
+  <td>
+    <!-- Quill toolbar (hidden in print) -->
+
+
+    <!-- Quill editor container -->
+    <div id="installResourcesEditor" style="height:340px;">
+      Write your install resources procedure here...
+    </div>
+  </td>
+  <td><input type="text" placeholder="T -> T"></td>
+  <td><input type="text" placeholder="20 min"></td>
+</tr>
+
+<tr>
+  <td>Assessment</td>
+  <td><textarea rows="1" placeholder="Write your assessment procedure here..." style="width:100%;"></textarea></td>
+  <td><input type="text" placeholder="L -> L"></td>
+  <td><input type="text" placeholder="15 min"></td>
+</tr>
+
+    <!-- Bottom Section: Self-reflection -->
+    <table class="reflection">
+      <tr>
+        <th>What Worked</th>
+        <th>What Hindered</th>
+        <th>Action Points</th>
+      </tr>
+      <tr>
+        <td><textarea placeholder="Write here..."></textarea></td>
+        <td><textarea placeholder="Write here..."></textarea></td>
+        <td><textarea placeholder="Write here..."></textarea></td>
+      </tr>
+    </table>
+    <!-- Bottom buttons -->
+    <div class="bottom-buttons no-print">
+      <button onclick="window.print()">Print</button>
+      <button onclick="downloadPage()">Download</button>
+	    <button onclick="goToMain()">Go to Main Page</button>
+		<script>
+
+function goToMain() {
+  window.location.href = "index.html"; // Redirect to main page 
+  }
+</script>
+
+      <select id="themeSelect" onchange="changeTheme(this.value)">
+        <option value="default-theme">Default</option>
+        <option value="theme-blue">Blue</option>
+        <option value="theme-green">Green</option>
+        <option value="theme-yellow">Yellow</option>
+        <option value="theme-pink">Pink</option>
+        <option value="theme-purple">Purple</option>
+        <option value="theme-gray">Gray</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+  // ------------------ Curriculum Data ------------------
+const curriculum = {
+  "3PS": {
+    "Family and Friends": {
+      "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    },
+    "School": {
+      "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    },
+    "Home": {
+      "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    },
+    "Play Time": {
+      "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    },
+    "Pets": {
+      "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    },
+    "Birthday": {
+      "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
+      "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
+    }
+  },
+
+  "4PS": {
+    "Family and Friends": {
+      "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
+      "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
+    },
+    "School": {
+      "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
+      "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
+    },
+    "Fun Time and Games": {
+      "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
+      "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
+    }
+  },
+
+  "5PS": {
+    "Jobs, Occupations, and Hobbies": {
+      "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
+      "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
+    },
+    "Hometown, City, Village Amenities": {
+      "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
+      "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
+    },
+    "Holidays and Travelling": {
+      "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
+      "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
+    }
+  }
+};
+
+// ------------------ Dropdown Handlers ------------------
+const levelSelect = document.getElementById("levelSelect");
+const sequenceSelect = document.getElementById("sequenceSelect");
+const sectionSelect = document.getElementById("sectionSelect");
+const sessionSelect = document.getElementById("sessionSelect");
+
+levelSelect.addEventListener("change", () => {
+  sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>";
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+  
+  if (curriculum[levelSelect.value]) {
+    Object.keys(curriculum[levelSelect.value]).forEach(seq => {
+      const opt = document.createElement("option");
+      opt.value = seq;
+      opt.textContent = seq;
+      sequenceSelect.appendChild(opt);
+    });
+    const remediationOption = document.createElement("option");
+    remediationOption.value = "Remediation & Standardisation";
+    remediationOption.textContent = "Remediation & Standardisation";
+    sequenceSelect.appendChild(remediationOption);
+  }
+});
+
+sequenceSelect.addEventListener("change", () => {
+  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  if (sequenceSelect.value === "Remediation & Standardisation") {
+    const remediationSection = document.createElement("option");
+    remediationSection.value = "Remediation & Standardisation";
+    remediationSection.textContent = "Remediation & Standardisation";
+    sectionSelect.appendChild(remediationSection);
+    return;
+  }
+  
+  const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+  if (seqData) {
+    Object.keys(seqData).forEach(sec => {
+      const opt = document.createElement("option");
+      opt.value = sec;
+      opt.textContent = sec;
+      sectionSelect.appendChild(opt);
+    });
+  }
+});
+
+sectionSelect.addEventListener("change", () => {
+  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+
+  if (sectionSelect.value === "Remediation & Standardisation") {
+    const remediationSession = document.createElement("option");
+    remediationSession.value = "Remediation & Standardisation";
+    remediationSession.textContent = "Remediation & Standardisation";
+    sessionSelect.appendChild(remediationSession);
+    return;
+  }
+
+  const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
+  if (sessData) {
+    sessData.forEach(ses => {
+      const opt = document.createElement("option");
+      opt.value = ses;
+      opt.textContent = ses;
+      sessionSelect.appendChild(opt);
+    });
+  }
+});
+    function downloadPage() {
+      const blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "lesson-plan.html";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function changeTheme(theme) {
+      document.body.className = theme;
+      localStorage.setItem("lessonTheme", theme);
+    }
+
+    window.onload = () => {
+      const saved = localStorage.getItem("lessonTheme");
+      if (saved) {
+        document.body.className = saved;
+        document.getElementById("themeSelect").value = saved;
+      }
+    };
+
+  // Register image resize module
+  Quill.register('modules/imageResize', window.ImageResize);
+
+  // Initialize Quill with full toolbar + image resize
+  var installResourcesQuill = new Quill('#installResourcesEditor', {
+    theme: 'snow',
+    placeholder: 'Write your lesson procedure here...',
+    modules: {
+      toolbar: {
+        container: [
+          [{ 'font': [] }],
+          [{ 'header': [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'script': 'super' }, { 'script': 'sub' }],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
+          [{ 'align': [] }],
+          ['blockquote', 'code-block'],
+          ['image'],
+          ['clean'],
+          ['increase-size', 'decrease-size']  // custom buttons
+        ]
+      },
+      imageResize: {}
+    }
+  });
+
+  // ---------- Font size increase/decrease ----------
+  function calculateNewSize(currentSize, delta) {
+    const sizes = ['8px','10px','12px','14px','16px','18px','24px','32px','48px'];
+    let index = sizes.indexOf(currentSize);
+    if(index === -1) index = sizes.indexOf('16px'); // default
+    let newIndex = index + delta;
+    if(newIndex < 0) newIndex = 0;
+    if(newIndex >= sizes.length) newIndex = sizes.length - 1;
+    return sizes[newIndex];
+  }
+
+  function adjustFontSize(delta) {
+    const range = installResourcesQuill.getSelection();
+    if(!range) return;
+    const format = installResourcesQuill.getFormat(range);
+    const currentSize = format.size || '16px';
+    const newSize = calculateNewSize(currentSize, delta);
+
+    if(range.length === 0) {
+      installResourcesQuill.format('size', newSize);
+    } else {
+      installResourcesQuill.formatText(range.index, range.length, 'size', newSize);
+    }
+  }
+
+  // Add custom buttons logic
+  const toolbar = installResourcesQuill.getModule('toolbar');
+function preparePrint() {
+  const editorContent = document.querySelector('#installResourcesEditor .ql-editor').innerHTML;
+  const printDiv = document.createElement('div');
+  printDiv.innerHTML = editorContent;
+  printDiv.style.fontFamily = "'Poppins', 'Roboto', sans-serif";
+  printDiv.style.fontSize = '13px';
+  printDiv.style.width = '100%';
+
+  // Temporarily append to body
+  document.body.appendChild(printDiv);
+
+  // Hide original editor
+  document.querySelector('#installResourcesEditor').style.display = 'none';
+
+  window.print();
+
+  // Restore
+  document.querySelector('#installResourcesEditor').style.display = 'block';
+  document.body.removeChild(printDiv);
+}
+
+// Then change your print button
+// <button onclick="preparePrint()">Print</button>
+
+  </script>
+  
+</body>
+</html>
