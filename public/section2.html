@@ -25,6 +25,7 @@
     }
     body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
 
+    /* NAVBAR STYLES (ADAPTED FROM INDEX.HTML) */
     nav {
       background: white;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
@@ -39,25 +40,79 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
+      padding: 1rem; /* Adjusted for mobile */
       max-width: 1000px;
       margin: 0 auto;
       position: relative;
     }
-
-    #nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
+    @media (min-width: 768px) {
+      nav .container {
+        padding: 1rem 2rem; /* Restore padding for larger screens */
+      }
+    }
+    
+    #nav-links {
+      /* Mobile styles for dropdown */
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 1rem 0;
+      border-radius: 0 0 12px 12px;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #nav-links.active {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.dark #nav-links {
+      background: #1e1e2e;
+    }
     #nav-links a {
       text-decoration: none;
       font-weight: 500;
       font-size: 1.1rem;
       color: #44475a;
-      padding: 8px 0;
+      padding: 1rem 2rem;
       transition: color 0.3s ease;
       white-space: nowrap;
       cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
     }
     body.dark #nav-links a { color: #cdd6f4; }
     #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+
+    /* Desktop styles for nav links */
+    @media (min-width: 768px) {
+      #nav-links {
+        position: static;
+        flex-direction: row;
+        background: transparent;
+        box-shadow: none;
+        gap: 3rem;
+        padding: 0;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #nav-links a {
+        padding: 8px 0;
+        width: auto;
+      }
+    }
 
     .underline {
       position: absolute;
@@ -70,7 +125,41 @@
       z-index: 5;
       left: 0;
       width: 0;
+      display: none; /* Hide by default on mobile */
     }
+    @media (min-width: 768px) {
+      .underline {
+        display: block; /* Show on desktop */
+      }
+    }
+    
+    /* Hamburger Menu Button */
+    #menu-toggle {
+      display: block;
+      z-index: 30;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    @media (min-width: 768px) {
+      #menu-toggle { display: none; }
+    }
+    #menu-toggle .hamburger-line {
+      width: 28px;
+      height: 3px;
+      background-color: #44475a;
+      border-radius: 3px;
+      display: block;
+      margin: 5px 0;
+      transition: all 0.3s ease-in-out;
+    }
+    body.dark #menu-toggle .hamburger-line { background-color: #cdd6f4; }
+
+    /* Animate hamburger to X */
+    #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
+    #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
 
     /* Background shapes & Animations */
     .shape {
@@ -179,15 +268,23 @@
   <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
   <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
   <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-
-  <nav>
+  
+  <!-- NAVBAR UPDATED TO MATCH INDEX.HTML -->
+  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
-      <ul id="nav-links">
+       <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      
+      <ul id="nav-links" class="hidden md:flex">
         <li><a href="index.html">Main page</a></li>
         <li><a href="section2.html" class="active">Templates</a></li>
         <li><a href="section3.html">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
+      
       <div class="theme-switcher">
         <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
         <label for="dm-toggle" class="switch">
@@ -202,13 +299,14 @@
     </div>
   </nav>
 
-  <div class="text-center py-12 px-6 relative z-10">
+  <!-- CONTENT STYLES IMPROVED FOR MOBILE -->
+  <div class="text-center py-8 px-4 md:py-12 md:px-6 relative z-10">
     <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4">? Explore Stunning Templates</h1>
     <p class="text-lg text-gray-800 dark:text-gray-300">Choose a template to get started with your lesson plan.</p>
   </div>
 
-  <div class="bg-white/50 dark:bg-white/10 backdrop-blur-md mx-6 md:mx-12 p-8 md:p-14 rounded-3xl shadow-xl relative z-10">
-    <div class="grid gap-10 grid-cols-1 md:grid-cols-2">
+  <div class="bg-white/50 dark:bg-white/10 backdrop-blur-md mx-4 md:mx-12 p-6 md:p-12 rounded-3xl shadow-xl relative z-10 mb-12">
+    <div class="grid gap-6 md:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 
       <div class="zoom-container">
         <img src="firstmodule.jpg" alt="Minimalist Planner" />
@@ -253,115 +351,112 @@
       </div>
     </div> 
   </div> 
+  
+  <!-- SCRIPT UPDATED TO MATCH INDEX.HTML -->
   <script>
-    // --- Nav & Theme Script ---
-    const menu = document.querySelector('nav .container');
-    const underline = document.querySelector('.underline');
-    const links = menu.querySelectorAll('a');
-    const body = document.body;
-    const dmToggle = document.getElementById('dm-toggle');
-    const sliderIcon = document.getElementById('slider-icon');
+    document.addEventListener('DOMContentLoaded', function () {
+      // --- Nav, Theme, & Hamburger Script ---
+      const menuContainer = document.querySelector('nav .container');
+      const underline = document.querySelector('.underline');
+      const allLinks = document.querySelectorAll('#nav-links a');
+      const toggleCheckbox = document.getElementById('dm-toggle');
+      const body = document.body;
+      const sliderIcon = document.getElementById('slider-icon');
+      const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+      const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
 
-    const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
-    const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+      // Hamburger Menu
+      const menuToggle = document.getElementById('menu-toggle');
+      const navLinks = document.getElementById('nav-links');
 
-    // Throttle function to limit how often a function can run
-    function throttle(func, limit) {
-      let inThrottle;
-      return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-          func.apply(context, args);
-          inThrottle = true;
-          setTimeout(() => inThrottle = false, limit);
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('hidden');
+        navLinks.classList.toggle('active');
+      });
+
+      function moveUnderline(element) {
+        if (!element || window.innerWidth < 768) return; // Don't run on mobile
+        const rect = element.getBoundingClientRect();
+        const parentRect = menuContainer.getBoundingClientRect();
+        const left = rect.left - parentRect.left + menuContainer.scrollLeft;
+        const width = rect.width;
+        underline.style.width = width + 'px';
+        underline.style.left = left + 'px';
+      }
+      
+      function updateSliderIcon() {
+        if (body.classList.contains('dark')) {
+          sliderIcon.src = darkIcon;
+        } else {
+          sliderIcon.src = lightIcon;
         }
-      };
-    }
+      }
 
-    function moveUnderline(element) {
-      const rect = element.getBoundingClientRect();
-      const parentRect = menu.getBoundingClientRect();
-      const left = rect.left - parentRect.left + menu.scrollLeft;
-      const width = rect.width;
-      underline.style.width = width + 'px';
-      underline.style.left = left + 'px';
-    }
+      function setDarkMode(enabled) {
+        if (enabled) {
+          body.classList.add('dark');
+          toggleCheckbox.checked = true;
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          toggleCheckbox.checked = false;
+          localStorage.setItem('theme', 'light');
+        }
+        updateSliderIcon();
+      }
+      
+      // Initialize theme from localStorage
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark') {
+        setDarkMode(true);
+      } else {
+        setDarkMode(false);
+      }
 
-    window.addEventListener('load', () => {
+      // Initialize underline position on load
       setTimeout(() => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
+          const activeLink = document.querySelector('a.active') || allLinks[0];
+          moveUnderline(activeLink);
       }, 50);
-    });
 
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => moveUnderline(link));
-      link.addEventListener('mouseleave', () => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
-      });
-      link.addEventListener('click', () => {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-      });
-    });
-
-    // Use the throttled function for the resize event
-    window.addEventListener('resize', throttle(() => {
-      const active = menu.querySelector('a.active') || links[0];
-      moveUnderline(active);
-    }, 100)); // Limit to once every 100ms
-
-    document.fonts.ready.then(() => {
-      const active = menu.querySelector('a.active') || links[0];
-      moveUnderline(active);
-    });
-
-    function updateSliderIcon() {
-      if (body.classList.contains('dark')) {
-        sliderIcon.src = moonIcon;
-        sliderIcon.alt = 'Dark Mode Icon';
-      } else {
-        sliderIcon.src = sunIcon;
-        sliderIcon.alt = 'Light Mode Icon';
-      }
-    }
-
-    function setDarkMode(enabled) {
-      if (enabled) {
-        body.classList.add('dark');
-        dmToggle.checked = true;
-        localStorage.setItem('theme', 'dark');
-      } else {
-        body.classList.remove('dark');
-        dmToggle.checked = false;
-        localStorage.setItem('theme', 'light');
-      }
-      updateSliderIcon();
-    }
-
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark') {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-
-    dmToggle.addEventListener('change', () => {
-      setDarkMode(dmToggle.checked);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+      // Event Listeners
+      allLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => moveUnderline(link));
+        link.addEventListener('click', () => {
+          allLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          
+          // Close mobile menu on link click
+          if (window.innerWidth < 768) {
+            menuToggle.classList.remove('active');
+            navLinks.classList.add('hidden');
+            navLinks.classList.remove('active');
+          }
         });
       });
-    });
+      
+      menuContainer.addEventListener('mouseleave', () => {
+          const activeLink = document.querySelector('a.active') || allLinks[0];
+          moveUnderline(activeLink);
+      });
 
+      window.addEventListener('resize', () => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+        // Hide mobile menu if screen is resized to be larger
+        if (window.innerWidth >= 768) {
+          menuToggle.classList.remove('active');
+          navLinks.classList.remove('active');
+          navLinks.classList.add('hidden');
+        }
+      });
+
+      toggleCheckbox.addEventListener('change', () => {
+        setDarkMode(toggleCheckbox.checked);
+      });
+    });
   </script>
 
-  </body>
+</body>
 </html>
