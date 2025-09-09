@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login</title>
+  <title>Login – Printely</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <script>
-    tailwind.config = { darkMode: 'class' };
+    tailwind.config = {
+      darkMode: 'class'
+    };
   </script>
 
   <style>
@@ -16,252 +17,394 @@
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      background: linear-gradient(to bottom right, #ede9fe, #d8b4fe);
+      background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+      transition: background 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
       overflow-x: hidden;
-      transition: background 0.5s ease;
     }
-    body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
+    body.dark {
+      background: linear-gradient(to bottom right, #1e1b4b, #4c1d95);
+      color: #e0e7ff;
+    }
 
-    /* Background Shapes */
+    /* Background Shapes & Animations */
     .shape { position: absolute; opacity: 0.15; z-index: 0; width: 2rem; height: 2rem; animation: float-rotate 20s linear infinite; }
-    .circle-purple-400 { top: 2rem; left: 2rem; fill: #a78bfa; animation-duration: 25s; }
-    .rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-duration: 35s; animation-direction: reverse; }
-    .triangle-violet-500 { bottom: 2rem; left: 15%; fill: #8b5cf6; animation-duration: 40s; }
-    .circle-indigo-400 { bottom: 4rem; right: 2rem; fill: #818cf8; animation-duration: 30s; animation-direction: reverse; }
-    .circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 50s; }
-    .rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 45s; }
-    .triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 55s; }
-    .diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-duration: 60s; animation-direction: reverse; }
-    .circle-gray { bottom: 2rem; right: 38%; fill: #9ca3af; animation-duration: 70s; }
-    .circle-green { top: 10%; left: 45%; fill: #22c55e; animation-duration: 65s; }
-    .rect-orange { top: 30%; right: 20%; fill: #f97316; animation-duration: 55s; animation-direction: reverse; }
-    .triangle-red { bottom: 25%; left: 25%; fill: #ef4444; animation-duration: 60s; }
-    .diamond-purple { top: 70%; right: 10%; fill: #a855f7; animation-duration: 50s; }
+    .circle-purple-400 { top: 2rem; right: 10%; background: #a78bfa; border-radius: 50%; animation-delay: 2s; }
+    .square-purple-600 { top: 15%; left: 5%; background: #8b5cf6; transform: rotate(45deg); animation-delay: 4s; }
+    .triangle-purple-500 { bottom: 20%; right: 15%; background: #8b5cf6; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation-delay: 6s; }
+    .circle-purple-700 { bottom: 5%; left: 20%; background: #6d28d9; border-radius: 50%; animation-delay: 8s; }
+    .star-purple-800 { top: 10%; left: 80%; background: #4c1d95; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); animation-delay: 10s; }
     @keyframes float-rotate {
-      0% { transform: rotate(0deg) translate(0, 0); }
-      50% { transform: rotate(180deg) translate(5px, -5px); }
-      100% { transform: rotate(360deg) translate(0, 0); }
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(1rem, -1rem) rotate(90deg); }
+      50% { transform: translate(0, 0) rotate(180deg); }
+      75% { transform: translate(-1rem, 1rem) rotate(270deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
     }
-
-    /* Standardized Navbar Styles */
-    nav { background: white; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); border-radius: 12px; position: relative; z-index: 20; transition: background 0.3s ease; }
-    body.dark nav { background: #1e1e2e; }
-    nav .container { display: flex; justify-content: space-between; align-items: center; padding: 1rem; max-width: 1000px; margin: 0 auto; position: relative; }
-    #nav-links { position: absolute; top: 100%; left: 0; right: 0; background: white; box-shadow: 0 6px 15px rgba(0,0,0,0.1); flex-direction: column; align-items: center; list-style: none; margin: 0; padding: 1rem 0; border-radius: 0 0 12px 12px; transition: transform 0.3s ease-out, opacity 0.3s ease-out; transform: translateY(-10px); opacity: 0; pointer-events: none; }
-    #nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
-    body.dark #nav-links { background: #1e1e2e; }
-    #nav-links a { text-decoration: none; font-weight: 500; font-size: 1.1rem; color: #44475a; padding: 1rem 2rem; transition: color 0.3s ease; white-space: nowrap; cursor: pointer; display: block; width: 100%; text-align: center; }
-    body.dark #nav-links a { color: #cdd6f4; }
-    #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+    
+    /* === FIXED NAVBAR STYLES === */
+    nav {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      position: relative;
+      z-index: 20;
+      transition: background 0.3s ease;
+    }
+    body.dark nav {
+      background: rgba(30, 30, 46, 0.7);
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
     @media (min-width: 768px) {
-      nav .container { padding: 1rem 2rem; }
-      #nav-links { position: static; flex-direction: row; background: transparent; box-shadow: none; gap: 3rem; padding: 0; transform: none; opacity: 1; pointer-events: auto; }
-      #nav-links a { padding: 8px 0; width: auto; }
+      nav .container {
+        padding: 1rem 2rem;
+      }
     }
-    .underline { position: absolute; bottom: 0; height: 3px; background-color: #7c3aed; border-radius: 1px; transition: left 0.3s ease, width 0.3s ease; pointer-events: none; z-index: 5; display: none; }
-    @media (min-width: 768px) { .underline { display: block; } }
-    #menu-toggle { display: block; z-index: 30; border: none; background: transparent; cursor: pointer; }
-    @media (min-width: 768px) { #menu-toggle { display: none; } }
-    #menu-toggle .hamburger-line { width: 28px; height: 3px; background-color: #44475a; border-radius: 3px; display: block; margin: 5px 0; transition: all 0.3s ease-in-out; }
-    body.dark #menu-toggle .hamburger-line { background-color: #cdd6f4; }
-    #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
-    #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    
+    #nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 1rem 0;
+      border-radius: 0 0 12px 12px;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #nav-links.active {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.dark #nav-links {
+      background: #1e1e2e;
+    }
+    #nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #44475a;
+      padding: 1rem 2rem;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    body.dark #nav-links a {
+      color: #cdd6f4;
+    }
+    #nav-links a.active,
+    #nav-links a:hover {
+      color: #7c3aed;
+      font-weight: 700;
+    }
+    @media (min-width: 768px) {
+      #nav-links {
+        position: static;
+        flex-direction: row;
+        background: transparent;
+        box-shadow: none;
+        gap: 3rem;
+        padding: 0;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #nav-links a {
+        padding: 8px 0;
+        width: auto;
+      }
+    }
 
-    /* Theme Switcher */
+    .underline {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      background-color: #7c3aed;
+      border-radius: 1px;
+      transition: left 0.3s ease, width 0.3s ease;
+      pointer-events: none;
+      z-index: 5;
+      left: 0;
+      width: 0;
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .underline {
+        display: block;
+      }
+    }
+    
+    #menu-toggle {
+      display: block;
+      z-index: 30;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+     @media (min-width: 768px) {
+       #menu-toggle {
+         display: none;
+       }
+     }
+     #menu-toggle .hamburger-line {
+       width: 28px;
+       height: 3px;
+       background-color: #44475a;
+       border-radius: 3px;
+       display: block;
+       margin: 5px 0;
+       transition: all 0.3s ease-in-out;
+     }
+     body.dark #menu-toggle .hamburger-line {
+       background-color: #cdd6f4;
+     }
+     #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+     #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
+     #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
     .theme-switcher { display: inline-block; position: relative; user-select: none; }
-    .switch { display: flex; align-items: center; width: 90px; height: 42px; background: linear-gradient(to right, #d8b4fe, #a78bfa); border-radius: 42px; cursor: pointer; position: relative; }
+    .switch {
+      display: flex; align-items: center; width: 90px; height: 42px;
+      background: linear-gradient(to right, #d8b4fe, #a78bfa);
+      border-radius: 42px; cursor: pointer; position: relative;
+    }
     .icon { width: 30px; height: 30px; pointer-events: none; }
     .sun { margin-left: 10px; }
     .moon { margin-left: auto; margin-right: 10px; }
-    .slider { position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%; top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; }
+    .slider {
+      position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%;
+      top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
     .slider img { width: 24px; height: 24px; }
     #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
     #dm-toggle:checked + .switch .slider { left: 49px; }
+    /* === END OF NAVBAR STYLES === */
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 120px); /* Adjust based on nav height */
+        z-index: 10;
+        position: relative;
+        padding: 1rem;
+    }
+    .login-box {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        z-index: 10;
+        width: 100%;
+        max-width: 400px;
+        padding: 2.5rem;
+    }
+    .dark .login-box {
+      background: rgba(31, 41, 55, 0.9);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .nav-btn {
+      transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+    }
+    .nav-btn:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
 <body class="min-h-screen">
+  <div class="shape circle-purple-400"></div>
+  <div class="shape square-purple-600"></div>
+  <div class="shape triangle-purple-500"></div>
+  <div class="shape circle-purple-700"></div>
+  <div class="shape star-purple-800"></div>
 
-  <svg class="shape circle-purple-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape rect-purple-300" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
-  <svg class="shape triangle-violet-500" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape circle-indigo-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape circle-pink" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape rect-blue" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
-  <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
-  <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape circle-green" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-  <svg class="shape rect-orange" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
-  <svg class="shape triangle-red" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape diamond-purple" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
-
-  <nav class="sticky top-4 max-w-5xl mx-auto">
+  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
-      <ul id="nav-links">
-        <li><a href="index.html">Main Page</a></li>
-        <li><a href="section3.html">Sign Up</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-      <div class="flex items-center gap-4">
-          <div class="theme-switcher">
-            <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
-            <label for="dm-toggle" class="switch">
-              <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" class="icon sun" alt="Sun Icon" />
-              <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" class="icon moon" alt="Moon Icon" />
-              <div class="slider">
-                <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" id="slider-icon" alt="Slider Icon" />
-              </div>
-            </label>
-          </div>
-          <button id="menu-toggle" aria-label="Open Menu">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-          </button>
+      <a href="index.html" class="text-xl font-bold text-purple-600 lg:text-2xl dark:text-purple-400">Printely</a>
+
+      <button id="menu-toggle" class="md:hidden" aria-label="Open Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="hidden md:flex items-center gap-6 relative">
+        <ul id="nav-links" class="hidden md:flex items-center">
+          <li><a href="index.html">Main page</a></li>
+          <li><a href="section2.html">Templates</a></li>
+          <li><a href="login.html" class="active">Login</a></li>
+        </ul>
+        <div class="underline"></div>
       </div>
-      <div class="underline"></div>
+      
+      <div class="flex items-center gap-4">
+          <a href="section3.html" class="hidden md:block px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-full nav-btn hover:bg-purple-700">
+              Sign Up
+          </a>
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
+            <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
+            <div class="slider">
+              <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+            </div>
+          </label>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <section class="max-w-lg mx-auto mt-20 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
-    <h2 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-6">Welcome Back</h2>
-    <form id="login-form" class="space-y-5">
-      <input type="email" name="email" placeholder="Email Address" required 
-             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
-      <input type="password" name="password" placeholder="Password" required 
-             class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
-      <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-lg transition duration-200">Login</button>
-    </form>
-    <p class="text-center text-sm text-gray-700 dark:text-gray-400 mt-4">Don’t have an account? 
-      <a href="section3.html" class="text-purple-600 dark:text-purple-400 hover:underline">Sign Up</a>
-    </p>
-  </section>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
-      authDomain: "printelydz.firebaseapp.com",
-      projectId: "printelydz",
-      storageBucket: "printelydz.appspot.com",
-      messagingSenderId: "49201277305",
-      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
-      measurementId: "G-R4VJL5SR88"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // FIX: Redirect user to main page if they are already logged in
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        window.location.href = 'index.html';
-      }
-    });
-
-    const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  <div class="login-container">
+    <div class="login-box">
+      <h2 class="text-3xl font-bold text-center text-purple-600 dark:text-purple-400">Login</h2>
+      <p class="mt-2 text-center text-gray-600 dark:text-gray-400">Welcome back! Please enter your details.</p>
       
-      const email = loginForm.email.value;
-      const password = loginForm.password.value;
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // Successful login is handled by the onAuthStateChanged listener above,
-        // which will redirect to index.html.
-      } catch (error) {
-        console.error("Login Error:", error.message);
-        alert("Incorrect username or password. Please try again.");
-      }
-    });
-  </script>
+      <form class="flex flex-col mt-6 space-y-4">
+        <label for="email" class="font-semibold text-gray-700 dark:text-gray-300">Email Address</label>
+        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="your@email.com" />
+        
+        <label for="password" class="font-semibold text-gray-700 dark:text-gray-300">Password</label>
+        <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="••••••••" />
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input type="checkbox" id="remember" class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500" />
+            <label for="remember" class="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember Me</label>
+          </div>
+          <a href="#" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">Forgot Password?</a>
+        </div>
+        
+        <button type="submit" class="w-full px-4 py-3 text-lg font-bold text-white bg-purple-600 rounded-lg nav-btn hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+          Login
+        </button>
+      </form>
+      
+      <p class="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
+        Don't have an account? <a href="section3.html" class="font-medium text-purple-600 dark:text-purple-400 hover:underline">Sign Up</a>
+      </p>
+    </div>
+  </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
       const menuContainer = document.querySelector('nav .container');
       const underline = document.querySelector('.underline');
-      const navLinksContainer = document.getElementById('nav-links');
-      const allLinks = navLinksContainer.querySelectorAll('a');
-      const menuToggle = document.getElementById('menu-toggle');
-      
+      const allLinks = document.querySelectorAll('#nav-links a');
+      const toggleCheckbox = document.getElementById('dm-toggle');
       const body = document.body;
-      const dmToggle = document.getElementById('dm-toggle');
       const sliderIcon = document.getElementById('slider-icon');
-      const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
-      const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+      const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+      const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+      const menuToggle = document.getElementById('menu-toggle');
+      const navLinks = document.getElementById('nav-links');
 
-      // --- 1. Set Active Nav Link ---
-      const currentPage = window.location.pathname.split("/").pop();
-      allLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPage) {
-          link.classList.add('active');
-        }
+      // Hamburger Menu Logic (FIXED)
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('hidden'); // This is for Tailwind's display property on mobile
+        navLinks.classList.toggle('active'); // This class controls the slide-down animation
       });
       
-      // --- 2. Underline Effect Logic ---
+      // Underline Movement Logic (FIXED)
       function moveUnderline(element) {
         if (!element || window.innerWidth < 768) {
-          underline.style.width = '0px';
+          if (underline) underline.style.width = '0px'; // Hide underline on mobile
           return;
         }
         const rect = element.getBoundingClientRect();
-        const parentRect = menuContainer.getBoundingClientRect();
-        underline.style.width = rect.width + 'px';
-        underline.style.left = (rect.left - parentRect.left) + 'px';
+        const parentRect = element.closest('ul').getBoundingClientRect();
+        const left = rect.left - parentRect.left;
+        const width = rect.width;
+        underline.style.width = width + 'px';
+        underline.style.left = left + 'px';
       }
 
-      // --- 3. Dark Mode Logic ---
-      function setDarkMode(isDark) {
-        if (isDark) {
+      // Initial underline position
+      setTimeout(() => {
+          const activeLink = document.querySelector('#nav-links a.active');
+          if (activeLink) moveUnderline(activeLink);
+      }, 50);
+
+      // Dark Mode Logic
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark') {
+        body.classList.add('dark');
+        toggleCheckbox.checked = true;
+        sliderIcon.src = darkIcon;
+      } else {
+        sliderIcon.src = lightIcon;
+      }
+      
+      toggleCheckbox.addEventListener('change', () => {
+        if (toggleCheckbox.checked) {
           body.classList.add('dark');
-          sliderIcon.src = moonIcon;
+          sliderIcon.src = darkIcon;
           localStorage.setItem('theme', 'dark');
         } else {
           body.classList.remove('dark');
-          sliderIcon.src = sunIcon;
+          sliderIcon.src = lightIcon;
           localStorage.setItem('theme', 'light');
         }
-      }
-
-      // Initialize theme on load
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const storedTheme = localStorage.getItem('theme');
-      const initialDark = storedTheme ? storedTheme === 'dark' : prefersDark;
-      dmToggle.checked = initialDark;
-      setDarkMode(initialDark);
-
-      dmToggle.addEventListener('change', () => setDarkMode(dmToggle.checked));
-
-      // --- 4. Hamburger Menu Logic ---
-      menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        navLinksContainer.classList.toggle('active');
       });
 
-      // --- 5. Event Listeners ---
-      window.addEventListener('load', () => {
-        setTimeout(() => moveUnderline(navLinksContainer.querySelector('a.active')), 50);
-      });
-      
+      // Event Listeners for Links and Resize
       allLinks.forEach(link => {
         link.addEventListener('mouseenter', () => moveUnderline(link));
-      });
-      
-      navLinksContainer.addEventListener('mouseleave', () => {
-        moveUnderline(navLinksContainer.querySelector('a.active'));
-      });
-      
-      window.addEventListener('resize', () => {
-        moveUnderline(navLinksContainer.querySelector('a.active'));
-        if (window.innerWidth >= 768) {
+        link.addEventListener('click', (e) => {
+          // Close mobile menu when a link is clicked
+          if (window.innerWidth < 768) {
             menuToggle.classList.remove('active');
-            navLinksContainer.classList.remove('active');
+            navLinks.classList.add('hidden');
+            navLinks.classList.remove('active');
+          }
+          // Set clicked link as active, if it's not a hash link
+          if(!link.getAttribute('href').startsWith('#')) {
+              allLinks.forEach(l => l.classList.remove('active'));
+              link.classList.add('active');
+          }
+        });
+      });
+      
+      const navLinksContainer = document.querySelector('#nav-links').closest('.relative');
+      if (navLinksContainer) {
+        navLinksContainer.addEventListener('mouseleave', () => {
+            const activeLink = document.querySelector('#nav-links a.active');
+            if(activeLink) moveUnderline(activeLink);
+        });
+      }
+
+      window.addEventListener('resize', () => {
+        const activeLink = document.querySelector('#nav-links a.active');
+        if (activeLink) moveUnderline(activeLink);
+        // Ensure mobile menu is hidden on resize to desktop
+        if (window.innerWidth >= 768) {
+          menuToggle.classList.remove('active');
+          navLinks.classList.remove('active');
+          navLinks.classList.add('hidden');
         }
       });
     });

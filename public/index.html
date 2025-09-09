@@ -1141,7 +1141,9 @@
 </main>
 
 <footer id="page-footer" class="max-w-5xl mx-auto px-4 md:px-6 text-center">
-    <!-- Logout button will be injected here by JavaScript -->
+    <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+        Logout
+    </button>
 </footer>
 
 <script>
@@ -1382,12 +1384,10 @@ onAuthStateChanged(auth, async (user) => {
 
     // 5. Display welcome message and logout button in Navbar
     userInfoDiv.innerHTML = `
-      <span class="font-medium text-sm md:text-base">Welcome back, <strong>${username}</strong>!</span>
-      <button id="logout-btn" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Logout</button>
+      <span class="font-medium text-sm md:text-base">Welcome, <strong>${username}</strong>!</span>
     `;
-    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
-    // 6. Display logout button in Footer
+    // 6. Display functional logout button in Footer
     pageFooter.classList.remove('hidden');
     pageFooter.innerHTML = `
         <button id="footer-logout-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-bold shadow-lg transform hover:scale-105">Sign Out</button>
@@ -1431,7 +1431,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // 2. Show the "Sign Up" navigation link
     if (signupNavLink) {
-        signupNavLink.style.display = 'block'; // Use 'block' or 'list-item'
+        signupNavLink.style.display = 'block';
     }
 
     // 3. Update UI for logged-out state
@@ -1441,9 +1441,12 @@ onAuthStateChanged(auth, async (user) => {
     commentTextarea.disabled = true;
     submitFeedbackBtn.disabled = true;
 
-    // 4. Hide the footer content
-    pageFooter.innerHTML = '';
-    pageFooter.classList.add('hidden');
+    // 4. (FIXED) Always show footer, but with a disabled button
+    pageFooter.classList.remove('hidden'); // Ensure footer is visible
+    pageFooter.innerHTML = `
+        <button id="footer-logout-btn" class="px-6 py-2 bg-gray-400 text-white rounded-lg font-bold shadow-lg cursor-not-allowed" disabled title="You must be logged in to sign out">Sign Out</button>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">You are not logged in.</p>
+    `;
   }
 });
 
@@ -1453,4 +1456,3 @@ displayComments();
 
 </body>
 </html>
-
