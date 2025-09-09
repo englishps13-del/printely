@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Main Page with Dark Mode Toggle Switch</title>
+  <title>Lesson Plan Builder | Mobile Responsive</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet" />
   <script>
     tailwind.config = {
-      darkMode: 'class' // Enable class-based dark mode
+      darkMode: 'class'
     };
   </script>
 
 	<style>
+  /* --- BASE & THEME STYLES --- */
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
@@ -24,419 +26,154 @@
     background: linear-gradient(to bottom right, #1e1b4b, #4c1d95);
     color: #e0e7ff;
   }
-  
-  /* Background shapes & Animations */
-  .shape {
-    position: absolute;
-    opacity: 0.1;
-    z-index: 0;
-    animation: float 15s ease-in-out infinite;
-    pointer-events: none;
+  body.overflow-hidden {
+    overflow: hidden; /* Prevents background scroll when mobile menu is open */
   }
-  .shape-1 { top: 15%; left: 10%; width: 80px; height: 80px; fill: #a78bfa; animation-delay: 0s; }
+  
+  /* --- ANIMATIONS & SHAPES --- */
+  .shape { position: absolute; opacity: 0.1; z-index: 0; animation: float 15s ease-in-out infinite; pointer-events: none; }
+  .shape-1 { top: 15%; left: 10%; width: 80px; height: 80px; fill: #a78bfa; }
   .shape-2 { top: 75%; left: 5%; width: 40px; height: 40px; fill: #c084fc; animation-delay: 3s; animation-duration: 12s; }
   .shape-3 { top: 20%; right: 8%; width: 60px; height: 60px; fill: #f472b6; animation-delay: 5s; }
   .shape-4 { bottom: 10%; right: 12%; width: 100px; height: 100px; fill: #60a5fa; animation-delay: 2s; animation-duration: 18s; }
   .shape-5 { top: 50%; right: 20%; width: 30px; height: 30px; fill: #34d399; animation-delay: 8s; }
-    
-  @keyframes float {
-    0% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-25px) rotate(15deg); }
-    100% { transform: translateY(0px) rotate(0deg); }
-  }
-
-  @keyframes fade-in-down {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fade-in-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
+  @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-25px); } 100% { transform: translateY(0px); } }
+  @keyframes fade-in-down { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+  @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
   .animate-fade-in-down { animation: fade-in-down 0.8s ease-out both; animation-delay: 0.2s; }
   .animate-fade-in-up { animation: fade-in-up 0.8s ease-out both; animation-delay: 0.4s; }
 
-
-  /* NAVBAR */
+  /* --- RESPONSIVE NAVIGATION --- */
   nav {
-    background: white;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    position: relative;
-    z-index: 20;
-    transition: background 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   }
-  body.dark nav {
-    background: #1e1e2e;
-  }
-  nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem; /* Adjusted for mobile */
-    max-width: 1000px;
-    margin: 0 auto;
-    position: relative;
-  }
-  @media (min-width: 768px) {
-    nav .container {
-      padding: 1rem 2rem; /* Restore padding for larger screens */
-    }
-  }
-  
-  #nav-links {
-    /* Mobile styles for dropdown */
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    list-style: none;
-    margin: 0;
-    padding: 1rem 0;
-    border-radius: 0 0 12px 12px;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    transform: translateY(-10px);
-    opacity: 0;
-    pointer-events: none;
-  }
-  #nav-links.active {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-  body.dark #nav-links {
-      background: #1e1e2e;
-  }
-  #nav-links a {
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    color: #44475a;
-    padding: 1rem 2rem;
-    transition: color 0.3s ease;
-    white-space: nowrap;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
-  body.dark #nav-links a {
-    color: #cdd6f4;
-  }
-  #nav-links a.active,
-  #nav-links a:hover {
-    color: #7c3aed;
-    font-weight: 700;
-  }
+  body.dark nav { background: rgba(30, 27, 75, 0.8); }
 
-  /* Desktop styles for nav links */
+  #menu-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 90;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+  }
+  #menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+  /* Mobile Slide-in Panel */
+  #nav-links {
+    position: fixed; top: 0; right: 0; width: 80%; max-width: 300px; height: 100vh;
+    background: white; z-index: 100;
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 6rem 2rem 2rem; gap: 1rem; list-style: none;
+    transform: translateX(100%); transition: transform 0.3s ease-in-out;
+  }
+  body.dark #nav-links { background: #1e1e2e; }
+  #nav-links.active { transform: translateX(0); }
+  #nav-links a { font-weight: 500; font-size: 1.25rem; color: #44475a; padding: 0.5rem 0; }
+  body.dark #nav-links a { color: #cdd6f4; }
+  #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+  #nav-links .theme-switcher { margin-top: auto; align-self: center; }
+
+  /* Desktop Nav */
   @media (min-width: 768px) {
     #nav-links {
-      position: static;
-      flex-direction: row;
-      background: transparent;
-      box-shadow: none;
-      gap: 3rem;
-      padding: 0;
-      transform: none;
-      opacity: 1;
-      pointer-events: auto;
+      position: static; transform: none; height: auto; width: auto; max-width: none;
+      flex-direction: row; padding: 0; background: transparent; gap: 3rem;
     }
-    #nav-links a {
-      padding: 8px 0;
-      width: auto;
-    }
+    #nav-links a { font-size: 1.1rem; padding: 8px 0; }
+    #nav-links .theme-switcher { margin-top: 0; }
   }
 
-  .underline {
-    position: absolute;
-    bottom: 0;
-    height: 3px;
-    background-color: #7c3aed;
-    border-radius: 1px;
-    transition: left 0.3s ease, width 0.3s ease;
-    pointer-events: none;
-    z-index: 5;
-    left: 0;
-    width: 0;
-    display: none; /* Hide by default on mobile */
-  }
+  .underline { display: none; }
   @media (min-width: 768px) {
-    .underline {
-      display: block; /* Show on desktop */
-    }
+    .underline { display: block; position: absolute; bottom: 0; height: 3px; background-color: #7c3aed; border-radius: 1px; transition: left 0.3s ease, width 0.3s ease; pointer-events: none; z-index: 5; }
   }
   
-  /* Hamburger Menu Button */
-  #menu-toggle {
-      display: block;
-      z-index: 30;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-  }
-   @media (min-width: 768px) {
-       #menu-toggle {
-           display: none;
-       }
-   }
-   #menu-toggle .hamburger-line {
-       width: 28px;
-       height: 3px;
-       background-color: #44475a;
-       border-radius: 3px;
-       display: block;
-       margin: 5px 0;
-       transition: all 0.3s ease-in-out;
-   }
-   body.dark #menu-toggle .hamburger-line {
-       background-color: #cdd6f4;
-   }
+  /* Hamburger Button */
+  #menu-toggle { display: block; z-index: 110; border: none; background: transparent; cursor: pointer; }
+  @media (min-width: 768px) { #menu-toggle { display: none; } }
+  .hamburger-line { width: 28px; height: 3px; background-color: #1e1e2e; border-radius: 3px; display: block; margin: 5px 0; transition: all 0.3s ease-in-out; }
+  body.dark .hamburger-line { background-color: #e0e7ff; }
+  #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
+  #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-   /* Animate hamburger to X */
-   #menu-toggle.active .hamburger-line:nth-child(1) {
-       transform: translateY(8px) rotate(45deg);
-   }
-   #menu-toggle.active .hamburger-line:nth-child(2) {
-       opacity: 0;
-   }
-   #menu-toggle.active .hamburger-line:nth-child(3) {
-       transform: translateY(-8px) rotate(-45deg);
-   }
+  /* --- THEME TOGGLE --- */
+  .switch { display: flex; align-items: center; width: 90px; height: 42px; background: linear-gradient(to right, #d8b4fe, #a78bfa); border-radius: 42px; cursor: pointer; position: relative; }
+  .icon { width: 30px; height: 30px; pointer-events: none; }
+  .sun { margin-left: 10px; }
+  .moon { margin-left: auto; margin-right: 10px; }
+  .slider { position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%; top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; }
+  .slider img { width: 24px; height: 24px; }
+  .dm-toggle-input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .dm-toggle-input:checked + .switch .slider { left: 49px; }
 
-
-  /* THEME TOGGLE */
-  .theme-switcher {
-    display: inline-block;
-    position: relative;
-    user-select: none;
-  }
-  .switch {
-    display: flex;
-    align-items: center;
-    width: 90px;
-    height: 42px;
-    background: linear-gradient(to right, #d8b4fe, #a78bfa);
-    border-radius: 42px;
-    cursor: pointer;
-    position: relative;
-  }
-  .icon {
-    width: 30px;
-    height: 30px;
-    pointer-events: none;
-    user-select: none;
-  }
-  .sun {
-    margin-left: 10px;
-  }
-  .moon {
-    margin-left: auto;
-    margin-right: 10px;
-  }
-  .slider {
-    position: absolute;
-    width: 38px;
-    height: 38px;
-    background: white;
-    border-radius: 50%;
-    top: 2px;
-    left: 3px;
-    transition: left 0.3s ease;
-    box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .slider img {
-    width: 24px;
-    height: 24px;
-  }
-  #dm-toggle {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  #dm-toggle:checked + .switch .slider {
-    left: 49px;
-  }
-
-  /* SYLLABUS TABLE */
-  .syllabus-table {
-    border-collapse: collapse;
-    width: 100%;
-    background: white;
-    color: #333;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  body.dark .syllabus-table {
-    background: #1e1e2e;
-    color: #e5e5e5;
-  }
-  .syllabus-table th, 
-  .syllabus-table td {
-    border: 1px solid #ddd;
-    padding: 14px 12px;
-    vertical-align: top;
-  }
-  body.dark .syllabus-table th, 
-  body.dark .syllabus-table td {
-    border-color: #4a4a6a;
-  }
-  .syllabus-table th {
-    text-align: left;
-    font-weight: bold;
-    color: #333;
-    background-color: #f3e8ff;
-  }
-  body.dark .syllabus-table th {
-    color: #f0eaff;
-    background-color: #4c1d95;
-  }
-  .syllabus-table tr:nth-child(even) {
-    background: #f9f9ff;
-  }
-  body.dark .syllabus-table tr:nth-child(even) {
-    background: #2a2a3d;
-  }
-  .syllabus-table tbody tr:hover {
-    background: #ede9fe;
-    transition: background 0.3s;
-  }
-  body.dark .syllabus-table tbody tr:hover {
-    background: #3b3055;
-  }
-  .syllabus-table ul {
-    margin: 0;
-    padding-left: 1rem;
-  }
-
-  /* ACCORDION */
-  .accordion-header {
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-radius: 12px 12px 0 0;
-    transition: background 0.3s ease, transform 0.2s ease;
-    background: linear-gradient(135deg, #e9d5ff, #d8b4fe);
-    color: #2e1065;
-    margin-top: 2rem; /* space between syllabus blocks */
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  }
-  .accordion-header:hover {
-    transform: scale(1.01);
-    background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
-  }
-  .accordion-header.active {
-    background: linear-gradient(135deg, #d8b4fe, #c084fc);
-    color: white;
-  }
-  body.dark .accordion-header {
-    background: linear-gradient(135deg, #6d28d9, #7c3aed);
-    color: #f3e8ff;
-  }
-  body.dark .accordion-header.active {
-    background: linear-gradient(135deg, #7c3aed, #9333ea);
-    color: white;
-  }
-  .accordion-icon {
-    transition: transform 0.3s ease;
-    width: 24px;
-    height: 24px;
-  }
-  .accordion-header.active .accordion-icon {
-    transform: rotate(180deg);
-  }
-  .accordion-panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out;
-    background: #f8fafc;
-    border-radius: 0 0 12px 12px;
-  }
-  body.dark .accordion-panel {
-    background: #1e1b29;
-  }
-  .accordion-panel .accordion-content {
-    padding: 1rem; /* Adjusted for mobile */
-  }
-   @media (min-width: 768px) {
-      .accordion-panel .accordion-content {
-         padding: 1.5rem;
-      }
-   }
-  .accordion-panel h4 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 1rem 0 0.5rem;
-    color: #9333ea;
-    border-left: 4px solid #d8b4fe;
-    padding-left: 0.5rem;
-  }
-  body.dark .accordion-panel h4 {
-    color: #d8b4fe;
-    border-left-color: #a78bfa;
-  }
-
-  /* WRAPPER FOR TABLES */
-  .overflow-x-auto {
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border-radius: 12px;
-    background: white;
-    padding: 1rem;
-    margin-top: 1rem;
-  }
-  body.dark .overflow-x-auto {
-    background: #1e1b29;
-  }
+  /* --- ORIGINAL SYLLABUS & ACCORDION STYLES --- */
+  .syllabus-table { border-collapse: collapse; width: 100%; background: white; color: #333; border-radius: 12px; overflow: hidden; }
+  body.dark .syllabus-table { background: #1e1e2e; color: #e5e5e5; }
+  .syllabus-table th, .syllabus-table td { border: 1px solid #ddd; padding: 14px 12px; vertical-align: top; }
+  body.dark .syllabus-table th, body.dark .syllabus-table td { border-color: #4a4a6a; }
+  .syllabus-table th { text-align: left; font-weight: bold; color: #333; background-color: #f3e8ff; }
+  body.dark .syllabus-table th { color: #f0eaff; background-color: #4c1d95; }
+  .syllabus-table tr:nth-child(even) { background: #f9f9ff; }
+  body.dark .syllabus-table tr:nth-child(even) { background: #2a2a3d; }
+  .syllabus-table tbody tr:hover { background: #ede9fe; transition: background 0.3s; }
+  body.dark .syllabus-table tbody tr:hover { background: #3b3055; }
+  .syllabus-table ul { margin: 0; padding-left: 1rem; }
+  .accordion-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-radius: 12px; transition: background 0.3s ease; background: linear-gradient(135deg, #e9d5ff, #d8b4fe); color: #2e1065; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+  .accordion-header.sub-header { margin-top: 1rem; background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+  body.dark .accordion-header { background: linear-gradient(135deg, #6d28d9, #7c3aed); color: #f3e8ff; }
+  body.dark .accordion-header.sub-header { background: linear-gradient(135deg, #4c1d95, #6d28d9); }
+  .accordion-header.active { background: linear-gradient(135deg, #d8b4fe, #c084fc); color: white; border-radius: 12px 12px 0 0; }
+  .accordion-icon { transition: transform 0.3s ease; width: 24px; height: 24px; }
+  .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+  .accordion-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; background: #f8fafc; border-radius: 0 0 12px 12px; }
+  body.dark .accordion-panel { background: #1e1b29; }
+  .accordion-content { padding: 1.5rem; }
+  .accordion-panel h4 { font-size: 1.1rem; font-weight: bold; margin: 1rem 0 0.5rem; color: #9333ea; border-left: 4px solid #d8b4fe; padding-left: 0.5rem; }
+  body.dark .accordion-panel h4 { color: #d8b4fe; border-left-color: #a78bfa; }
+  .overflow-x-auto { box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; background: white; padding: 1rem; margin-top: 1rem; }
+  body.dark .overflow-x-auto { background: #1e1b29; }
 </style>
-
-	
 </head>
-<body class="min-h-screen transition-colors duration-500">
-  
-  <svg class="shape shape-1" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
-  <svg class="shape shape-2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape shape-3" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape shape-4" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
-  <svg class="shape shape-5" viewBox="0 0 100 100"><rect width="70" height="70" transform="translate(50) rotate(45)"/></svg>
 
-  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
-    <div class="container">
-      <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+<body class="min-h-screen">
+  <div id="menu-overlay"></div>
+  
+  <div class="absolute inset-0 z-0">
+    <svg class="shape shape-1" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
+    <svg class="shape shape-2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+    <svg class="shape shape-3" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+    <svg class="shape shape-4" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
+    <svg class="shape shape-5" viewBox="0 0 100 100"><rect width="70" height="70" transform="translate(50) rotate(45)"/></svg>
+  </div>
+
+  <nav class="sticky top-0 md:top-4 md:rounded-xl max-w-5xl mx-auto z-50">
+    <div class="container mx-auto flex justify-between items-center px-4 py-3 relative">
+      <a href="#" class="text-xl font-bold text-purple-700 dark:text-purple-300">Lesson Planner</a>
+      
+      <div class="hidden md:flex items-center gap-8">
+          <ul id="desktop-nav" class="flex items-center gap-8">
+              <li><a href="index.html" class="font-semibold text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition active">Main page</a></li>
+              <li><a href="section2.html" class="font-semibold text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Templates</a></li>
+              <li><a href="section3.html" class="font-semibold text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Sign up</a></li>
+              <li><a href="section4.html" class="font-semibold text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Soon</a></li>
+          </ul>
+          <div class="theme-switcher">
+              <input type="checkbox" id="dm-toggle" class="dm-toggle-input" />
+              <label for="dm-toggle" class="switch">
+                  <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode" class="icon sun" />
+                  <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode" class="icon moon" />
+                  <div class="slider"><img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" id="slider-icon" /></div>
+              </label>
+          </div>
+      </div>
+
+      <button id="menu-toggle" aria-label="Open Menu">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </button>
 
-      <ul id="nav-links" class="hidden md:flex">
-        <li><a href="index.html" class="active">Main page</a></li>
-        <li><a href="section2.html">Templates</a></li>
-        <li><a href="section3.html">Sign up</a></li>
-        <li><a href="section4.html">Soon</a></li>
-      </ul>
-
-      <div class="theme-switcher">
-        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
-        <label for="dm-toggle" class="switch">
-          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
-          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
-          <div class="slider">
-            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
-          </div>
-        </label>
-      </div>
       <div class="underline"></div>
     </div>
   </nav>
@@ -445,838 +182,329 @@
     <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 opacity-90 dark:opacity-80"></div>
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
     <div class="relative z-10 text-white px-4">
-        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
+        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight animate-fade-in-down">
             Welcome to the Lesson Plan Builder
         </h2>
-        <p class="text-lg md:text-2xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto">
+        <p class="text-lg md:text-xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto">
             Customize your lesson plan in a few easy steps
         </p>
     </div>
   </header>
 
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-10 max-w-6xl mx-auto relative z-10">
-  <a href="#orientation" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
-    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">General Orientation</h3>
-    <p>Introduction and overview for primary school.</p>
-  </a>
-
-  <a href="#guidelines" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
-    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Instructional Video</h3>
-    <p>Watch our guide for using the planner.</p>
-  </a>
-
-  <a href="#syllabus" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
-    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Year 3, 4, 5 PS Syllabus</h3>
-    <p>Detailed syllabus for Primary School Years 3, 4, and 5.</p>
-  </a>
-
-  <a href="#topics" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
-    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Download Didactic Guides</h3>
-    <p>Get the official didactic guides for each level.</p>
-  </a>
-
-  <a href="#planning" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1 col-span-1 md:col-span-2 lg:col-span-1">
-    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Feedback</h3>
-    <p>Leave your comments and suggestions.</p>
-  </a>
-</section>
-
-<main class="max-w-5xl mx-auto px-4 md:px-6 space-y-32 pb-20 relative z-10">
-
-  <section id="orientation">
-    <h2 class="text-3xl font-bold mb-4 text-purple-600 dark:text-purple-300">General Orientation</h2>
-    <p class="leading-relaxed">Write your introduction and overview here...</p>
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-10 max-w-6xl mx-auto relative z-10">
+    <a href="#orientation" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
+      <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">General Orientation</h3>
+      <p>Introduction and overview for primary school.</p>
+    </a>
+    <a href="#guidelines" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
+      <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Instructional Video</h3>
+      <p>Watch our guide for using the planner.</p>
+    </a>
+    <a href="#syllabus" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
+      <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Year 3, 4, 5 PS Syllabus</h3>
+      <p>Detailed syllabus for Primary School Years 3, 4, and 5.</p>
+    </a>
+    <a href="#topics" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
+      <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Download Didactic Guides</h3>
+      <p>Get the official didactic guides for each level.</p>
+    </a>
+    <a href="#planning" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1 col-span-1 md:col-span-2 lg:col-span-1">
+      <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Feedback</h3>
+      <p>Leave your comments and suggestions.</p>
+    </a>
   </section>
 
-  <section id="guidelines">
-    <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Instructional Video Guide</h2>
-    <div class="video-container-wrapper bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-2xl shadow-lg">
-        <div class="relative aspect-video w-full bg-slate-200 dark:bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center border-2 border-dashed border-purple-300 dark:border-purple-700">
-            <video id="video-player" class="w-full h-full object-cover" controls style="display: none;"></video>
-            <div id="video-placeholder" class="text-center cursor-pointer group p-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-24 w-24 text-purple-400 dark:text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                <p class="mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Click to Upload Your Video</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">MP4, WebM, Ogg</p>
-                <input type="file" id="video-upload" accept="video/*" class="hidden">
-            </div>
-        </div>
-    </div>
-  </section>
-
-
-  <section id="syllabus">
-      <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Year 3, 4 and 5 PS Syllabus</h2>
-      <div class="space-y-6">
- 
-<div class="accordion-item">
-  <div class="accordion-header">
-    <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">
-      Key Stage 1 - Year 3 Syllabus
-    </h2>
-    <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-    </svg>
-  </div>
-  <div class="accordion-panel">
-    <div class="accordion-content space-y-4">
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Time Allocation</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>Hours per Week</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>English</td>
-                  <td>5h</td>
-                </tr>
-                <tr>
-                  <td>Math</td>
-                  <td>4h</td>
-                </tr>
-                <tr>
-                  <td>Science</td>
-                  <td>3h</td>
-                </tr>
-              </tbody>
-            </table>
+  <main class="max-w-5xl mx-auto px-4 md:px-6 space-y-16 md:space-y-24 pb-20 relative z-10">
+    <section id="orientation">
+      <h2 class="text-3xl font-bold mb-4 text-purple-600 dark:text-purple-300">General Orientation</h2>
+      <p class="leading-relaxed">Write your introduction and overview here...</p>
+    </section>
+    <section id="guidelines">
+      <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Instructional Video Guide</h2>
+      <div class="video-container-wrapper bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-2xl shadow-lg">
+          <div class="relative aspect-video w-full bg-slate-200 dark:bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center border-2 border-dashed border-purple-300 dark:border-purple-700">
+              <video id="video-player" class="w-full h-full object-cover" controls style="display: none;"></video>
+              <div id="video-placeholder" class="text-center cursor-pointer group p-8">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-24 w-24 text-purple-400 dark:text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  <p class="mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Click to Upload Your Video</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">MP4, WebM, Ogg</p>
+                  <input type="file" id="video-upload" accept="video/*" class="hidden">
+              </div>
           </div>
-        </div>
       </div>
+    </section>
 
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Exit Profile</th>
-                  <th>Competence</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Global competence</strong></td>
-                  <td>Understand and use basic English in familiar contexts.</td>
-                </tr>
-                <tr>
-                  <td><strong>Values</strong></td>
-                  <td>Respect, teamwork, openness to others.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains & Competences</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Domains</th>
-                  <th>Target Competences</th>
-                  <th>Resources</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Oral Comprehension</td>
-                  <td>Understand simple spoken English.</td>
-                  <td>Songs, rhymes, videos.</td>
-                </tr>
-                <tr>
-                  <td>Written Production</td>
-                  <td>Write simple words and sentences.</td>
-                  <td>Worksheets, flashcards.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Topics</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Theme</th>
-                  <th>Topics</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Family</td>
-                  <td>Family members, friends</td>
-                </tr>
-                <tr>
-                  <td>School</td>
-                  <td>Classroom, subjects</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Learning Sequences</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 1: Greetings</h4>
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Seq</th><th>Sections</th><th>Domains</th>
-                  <th>Objectives</th><th>Resources</th><th>Values</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Seq 1</td>
-                  <td>Greetings, introductions</td>
-                  <td>Oral Comprehension & Production</td>
-                  <td>- Greet others<br>- Introduce oneself</td>
-                  <td>Flashcards, songs</td>
-                  <td>Respect</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Evaluation Grid</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Skill</th>
-                  <th>Criteria</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Oral</td>
-                  <td>Can greet, introduce, ask simple questions</td>
-                </tr>
-                <tr>
-                  <td>Written</td>
-                  <td>Can copy and write simple words</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item-sub">
-        <div class="accordion-header">
-          <h3 class="text-lg md:text-xl font-bold text-purple-500">Planning Canvas</h3>
-          <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </div>
-        <div class="accordion-panel">
-          <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-            <table class="syllabus-table w-full text-sm text-left">
-              <thead>
-                <tr>
-                  <th>Week</th>
-                  <th>Lesson Focus</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Week 1</td>
-                  <td>Greetings & Introductions</td>
-                </tr>
-                <tr>
-                  <td>Week 2</td>
-                  <td>Family & Friends</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
- 
-        <div class="accordion-item">
+    <section id="syllabus">
+        <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Year 3, 4 and 5 PS Syllabus</h2>
+        <div class="space-y-6">
+          <div class="accordion-item">
             <div class="accordion-header">
-                <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 4 Syllabus</h2>
-                <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              <h3 class="text-xl md:text-2xl font-bold">Key Stage 1 - Year 3 Syllabus</h3>
+              <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <div class="accordion-panel">
-                <div class="accordion-content space-y-4">
-                    
-                    <div class="accordion-item-sub">
-                        <div class="accordion-header">
-                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
-                             <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                        <div class="accordion-panel">
-                            <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-                                <table class="syllabus-table w-full text-sm text-left">
-                                  <thead>
-                                    <tr>
-                                      <th>Exit Profile</th>
-                                      <th>Competence</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td><strong>Global competence</strong></td>
-                                      <td>Interact orally, comprehend and interpret oral and written messages related to the learner’s immediate environment, daily concerns and interests. Write words, simple sentences and short messages.</td>
-                                    </tr>
-                                    <tr>
-                                      <td><strong>Values</strong></td>
-                                      <td>
-                                        <ul class="list-disc pl-6 space-y-1">
-                                          <li><strong>National Identity:</strong> The learner is proud of being Algerian, Muslim, Arab and Amazigh.</li>
-                                          <li><strong>National Conscience:</strong> S/he respects her/his nation’s constant fundamental tenets.</li>
-                                          <li><strong>Citizenship:</strong> S/he demonstrates respect towards others.</li>
-                                          <li><strong>Openness to the World:</strong> S/he exchanges and communicates with friends from English-speaking countries to widen her/his friendship.</li>
-                                        </ul>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td><strong>Cross-curricular Competences</strong></td>
-                                      <td>
-                                        <ul class="list-disc pl-6 space-y-1">
-                                          <li><strong>Intellectual Competence:</strong> Discover usage of words, expressions and sentences in oral interaction; demonstrate understanding of reading basics and writing features.</li>
-                                          <li><strong>Methodological Competence:</strong> Exploit linguistic repertoire and paralinguistic features to interact orally; employ reading basics to understand; implement writing appropriately.</li>
-                                          <li><strong>Communicative Competence:</strong> Select appropriate words to interact orally; communicate reading basics to peers; achieve readability in writing.</li>
-                                          <li><strong>Personal and Social Competence:</strong> Consider context and paralinguistic features when interacting orally; respect writings of others.</li>
-                                        </ul>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="accordion-item-sub">
-                        <div class="accordion-header">
-                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains and Competences</h3>
-                            <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                        <div class="accordion-panel">
-                             <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-                                <table class="syllabus-table w-full text-sm text-left">
-                                  <thead>
-                                    <tr>
-                                      <th>Domains</th>
-                                      <th>Target Competences</th>
-                                      <th>Components of the Competence</th>
-                                      <th>Resources</th>
-                                      <th>Cross-Curricular Resources</th>
-                                      <th>Timing</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>Oral Comprehension</td>
-                                      <td>Interpret oral messages related to the learner’s immediate environment, daily concerns and interests.</td>
-                                      <td>
-                                        <ul class="list-disc pl-6 space-y-1">
-                                          <li>Identify simple words, expressions and sentences in familiar context.</li>
-                                          <li>Use context and paralinguistic features to understand oral messages.</li>
-                                          <li>Be an attentive listener.</li>
-                                        </ul>
-                                      </td>
-                                      <td>Teaching materials: Videos, songs, cartoons, posters, pictures, short stories, etc.</td>
-                                      <td>
-                                        <ul class="list-disc pl-6 space-y-1">
-                                          <li><strong>Intellectual:</strong> Discover the relationship between context, paralinguistic features and meaning.</li>
-                                          <li><strong>Methodological:</strong> Make use of context & paralinguistic features to identify meaning.</li>
-                                          <li><strong>Communicative:</strong> React to verbal and non-verbal messages to show understanding.</li>
-                                          <li><strong>Personal and Social:</strong> Respond to oral messages.</li>
-                                        </ul>
-                                      </td>
-                                      <td>10h</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item-sub">
-                        <div class="accordion-header">
-                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Sequences (1-6)</h3>
-                            <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                        <div class="accordion-panel">
-                            <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 1: Family & Friends</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 1</td>
-        <td>Family, friends</td>
-        <td>Oral comprehension & Oral production</td>
-        <td>- Introduce oneself and others<br>- Greet and say goodbye</td>
-        <td><strong>Vocab:</strong> Family, friends.<br><strong>Grammar:</strong> Verb “to be”</td>
-        <td>Pictures, flashcards</td>
-        <td>Respect, friendship</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 2: School</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 2</td>
-        <td>School life</td>
-        <td>Written comprehension & Written production</td>
-        <td>- Talk about classroom objects<br>- Ask and answer about subjects</td>
-        <td><strong>Vocab:</strong> School objects, subjects.<br><strong>Grammar:</strong> Plural nouns</td>
-        <td>School timetable, maps</td>
-        <td>Discipline, teamwork</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 3: Hobbies</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 3</td>
-        <td>Hobbies</td>
-        <td>Oral comprehension & Oral production</td>
-        <td>- Talk about hobbies<br>- Ask and answer about free-time activities</td>
-        <td><strong>Vocab:</strong> Sports, games.<br><strong>Grammar:</strong> Present continuous</td>
-        <td>Charts, posters</td>
-        <td>Respect, cooperation</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 4: Food & Drinks</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 4</td>
-        <td>Food, drinks</td>
-        <td>Written comprehension & Oral production</td>
-        <td>- Order food and drinks<br>- Express likes and dislikes</td>
-        <td><strong>Vocab:</strong> Meals, fruits, drinks.<br><strong>Grammar:</strong> Countable/uncountable nouns</td>
-        <td>Menus, recipe books</td>
-        <td>Healthy habits</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 5: Places in Town</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 5</td>
-        <td>Town</td>
-        <td>Oral comprehension & Written production</td>
-        <td>- Give and ask for directions<br>- Describe places in town</td>
-        <td><strong>Vocab:</strong> Streets, shops.<br><strong>Grammar:</strong> Prepositions of place</td>
-        <td>Town maps, signs</td>
-        <td>Respect rules, citizenship</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
-  <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 6: Celebrations</h4>
-  <table class="syllabus-table w-full text-sm text-left">
-    <thead>
-      <tr>
-        <th>Seq</th><th>Sections</th><th>Domains</th>
-        <th>Communicative objectives</th><th>Resources</th>
-        <th>Cross curricular resources</th><th>Values</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Seq 6</td>
-        <td>Celebrations</td>
-        <td>Oral comprehension & Oral production</td>
-        <td>- Talk about celebrations<br>- Invite and reply to invitations</td>
-        <td><strong>Vocab:</strong> Holidays, festivals.<br><strong>Grammar:</strong> Future tense (will)</td>
-        <td>Calendars, greeting cards</td>
-        <td>Sharing, cultural awareness</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-                    </div>
-
+              <div class="accordion-content space-y-4">
+                <div class="accordion-item-sub">
+                  <div class="accordion-header sub-header">
+                    <h4 class="text-lg font-bold">Time Allocation</h4>
+                    <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                  <div class="accordion-panel"><div class="overflow-x-auto"><table class="syllabus-table"><thead><tr><th>Subject</th><th>Hours per Week</th></tr></thead><tbody><tr><td>English</td><td>5h</td></tr><tr><td>Math</td><td>4h</td></tr><tr><td>Science</td><td>3h</td></tr></tbody></table></div></div>
                 </div>
+                <div class="accordion-item-sub">
+                  <div class="accordion-header sub-header">
+                    <h4 class="text-lg font-bold">Exit Profile & Competences</h4>
+                    <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                  <div class="accordion-panel"><div class="overflow-x-auto"><table class="syllabus-table"><thead><tr><th>Exit Profile</th><th>Competence</th></tr></thead><tbody><tr><td><strong>Global competence</strong></td><td>Understand and use basic English in familiar contexts.</td></tr><tr><td><strong>Values</strong></td><td>Respect, teamwork, openness to others.</td></tr></tbody></table></div></div>
+                </div>
+              </div>
             </div>
-        </div>
-
-        <div class="accordion-item">
+          </div>
+          <div class="accordion-item">
             <div class="accordion-header">
-                <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 5 Syllabus</h2>
-                <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              <h3 class="text-xl md:text-2xl font-bold">Key Stage 1 - Year 4 Syllabus</h3>
+              <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <div class="accordion-panel">
+              <div class="accordion-content space-y-4">
+                <div class="accordion-item-sub">
+                  <div class="accordion-header sub-header">
+                    <h4 class="text-lg font-bold">Exit Profile & Competences</h4>
+                    <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                  <div class="accordion-panel"><div class="overflow-x-auto"><table class="syllabus-table"><thead><tr><th>Exit Profile</th><th>Competence</th></tr></thead><tbody><tr><td><strong>Global competence</strong></td><td>Interact orally, comprehend and interpret oral and written messages related to the learner’s immediate environment, daily concerns and interests. Write words, simple sentences and short messages.</td></tr><tr><td><strong>Values</strong></td><td><ul class="list-disc pl-5"><li><strong>National Identity:</strong> The learner is proud of being Algerian, Muslim, Arab and Amazigh.</li><li><strong>National Conscience:</strong> S/he respects her/his nation’s constant fundamental tenets.</li><li><strong>Citizenship:</strong> S/he demonstrates respect towards others.</li><li><strong>Openness to the World:</strong> S/he exchanges and communicates with friends from English-speaking countries to widen her/his friendship.</li></ul></td></tr></tbody></table></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-header">
+                <h3 class="text-xl md:text-2xl font-bold">Key Stage 1 - Year 5 Syllabus</h3>
+                <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <div class="accordion-panel">
                  <div class="accordion-content space-y-4">
                     <div class="accordion-item-sub">
-                        <div class="accordion-header">
-                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
-                             <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <div class="accordion-header sub-header">
+                            <h4 class="text-lg font-bold">Exit Profile & Competences</h4>
+                             <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
-                            <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-                               <table class="syllabus-table w-full text-sm text-left">
-                                    <tbody>
-                                      <tr>
-                                        <th>Global Competence</th>
-                                        <td>Interpret oral messages and interact orally, decode a short simple message to understand its meaning, and produce a very short written message.</td>
-                                      </tr>
-                                      <tr>
-                                        <th>Values</th>
-                                        <td>
-                                          <ul class="list-disc pl-6">
-                                            <li><strong>National Identity:</strong> Proud of being Algerian, Muslim, Arab and Amazigh.</li>
-                                            <li><strong>Citizenship:</strong> Demonstrates respect towards others.</li>
-                                          </ul>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <div class="overflow-x-auto"><table class="syllabus-table"><tbody><tr><th>Global Competence</th><td>Interpret oral messages and interact orally, decode a short simple message to understand its meaning, and produce a very short written message.</td></tr><tr><th>Values</th><td><ul class="list-disc pl-5"><li><strong>National Identity:</strong> Proud of being Algerian, Muslim, Arab and Amazigh.</li><li><strong>Citizenship:</strong> Demonstrates respect towards others.</li></ul></td></tr></tbody></table></div>
                         </div>
                     </div>
-
-                    <div class="accordion-item-sub">
-                        <div class="accordion-header">
-                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains and Competences</h3>
-                             <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                        <div class="accordion-panel">
-                            <div class="overflow-x-auto shadow-lg rounded-xl my-4">
-                               <table class="syllabus-table w-full text-sm text-left">
-                                    <thead><tr><th>Domain</th><th>Target Competence</th><th>Resources</th><th>Timing</th></tr></thead>
-                                    <tbody>
-                                        <tr><td><strong>Oral Comprehension</strong></td><td>Interpret oral messages.</td><td>Videos, songs, cartoons, stories.</td><td>17h</td></tr>
-                                        <tr><td><strong>Oral Production</strong></td><td>Interact orally.</td><td>Vocab: Jobs, hobbies, directions. Grammar: Present simple, 'can'.</td><td>20h</td></tr>
-                                        <tr><td><strong>Written Comprehension</strong></td><td>Read short messages (˜40 words).</td><td>Phonics, vocabulary, grammar basics.</td><td>9h</td></tr>
-                                        <tr><td><strong>Written Production</strong></td><td>Write a short message (˜30 words).</td><td>Handwriting, spelling, punctuation.</td><td>9h</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                     </div>
+                 </div>
             </div>
         </div>
+        </div>
+    </section>
 
+    <section id="topics">
+      <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Download The Didactic Guide of Primary School</h2>
+      <div class="space-y-4">
+          <a href="#" class="flex flex-col md:flex-row items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 transition-all transform hover:-translate-y-1 group">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mb-4 md:mb-0 md:mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+              <div>
+                  <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third Year</h3>
+                  <p class="text-violet-600 dark:text-violet-400">Click here to start your download.</p>
+              </div>
+          </a>
+          <a href="#" class="flex flex-col md:flex-row items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 transition-all transform hover:-translate-y-1 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mb-4 md:mb-0 md:mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            <div>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fourth Year</h3>
+                <p class="text-violet-600 dark:text-violet-400">Click here to start your download.</p>
+            </div>
+          </a>
+          <a href="#" class="flex flex-col md:flex-row items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 transition-all transform hover:-translate-y-1 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mb-4 md:mb-0 md:mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            <div>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fifth Year</h3>
+                <p class="text-violet-600 dark:text-violet-400">Click here to start your download.</p>
+            </div>
+          </a>
       </div>
-  </section>
-  </section>
-  <section id="topics">
-  <section id="topics">
-    <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Download The Didactic Guide of Primary School</h2>
-    <div class="space-y-4">
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            <div>
-                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third Year of Primary School</h3>
-                <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
-            </div>
-        </a>
+    </section>
 
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            <div>
-                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fourth Year of Primary School</h3>
-                <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
-            </div>
-        </a>
-
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            <div>
-                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fifth Year of Primary School</h3>
-                <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
-            </div>
-        </a>
-    </div>
-</section>
-
-  <section id="planning">
-    <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300">Feedback Corner</h2>
-    <div class="feedback-container bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg">
-        <form id="feedback-form" class="space-y-6">
-            <div>
-                <label for="commenter-name" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
-                <input type="text" id="commenter-name" name="commenter-name" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Enter your name">
-            </div>
-            <div>
-                <label for="comment-text" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
-                <textarea id="comment-text" name="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
-            </div>
-<button type="submit" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
-           bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
-    Submit Feedback
-</button>
-        </form>
-        <div id="comments-container" class="mt-12 space-y-6">
-            </div>
-    </div>
-  </section>
-</main>
+    <section id="planning">
+      <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Feedback Corner</h2>
+      <div class="feedback-container bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
+          <form id="feedback-form" class="space-y-6">
+              <div>
+                  <label for="commenter-name" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                  <input type="text" id="commenter-name" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Enter your name">
+              </div>
+              <div>
+                  <label for="comment-text" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
+                  <textarea id="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
+              </div>
+              <button type="submit" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
+                  Submit Feedback
+              </button>
+          </form>
+          <div id="comments-container" class="mt-12 space-y-6"></div>
+      </div>
+    </section>
+  </main>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // --- Navbar and Dark Mode Script ---
-    const menuContainer = document.querySelector('nav .container');
-    const underline = document.querySelector('.underline');
-    const allLinks = document.querySelectorAll('#nav-links a');
-    const toggleCheckbox = document.getElementById('dm-toggle');
+document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
-    const sliderIcon = document.getElementById('slider-icon');
-    const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
-    const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+    const lightIconSrc = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+    const darkIconSrc = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
 
-    // --- NEW: Hamburger Menu Script ---
+    // --- Mobile Menu Logic ---
     const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-    menuToggle.addEventListener('click', () => {
-      menuToggle.classList.toggle('active');
-      navLinks.classList.toggle('hidden');
-      navLinks.classList.toggle('active');
-    });
+    const navLinksPanel = document.getElementById('nav-links');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const allMobileLinks = navLinksPanel.querySelectorAll('a');
 
-    function moveUnderline(element) {
-      if (!element || window.innerWidth < 768) return; // Don't run on mobile
-      const rect = element.getBoundingClientRect();
-      const parentRect = menuContainer.getBoundingClientRect();
-      const left = rect.left - parentRect.left + menuContainer.scrollLeft;
-      const width = rect.width;
-      underline.style.width = width + 'px';
-      underline.style.left = left + 'px';
-    }
-
-    setTimeout(() => {
-        const activeLink = document.querySelector('a.active') || allLinks[0];
-        moveUnderline(activeLink);
-    }, 50);
-
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark') {
-      body.classList.add('dark');
-      toggleCheckbox.checked = true;
-      sliderIcon.src = darkIcon;
-    } else {
-      sliderIcon.src = lightIcon;
-    }
-
-    allLinks.forEach(link => {
-      link.addEventListener('mouseenter', () => moveUnderline(link));
-      link.addEventListener('click', (e) => {
-        allLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        
-        // Close mobile menu on link click
-        if (window.innerWidth < 768) {
-          menuToggle.classList.remove('active');
-          navLinks.classList.add('hidden');
-          navLinks.classList.remove('active');
-        }
-
-        if(link.getAttribute('href').startsWith('#')) {
-          e.preventDefault();
-          document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth'});
-        }
-      });
-    });
-    
-    menuContainer.addEventListener('mouseleave', () => {
-        const activeLink = document.querySelector('a.active') || allLinks[0];
-        moveUnderline(activeLink);
-    });
-
-    window.addEventListener('resize', () => {
-      const activeLink = document.querySelector('a.active') || allLinks[0];
-      moveUnderline(activeLink);
-      // Hide mobile menu if screen is resized to be larger
-      if (window.innerWidth >= 768) {
+    const openMenu = () => {
+        menuToggle.classList.add('active');
+        navLinksPanel.classList.add('active');
+        menuOverlay.classList.add('active');
+        body.classList.add('overflow-hidden');
+    };
+    const closeMenu = () => {
         menuToggle.classList.remove('active');
-        navLinks.classList.remove('active');
-        navLinks.classList.add('hidden'); // Ensure it's ready for mobile again
-      }
+        navLinksPanel.classList.remove('active');
+        menuOverlay.classList.remove('active');
+        body.classList.remove('overflow-hidden');
+    };
+
+    menuToggle.addEventListener('click', () => {
+        navLinksPanel.classList.contains('active') ? closeMenu() : openMenu();
+    });
+    menuOverlay.addEventListener('click', closeMenu);
+    allMobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (link.getAttribute('href').startsWith('#')) {
+                // Smooth scroll for anchor links
+                e.preventDefault();
+                document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            }
+            closeMenu();
+        });
     });
 
-    toggleCheckbox.addEventListener('change', () => {
-      if (toggleCheckbox.checked) {
-        body.classList.add('dark');
-        sliderIcon.src = darkIcon;
-        localStorage.setItem('theme', 'dark');
-      } else {
-        body.classList.remove('dark');
-        sliderIcon.src = lightIcon;
-        localStorage.setItem('theme', 'light');
-      }
-    });
+    // --- Dark Mode Logic ---
+    const toggleCheckbox = document.getElementById('dm-toggle');
+    const toggleCheckboxMobile = document.getElementById('dm-toggle-mobile');
+    const sliderIcon = document.getElementById('slider-icon');
+    const sliderIconMobile = document.getElementById('slider-icon-mobile');
 
-    // --- Accordion Script ---
-    const accordions = document.querySelectorAll('.accordion-header');
-    accordions.forEach(header => {
-      header.addEventListener('click', function () {
-        const panel = this.nextElementSibling;
-        const isOpen = this.classList.contains('active');
-        this.classList.toggle('active');
-        if (isOpen) {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-          requestAnimationFrame(() => { panel.style.maxHeight = "0px"; });
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            body.classList.add('dark');
+            if (toggleCheckbox) toggleCheckbox.checked = true;
+            if (toggleCheckboxMobile) toggleCheckboxMobile.checked = true;
+            if (sliderIcon) sliderIcon.src = darkIconSrc;
+            if (sliderIconMobile) sliderIconMobile.src = darkIconSrc;
         } else {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-          panel.addEventListener('transitionend', () => {
-            if (this.classList.contains('active')) panel.style.maxHeight = "none";
-          }, { once: true });
+            body.classList.remove('dark');
+            if (toggleCheckbox) toggleCheckbox.checked = false;
+            if (toggleCheckboxMobile) toggleCheckboxMobile.checked = false;
+            if (sliderIcon) sliderIcon.src = lightIconSrc;
+            if (sliderIconMobile) sliderIconMobile.src = lightIconSrc;
         }
-      });
-    });
+    };
+    const toggleTheme = () => {
+        const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    };
+    if (toggleCheckbox) toggleCheckbox.addEventListener('change', toggleTheme);
+    if (toggleCheckboxMobile) toggleCheckboxMobile.addEventListener('change', toggleTheme);
+    applyTheme(localStorage.getItem('theme') || 'light');
 
-    // --- Feedback Form Script ---
+    // --- Accordion Logic ---
+    const setupAccordion = (container) => {
+        const headers = container.querySelectorAll('.accordion-header');
+        headers.forEach(header => {
+            header.addEventListener('click', function () {
+                const panel = this.nextElementSibling;
+                const wasActive = this.classList.contains('active');
+                
+                // Close all sibling accordions at the same level
+                const parentContainer = this.parentElement.parentElement;
+                parentContainer.querySelectorAll('.accordion-header').forEach(h => {
+                    if (h !== this) {
+                        h.classList.remove('active');
+                        h.nextElementSibling.style.maxHeight = null;
+                    }
+                });
+
+                // Toggle the clicked accordion
+                if (!wasActive) {
+                    this.classList.add('active');
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } else {
+                    this.classList.remove('active');
+                    panel.style.maxHeight = null;
+                }
+            });
+        });
+    };
+    document.querySelectorAll('.accordion-item').forEach(setupAccordion);
+
+    // --- Other Scripts from original file ---
     const feedbackForm = document.getElementById('feedback-form');
-    const commentsContainer = document.getElementById('comments-container');
-    const nameInput = document.getElementById('commenter-name');
-    const commentInput = document.getElementById('comment-text');
-
-    feedbackForm.addEventListener('submit', function (e) {
+    if (feedbackForm) {
+      const commentsContainer = document.getElementById('comments-container');
+      const nameInput = document.getElementById('commenter-name');
+      const commentInput = document.getElementById('comment-text');
+      feedbackForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const name = nameInput.value.trim();
         const commentText = commentInput.value.trim();
-        if (name === '' || commentText === '') return;
+        if (!name || !commentText) return;
         const commentElement = document.createElement('div');
-        commentElement.className = 'p-6 rounded-xl bg-gray-100 dark:bg-gray-700/50 shadow-inner';
-        commentElement.innerHTML = `<h4 class="font-bold text-purple-600 dark:text-purple-300 text-lg">${name}</h4><p class="text-gray-700 dark:text-gray-300 mt-2 whitespace-pre-wrap">${commentText}</p>`;
+        commentElement.className = 'p-4 rounded-lg bg-gray-100 dark:bg-gray-700/50';
+        commentElement.innerHTML = `<h4 class="font-bold text-purple-600 dark:text-purple-300">${name}</h4><p class="text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-wrap">${commentText}</p>`;
         commentsContainer.prepend(commentElement);
         feedbackForm.reset();
-    });
-
-    // --- Video Upload Script ---
+      });
+    }
     const videoPlaceholder = document.getElementById('video-placeholder');
-    const videoUploadInput = document.getElementById('video-upload');
-    const videoPlayer = document.getElementById('video-player');
-
-    videoPlaceholder.addEventListener('click', () => {
-        videoUploadInput.click();
-    });
-
-    videoUploadInput.addEventListener('change', (event) => {
+    if (videoPlaceholder) {
+      const videoUploadInput = document.getElementById('video-upload');
+      const videoPlayer = document.getElementById('video-player');
+      videoPlaceholder.addEventListener('click', () => videoUploadInput.click());
+      videoUploadInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('video/')) {
-            const videoURL = URL.createObjectURL(file);
-            videoPlayer.src = videoURL;
-            videoPlayer.style.display = 'block';
-            videoPlaceholder.style.display = 'none';
-            videoPlayer.play();
+          const videoURL = URL.createObjectURL(file);
+          videoPlayer.src = videoURL;
+          videoPlayer.style.display = 'block';
+          videoPlaceholder.style.display = 'none';
+          videoPlayer.play();
         }
+      });
+    }
+
+    // Desktop Nav Underline Logic
+    const menuContainer = document.querySelector('nav .container');
+    const underline = document.querySelector('.underline');
+    const desktopLinks = document.querySelectorAll('#desktop-nav a');
+    function moveUnderline(element) {
+        if (!element || window.innerWidth < 768) {
+            if(underline) underline.style.width = '0px';
+            return;
+        }
+        const rect = element.getBoundingClientRect();
+        const parentRect = menuContainer.getBoundingClientRect();
+        const left = rect.left - parentRect.left;
+        underline.style.width = `${rect.width}px`;
+        underline.style.left = `${left}px`;
+    }
+    setTimeout(() => moveUnderline(document.querySelector('#desktop-nav a.active')), 100);
+    desktopLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => moveUnderline(link));
     });
-  });
+    menuContainer.addEventListener('mouseleave', () => moveUnderline(document.querySelector('#desktop-nav a.active')));
+    window.addEventListener('resize', () => moveUnderline(document.querySelector('#desktop-nav a.active')));
+});
 </script>
 
 </body>
