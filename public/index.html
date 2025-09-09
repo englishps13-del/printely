@@ -400,9 +400,13 @@
   body.dark .overflow-x-auto {
     background: #1e1b29;
   }
+  #user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space between welcome text and logout button */
+  }
 </style>
 
-	
 </head>
 <body class="min-h-screen transition-colors duration-500">
   
@@ -426,6 +430,8 @@
         <li><a href="section3.html">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
+      <div id="user-info" class="flex items-center gap-4 text-gray-700 dark:text-gray-300">
+          </div>
 
       <div class="theme-switcher">
         <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
@@ -1067,8 +1073,7 @@
 
       </div>
   </section>
-  </section>
-  <section id="topics">
+  
   <section id="topics">
     <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Download The Didactic Guide of Primary School</h2>
     <div class="space-y-4">
@@ -1092,7 +1097,7 @@
             </div>
         </a>
 
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
+        <a href="https://drive.google.com/uc?export=download&id=1--xytiEzXJDio9QdrH6ehTSwCho84WN3" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
@@ -1104,27 +1109,31 @@
     </div>
 </section>
 
-  <section id="planning">
+<section id="planning">
     <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300">Feedback Corner</h2>
     <div class="feedback-container bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg">
         <form id="feedback-form" class="space-y-6">
             <div>
-                <label for="commenter-name" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
-                <input type="text" id="commenter-name" name="commenter-name" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Enter your name">
-            </div>
-            <div>
                 <label for="comment-text" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
                 <textarea id="comment-text" name="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
             </div>
-<button type="submit" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
-           bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
-    Submit Feedback
-</button>
+            <button type="submit" id="submit-feedback-btn" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                       bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Submit Feedback
+            </button>
         </form>
+
+        <div id="login-prompt" class="hidden text-center mt-6 p-4 bg-yellow-100/50 dark:bg-yellow-900/30 rounded-lg">
+            <p class="text-gray-700 dark:text-yellow-200">
+                You must be logged in to comment. 
+                <a href="section3.html" class="text-purple-600 dark:text-purple-300 hover:underline font-bold">Sign up here</a>.
+            </p>
+        </div>
+
         <div id="comments-container" class="mt-12 space-y-6">
             </div>
     </div>
-  </section>
+</section>
 </main>
 
 <script>
@@ -1239,24 +1248,6 @@
       });
     });
 
-    // --- Feedback Form Script ---
-    const feedbackForm = document.getElementById('feedback-form');
-    const commentsContainer = document.getElementById('comments-container');
-    const nameInput = document.getElementById('commenter-name');
-    const commentInput = document.getElementById('comment-text');
-
-    feedbackForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = nameInput.value.trim();
-        const commentText = commentInput.value.trim();
-        if (name === '' || commentText === '') return;
-        const commentElement = document.createElement('div');
-        commentElement.className = 'p-6 rounded-xl bg-gray-100 dark:bg-gray-700/50 shadow-inner';
-        commentElement.innerHTML = `<h4 class="font-bold text-purple-600 dark:text-purple-300 text-lg">${name}</h4><p class="text-gray-700 dark:text-gray-300 mt-2 whitespace-pre-wrap">${commentText}</p>`;
-        commentsContainer.prepend(commentElement);
-        feedbackForm.reset();
-    });
-
     // --- Video Upload Script ---
     const videoPlaceholder = document.getElementById('video-placeholder');
     const videoUploadInput = document.getElementById('video-upload');
@@ -1277,6 +1268,134 @@
         }
     });
   });
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  query, 
+  orderBy, 
+  onSnapshot 
+} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+// Your existing Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+  authDomain: "printelydz.firebaseapp.com",
+  projectId: "printelydz",
+  storageBucket: "printelydz.appspot.com",
+  messagingSenderId: "49201277305",
+  appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+  measurementId: "G-R4VJL5SR88"
+};
+
+// Initialize Firebase services
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Get references to HTML elements
+const userInfoDiv = document.getElementById("user-info");
+const feedbackForm = document.getElementById('feedback-form');
+const commentTextarea = document.getElementById('comment-text');
+const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
+const loginPrompt = document.getElementById('login-prompt');
+const commentsContainer = document.getElementById('comments-container');
+
+// --- Function to fetch and display comments in real-time ---
+const displayComments = () => {
+  const commentsRef = collection(db, 'comments');
+  const q = query(commentsRef, orderBy('timestamp', 'desc')); // Order by newest first
+
+  onSnapshot(q, (snapshot) => {
+    commentsContainer.innerHTML = ''; // Clear existing comments to prevent duplication
+    snapshot.forEach((doc) => {
+      const comment = doc.data();
+      const commentElement = document.createElement('div');
+      commentElement.className = 'p-6 rounded-xl bg-gray-100 dark:bg-gray-700/50 shadow-inner animate-fade-in-up';
+      
+      // Format the timestamp for display
+      const date = comment.timestamp ? comment.timestamp.toDate().toLocaleString() : 'Just now';
+
+      commentElement.innerHTML = `
+        <div class="flex justify-between items-center">
+            <h4 class="font-bold text-purple-600 dark:text-purple-300 text-lg">${comment.username}</h4>
+            <span class="text-xs text-gray-500 dark:text-gray-400">${date}</span>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 mt-2 whitespace-pre-wrap">${comment.commentText}</p>
+      `;
+      commentsContainer.appendChild(commentElement);
+    });
+  });
+};
+
+// --- Listen for Authentication State Changes ---
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // --- USER IS LOGGED IN ---
+    
+    // 1. Update UI for logged-in state
+    feedbackForm.style.display = 'block';
+    loginPrompt.classList.add('hidden');
+    commentTextarea.disabled = false;
+    submitFeedbackBtn.disabled = false;
+
+    // 2. Fetch user's username from Firestore
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const username = userDoc.exists() ? userDoc.data().username : user.email;
+
+    // 3. Display welcome message and logout button
+    userInfoDiv.innerHTML = `
+      Welcome, <strong>${username}</strong>!
+      <button id="logout-btn" class="ml-4 px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Logout</button>
+    `;
+    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+
+    // 4. Handle feedback form submission
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const commentText = commentTextarea.value.trim();
+        
+        if (commentText === '') return; // Don't submit empty comments
+
+        try {
+            // Add a new document with a generated ID to the 'comments' collection.
+            await addDoc(collection(db, "comments"), {
+                userId: user.uid,
+                username: username,
+                commentText: commentText,
+                timestamp: serverTimestamp() // Use server timestamp for consistency
+            });
+            // Clear the form after successful submission
+            feedbackForm.reset();
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Sorry, there was an error submitting your feedback. Please try again.");
+        }
+    });
+
+  } else {
+    // --- USER IS LOGGED OUT ---
+
+    // 1. Update UI for logged-out state
+    userInfoDiv.innerHTML = `<a href="login.html" class="text-purple-600 hover:underline">Login</a>`;
+    feedbackForm.style.display = 'none'; // Hide the form
+    loginPrompt.classList.remove('hidden'); // Show the login prompt
+    commentTextarea.disabled = true;
+    submitFeedbackBtn.disabled = true;
+  }
+});
+
+// --- Initial call to display comments when the page loads ---
+displayComments();
 </script>
 
 </body>

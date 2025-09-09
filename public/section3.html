@@ -6,10 +6,7 @@
   <title>Sign Up – Printely</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
-
-  <script>
-    tailwind.config = { darkMode: 'class' };
-  </script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
 
   <style>
     * { box-sizing: border-box; }
@@ -22,6 +19,7 @@
     }
     body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
 
+    /* NAVBAR STYLES FROM INDEX.HTML */
     nav {
       background: white;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
@@ -30,26 +28,150 @@
       z-index: 20;
       transition: background 0.3s ease;
     }
-    body.dark nav { background: #1e1e2e; }
-
+    body.dark nav {
+      background: #1e1e2e;
+    }
     nav .container {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 2rem; max-width: 1000px; margin: 0 auto; position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem; /* Adjusted for mobile */
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+    @media (min-width: 768px) {
+      nav .container {
+        padding: 1rem 2rem; /* Restore padding for larger screens */
+      }
+    }
+    
+    #nav-links {
+      /* Mobile styles for dropdown */
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 1rem 0;
+      border-radius: 0 0 12px 12px;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #nav-links.active {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.dark #nav-links {
+        background: #1e1e2e;
+    }
+    #nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #44475a;
+      padding: 1rem 2rem;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    body.dark #nav-links a {
+      color: #cdd6f4;
+    }
+    #nav-links a.active,
+    #nav-links a:hover {
+      color: #7c3aed;
+      font-weight: 700;
     }
 
-    #nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
-    #nav-links a {
-      text-decoration: none; font-weight: 500; font-size: 1.1rem;
-      color: #44475a; padding: 8px 0; transition: color 0.3s ease; white-space: nowrap; cursor: pointer;
+    /* Desktop styles for nav links */
+    @media (min-width: 768px) {
+      #nav-links {
+        position: static;
+        flex-direction: row;
+        background: transparent;
+        box-shadow: none;
+        gap: 3rem;
+        padding: 0;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #nav-links a {
+        padding: 8px 0;
+        width: auto;
+      }
     }
-    body.dark #nav-links a { color: #cdd6f4; }
-    #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
 
     .underline {
-      position: absolute; bottom: 0; height: 3px; background-color: #7c3aed;
-      border-radius: 1px; transition: left 0.3s ease, width 0.3s ease;
-      pointer-events: none; z-index: 5; left: 0; width: 0;
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      background-color: #7c3aed;
+      border-radius: 1px;
+      transition: left 0.3s ease, width 0.3s ease;
+      pointer-events: none;
+      z-index: 5;
+      left: 0;
+      width: 0;
+      display: none; /* Hide by default on mobile */
     }
+    @media (min-width: 768px) {
+      .underline {
+        display: block; /* Show on desktop */
+      }
+    }
+    
+    /* Hamburger Menu Button */
+    #menu-toggle {
+        display: block;
+        z-index: 30;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+    }
+     @media (min-width: 768px) {
+         #menu-toggle {
+             display: none;
+         }
+     }
+     #menu-toggle .hamburger-line {
+         width: 28px;
+         height: 3px;
+         background-color: #44475a;
+         border-radius: 3px;
+         display: block;
+         margin: 5px 0;
+         transition: all 0.3s ease-in-out;
+     }
+     body.dark #menu-toggle .hamburger-line {
+         background-color: #cdd6f4;
+     }
+
+     /* Animate hamburger to X */
+     #menu-toggle.active .hamburger-line:nth-child(1) {
+         transform: translateY(8px) rotate(45deg);
+     }
+     #menu-toggle.active .hamburger-line:nth-child(2) {
+         opacity: 0;
+     }
+     #menu-toggle.active .hamburger-line:nth-child(3) {
+         transform: translateY(-8px) rotate(-45deg);
+     }
+    /* END NAVBAR STYLES */
+
 
     /* Theme Switcher */
     .theme-switcher { display: inline-block; position: relative; user-select: none; }
@@ -69,20 +191,33 @@
     .slider img { width: 24px; height: 24px; }
     #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
     #dm-toggle:checked + .switch .slider { left: 49px; }
+
+    /* Feedback message */
+    #message {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: #7c3aed; color: white; padding: 12px 24px;
+      border-radius: 12px; font-weight: 500; display: none; z-index: 50;
+    }
   </style>
 </head>
-
 <body class="min-h-screen">
 
   <!-- Navbar -->
-  <nav>
+  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
-      <ul id="nav-links">
+       <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <ul id="nav-links" class="hidden md:flex">
         <li><a href="index.html">Main page</a></li>
         <li><a href="section2.html">Templates</a></li>
         <li><a href="section3.html" class="active">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
+
       <div class="theme-switcher">
         <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
         <label for="dm-toggle" class="switch">
@@ -96,6 +231,9 @@
       <div class="underline"></div>
     </div>
   </nav>
+
+  <!-- Feedback Message -->
+  <div id="message"></div>
 
   <!-- SIGN-UP FORM -->
   <section class="max-w-lg mx-auto mt-16 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
@@ -120,12 +258,9 @@
   <!-- Firebase Signup Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } 
-      from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
       authDomain: "printelydz.firebaseapp.com",
@@ -136,44 +271,152 @@
       measurementId: "G-R4VJL5SR88"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Handle signup form
     const signupForm = document.getElementById("signup-form");
+    const messageDiv = document.getElementById("message");
+
+    function showMessage(msg) {
+      messageDiv.textContent = msg;
+      messageDiv.style.display = "block";
+      setTimeout(() => messageDiv.style.display = "none", 2500);
+    }
+
+    // Redirect logged-in users automatically
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        showMessage(`? Logged in as ${user.email}, redirecting...`);
+        setTimeout(() => {
+          window.location.href = "index.html"; // redirect to main page
+        }, 2000);
+      }
+    });
+
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      const name = signupForm.querySelector("[name='username']").value;
-      const email = signupForm.querySelector("[name='email']").value;
-      const password = signupForm.querySelector("[name='password']").value;
-      const confirmPassword = signupForm.querySelector("[name='confirm_password']").value;
+      const name = signupForm.username.value;
+      const email = signupForm.email.value;
+      const password = signupForm.password.value;
+      const confirmPassword = signupForm.confirm_password.value;
 
       if (password !== confirmPassword) {
-        alert("? Passwords do not match!");
+        showMessage("? Passwords do not match!");
         return;
       }
 
       try {
-        // Create user in Firebase Auth
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Save extra user info in Firestore
         await setDoc(doc(db, "users", user.uid), {
           username: name,
           email: email,
           createdAt: serverTimestamp()
         });
 
-        alert("? Account created successfully!");
+        showMessage("?? Account created! Redirecting to login...");
         signupForm.reset();
+
+        setTimeout(() => window.location.href = "login.html", 2000);
       } catch (error) {
-        alert("? Error: " + error.message);
+        showMessage(`? Error: ${error.message}`);
       }
     });
   </script>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- Navbar and Dark Mode Script ---
+    const menuContainer = document.querySelector('nav .container');
+    const underline = document.querySelector('.underline');
+    const allLinks = document.querySelectorAll('#nav-links a');
+    const toggleCheckbox = document.getElementById('dm-toggle');
+    const body = document.body;
+    const sliderIcon = document.getElementById('slider-icon');
+    const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+    const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+
+    // --- Hamburger Menu Script ---
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      navLinks.classList.toggle('hidden');
+      navLinks.classList.toggle('active');
+    });
+
+    function moveUnderline(element) {
+      if (!element || window.innerWidth < 768) return; // Don't run on mobile
+      const rect = element.getBoundingClientRect();
+      const parentRect = menuContainer.getBoundingClientRect();
+      const left = rect.left - parentRect.left + menuContainer.scrollLeft;
+      const width = rect.width;
+      underline.style.width = width + 'px';
+      underline.style.left = left + 'px';
+    }
+
+    setTimeout(() => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+    }, 50);
+
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      body.classList.add('dark');
+      toggleCheckbox.checked = true;
+      sliderIcon.src = darkIcon;
+    } else {
+      sliderIcon.src = lightIcon;
+    }
+
+    allLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link));
+      link.addEventListener('click', (e) => {
+        // Close mobile menu on link click
+        if (window.innerWidth < 768) {
+          menuToggle.classList.remove('active');
+          navLinks.classList.add('hidden');
+          navLinks.classList.remove('active');
+        }
+
+        if(!link.getAttribute('href').startsWith('#')) {
+            allLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        }
+      });
+    });
+    
+    menuContainer.addEventListener('mouseleave', () => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+    });
+
+    window.addEventListener('resize', () => {
+      const activeLink = document.querySelector('a.active') || allLinks[0];
+      moveUnderline(activeLink);
+      // Hide mobile menu if screen is resized to be larger
+      if (window.innerWidth >= 768) {
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        navLinks.classList.add('hidden');
+      }
+    });
+
+    toggleCheckbox.addEventListener('change', () => {
+      if (toggleCheckbox.checked) {
+        body.classList.add('dark');
+        sliderIcon.src = darkIcon;
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        sliderIcon.src = lightIcon;
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
