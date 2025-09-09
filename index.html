@@ -75,27 +75,57 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1rem; /* Adjusted for mobile */
     max-width: 1000px;
     margin: 0 auto;
     position: relative;
   }
+  @media (min-width: 768px) {
+    nav .container {
+      padding: 1rem 2rem; /* Restore padding for larger screens */
+    }
+  }
+  
   #nav-links {
-    display: flex;
-    gap: 3rem;
+    /* Mobile styles for dropdown */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 1rem 0;
+    border-radius: 0 0 12px 12px;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+  }
+  #nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.dark #nav-links {
+      background: #1e1e2e;
   }
   #nav-links a {
     text-decoration: none;
     font-weight: 500;
     font-size: 1.1rem;
     color: #44475a;
-    padding: 8px 0;
+    padding: 1rem 2rem;
     transition: color 0.3s ease;
     white-space: nowrap;
     cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
   }
   body.dark #nav-links a {
     color: #cdd6f4;
@@ -105,6 +135,26 @@
     color: #7c3aed;
     font-weight: 700;
   }
+
+  /* Desktop styles for nav links */
+  @media (min-width: 768px) {
+    #nav-links {
+      position: static;
+      flex-direction: row;
+      background: transparent;
+      box-shadow: none;
+      gap: 3rem;
+      padding: 0;
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #nav-links a {
+      padding: 8px 0;
+      width: auto;
+    }
+  }
+
   .underline {
     position: absolute;
     bottom: 0;
@@ -116,7 +166,51 @@
     z-index: 5;
     left: 0;
     width: 0;
+    display: none; /* Hide by default on mobile */
   }
+  @media (min-width: 768px) {
+    .underline {
+      display: block; /* Show on desktop */
+    }
+  }
+  
+  /* Hamburger Menu Button */
+  #menu-toggle {
+      display: block;
+      z-index: 30;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+  }
+   @media (min-width: 768px) {
+       #menu-toggle {
+           display: none;
+       }
+   }
+   #menu-toggle .hamburger-line {
+       width: 28px;
+       height: 3px;
+       background-color: #44475a;
+       border-radius: 3px;
+       display: block;
+       margin: 5px 0;
+       transition: all 0.3s ease-in-out;
+   }
+   body.dark #menu-toggle .hamburger-line {
+       background-color: #cdd6f4;
+   }
+
+   /* Animate hamburger to X */
+   #menu-toggle.active .hamburger-line:nth-child(1) {
+       transform: translateY(8px) rotate(45deg);
+   }
+   #menu-toggle.active .hamburger-line:nth-child(2) {
+       opacity: 0;
+   }
+   #menu-toggle.active .hamburger-line:nth-child(3) {
+       transform: translateY(-8px) rotate(-45deg);
+   }
+
 
   /* THEME TOGGLE */
   .theme-switcher {
@@ -275,8 +369,13 @@
     background: #1e1b29;
   }
   .accordion-panel .accordion-content {
-    padding: 1.5rem;
+    padding: 1rem; /* Adjusted for mobile */
   }
+   @media (min-width: 768px) {
+      .accordion-panel .accordion-content {
+         padding: 1.5rem;
+      }
+   }
   .accordion-panel h4 {
     font-size: 1.1rem;
     font-weight: bold;
@@ -307,7 +406,6 @@
 </head>
 <body class="min-h-screen transition-colors duration-500">
   
-  <!-- Background Shapes -->
   <svg class="shape shape-1" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
   <svg class="shape shape-2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
   <svg class="shape shape-3" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
@@ -316,12 +414,19 @@
 
   <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
-      <ul id="nav-links">
-        <li><a href="index.html"class="active">Main page</a></li>
+      <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <ul id="nav-links" class="hidden md:flex">
+        <li><a href="index.html" class="active">Main page</a></li>
         <li><a href="section2.html">Templates</a></li>
         <li><a href="section3.html">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
+
       <div class="theme-switcher">
         <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
         <label for="dm-toggle" class="switch">
@@ -336,20 +441,20 @@
     </div>
   </nav>
 
-  <header class="relative text-center py-28 my-8 overflow-hidden">
+  <header class="relative text-center py-20 md:py-28 my-8 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 opacity-90 dark:opacity-80"></div>
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
     <div class="relative z-10 text-white px-4">
-        <h2 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
+        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
             Welcome to the Lesson Plan Builder
         </h2>
-        <p class="text-xl md:text-2xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto">
+        <p class="text-lg md:text-2xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto">
             Customize your lesson plan in a few easy steps
         </p>
     </div>
   </header>
 
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10 max-w-6xl mx-auto relative z-10">
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 md:p-10 max-w-6xl mx-auto relative z-10">
   <a href="#orientation" class="p-6 rounded-2xl shadow-lg hover:shadow-xl bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm text-black dark:text-white transition-all transform hover:-translate-y-1">
     <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">General Orientation</h3>
     <p>Introduction and overview for primary school.</p>
@@ -376,7 +481,7 @@
   </a>
 </section>
 
-<main class="max-w-5xl mx-auto px-6 space-y-32 pb-20 relative z-10">
+<main class="max-w-5xl mx-auto px-4 md:px-6 space-y-32 pb-20 relative z-10">
 
   <section id="orientation">
     <h2 class="text-3xl font-bold mb-4 text-purple-600 dark:text-purple-300">General Orientation</h2>
@@ -407,7 +512,7 @@
  
 <div class="accordion-item">
   <div class="accordion-header">
-    <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+    <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">
       Key Stage 1 - Year 3 Syllabus
     </h2>
     <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -417,10 +522,9 @@
   <div class="accordion-panel">
     <div class="accordion-content space-y-4">
 
-      <!-- Time Allocation -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Time Allocation</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Time Allocation</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -453,10 +557,9 @@
         </div>
       </div>
 
-      <!-- Exit Profile & Competences -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -485,10 +588,9 @@
         </div>
       </div>
 
-      <!-- Domains & Competences -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Domains & Competences</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains & Competences</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -520,10 +622,9 @@
         </div>
       </div>
 
-      <!-- Topics -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Topics</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Topics</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -552,16 +653,14 @@
         </div>
       </div>
 
-      <!-- Learning Sequences -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Learning Sequences</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Learning Sequences</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </div>
         <div class="accordion-panel">
-          <!-- Sequence 1 -->
           <div class="overflow-x-auto shadow-lg rounded-xl my-4">
             <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 1: Greetings</h4>
             <table class="syllabus-table w-full text-sm text-left">
@@ -586,10 +685,9 @@
         </div>
       </div>
 
-      <!-- Evaluation Grid -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Evaluation Grid</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Evaluation Grid</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -618,10 +716,9 @@
         </div>
       </div>
 
-      <!-- Planning Canvas -->
       <div class="accordion-item-sub">
         <div class="accordion-header">
-          <h3 class="text-xl font-bold text-purple-500">Planning Canvas</h3>
+          <h3 class="text-lg md:text-xl font-bold text-purple-500">Planning Canvas</h3>
           <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
@@ -656,7 +753,7 @@
  
         <div class="accordion-item">
             <div class="accordion-header">
-                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 4 Syllabus</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 4 Syllabus</h2>
                 <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <div class="accordion-panel">
@@ -664,7 +761,7 @@
                     
                     <div class="accordion-item-sub">
                         <div class="accordion-header">
-                            <h3 class="text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
                              <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
@@ -711,7 +808,7 @@
                     
                     <div class="accordion-item-sub">
                         <div class="accordion-header">
-                            <h3 class="text-xl font-bold text-purple-500">Domains and Competences</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains and Competences</h3>
                             <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
@@ -757,12 +854,11 @@
 
                     <div class="accordion-item-sub">
                         <div class="accordion-header">
-                            <h3 class="text-xl font-bold text-purple-500">Sequences (1-6)</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Sequences (1-6)</h3>
                             <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
-                            <!-- Sequence 1 -->
-<div class="overflow-x-auto shadow-lg rounded-xl my-4">
+                            <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 1: Family & Friends</h4>
   <table class="syllabus-table w-full text-sm text-left">
     <thead>
@@ -786,7 +882,6 @@
   </table>
 </div>
 
-<!-- Sequence 2 -->
 <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 2: School</h4>
   <table class="syllabus-table w-full text-sm text-left">
@@ -811,7 +906,6 @@
   </table>
 </div>
 
-<!-- Sequence 3 -->
 <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 3: Hobbies</h4>
   <table class="syllabus-table w-full text-sm text-left">
@@ -836,7 +930,6 @@
   </table>
 </div>
 
-<!-- Sequence 4 -->
 <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 4: Food & Drinks</h4>
   <table class="syllabus-table w-full text-sm text-left">
@@ -861,7 +954,6 @@
   </table>
 </div>
 
-<!-- Sequence 5 -->
 <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 5: Places in Town</h4>
   <table class="syllabus-table w-full text-sm text-left">
@@ -886,7 +978,6 @@
   </table>
 </div>
 
-<!-- Sequence 6 -->
 <div class="overflow-x-auto shadow-lg rounded-xl my-4">
   <h4 class="text-lg font-semibold my-2 text-purple-400">Sequence 6: Celebrations</h4>
   <table class="syllabus-table w-full text-sm text-left">
@@ -918,14 +1009,14 @@
 
         <div class="accordion-item">
             <div class="accordion-header">
-                <h2 class="text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 5 Syllabus</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-purple-600 dark:text-purple-400">Key Stage 1 - Year 5 Syllabus</h2>
                 <svg class="accordion-icon text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <div class="accordion-panel">
                  <div class="accordion-content space-y-4">
                     <div class="accordion-item-sub">
                         <div class="accordion-header">
-                            <h3 class="text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Exit Profile & Competences</h3>
                              <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
@@ -953,7 +1044,7 @@
 
                     <div class="accordion-item-sub">
                         <div class="accordion-header">
-                            <h3 class="text-xl font-bold text-purple-500">Domains and Competences</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-purple-500">Domains and Competences</h3>
                              <svg class="accordion-icon text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                         <div class="accordion-panel">
@@ -986,7 +1077,7 @@
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
             <div>
-                <h3 class="text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third Year of Primary School</h3>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third Year of Primary School</h3>
                 <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
             </div>
         </a>
@@ -996,7 +1087,7 @@
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
             <div>
-                <h3 class="text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fourth Year of Primary School</h3>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fourth Year of Primary School</h3>
                 <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
             </div>
         </a>
@@ -1006,7 +1097,7 @@
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
             <div>
-                <h3 class="text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fifth Year of Primary School</h3>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fifth Year of Primary School</h3>
                 <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
             </div>
         </a>
@@ -1031,8 +1122,7 @@
 </button>
         </form>
         <div id="comments-container" class="mt-12 space-y-6">
-            <!-- Comments will be dynamically inserted here -->
-        </div>
+            </div>
     </div>
   </section>
 </main>
@@ -1040,28 +1130,37 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar and Dark Mode Script ---
-    const menu = document.querySelector('nav .container');
+    const menuContainer = document.querySelector('nav .container');
     const underline = document.querySelector('.underline');
-    const links = menu.querySelectorAll('#nav-links a');
+    const allLinks = document.querySelectorAll('#nav-links a');
     const toggleCheckbox = document.getElementById('dm-toggle');
     const body = document.body;
     const sliderIcon = document.getElementById('slider-icon');
     const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
     const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
 
+    // --- NEW: Hamburger Menu Script ---
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      navLinks.classList.toggle('hidden');
+      navLinks.classList.toggle('active');
+    });
+
     function moveUnderline(element) {
-      if (!element) return;
+      if (!element || window.innerWidth < 768) return; // Don't run on mobile
       const rect = element.getBoundingClientRect();
-      const parentRect = menu.getBoundingClientRect();
-      const left = rect.left - parentRect.left + menu.scrollLeft;
+      const parentRect = menuContainer.getBoundingClientRect();
+      const left = rect.left - parentRect.left + menuContainer.scrollLeft;
       const width = rect.width;
       underline.style.width = width + 'px';
       underline.style.left = left + 'px';
     }
 
     setTimeout(() => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
     }, 50);
 
     const storedTheme = localStorage.getItem('theme');
@@ -1073,11 +1172,19 @@
       sliderIcon.src = lightIcon;
     }
 
-    links.forEach(link => {
+    allLinks.forEach(link => {
       link.addEventListener('mouseenter', () => moveUnderline(link));
       link.addEventListener('click', (e) => {
-        links.forEach(l => l.classList.remove('active'));
+        allLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
+        
+        // Close mobile menu on link click
+        if (window.innerWidth < 768) {
+          menuToggle.classList.remove('active');
+          navLinks.classList.add('hidden');
+          navLinks.classList.remove('active');
+        }
+
         if(link.getAttribute('href').startsWith('#')) {
           e.preventDefault();
           document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth'});
@@ -1085,14 +1192,20 @@
       });
     });
     
-    menu.addEventListener('mouseleave', () => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
+    menuContainer.addEventListener('mouseleave', () => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
     });
 
     window.addEventListener('resize', () => {
-      const active = menu.querySelector('a.active') || links[0];
-      moveUnderline(active);
+      const activeLink = document.querySelector('a.active') || allLinks[0];
+      moveUnderline(activeLink);
+      // Hide mobile menu if screen is resized to be larger
+      if (window.innerWidth >= 768) {
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        navLinks.classList.add('hidden'); // Ensure it's ready for mobile again
+      }
     });
 
     toggleCheckbox.addEventListener('change', () => {
@@ -1168,4 +1281,3 @@
 
 </body>
 </html>
-
