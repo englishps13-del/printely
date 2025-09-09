@@ -287,9 +287,9 @@
           createdAt: serverTimestamp()
         });
         
-        // Show success alert and redirect to login page
-        alert("You signed up successfully!");
-        window.location.href = "login.html";
+        // Show success alert and clear the form
+        alert("You signed up successfully! Now you can log in");
+        signupForm.reset();
 
       } catch (error) {
         // Show a more user-friendly error from Firebase
