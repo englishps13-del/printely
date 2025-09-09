@@ -268,30 +268,63 @@
       });
     });
   </script>
-  <!-- Firebase App (the core Firebase SDK) -->
+  <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
-
-<!-- Firebase Auth -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"></script>
-
-<!-- Firebase Firestore -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
 
 <script>
-  // Your web app's Firebase configuration
+  // ? Your Firebase config
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+    authDomain: "printelydz.firebaseapp.com",
+    projectId: "printelydz",
+    storageBucket: "printelydz.appspot.com",   // ?? I fixed this (it must end with .app**spot**.com)
+    messagingSenderId: "49201277305",
+    appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+    measurementId: "G-R4VJL5SR88"
   };
 
-  // Initialize Firebase
+  // ? Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
+</script>
+<script>
+  // Select the sign-up form
+  const signupForm = document.querySelector("form");
+
+  signupForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = signupForm.username.value;
+    const email = signupForm.email.value;
+    const password = signupForm.password.value;
+    const confirmPassword = signupForm.confirm_password.value;
+
+    if (password !== confirmPassword) {
+      alert("? Passwords do not match!");
+      return;
+    }
+
+    // Create user with Firebase Authentication
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((cred) => {
+        // Save extra user info in Firestore
+        return db.collection("users").doc(cred.user.uid).set({
+          username: name,
+          email: email,
+          createdAt: new Date()
+        });
+      })
+      .then(() => {
+        alert("? Account created successfully!");
+        signupForm.reset();
+      })
+      .catch((err) => {
+        alert("? Error: " + err.message);
+      });
+  });
 </script>
 
 </body>
