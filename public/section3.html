@@ -191,18 +191,10 @@
     .slider img { width: 24px; height: 24px; }
     #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
     #dm-toggle:checked + .switch .slider { left: 49px; }
-
-    /* Feedback message */
-    #message {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #7c3aed; color: white; padding: 12px 24px;
-      border-radius: 12px; font-weight: 500; display: none; z-index: 50;
-    }
   </style>
 </head>
 <body class="min-h-screen">
 
-  <!-- Navbar -->
   <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
        <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
@@ -232,10 +224,6 @@
     </div>
   </nav>
 
-  <!-- Feedback Message -->
-  <div id="message"></div>
-
-  <!-- SIGN-UP FORM -->
   <section class="max-w-lg mx-auto mt-16 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
     <h2 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-6">Create Your Account</h2>
     <form id="signup-form" class="space-y-5">
@@ -255,10 +243,9 @@
     </p>
   </section>
 
-  <!-- Firebase Signup Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -276,23 +263,6 @@
     const db = getFirestore(app);
 
     const signupForm = document.getElementById("signup-form");
-    const messageDiv = document.getElementById("message");
-
-    function showMessage(msg) {
-      messageDiv.textContent = msg;
-      messageDiv.style.display = "block";
-      setTimeout(() => messageDiv.style.display = "none", 2500);
-    }
-
-    // Redirect logged-in users automatically
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        showMessage(`? Logged in as ${user.email}, redirecting...`);
-        setTimeout(() => {
-          window.location.href = "index.html"; // redirect to main page
-        }, 2000);
-      }
-    });
 
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -302,7 +272,7 @@
       const confirmPassword = signupForm.confirm_password.value;
 
       if (password !== confirmPassword) {
-        showMessage("? Passwords do not match!");
+        alert("Passwords do not match!");
         return;
       }
 
@@ -310,18 +280,20 @@
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        // Save user data to Firestore
         await setDoc(doc(db, "users", user.uid), {
           username: name,
           email: email,
           createdAt: serverTimestamp()
         });
+        
+        // Show success alert and redirect to login page
+        alert("You signed up successfully!");
+        window.location.href = "login.html";
 
-        showMessage("?? Account created! Redirecting to login...");
-        signupForm.reset();
-
-        setTimeout(() => window.location.href = "login.html", 2000);
       } catch (error) {
-        showMessage(`? Error: ${error.message}`);
+        // Show a more user-friendly error from Firebase
+        alert(`Error: ${error.message}`);
       }
     });
   </script>

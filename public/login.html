@@ -104,7 +104,6 @@
 
 <body class="min-h-screen">
 
-  <!-- Background Shapes -->
   <svg class="shape circle-purple-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
   <svg class="shape rect-purple-300" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
   <svg class="shape triangle-violet-500" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
@@ -114,8 +113,7 @@
   <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
   <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
   <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <!-- Extra background shapes -->
-<svg class="shape circle-green" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+  <svg class="shape circle-green" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
 <svg class="shape rect-orange" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
 <svg class="shape triangle-red" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
 <svg class="shape diamond-purple" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
@@ -127,7 +125,6 @@
 <svg class="shape rect-gray" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
 
 
-  <!-- Navbar -->
   <nav>
     <div class="container">
       <ul id="nav-links">
@@ -149,10 +146,9 @@
     </div>
   </nav>
 
-  <!-- LOGIN FORM -->
   <section class="max-w-lg mx-auto mt-20 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
     <h2 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-6">Welcome Back</h2>
-    <form action="#" method="POST" class="space-y-5">
+    <form id="login-form" class="space-y-5">
       <input type="email" name="email" placeholder="Email Address" required 
              class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
       <input type="password" name="password" placeholder="Password" required 
@@ -164,7 +160,49 @@
     </p>
   </section>
 
-  <!-- Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginForm = document.getElementById('login-form');
+
+    // Redirect user to index if already logged in
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // Successful login will be handled by the onAuthStateChanged listener,
+        // which will redirect to index.html
+      } catch (error) {
+        console.error("Login Error:", error.message);
+        alert("Incorrect username or password");
+      }
+    });
+  </script>
+
   <script>
     const menu = document.querySelector('nav .container');
     const underline = document.querySelector('.underline');

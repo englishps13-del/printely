@@ -1308,6 +1308,7 @@ const commentTextarea = document.getElementById('comment-text');
 const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
 const loginPrompt = document.getElementById('login-prompt');
 const commentsContainer = document.getElementById('comments-container');
+const signupLinkLi = document.querySelector('#nav-links a[href="section3.html"]').parentElement;
 
 // --- Function to fetch and display comments in real-time ---
 const displayComments = () => {
@@ -1321,7 +1322,6 @@ const displayComments = () => {
       const commentElement = document.createElement('div');
       commentElement.className = 'p-6 rounded-xl bg-gray-100 dark:bg-gray-700/50 shadow-inner animate-fade-in-up';
       
-      // Format the timestamp for display
       const date = comment.timestamp ? comment.timestamp.toDate().toLocaleString() : 'Just now';
 
       commentElement.innerHTML = `
@@ -1346,6 +1346,7 @@ onAuthStateChanged(auth, async (user) => {
     loginPrompt.classList.add('hidden');
     commentTextarea.disabled = false;
     submitFeedbackBtn.disabled = false;
+    if (signupLinkLi) signupLinkLi.style.display = 'none'; // Hide "Sign up" link
 
     // 2. Fetch user's username from Firestore
     const userDocRef = doc(db, "users", user.uid);
@@ -1354,43 +1355,52 @@ onAuthStateChanged(auth, async (user) => {
 
     // 3. Display welcome message and logout button
     userInfoDiv.innerHTML = `
-      Welcome, <strong>${username}</strong>!
-      <button id="logout-btn" class="ml-4 px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Logout</button>
+      <span class="font-semibold">Welcome, ${username}!</span>
+      <button id="logout-btn" class="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">Logout</button>
     `;
-    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+    
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        // Redirect to login page after successful sign out.
+        window.location.href = "login.html";
+      }).catch((error) => {
+        console.error("Sign out error", error);
+      });
+    });
 
     // 4. Handle feedback form submission
-    feedbackForm.addEventListener('submit', async (e) => {
+    const handleFeedbackSubmit = async (e) => {
         e.preventDefault();
         const commentText = commentTextarea.value.trim();
-        
-        if (commentText === '') return; // Don't submit empty comments
+        if (commentText === '') return;
 
         try {
-            // Add a new document with a generated ID to the 'comments' collection.
             await addDoc(collection(db, "comments"), {
                 userId: user.uid,
                 username: username,
                 commentText: commentText,
-                timestamp: serverTimestamp() // Use server timestamp for consistency
+                timestamp: serverTimestamp()
             });
-            // Clear the form after successful submission
             feedbackForm.reset();
         } catch (error) {
             console.error("Error adding document: ", error);
-            alert("Sorry, there was an error submitting your feedback. Please try again.");
+            alert("Sorry, there was an error submitting your feedback.");
         }
-    });
+    };
+    // To prevent multiple listeners, we remove it before adding it
+    feedbackForm.removeEventListener('submit', handleFeedbackSubmit); 
+    feedbackForm.addEventListener('submit', handleFeedbackSubmit);
 
   } else {
     // --- USER IS LOGGED OUT ---
 
     // 1. Update UI for logged-out state
-    userInfoDiv.innerHTML = `<a href="login.html" class="text-purple-600 hover:underline">Login</a>`;
-    feedbackForm.style.display = 'none'; // Hide the form
-    loginPrompt.classList.remove('hidden'); // Show the login prompt
+    userInfoDiv.innerHTML = `<a href="login.html" class="font-semibold text-purple-600 dark:text-purple-300 hover:underline">Login</a>`;
+    feedbackForm.style.display = 'none';
+    loginPrompt.classList.remove('hidden');
     commentTextarea.disabled = true;
     submitFeedbackBtn.disabled = true;
+    if (signupLinkLi) signupLinkLi.style.display = 'list-item'; // Show "Sign up" link
   }
 });
 
