@@ -416,9 +416,9 @@
   <svg class="shape shape-4" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
   <svg class="shape shape-5" viewBox="0 0 100 100"><rect width="70" height="70" transform="translate(50) rotate(45)"/></svg>
 
-  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
+<nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
-      <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+      <button id="menu-toggle" class="md:hidden" aria-label="Open Menu">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -430,18 +430,20 @@
         <li id="signup-nav-link"><a href="section3.html">Sign up</a></li>
         <li><a href="section4.html">Soon</a></li>
       </ul>
-      <div id="user-info" class="flex items-center gap-4 text-gray-700 dark:text-gray-300">
-          </div>
 
-      <div class="theme-switcher">
-        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
-        <label for="dm-toggle" class="switch">
-          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
-          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
-          <div class="slider">
-            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+      <div class="flex items-center gap-4">
+        <div id="user-info" class="hidden md:flex items-center gap-2 text-gray-700 dark:text-gray-300">
           </div>
-        </label>
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
+            <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
+            <div class="slider">
+              <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+            </div>
+          </label>
+        </div>
       </div>
       <div class="underline"></div>
     </div>
@@ -450,7 +452,7 @@
   <header class="relative text-center py-20 md:py-28 my-8 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 opacity-90 dark:opacity-80"></div>
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-    <div class="relative z-10 text-white px-4">
+    <div id="header-text-container" class="relative z-10 text-white px-4">
         <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
             Welcome to the Lesson Plan Builder
         </h2>
@@ -1308,8 +1310,8 @@ const commentTextarea = document.getElementById('comment-text');
 const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
 const loginPrompt = document.getElementById('login-prompt');
 const commentsContainer = document.getElementById('comments-container');
-// MODIFICATION: Get reference to the signup link
 const signupNavLink = document.getElementById('signup-nav-link');
+const headerTextContainer = document.getElementById('header-text-container'); // Get the header text container
 
 // --- Function to fetch and display comments in real-time ---
 const displayComments = () => {
@@ -1358,14 +1360,27 @@ onAuthStateChanged(auth, async (user) => {
     const userDoc = await getDoc(userDocRef);
     const username = userDoc.exists() ? userDoc.data().username : user.email;
 
-    // 4. Display welcome message and logout button
+    // 4. Display personalized welcome in the main header
+    headerTextContainer.innerHTML = `
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 animate-fade-in-down">
+            Welcome back, ${username}!
+        </h1>
+        <h2 class="text-2xl md:text-5xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down" style="animation-delay: 0.2s;">
+           Welcome to the Lesson Plan Builder
+        </h2>
+        <p class="text-lg md:text-2xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto" style="animation-delay: 0.4s;">
+            Let's create something amazing today.
+        </p>
+    `;
+
+    // 5. Display welcome message and logout button
     userInfoDiv.innerHTML = `
-      <span class="font-medium text-sm md:text-base">Welcome, <strong>${username}</strong>!</span>
+      <span class="font-medium text-sm md:text-base">Welcome back, <strong>${username}</strong>!</span>
       <button id="logout-btn" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Logout</button>
     `;
     document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
-    // 5. Handle feedback form submission
+    // 6. Handle feedback form submission
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const commentText = commentTextarea.value.trim();
@@ -1388,13 +1403,23 @@ onAuthStateChanged(auth, async (user) => {
 
   } else {
     // --- USER IS LOGGED OUT ---
+    
+    // 1. Restore the original generic header
+    headerTextContainer.innerHTML = `
+        <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
+            Welcome to the Lesson Plan Builder
+        </h2>
+        <p class="text-lg md:text-2xl text-purple-100/90 animate-fade-in-up max-w-3xl mx-auto">
+            Customize your lesson plan in a few easy steps
+        </p>
+    `;
 
-    // 1. Show the "Sign Up" navigation link
+    // 2. Show the "Sign Up" navigation link
     if (signupNavLink) {
         signupNavLink.style.display = 'block'; // Use 'block' or 'list-item'
     }
 
-    // 2. Update UI for logged-out state
+    // 3. Update UI for logged-out state
     userInfoDiv.innerHTML = `<a href="login.html" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Login</a>`;
     feedbackForm.style.display = 'none';
     loginPrompt.classList.remove('hidden');
