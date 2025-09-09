@@ -405,6 +405,18 @@
     align-items: center;
     gap: 0.5rem; /* space between welcome text and logout button */
   }
+
+  /* FOOTER STYLES */
+  #page-footer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    margin-top: 4rem;
+    border-top: 1px solid #e2e8f0;
+    transition: border-color 0.3s ease;
+  }
+  body.dark #page-footer {
+    border-top-color: #334155;
+  }
 </style>
 
 </head>
@@ -1079,22 +1091,12 @@
   <section id="topics">
     <h2 class="text-3xl font-bold mb-6 text-purple-600 dark:text-purple-300 text-center">Download The Didactic Guide of Primary School</h2>
     <div class="space-y-4">
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
+        <a href="https://drive.google.com/uc?export=download&id=1-AYuZdlCW702Hk8X00FRoNRM2ERLKEfY" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
             <div>
-                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third Year of Primary School</h3>
-                <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
-            </div>
-        </a>
-
-        <a href="#" class="flex items-center p-6 rounded-2xl shadow-lg hover:shadow-xl bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600 dark:text-violet-400 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            <div>
-                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Fourth Year of Primary School</h3>
+                <h3 class="text-lg md:text-xl font-bold text-violet-800 dark:text-violet-200">Download The Didactic Guide for English for the Third and Fourth Year of Primary School</h3>
                 <p class="text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-200">Click here to start your download.</p>
             </div>
         </a>
@@ -1137,6 +1139,10 @@
     </div>
 </section>
 </main>
+
+<footer id="page-footer" class="max-w-5xl mx-auto px-4 md:px-6 text-center">
+    <!-- Logout button will be injected here by JavaScript -->
+</footer>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -1311,7 +1317,8 @@ const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
 const loginPrompt = document.getElementById('login-prompt');
 const commentsContainer = document.getElementById('comments-container');
 const signupNavLink = document.getElementById('signup-nav-link');
-const headerTextContainer = document.getElementById('header-text-container'); // Get the header text container
+const headerTextContainer = document.getElementById('header-text-container');
+const pageFooter = document.getElementById('page-footer'); // Get the footer
 
 // --- Function to fetch and display comments in real-time ---
 const displayComments = () => {
@@ -1373,14 +1380,22 @@ onAuthStateChanged(auth, async (user) => {
         </p>
     `;
 
-    // 5. Display welcome message and logout button
+    // 5. Display welcome message and logout button in Navbar
     userInfoDiv.innerHTML = `
       <span class="font-medium text-sm md:text-base">Welcome back, <strong>${username}</strong>!</span>
       <button id="logout-btn" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Logout</button>
     `;
     document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
-    // 6. Handle feedback form submission
+    // 6. Display logout button in Footer
+    pageFooter.classList.remove('hidden');
+    pageFooter.innerHTML = `
+        <button id="footer-logout-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-bold shadow-lg transform hover:scale-105">Sign Out</button>
+    `;
+    document.getElementById("footer-logout-btn").addEventListener("click", () => signOut(auth));
+
+
+    // 7. Handle feedback form submission
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const commentText = commentTextarea.value.trim();
@@ -1425,6 +1440,10 @@ onAuthStateChanged(auth, async (user) => {
     loginPrompt.classList.remove('hidden');
     commentTextarea.disabled = true;
     submitFeedbackBtn.disabled = true;
+
+    // 4. Hide the footer content
+    pageFooter.innerHTML = '';
+    pageFooter.classList.add('hidden');
   }
 });
 
@@ -1434,3 +1453,4 @@ displayComments();
 
 </body>
 </html>
+
