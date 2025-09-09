@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reset Password – Printely</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #ede9fe, #d8b4fe);
+      transition: background 0.5s ease;
+      min-height: 100vh;
+    }
+    body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
+
+    /* NAVBAR STYLES (exactly from section2.html) */
+    nav {
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      position: relative;
+      z-index: 20;
+      transition: background 0.3s ease;
+    }
+    body.dark nav { background: #1e1e2e; }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+    @media (min-width: 768px) { nav .container { padding: 1rem 2rem; } }
+
+    #nav-links {
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: white;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+      border-radius: 0 0 12px 12px;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+    #nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    body.dark #nav-links { background: #1e1e2e; }
+    #nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #44475a;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    body.dark #nav-links a { color: #cdd6f4; }
+    #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
+    @media (min-width: 768px) {
+      #nav-links {
+        position: static;
+        flex-direction: row;
+        background: transparent;
+        box-shadow: none;
+        gap: 3rem;
+        padding: 0;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #nav-links a { padding: 8px 0; width: auto; }
+    }
+
+    .underline {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      background-color: #7c3aed;
+      border-radius: 1px;
+      transition: left 0.3s ease, width 0.3s ease;
+      pointer-events: none;
+      z-index: 5;
+      left: 0;
+      width: 0;
+      display: none;
+    }
+    @media (min-width: 768px) { .underline { display: block; } }
+
+    #menu-toggle { display: block; background: transparent; border: none; cursor: pointer; }
+    @media (min-width: 768px) { #menu-toggle { display: none; } }
+    #menu-toggle .hamburger-line {
+      width: 28px; height: 3px;
+      background-color: #44475a;
+      border-radius: 3px;
+      margin: 5px 0;
+      transition: all 0.3s ease-in-out;
+    }
+    body.dark #menu-toggle .hamburger-line { background-color: #cdd6f4; }
+    #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
+    #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .theme-switcher { display: inline-block; position: relative; }
+    .switch {
+      display: flex; align-items: center;
+      width: 90px; height: 42px;
+      background: linear-gradient(to right, #d8b4fe, #a78bfa);
+      border-radius: 42px;
+      cursor: pointer;
+      position: relative;
+    }
+    .icon { width: 30px; height: 30px; }
+    .sun { margin-left: 10px; }
+    .moon { margin-left: auto; margin-right: 10px; }
+    .slider {
+      position: absolute; width: 38px; height: 38px;
+      background: white; border-radius: 50%;
+      top: 2px; left: 3px;
+      transition: left 0.3s ease;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .slider img { width: 24px; height: 24px; }
+    #dm-toggle { position: absolute; opacity: 0; }
+    #dm-toggle:checked + .switch .slider { left: 49px; }
+
+    /* Reset form box */
+    .login-container { display:flex; justify-content:center; align-items:center; min-height:80vh; padding:1rem; }
+    .login-box {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 400px; width:100%; padding:2.5rem;
+    }
+    .dark .login-box { background: rgba(31,41,55,0.9); }
+    .message-box { margin-top:1rem; padding:0.75rem 1rem; border-radius:0.5rem; font-weight:500; display:none; }
+    .message-box.error { background:#fecaca; color:#991b1b; display:block; }
+    .message-box.success { background:#d1fae5; color:#065f46; display:block; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR (from section2.html) -->
+  <nav class="sticky top-4 max-w-5xl mx-auto z-50">
+    <div class="container">
+      <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <ul id="nav-links" class="hidden md:flex">
+        <li><a href="index.html">Main page</a></li>
+        <li><a href="section2.html">Templates</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="signup.html">Sign up</a></li>
+      </ul>
+      <div class="theme-switcher">
+        <input type="checkbox" id="dm-toggle" />
+        <label for="dm-toggle" class="switch">
+          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light" class="icon sun" />
+          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark" class="icon moon" />
+          <div class="slider"><img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" id="slider-icon" /></div>
+        </label>
+      </div>
+      <div class="underline"></div>
+    </div>
+  </nav>
+
+  <!-- RESET FORM -->
+  <div class="login-container">
+    <div class="login-box">
+      <h2 class="text-2xl font-bold text-center text-purple-600 dark:text-purple-400">Reset Password</h2>
+      <p class="mt-2 text-center text-gray-600 dark:text-gray-400">Enter your email to receive a reset link.</p>
+
+      <form id="request-form" class="flex flex-col mt-6 space-y-4">
+        <label for="reset-email" class="font-semibold text-gray-700 dark:text-gray-300">Email Address</label>
+        <input type="email" id="reset-email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="your@email.com" />
+        <button type="submit" class="w-full px-4 py-3 text-lg font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700">Send Reset Link</button>
+      </form>
+
+      <form id="newpass-form" class="flex flex-col mt-6 space-y-4 hidden">
+        <label for="new-password" class="font-semibold text-gray-700 dark:text-gray-300">New Password</label>
+        <input type="password" id="new-password" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="••••••••" />
+        <button type="submit" class="w-full px-4 py-3 text-lg font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700">Update Password</button>
+      </form>
+
+      <div id="message-box" class="message-box"></div>
+    </div>
+  </div>
+
+  <!-- FIREBASE SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset } 
+      from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const requestForm = document.getElementById("request-form");
+    const newPassForm = document.getElementById("newpass-form");
+    const resetEmail = document.getElementById("reset-email");
+    const newPassword = document.getElementById("new-password");
+    const messageBox = document.getElementById("message-box");
+
+    requestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        await sendPasswordResetEmail(auth, resetEmail.value, {
+          url: window.location.origin + "/reset.html",
+          handleCodeInApp: true
+        });
+        messageBox.textContent = "Reset link sent! Check your email.";
+        messageBox.className = "message-box success";
+      } catch (err) {
+        messageBox.textContent = err.message;
+        messageBox.className = "message-box error";
+      }
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const oobCode = urlParams.get("oobCode");
+    if (oobCode) {
+      requestForm.classList.add("hidden");
+      newPassForm.classList.remove("hidden");
+      newPassForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        try {
+          await verifyPasswordResetCode(auth, oobCode);
+          await confirmPasswordReset(auth, oobCode, newPassword.value);
+          messageBox.textContent = "Password updated! You can now log in.";
+          messageBox.className = "message-box success";
+        } catch (err) {
+          messageBox.textContent = err.message;
+          messageBox.className = "message-box error";
+        }
+      });
+    }
+  </script>
+
+  <!-- NAV SCRIPT (same as section2.html) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const menuContainer = document.querySelector('nav .container');
+      const underline = document.querySelector('.underline');
+      const allLinks = document.querySelectorAll('#nav-links a');
+      const toggleCheckbox = document.getElementById('dm-toggle');
+      const body = document.body;
+      const sliderIcon = document.getElementById('slider-icon');
+      const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+      const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
+      const menuToggle = document.getElementById('menu-toggle');
+      const navLinks = document.getElementById('nav-links');
+
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('hidden');
+        navLinks.classList.toggle('active');
+      });
+
+      function moveUnderline(element) {
+        if (!element || window.innerWidth < 768) return;
+        const rect = element.getBoundingClientRect();
+        const parentRect = menuContainer.getBoundingClientRect();
+        underline.style.width = rect.width + 'px';
+        underline.style.left = rect.left - parentRect.left + 'px';
+      }
+
+      function updateSliderIcon() {
+        sliderIcon.src = body.classList.contains('dark') ? darkIcon : lightIcon;
+      }
+
+      function setDarkMode(enabled) {
+        if (enabled) {
+          body.classList.add('dark');
+          toggleCheckbox.checked = true;
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          toggleCheckbox.checked = false;
+          localStorage.setItem('theme', 'light');
+        }
+        updateSliderIcon();
+      }
+
+      const storedTheme = localStorage.getItem('theme');
+      setDarkMode(storedTheme === 'dark');
+
+      setTimeout(() => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+      }, 50);
+
+      allLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => moveUnderline(link));
+        link.addEventListener('click', () => {
+          allLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          if (window.innerWidth < 768) {
+            menuToggle.classList.remove('active');
+            navLinks.classList.add('hidden');
+            navLinks.classList.remove('active');
+          }
+        });
+      });
+
+      menuContainer.addEventListener('mouseleave', () => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+      });
+
+      window.addEventListener('resize', () => {
+        const activeLink = document.querySelector('a.active') || allLinks[0];
+        moveUnderline(activeLink);
+        if (window.innerWidth >= 768) {
+          menuToggle.classList.remove('active');
+          navLinks.classList.remove('active');
+          navLinks.classList.add('hidden');
+        }
+      });
+
+      toggleCheckbox.addEventListener('change', () => {
+        setDarkMode(toggleCheckbox.checked);
+      });
+    });
+  </script>
+</body>
+</html>
