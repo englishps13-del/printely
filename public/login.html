@@ -12,6 +12,7 @@
   </script>
 
   <style>
+    /* General Styles */
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,80 +23,59 @@
     }
     body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
 
-    nav {
-      background: white;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      border-radius: 12px;
-      position: relative;
-      z-index: 20;
-      transition: background 0.3s ease;
+    /* Background Shapes */
+    .shape { position: absolute; opacity: 0.15; z-index: 0; width: 2rem; height: 2rem; animation: float-rotate 20s linear infinite; }
+    .circle-purple-400 { top: 2rem; left: 2rem; fill: #a78bfa; animation-duration: 25s; }
+    .rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-duration: 35s; animation-direction: reverse; }
+    .triangle-violet-500 { bottom: 2rem; left: 15%; fill: #8b5cf6; animation-duration: 40s; }
+    .circle-indigo-400 { bottom: 4rem; right: 2rem; fill: #818cf8; animation-duration: 30s; animation-direction: reverse; }
+    .circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 50s; }
+    .rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 45s; }
+    .triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 55s; }
+    .diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-duration: 60s; animation-direction: reverse; }
+    .circle-gray { bottom: 2rem; right: 38%; fill: #9ca3af; animation-duration: 70s; }
+    .circle-green { top: 10%; left: 45%; fill: #22c55e; animation-duration: 65s; }
+    .rect-orange { top: 30%; right: 20%; fill: #f97316; animation-duration: 55s; animation-direction: reverse; }
+    .triangle-red { bottom: 25%; left: 25%; fill: #ef4444; animation-duration: 60s; }
+    .diamond-purple { top: 70%; right: 10%; fill: #a855f7; animation-duration: 50s; }
+    @keyframes float-rotate {
+      0% { transform: rotate(0deg) translate(0, 0); }
+      50% { transform: rotate(180deg) translate(5px, -5px); }
+      100% { transform: rotate(360deg) translate(0, 0); }
     }
+
+    /* Standardized Navbar Styles */
+    nav { background: white; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); border-radius: 12px; position: relative; z-index: 20; transition: background 0.3s ease; }
     body.dark nav { background: #1e1e2e; }
-
-    nav .container {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 2rem; max-width: 1000px; margin: 0 auto; position: relative;
-    }
-
-    #nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
-    #nav-links a {
-      text-decoration: none; font-weight: 500; font-size: 1.1rem;
-      color: #44475a; padding: 8px 0; transition: color 0.3s ease; white-space: nowrap; cursor: pointer;
-    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; padding: 1rem; max-width: 1000px; margin: 0 auto; position: relative; }
+    #nav-links { position: absolute; top: 100%; left: 0; right: 0; background: white; box-shadow: 0 6px 15px rgba(0,0,0,0.1); flex-direction: column; align-items: center; list-style: none; margin: 0; padding: 1rem 0; border-radius: 0 0 12px 12px; transition: transform 0.3s ease-out, opacity 0.3s ease-out; transform: translateY(-10px); opacity: 0; pointer-events: none; }
+    #nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    body.dark #nav-links { background: #1e1e2e; }
+    #nav-links a { text-decoration: none; font-weight: 500; font-size: 1.1rem; color: #44475a; padding: 1rem 2rem; transition: color 0.3s ease; white-space: nowrap; cursor: pointer; display: block; width: 100%; text-align: center; }
     body.dark #nav-links a { color: #cdd6f4; }
     #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
-
-    .underline {
-      position: absolute; bottom: 0; height: 3px; background-color: #7c3aed;
-      border-radius: 1px; transition: left 0.3s ease, width 0.3s ease;
-      pointer-events: none; z-index: 5; left: 0; width: 0;
+    @media (min-width: 768px) {
+      nav .container { padding: 1rem 2rem; }
+      #nav-links { position: static; flex-direction: row; background: transparent; box-shadow: none; gap: 3rem; padding: 0; transform: none; opacity: 1; pointer-events: auto; }
+      #nav-links a { padding: 8px 0; width: auto; }
     }
-
-    /* Background shapes */
-    .shape { position: absolute; opacity: 0.15; z-index: 0; width: 2rem; height: 2rem ;   animation: float-rotate 20s linear infinite;
-}
-.circle-purple-400 { top: 2rem; left: 2rem; fill: #a78bfa; animation-duration: 25s; }
-.rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-duration: 35s; animation-direction: reverse; }
-.triangle-violet-500 { bottom: 2rem; left: 15%; fill: #8b5cf6; animation-duration: 40s; }
-.circle-indigo-400 { bottom: 4rem; right: 2rem; fill: #818cf8; animation-duration: 30s; animation-direction: reverse; }
-.circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 50s; }
-.rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 45s; }
-.triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 55s; }
-.diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-duration: 60s; animation-direction: reverse; }
-.circle-gray { bottom: 2rem; right: 38%; fill: #9ca3af; animation-duration: 70s; }
-/* New shapes */
-.circle-green   { top: 10%; left: 45%; fill: #22c55e; animation-duration: 65s; }
-.rect-orange    { top: 30%; right: 20%; fill: #f97316; animation-duration: 55s; animation-direction: reverse; }
-.triangle-red   { bottom: 25%; left: 25%; fill: #ef4444; animation-duration: 60s; }
-.diamond-purple { top: 70%; right: 10%; fill: #a855f7; animation-duration: 50s; }
-.circle-cyan    { top: 5%; right: 40%; fill: #06b6d4; animation-duration: 80s; animation-direction: reverse; }
-.rect-lime      { bottom: 15%; right: 30%; fill: #84cc16; animation-duration: 75s; }
-.triangle-pink  { top: 40%; left: 60%; fill: #ec4899; animation-duration: 58s; }
-.diamond-blue   { bottom: 40%; right: 50%; fill: #3b82f6; animation-duration: 90s; }
-.circle-orange  { top: 80%; left: 35%; fill: #f59e0b; animation-duration: 68s; animation-direction: reverse; }
-.rect-gray      { bottom: 5%; left: 5%; fill: #6b7280; animation-duration: 85s; }
-
-@keyframes float-rotate {
-  0% { transform: rotate(0deg) translate(0, 0); }
-  50% { transform: rotate(180deg) translate(5px, -5px); }
-  100% { transform: rotate(360deg) translate(0, 0); }
-}
+    .underline { position: absolute; bottom: 0; height: 3px; background-color: #7c3aed; border-radius: 1px; transition: left 0.3s ease, width 0.3s ease; pointer-events: none; z-index: 5; display: none; }
+    @media (min-width: 768px) { .underline { display: block; } }
+    #menu-toggle { display: block; z-index: 30; border: none; background: transparent; cursor: pointer; }
+    @media (min-width: 768px) { #menu-toggle { display: none; } }
+    #menu-toggle .hamburger-line { width: 28px; height: 3px; background-color: #44475a; border-radius: 3px; display: block; margin: 5px 0; transition: all 0.3s ease-in-out; }
+    body.dark #menu-toggle .hamburger-line { background-color: #cdd6f4; }
+    #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
+    #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     /* Theme Switcher */
     .theme-switcher { display: inline-block; position: relative; user-select: none; }
-    .switch {
-      display: flex; align-items: center; width: 90px; height: 42px;
-      background: linear-gradient(to right, #d8b4fe, #a78bfa);
-      border-radius: 42px; cursor: pointer; position: relative;
-    }
+    .switch { display: flex; align-items: center; width: 90px; height: 42px; background: linear-gradient(to right, #d8b4fe, #a78bfa); border-radius: 42px; cursor: pointer; position: relative; }
     .icon { width: 30px; height: 30px; pointer-events: none; }
     .sun { margin-left: 10px; }
     .moon { margin-left: auto; margin-right: 10px; }
-    .slider {
-      position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%;
-      top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2);
-      display: flex; align-items: center; justify-content: center;
-    }
+    .slider { position: absolute; width: 38px; height: 38px; background: white; border-radius: 50%; top: 2px; left: 3px; transition: left 0.3s ease; box-shadow: 0 0 6px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; }
     .slider img { width: 24px; height: 24px; }
     #dm-toggle { position: absolute; opacity: 0; width: 0; height: 0; }
     #dm-toggle:checked + .switch .slider { left: 49px; }
@@ -114,33 +94,33 @@
   <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
   <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
   <svg class="shape circle-green" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-<svg class="shape rect-orange" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
-<svg class="shape triangle-red" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-<svg class="shape diamond-purple" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
-<svg class="shape circle-cyan" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-<svg class="shape rect-lime" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
-<svg class="shape triangle-pink" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-<svg class="shape diamond-blue" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
-<svg class="shape circle-orange" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
-<svg class="shape rect-gray" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+  <svg class="shape rect-orange" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+  <svg class="shape triangle-red" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+  <svg class="shape diamond-purple" viewBox="0 0 100 100"><rect width="100" height="100" transform="rotate(45 50 50)"/></svg>
 
-
-  <nav>
+  <nav class="sticky top-4 max-w-5xl mx-auto">
     <div class="container">
       <ul id="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html">Main Page</a></li>
         <li><a href="section3.html">Sign Up</a></li>
-        <li><a href="login.html" class="active">Login</a></li>
+        <li><a href="login.html">Login</a></li>
       </ul>
-      <div class="theme-switcher">
-        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
-        <label for="dm-toggle" class="switch">
-          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" class="icon sun" />
-          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" class="icon moon" />
-          <div class="slider">
-            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" id="slider-icon" />
+      <div class="flex items-center gap-4">
+          <div class="theme-switcher">
+            <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+            <label for="dm-toggle" class="switch">
+              <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" class="icon sun" alt="Sun Icon" />
+              <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" class="icon moon" alt="Moon Icon" />
+              <div class="slider">
+                <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" id="slider-icon" alt="Slider Icon" />
+              </div>
+            </label>
           </div>
-        </label>
+          <button id="menu-toggle" aria-label="Open Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
       </div>
       <div class="underline"></div>
     </div>
@@ -177,15 +157,14 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const loginForm = document.getElementById('login-form');
-
-    // Redirect user to index if already logged in
+    // FIX: Redirect user to main page if they are already logged in
     onAuthStateChanged(auth, user => {
       if (user) {
         window.location.href = 'index.html';
       }
     });
 
+    const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -194,93 +173,97 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        // Successful login will be handled by the onAuthStateChanged listener,
-        // which will redirect to index.html
+        // Successful login is handled by the onAuthStateChanged listener above,
+        // which will redirect to index.html.
       } catch (error) {
         console.error("Login Error:", error.message);
-        alert("Incorrect username or password");
+        alert("Incorrect username or password. Please try again.");
       }
     });
   </script>
 
   <script>
-    const menu = document.querySelector('nav .container');
-    const underline = document.querySelector('.underline');
-    const links = menu.querySelectorAll('a');
-    const body = document.body;
-    const dmToggle = document.getElementById('dm-toggle');
-    const sliderIcon = document.getElementById('slider-icon');
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuContainer = document.querySelector('nav .container');
+      const underline = document.querySelector('.underline');
+      const navLinksContainer = document.getElementById('nav-links');
+      const allLinks = navLinksContainer.querySelectorAll('a');
+      const menuToggle = document.getElementById('menu-toggle');
+      
+      const body = document.body;
+      const dmToggle = document.getElementById('dm-toggle');
+      const sliderIcon = document.getElementById('slider-icon');
+      const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
+      const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
 
-    const sunIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
-    const moonIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
-
-    function moveUnderline(element) {
-      const rect = element.getBoundingClientRect();
-      const parentRect = menu.getBoundingClientRect();
-      const left = rect.left - parentRect.left + menu.scrollLeft;
-      const width = rect.width;
-      underline.style.width = width + 'px';
-      underline.style.left = left + 'px';
-    }
-
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
-      }, 50);
-    });
-
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => moveUnderline(link));
-      link.addEventListener('mouseleave', () => {
-        const active = menu.querySelector('a.active') || links[0];
-        moveUnderline(active);
+      // --- 1. Set Active Nav Link ---
+      const currentPage = window.location.pathname.split("/").pop();
+      allLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+        }
       });
-      link.addEventListener('click', () => {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+      
+      // --- 2. Underline Effect Logic ---
+      function moveUnderline(element) {
+        if (!element || window.innerWidth < 768) {
+          underline.style.width = '0px';
+          return;
+        }
+        const rect = element.getBoundingClientRect();
+        const parentRect = menuContainer.getBoundingClientRect();
+        underline.style.width = rect.width + 'px';
+        underline.style.left = (rect.left - parentRect.left) + 'px';
+      }
+
+      // --- 3. Dark Mode Logic ---
+      function setDarkMode(isDark) {
+        if (isDark) {
+          body.classList.add('dark');
+          sliderIcon.src = moonIcon;
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          sliderIcon.src = sunIcon;
+          localStorage.setItem('theme', 'light');
+        }
+      }
+
+      // Initialize theme on load
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const storedTheme = localStorage.getItem('theme');
+      const initialDark = storedTheme ? storedTheme === 'dark' : prefersDark;
+      dmToggle.checked = initialDark;
+      setDarkMode(initialDark);
+
+      dmToggle.addEventListener('change', () => setDarkMode(dmToggle.checked));
+
+      // --- 4. Hamburger Menu Logic ---
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinksContainer.classList.toggle('active');
       });
-    });
 
-    window.addEventListener('resize', () => {
-      const active = menu.querySelector('a.active') || links[0];
-      moveUnderline(active);
-    });
-
-    document.fonts.ready.then(() => {
-      const active = menu.querySelector('a.active') || links[0];
-      moveUnderline(active);
-    });
-
-    function updateSliderIcon() {
-      if (body.classList.contains('dark')) {
-        sliderIcon.src = moonIcon;
-        sliderIcon.alt = 'Dark Mode Icon';
-      } else {
-        sliderIcon.src = sunIcon;
-        sliderIcon.alt = 'Light Mode Icon';
-      }
-    }
-
-    function setDarkMode(enabled) {
-      if (enabled) {
-        body.classList.add('dark');
-        dmToggle.checked = true;
-        localStorage.setItem('theme', 'dark');
-      } else {
-        body.classList.remove('dark');
-        dmToggle.checked = false;
-        localStorage.setItem('theme', 'light');
-      }
-      updateSliderIcon();
-    }
-
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark') setDarkMode(true);
-    else setDarkMode(false);
-
-    dmToggle.addEventListener('change', () => {
-      setDarkMode(dmToggle.checked);
+      // --- 5. Event Listeners ---
+      window.addEventListener('load', () => {
+        setTimeout(() => moveUnderline(navLinksContainer.querySelector('a.active')), 50);
+      });
+      
+      allLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => moveUnderline(link));
+      });
+      
+      navLinksContainer.addEventListener('mouseleave', () => {
+        moveUnderline(navLinksContainer.querySelector('a.active'));
+      });
+      
+      window.addEventListener('resize', () => {
+        moveUnderline(navLinksContainer.querySelector('a.active'));
+        if (window.innerWidth >= 768) {
+            menuToggle.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        }
+      });
     });
   </script>
 </body>
