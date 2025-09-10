@@ -119,22 +119,21 @@
     .section.mini {
       border: 1px solid #000;
     }
-.section.mini h2 {
-  font-size: 11px;
-  padding: 2px 6px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  font-weight: bold;
-  border-bottom: 1px solid #000; /* ? black underline */
-}
-.lesson-plan th {
-  color: white;
-  padding: 4px 6px;
-  font-size: 11px;
-  font-weight: bold;
-  border: 1px solid #000;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* shadow on the text */
-}
-
+    .section.mini h2 {
+      font-size: 11px;
+      padding: 2px 6px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      font-weight: bold;
+      border-bottom: 1px solid #000; /* black underline */
+    }
+    .lesson-plan th {
+      color: white;
+      padding: 4px 6px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 1px solid #000;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* shadow on the text */
+    }
 
     .section.mini .content {
       padding: 4px 6px;
@@ -191,18 +190,18 @@
       text-align: left;
     }
 
-.lesson-plan th {
-  color: white;
-  padding: 4px 6px;
-  font-size: 11px;
-  font-weight: bold;
-  border: 1px solid #000;   /* full box */
-}
-.lesson-plan {
-  border-collapse: separate;  /* important */
-  border-spacing: 2px;        /* little gap between cells */
-}
-	
+    .lesson-plan th {
+      color: white;
+      padding: 4px 6px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 1px solid #000;   /* full box */
+    }
+    .lesson-plan {
+      border-collapse: separate;  /* important */
+      border-spacing: 2px;        /* little gap between cells */
+    }
+    
     .lesson-plan input,
     .lesson-plan textarea {
       width: 100%;
@@ -306,17 +305,17 @@
         break-inside: avoid;
       }
 
- /* Default: underline all inputs in print */
-input, textarea, select {
-  border: none !important;
-  border-bottom: 1px solid #000 !important;
-  background: transparent !important;
-}
+      /* Default: underline all inputs in print */
+      input, textarea, select {
+        border: none !important;
+        border-bottom: 1px solid #000 !important;
+        background: transparent !important;
+      }
 
-/* Remove underline for specific fields */
-.no-underline-print {
-  border: none !important;
-}
+      /* Remove underline for specific fields */
+      .no-underline-print {
+        border: none !important;
+      }
 
       .no-print, .ribbon {
         display: none !important;
@@ -348,118 +347,178 @@ input, textarea, select {
       font-family: inherit;
       font-size: inherit;
     }
-/* Stronger shadow for bar text */
-.section.mini h2 {
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  font-weight: bold;
-}
 
-select, option {
-  font-family: 'Poppins', sans-serif; /* Or your lesson plan font */
-  font-size: 14px;  /* Adjust size */
-  font-weight: 500; /* Medium weight for readability */
-  color: #333;      /* Dark text */
-  background: #fff; /* White background */
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 4px 8px;
-  outline: none;
-}
-select {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
+    /* Stronger shadow for bar text */
+    .section.mini h2 {
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
 
+    select, option {
+      font-family: 'Poppins', sans-serif; /* Or your lesson plan font */
+      font-size: 14px;  /* Adjust size */
+      font-weight: 500; /* Medium weight for readability */
+      color: #333;      /* Dark text */
+      background: #fff; /* White background */
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 4px 8px;
+      outline: none;
+    }
+    select {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
 
-@media screen {
-  body {
-    transform: scale(1.75);
-    transform-origin: top left;
-    width: calc(210mm / 1.75);
-    height: calc(297mm / 1.75);
-  }
-}
-textarea {
-  resize: none;       /* disables the arrows/resize handle */
-  overflow: auto;     /* allow scrolling if text overflows */
-}
-textarea {
-  resize: none;
-  overflow: hidden;
-}
+    @media screen {
+      body {
+        transform: scale(1.75);
+        transform-origin: top left;
+        width: calc(210mm / 1.75);
+        height: calc(297mm / 1.75);
+      }
+    }
+    textarea {
+      resize: none;       /* disables the arrows/resize handle */
+      overflow: auto;     /* allow scrolling if text overflows */
+    }
+    textarea {
+      resize: none;
+      overflow: hidden;
+    }
 
-textarea:focus, textarea:not(:placeholder-shown) {
-  height: auto;
-  min-height: 24px;     /* adjust for short rows */
-}
+    textarea:focus, textarea:not(:placeholder-shown) {
+      height: auto;
+      min-height: 24px;     /* adjust for short rows */
+    }
 
-/* --- Ribbon Editor Styles --- */
-.ribbon {
-    display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
-    background: #f3f4f6;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-.ribbon .group {
-    display: flex; align-items: center; gap: 6px;
-    padding: 6px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #ffffff;
-}
-.ribbon .group .label { font-size: 12px; color: #6b7280; margin-left: 4px; white-space: nowrap; }
-.ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
-    appearance: none; border: 1px solid #d1d5db; background: #ffffff;
-    padding: 7px 10px; border-radius: 5px; font-size: 14px;
-    line-height: 1; cursor: pointer; color: #1f2937;
-    font-family: 'Poppins', sans-serif;
-}
-.ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-.ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
-.ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f9fafb; }
-.ribbon .btn.active, .ribbon .btn-square.active {
-    background: var(--objective, #5d4a9c); color: white; border-color: var(--objective, #5d4a9c);
-}
-.ribbon .sep { width: 1px; background: #d1d5db; margin: 0 6px; align-self: stretch; }
-.ribbon .grow { flex: 1 1 auto; }
-.ribbon .pill {
-    font-size: 12px; padding: 4px 8px; border-radius: 999px;
-    border: 1px solid #d1d5db;
-    background: #ffffff; color: #6b7280;
-}
-.editable-area {
-    width: 100%;
-    border: none;
-    outline: none;
-    font-family: inherit;
-    font-size: 14px;
-    line-height: 1.6;
-    background: transparent;
-    padding: 4px;
-    min-height: 24px; /* Matches short row height */
-    cursor: text;
-    box-sizing: border-box;
-}
-.editable-area:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--objective, #5d4a9c);
-    border-radius: 4px;
-}
-.editable-area[data-placeholder]:empty::before {
-    content: attr(data-placeholder);
-    color: #999;
-    pointer-events: none;
-    font-style: italic;
-}
-/* Ensure tall editable areas grow */
-.stage-row.tall .editable-area {
-    min-height: 80px;
-}
+    /* --- Ribbon Editor Styles --- */
+    .ribbon {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    .ribbon .group {
+        display: flex; align-items: center; gap: 6px;
+        padding: 6px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: #ffffff;
+    }
+    .ribbon .group .label { font-size: 12px; color: #6b7280; margin-left: 4px; white-space: nowrap; }
+    .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+        appearance: none; border: 1px solid #d1d5db; background: #ffffff;
+        padding: 7px 10px; border-radius: 5px; font-size: 14px;
+        line-height: 1; cursor: pointer; color: #1f2937;
+        font-family: 'Poppins', sans-serif;
+    }
+    .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+    .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f9fafb; }
+    /* Style for disabled save button */
+    .ribbon .btn:disabled {
+        background-color: #e5e7eb;
+        color: #9ca3af;
+        cursor: not-allowed;
+    }
+    .ribbon .btn.active, .ribbon .btn-square.active {
+        background: var(--objective, #5d4a9c); color: white; border-color: var(--objective, #5d4a9c);
+    }
+    .ribbon .sep { width: 1px; background: #d1d5db; margin: 0 6px; align-self: stretch; }
+    .ribbon .grow { flex: 1 1 auto; }
+    .ribbon .pill {
+        font-size: 12px; padding: 4px 8px; border-radius: 999px;
+        border: 1px solid #d1d5db;
+        background: #ffffff; color: #6b7280;
+    }
+    .editable-area {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.6;
+        background: transparent;
+        padding: 4px;
+        min-height: 24px; /* Matches short row height */
+        cursor: text;
+        box-sizing: border-box;
+    }
+    .editable-area:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--objective, #5d4a9c);
+        border-radius: 4px;
+    }
+    .editable-area[data-placeholder]:empty::before {
+        content: attr(data-placeholder);
+        color: #999;
+        pointer-events: none;
+        font-style: italic;
+    }
+    /* Ensure tall editable areas grow */
+    .stage-row.tall .editable-area {
+        min-height: 80px;
+    }
+    
+    /* --- NEW: Modal Styles --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background-color: white; padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; text-align: center; position: relative; font-family: 'Poppins', sans-serif;
+    }
+    .modal-close-btn {
+      position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer; color: #888;
+    }
+    .modal-content h2 { margin-top: 0; margin-bottom: 15px; }
+    .modal-content p { margin-bottom: 20px; color: #555; }
+    .modal-content input[type="text"] {
+      box-sizing: border-box; width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;
+    }
+    .modal-content button {
+      background-color: #5d4a9c; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%;
+    }
+    .modal-content button:hover { background-color: #4a3a7c; }
+    .modal-content button:disabled { background-color: #a0a0a0; cursor: not-allowed; }
+    #saveStatus { margin-top: 15px; font-size: 14px; min-height: 18px; }
 
+    /* Loading indicator */
+    .loading-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    
+    .loading-spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #5d4a9c;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+
+<!-- Loading Indicator -->
+<div id="loadingIndicator" class="loading-indicator" style="display: none;">
+  <div class="loading-spinner"></div>
+</div>
 
 <select id="theme-select" class="no-print">
   <option value="">Select Theme</option>
@@ -482,127 +541,213 @@ textarea:focus, textarea:not(:placeholder-shown) {
   <option value="earthy">Earthy</option>
   <option value="neon">Neon</option>
   <option value="elegant">Elegant</option>
-
 </select>
 
+<div class="container">
+  <div class="header">
+    <h1>LESSON PLAN</h1>
+    <span class="sub">Teaching is an art</span>
+  </div>
 
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <h1>LESSON PLAN</h1>
-      <span class="sub">Teaching is an art</span>
+  <div class="ribbon" id="ribbon">
+      <div class="group" aria-label="Font">
+        <select id="fontFamily" title="Font family">
+          <option>Poppins</option><option>Sacramento</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
+        </select>
+        <select id="fontSize" title="Font size">
+          <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
+        </select>
+        <button class="btn-square" id="fontDec" title="Decrease font size">A-</button>
+        <button class="btn-square" id="fontInc" title="Increase font size">A+</button>
+      </div>
+
+      <div class="group" aria-label="Emphasis">
+        <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+        <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+        <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+        <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+        <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
+        <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
+      </div>
+
+      <div class="group" aria-label="Colors">
+        <label class="label" for="foreColor">Text</label>
+        <input type="color" id="foreColor" title="Text color" value="#3d4852">
+        <span class="sep"></span>
+        <label class="label" for="hiliteColor">Highlight</label>
+        <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+      </div>
+
+      <div class="group" aria-label="Paragraph">
+        <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+        <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+        <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+        <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+        <span class="sep"></span>
+        <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+        <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+        <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
+        <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
+      </div>
+
+      <div class="group" aria-label="Actions">
+        <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
+      </div>
+      
+      <div class="group" aria-label="File">
+          <button class="btn" id="newPlanBtn" title="Create a new lesson plan"><i class="fas fa-file"></i> New</button>
+          <button class="btn" id="savePlanBtn" title="You must be logged in to save" disabled><i class="fas fa-save"></i> Save Plan</button>
+      </div>
+
+      <div class="grow"></div>
+
+      <div class="group">
+        <span class="pill" id="wordCount">0 words</span>
+        <span class="pill" id="selectionInfo">No selection</span>
+      </div>
+  </div>
+
+  <div class="row">
+    <span>Primary school: <input type="text" id="primarySchoolInput"></span>
+    <span>Teacher <input type="text" id="teacherInput"></span>
+  </div>
+
+  <div class="three-col">
+    <div class="section teal mini">
+      <h2>LEVEL</h2>
+      <div class="content">
+        <select id="level">
+          <option value="">Select level</option>
+          <option value="3PS">3rd Level PS</option>
+          <option value="4PS">4th Level PS</option>
+          <option value="5PS">5th Level PS</option>
+        </select>
+      </div>
     </div>
 
-    <!-- Ribbon Editor -->
-    <div class="ribbon" id="ribbon">
-        <div class="group" aria-label="Font">
-          <select id="fontFamily" title="Font family">
-            <option>Poppins</option><option>Sacramento</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
-          </select>
-          <select id="fontSize" title="Font size">
-            <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
-          </select>
-          <button class="btn-square" id="fontDec" title="Decrease font size">A-</button>
-          <button class="btn-square" id="fontInc" title="Increase font size">A+</button>
-        </div>
-
-        <div class="group" aria-label="Emphasis">
-          <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
-          <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
-          <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
-          <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
-          <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
-          <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
-        </div>
-
-        <div class="group" aria-label="Colors">
-          <label class="label" for="foreColor">Text</label>
-          <input type="color" id="foreColor" title="Text color" value="#3d4852">
-          <span class="sep"></span>
-          <label class="label" for="hiliteColor">Highlight</label>
-          <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
-        </div>
-
-        <div class="group" aria-label="Paragraph">
-          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
-          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
-          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
-          <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
-          <span class="sep"></span>
-          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
-          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
-          <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
-          <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
-        </div>
-
-        <div class="group" aria-label="Actions">
-          <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
-        </div>
-
-        <div class="grow"></div>
-
-        <div class="group">
-          <span class="pill" id="wordCount">0 words</span>
-          <span class="pill" id="selectionInfo">No selection</span>
-        </div>
+    <div class="section orange mini">
+      <h2>NUMBER OF LEARNERS</h2>
+      <div class="content">
+        <input type="number" placeholder="e.g. 30" id="learnersInput">
+      </div>
     </div>
 
-
-    <!-- Lesson field -->
-    <div class="row">
-      <span>Primary school: <input type="text"></span>
-      <span>Teacher <input type="text"></span>
-    </div>
-
-    <!-- Three mini sections -->
-<div class="three-col">
-  <div class="section teal mini">
-    <h2>LEVEL</h2>
-    <div class="content">
-      <select id="level">
-        <option value="">Select level</option>
-        <option value="3PS">3rd Level PS</option>
-        <option value="4PS">4th Level PS</option>
-        <option value="5PS">5th Level PS</option>
-      </select>
+    <div class="section green mini">
+      <h2>SEQUENCE</h2>
+      <div class="content">
+        <select id="sequence">
+          <option value="">Select sequence</option>
+        </select>
+      </div>
     </div>
   </div>
 
-  <div class="section orange mini">
-    <h2>NUMBER OF LEARNERS</h2>
-    <div class="content">
-      <input type="number" placeholder="e.g. 30">
+  <div class="two-col">
+    <div class="section blue mini">
+      <h2>SECTION</h2>
+      <div class="content">
+        <select id="section">
+          <option value="">Select section</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section pink mini">
+      <h2>SESSION</h2>
+      <div class="content">
+        <select id="session">
+          <option value="">Select session</option>
+        </select>
+      </div>
     </div>
   </div>
 
-  <div class="section green mini">
-    <h2>SEQUENCE</h2>
+  <div class="section violet mini">
+    <h2>Session objective(s):</h2>
     <div class="content">
-      <select id="sequence">
-        <option value="">Select sequence</option>
-      </select>
+      <div contenteditable="true" class="editable-area no-underline-print" id="objective-area" data-placeholder="By the end of the lesson..."></div>
     </div>
+  </div>
+
+  <div class="two-col">
+    <div class="section purple mini">
+      <h2>TARGET COMPETENCIES</h2>
+      <div class="content checkboxes inline" id="competencies-group">
+        <label><input type="checkbox" value="Interact"> Interact</label>
+        <label><input type="checkbox" value="Interpret"> Interpret</label>
+        <label><input type="checkbox" value="Produce"> Produce</label>
+      </div>
+    </div>
+
+    <div class="section teal mini">
+      <h2>TEACHING MATERIALS</h2>
+      <div class="content checkboxes inline" id="materials-group">
+        <label><input type="checkbox" value="Textbook"> Textbook</label>
+        <label><input type="checkbox" value="W.B"> W.B</label>
+      </div>
+    </div>
+  </div>
+
+  <table class="lesson-plan">
+    <thead>
+      <tr>
+        <th>STAGES</th>
+        <th>PROCEDURE / TASKS</th>
+        <th>INTERACTION</th>
+        <th>TIME</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="stage-row short">
+        <td>Warmer</td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="warmer-proc-area" data-placeholder="Write your Warmer procedure here..."></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="warmer-int-area" data-placeholder="T -> T"></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="warmer-time-area" data-placeholder="5 min"></div></td>
+      </tr>
+      <tr class="stage-row tall">
+        <td>Install resources</td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="install-proc-area" data-placeholder="Write your Install resources procedure here..."></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="install-int-area" data-placeholder="T -> Ps"></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="install-time-area" data-placeholder="20 min"></div></td>
+      </tr>
+      <tr class="stage-row short">
+        <td>Assessment</td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="assessment-proc-area" data-placeholder="Write your assessment procedure here..."></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="assessment-int-area" data-placeholder="P -> P"></div></td>
+        <td><div contenteditable="true" class="editable-area no-underline-print" id="assessment-time-area" data-placeholder="15 min"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div class="section violet mini">
+      <h2>ACTIVITY 1</h2>
+      <div class="content">
+       <div contenteditable="true" class="editable-area no-underline-print" id="activity1-area" data-placeholder="Write activity 1 here..."></div>
+      </div>
+    </div>
+
+    <div class="section pink mini">
+      <h2>ACTIVITY 2</h2>
+      <div class="content">
+       <div contenteditable="true" class="editable-area no-underline-print" id="activity2-area" data-placeholder="Write activity 2 here..."></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Success is the sum of small efforts, repeated day in and day out.
   </div>
 </div>
 
-<!-- Other sections -->
-<div class="two-col">
-  <div class="section blue mini">
-    <h2>SECTION</h2>
-    <div class="content">
-      <select id="section">
-        <option value="">Select section</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="section pink mini">
-    <h2>SESSION</h2>
-    <div class="content">
-      <select id="session">
-        <option value="">Select session</option>
-      </select>
-    </div>
+<div id="saveModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <span class="modal-close-btn">&times;</span>
+    <h2>Save Lesson Plan</h2>
+    <p>Please enter a name for your lesson plan.</p>
+    <input type="text" id="planNameInput" placeholder="e.g., Grade 4 - Week 5 - Grammar" />
+    <button id="confirmSaveBtn">Save</button>
+    <div id="saveStatus"></div>
   </div>
 </div>
 
@@ -893,88 +1038,7 @@ sectionSelect.addEventListener("change", () => {
 });
 </script>
 
-    <div class="section violet mini">
-      <h2>Session objective(s):</h2>
-      <div class="content">
-        <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="By the end of the lesson..."></div>
-      </div>
-    </div>
-
-    <!-- Competencies & Materials -->
-    <div class="two-col">
-      <div class="section purple mini">
-        <h2>TARGET COMPETENCIES</h2>
-        <div class="content checkboxes inline">
-          <label><input type="checkbox"> Interact</label>
-          <label><input type="checkbox"> Interpret</label>
-          <label><input type="checkbox"> Produce</label>
-        </div>
-      </div>
-
-      <div class="section teal mini">
-        <h2>TEACHING MATERIALS</h2>
-        <div class="content checkboxes inline">
-          <label><input type="checkbox"> Textbook</label>
-          <label><input type="checkbox"> W.B</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lesson plan table -->
-    <table class="lesson-plan">
-      <thead>
-        <tr>
-          <th>STAGES</th>
-          <th>PROCEDURE / TASKS</th>
-          <th>INTERACTION</th>
-          <th>TIME</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="stage-row short">
-          <td>Warmer</td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your Warmer procedure here..."></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="T -> T"></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="5 min"></div></td>
-        </tr>
-        <tr class="stage-row tall">
-          <td>Install resources</td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your Install resources procedure here..."></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="T -> Ps"></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="20 min"></div></td>
-        </tr>
-        <tr class="stage-row short">
-          <td>Assessment</td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write your assessment procedure here..."></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="P -> P"></div></td>
-          <td><div contenteditable="true" class="editable-area no-underline-print" data-placeholder="15 min"></div></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Activities -->
-    <div class="two-col">
-      <div class="section violet mini">
-        <h2>ACTIVITY 1</h2>
-        <div class="content">
-         <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write activity 1 here..."></div>
-        </div>
-      </div>
-
-      <div class="section pink mini">
-        <h2>ACTIVITY 2</h2>
-        <div class="content">
-         <div contenteditable="true" class="editable-area no-underline-print" data-placeholder="Write activity 2 here..."></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      Success is the sum of small efforts, repeated day in and day out.
-    </div>
-  </div>
-
-  <script>
+<script>
  const themes = {
   green: {
     '--level': '#2e7d32',
@@ -1080,7 +1144,6 @@ sectionSelect.addEventListener("change", () => {
     '--sequence': '#e27397',
     '--objective': '#c94b6f'
   },
-
 
   brown: {
     '--level': '#4e342e',
@@ -1260,7 +1323,6 @@ sectionSelect.addEventListener("change", () => {
     '--sequence': '#37474f',   // slate grey
     '--objective': '#880e4f'   // deep magenta
   }
-
 };
 
     const select = document.getElementById('theme-select');
@@ -1394,6 +1456,353 @@ sectionSelect.addEventListener("change", () => {
     document.addEventListener('selectionchange', updateStatus);
     document.querySelector('.container').addEventListener('keyup', updateStatus);
     document.querySelector('.container').addEventListener('mouseup', updateStatus);
+  </script>
+
+  <script type="module">
+    // --- IMPORT FIREBASE MODULES ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // --- FIREBASE CONFIGURATION ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    // --- INITIALIZE FIREBASE ---
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    
+    // --- DOM ELEMENTS ---
+    const saveButton = document.getElementById('savePlanBtn');
+    const newButton = document.getElementById('newPlanBtn');
+    const saveModal = document.getElementById('saveModal');
+    const closeModalBtn = document.querySelector('.modal-close-btn');
+    const planNameInput = document.getElementById('planNameInput');
+    const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+    const saveStatusEl = document.getElementById('saveStatus');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    // --- FORM ELEMENTS ---
+    const primarySchoolInput = document.getElementById('primarySchoolInput');
+    const teacherInput = document.getElementById('teacherInput');
+    const levelSelect = document.getElementById('level');
+    const learnersInput = document.getElementById('learnersInput');
+    const sequenceSelect = document.getElementById('sequence');
+    const sectionSelect = document.getElementById('section');
+    const sessionSelect = document.getElementById('session');
+    const objectiveArea = document.getElementById('objective-area');
+    const competenciesGroup = document.getElementById('competencies-group');
+    const materialsGroup = document.getElementById('materials-group');
+    
+    // Table cells
+    const warmerProcArea = document.getElementById('warmer-proc-area');
+    const warmerIntArea = document.getElementById('warmer-int-area');
+    const warmerTimeArea = document.getElementById('warmer-time-area');
+    const installProcArea = document.getElementById('install-proc-area');
+    const installIntArea = document.getElementById('install-int-area');
+    const installTimeArea = document.getElementById('install-time-area');
+    const assessmentProcArea = document.getElementById('assessment-proc-area');
+    const assessmentIntArea = document.getElementById('assessment-int-area');
+    const assessmentTimeArea = document.getElementById('assessment-time-area');
+    
+    // Activities
+    const activity1Area = document.getElementById('activity1-area');
+    const activity2Area = document.getElementById('activity2-area');
+
+    let currentUser = null;
+    let currentPlanId = null;
+    let isEditMode = false;
+
+    // Show loading indicator
+    function showLoading() {
+      loadingIndicator.style.display = 'flex';
+    }
+
+    // Hide loading indicator
+    function hideLoading() {
+      loadingIndicator.style.display = 'none';
+    }
+
+    // Clear all form fields
+    function clearForm() {
+      primarySchoolInput.value = '';
+      teacherInput.value = '';
+      levelSelect.value = '';
+      learnersInput.value = '';
+      sequenceSelect.value = '';
+      sectionSelect.value = '';
+      sessionSelect.value = '';
+      objectiveArea.innerHTML = '';
+      warmerProcArea.innerHTML = '';
+      warmerIntArea.innerHTML = '';
+      warmerTimeArea.innerHTML = '';
+      installProcArea.innerHTML = '';
+      installIntArea.innerHTML = '';
+      installTimeArea.innerHTML = '';
+      assessmentProcArea.innerHTML = '';
+      assessmentIntArea.innerHTML = '';
+      assessmentTimeArea.innerHTML = '';
+      activity1Area.innerHTML = '';
+      activity2Area.innerHTML = '';
+      
+      // Uncheck all checkboxes
+      document.querySelectorAll('#competencies-group input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      document.querySelectorAll('#materials-group input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      currentPlanId = null;
+      isEditMode = false;
+    }
+
+    // Collect form data
+    function collectFormData() {
+      // Get selected competencies
+      const competencies = [];
+      document.querySelectorAll('#competencies-group input[type="checkbox"]:checked').forEach(checkbox => {
+        competencies.push(checkbox.value);
+      });
+      
+      // Get selected materials
+      const materials = [];
+      document.querySelectorAll('#materials-group input[type="checkbox"]:checked').forEach(checkbox => {
+        materials.push(checkbox.value);
+      });
+      
+      return {
+        primarySchool: primarySchoolInput.value,
+        teacher: teacherInput.value,
+        level: levelSelect.value,
+        learners: learnersInput.value,
+        sequence: sequenceSelect.value,
+        section: sectionSelect.value,
+        session: sessionSelect.value,
+        objective: objectiveArea.innerHTML,
+        competencies: competencies,
+        materials: materials,
+        stages: {
+          warmer: {
+            procedure: warmerProcArea.innerHTML,
+            interaction: warmerIntArea.innerHTML,
+            time: warmerTimeArea.innerHTML
+          },
+          install: {
+            procedure: installProcArea.innerHTML,
+            interaction: installIntArea.innerHTML,
+            time: installTimeArea.innerHTML
+          },
+          assessment: {
+            procedure: assessmentProcArea.innerHTML,
+            interaction: assessmentIntArea.innerHTML,
+            time: assessmentTimeArea.innerHTML
+          }
+        },
+        activities: {
+          activity1: activity1Area.innerHTML,
+          activity2: activity2Area.innerHTML
+        },
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+    }
+
+    // Populate form with data
+    function populateFormData(data) {
+      primarySchoolInput.value = data.primarySchool || '';
+      teacherInput.value = data.teacher || '';
+      levelSelect.value = data.level || '';
+      learnersInput.value = data.learners || '';
+      
+      // Trigger change events to populate dependent dropdowns
+      levelSelect.dispatchEvent(new Event('change'));
+      
+      // Set sequence, section, and session after a delay to ensure dropdowns are populated
+      setTimeout(() => {
+        sequenceSelect.value = data.sequence || '';
+        sequenceSelect.dispatchEvent(new Event('change'));
+        
+        setTimeout(() => {
+          sectionSelect.value = data.section || '';
+          sectionSelect.dispatchEvent(new Event('change'));
+          
+          setTimeout(() => {
+            sessionSelect.value = data.session || '';
+          }, 100);
+        }, 100);
+      }, 100);
+      
+      objectiveArea.innerHTML = data.objective || '';
+      warmerProcArea.innerHTML = data.stages?.warmer?.procedure || '';
+      warmerIntArea.innerHTML = data.stages?.warmer?.interaction || '';
+      warmerTimeArea.innerHTML = data.stages?.warmer?.time || '';
+      installProcArea.innerHTML = data.stages?.install?.procedure || '';
+      installIntArea.innerHTML = data.stages?.install?.interaction || '';
+      installTimeArea.innerHTML = data.stages?.install?.time || '';
+      assessmentProcArea.innerHTML = data.stages?.assessment?.procedure || '';
+      assessmentIntArea.innerHTML = data.stages?.assessment?.interaction || '';
+      assessmentTimeArea.innerHTML = data.stages?.assessment?.time || '';
+      activity1Area.innerHTML = data.activities?.activity1 || '';
+      activity2Area.innerHTML = data.activities?.activity2 || '';
+      
+      // Set checkboxes
+      document.querySelectorAll('#competencies-group input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = data.competencies && data.competencies.includes(checkbox.value);
+      });
+      
+      document.querySelectorAll('#materials-group input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = data.materials && data.materials.includes(checkbox.value);
+      });
+    }
+
+    // Check if user is authenticated
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            saveButton.disabled = false;
+            saveButton.title = "Save your lesson plan";
+            
+            // Check if we need to load a plan
+            const planToLoadId = sessionStorage.getItem('planToLoadId');
+            if (planToLoadId) {
+                loadPlan(planToLoadId);
+                sessionStorage.removeItem('planToLoadId');
+            }
+        } else {
+            currentUser = null;
+            saveButton.disabled = true;
+            saveButton.title = "You must be logged in to save";
+        }
+    });
+
+    // Load a lesson plan
+    async function loadPlan(planId) {
+      if (!currentUser) return;
+      
+      showLoading();
+      
+      try {
+        const planRef = doc(db, "users", currentUser.uid, "lessonPlans", planId);
+        const planDoc = await getDoc(planRef);
+        
+        if (planDoc.exists()) {
+          const planData = planDoc.data();
+          currentPlanId = planId;
+          isEditMode = true;
+          populateFormData(planData);
+        } else {
+          console.error("No such plan!");
+          alert("Lesson plan not found.");
+        }
+      } catch (error) {
+        console.error("Error loading plan:", error);
+        alert("Could not load the lesson plan. Please try again.");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // Save a lesson plan
+    async function savePlan(planName) {
+      if (!currentUser || !planName.trim()) return;
+      
+      showLoading();
+      
+      try {
+        const formData = collectFormData();
+        formData.planName = planName.trim();
+        
+        if (isEditMode && currentPlanId) {
+          // Update existing plan
+          const planRef = doc(db, "users", currentUser.uid, "lessonPlans", currentPlanId);
+          await updateDoc(planRef, {
+            ...formData,
+            updatedAt: serverTimestamp()
+          });
+          saveStatusEl.textContent = "Lesson plan updated successfully!";
+          saveStatusEl.style.color = "green";
+        } else {
+          // Create new plan
+          const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
+          const docRef = await addDoc(plansRef, formData);
+          currentPlanId = docRef.id;
+          isEditMode = true;
+          saveStatusEl.textContent = "Lesson plan saved successfully!";
+          saveStatusEl.style.color = "green";
+        }
+        
+        // Close modal after a short delay
+        setTimeout(() => {
+          saveModal.style.display = 'none';
+          planNameInput.value = '';
+          saveStatusEl.textContent = '';
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Error saving plan:", error);
+        saveStatusEl.textContent = "Error saving lesson plan. Please try again.";
+        saveStatusEl.style.color = "red";
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // --- EVENT LISTENERS ---
+    saveButton.addEventListener('click', () => {
+      saveModal.style.display = 'flex';
+      planNameInput.focus();
+    });
+
+    newButton.addEventListener('click', () => {
+      if (confirm('Creating a new plan will clear all current data. Continue?')) {
+        clearForm();
+      }
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      saveModal.style.display = 'none';
+      planNameInput.value = '';
+      saveStatusEl.textContent = '';
+    });
+
+    confirmSaveBtn.addEventListener('click', () => {
+      const planName = planNameInput.value.trim();
+      if (planName) {
+        savePlan(planName);
+      } else {
+        saveStatusEl.textContent = "Please enter a name for your lesson plan.";
+        saveStatusEl.style.color = "red";
+      }
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === saveModal) {
+        saveModal.style.display = 'none';
+        planNameInput.value = '';
+        saveStatusEl.textContent = '';
+      }
+    });
+
+    // Handle Enter key in plan name input
+    planNameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const planName = planNameInput.value.trim();
+        if (planName) {
+          savePlan(planName);
+        }
+      }
+    });
   </script>
 </body>
 </html>
