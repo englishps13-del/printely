@@ -231,6 +231,69 @@
       background-color: #374151;
       color: #d1d5db;
     }
+
+    /* History item styles */
+    .history-item {
+      background: white;
+      dark:bg-gray-800;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .history-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .history-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      dark:border-gray-700;
+    }
+    
+    .history-title {
+      font-weight: 600;
+      color: #1f2937;
+      dark:text-white;
+    }
+    
+    .history-date {
+      font-size: 0.75rem;
+      color: #6b7280;
+      dark:text-gray-400;
+    }
+    
+    .history-details {
+      padding: 0.75rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+    
+    .history-detail {
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: #4b5563;
+      dark:text-gray-300;
+    }
+    
+    .history-detail i {
+      margin-right: 0.5rem;
+      color: #6b7280;
+      dark:text-gray-400;
+    }
+    
+    .history-actions {
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      background: #f9fafb;
+      dark:bg-gray-700;
+    }
   </style>
 
 </head>
@@ -495,14 +558,49 @@
           
           const date = plan.createdAt ? plan.createdAt.toDate().toLocaleDateString() : 'N/A';
           
+          // Create a more detailed history item
           const planElement = document.createElement('div');
-          planElement.className = "bg-white dark:bg-gray-800 p-3 rounded-lg flex items-center justify-between shadow-sm";
+          planElement.className = "history-item bg-white dark:bg-gray-800 rounded-lg shadow-sm";
+          
+          // Get competencies as a comma-separated string
+          const competencies = plan.competencies && plan.competencies.length > 0 
+            ? plan.competencies.join(', ') 
+            : 'None specified';
+            
+          // Get materials as a comma-separated string
+          const materials = plan.materials && plan.materials.length > 0 
+            ? plan.materials.join(', ') 
+            : 'None specified';
+          
           planElement.innerHTML = `
-            <div>
-              <p class="font-bold text-gray-800 dark:text-gray-200">${plan.planName || 'Untitled Plan'}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Created on: ${date}</p>
+            <div class="history-header">
+              <div class="history-title">${plan.planName || 'Untitled Plan'}</div>
+              <div class="history-date">Created on: ${date}</div>
             </div>
-            <div class="flex items-center space-x-2">
+            <div class="history-details">
+              <div class="history-detail">
+                <i class="fas fa-users"></i>
+                <span>Capacity: ${plan.learners || 'Not specified'} learners</span>
+              </div>
+              <div class="history-detail">
+                <i class="fas fa-layer-group"></i>
+                <span>Level: ${plan.level || 'Not specified'}</span>
+              </div>
+              <div class="history-detail">
+                <i class="fas fa-book"></i>
+                <span>${plan.sequence || 'Not specified'}</span>
+              </div>
+              <div class="history-detail">
+                <i class="fas fa-bookmark"></i>
+                <span>${plan.section || 'Not specified'}</span>
+              </div>
+              <div class="history-detail">
+                <i class="fas fa-calendar-day"></i>
+                <span>${plan.session || 'Not specified'}</span>
+              </div>
+              
+            </div>
+            <div class="history-actions">
               <button data-id="${planId}" class="history-btn load-btn">Load</button>
               <button data-id="${planId}" class="history-btn delete-btn">Delete</button>
             </div>
