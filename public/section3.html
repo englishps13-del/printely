@@ -323,7 +323,7 @@
 
         // Save the user data to Firestore, including the new gender field
         await setDoc(doc(db, "users", user.uid), {
-          username: name,
+          username: username,
           email: email,
           gender: gender, // <-- The new field is added here
           createdAt: serverTimestamp()

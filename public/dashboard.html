@@ -158,6 +158,79 @@
       color: #ef4444;
     }
 
+    /* Loading indicator */
+    .loading-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    
+    .dark .loading-indicator {
+      background-color: rgba(30, 30, 46, 0.8);
+    }
+    
+    .loading-spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #5d4a9c;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Profile icon styles */
+    .profile-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .profile-icon.male {
+      background-color: #dbeafe;
+      color: #3b82f6;
+    }
+    
+    .profile-icon.female {
+      background-color: #fce7f3;
+      color: #ec4899;
+    }
+    
+    .profile-icon.default {
+      background-color: #f3f4f6;
+      color: #9ca3af;
+    }
+    
+    .dark .profile-icon.male {
+      background-color: #1e3a8a;
+      color: #93c5fd;
+    }
+    
+    .dark .profile-icon.female {
+      background-color: #831843;
+      color: #f9a8d4;
+    }
+    
+    .dark .profile-icon.default {
+      background-color: #374151;
+      color: #d1d5db;
+    }
   </style>
 
 </head>
@@ -166,6 +239,17 @@
   <div class="shape shape-1"></div>
   <div class="shape shape-2"></div>
   <div class="shape shape-3"></div>
+
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Success!</span>
+  </div>
 
   <nav class="sticky top-4 max-w-5xl mx-auto z-50 p-4">
     <div class="container mx-auto flex justify-between items-center">
@@ -188,9 +272,9 @@
     <div class="main-card w-full max-w-2xl mx-auto p-8 md:p-10 rounded-2xl shadow-lg">
       
       <section class="flex flex-col items-center justify-center mb-8 text-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-24 h-24 mb-4 text-gray-400" viewBox="0 0 16 16">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-        </svg>
+        <div class="profile-icon default" id="profileIcon">
+          <i class="fas fa-user fa-3x"></i>
+        </div>
         <h2 class="text-4xl font-bold min-h-[44px]" id="userName">Welcome Member</h2>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Member since: <span id="joinDate">N/A</span></p>
       </section>
@@ -256,17 +340,11 @@
     </div>
   </main>
   
-  <!-- Toast notification container -->
-  <div id="toast" class="toast">
-    <i class="fas fa-check-circle"></i>
-    <span id="toast-message">Success!</span>
-  </div>
-  
   <script type="module">
     // --- IMPORT FIREBASE MODULES ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot, deleteDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     // --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
@@ -283,6 +361,18 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    
+    // Enable offline persistence
+    try {
+      await enableIndexedDbPersistence(db);
+      console.log("Offline persistence enabled");
+    } catch (err) {
+      if (err.code === 'failed-precondition') {
+        console.log("Multiple tabs open, persistence can only be enabled in one tab at a time");
+      } else if (err.code === 'unimplemented') {
+        console.log("The current browser does not support persistence");
+      }
+    }
 
     // --- DOM ELEMENTS ---
     const userNameEl = document.getElementById('userName');
@@ -298,10 +388,12 @@
     const passwordForm = document.getElementById('change-password-form');
     const passwordMessageEl = document.getElementById('password-message');
     const genderTextEl = document.getElementById('genderText'); 
-    const profileSvg = document.querySelector('.main-card svg'); 
+    const profileIcon = document.getElementById('profileIcon'); 
     const historyContainer = document.getElementById('history-container');
+    const loadingHistoryEl = document.getElementById('loading-history');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
+    const loadingIndicator = document.getElementById('loadingIndicator');
 
     // --- ICONS ---
     const eyeIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>`;
@@ -338,15 +430,25 @@
       }, 3100);
     }
 
+    // --- Show loading indicator ---
+    function showLoading() {
+      loadingIndicator.style.display = 'flex';
+    }
+
+    // --- Hide loading indicator ---
+    function hideLoading() {
+      loadingIndicator.style.display = 'none';
+    }
+
     // --- Helper functions ---
     const updateProfileColor = (gender) => {
-      profileSvg.classList.remove('text-blue-500', 'text-pink-500', 'text-gray-400', 'dark:text-gray-500');
-      profileSvg.classList.add(genderColors[gender] || genderColors['default']);
+      profileIcon.classList.remove('male', 'female', 'default');
+      profileIcon.classList.add(gender || 'default');
     };
     
     const displaySavedGender = (gender) => {
       if (gender === 'default' || !gender) {
-        genderTextEl.textContent = "Male / Female";
+        genderTextEl.textContent = "Not specified";
       } else {
         genderTextEl.textContent = gender.charAt(0).toUpperCase() + gender.slice(1);
       }
@@ -381,6 +483,7 @@
 
       onSnapshot(q, (snapshot) => {
         historyContainer.innerHTML = ''; // Clear previous content
+        
         if (snapshot.empty) {
           historyContainer.innerHTML = `<p class="text-gray-500 dark:text-gray-400 text-center">You have no saved lesson plans yet.</p>`;
           return;
@@ -396,7 +499,7 @@
           planElement.className = "bg-white dark:bg-gray-800 p-3 rounded-lg flex items-center justify-between shadow-sm";
           planElement.innerHTML = `
             <div>
-              <p class="font-bold text-gray-800 dark:text-gray-200">${plan.planName}</p>
+              <p class="font-bold text-gray-800 dark:text-gray-200">${plan.planName || 'Untitled Plan'}</p>
               <p class="text-xs text-gray-500 dark:text-gray-400">Created on: ${date}</p>
             </div>
             <div class="flex items-center space-x-2">
@@ -406,6 +509,9 @@
           `;
           historyContainer.appendChild(planElement);
         });
+      }, (error) => {
+        console.error("Error loading history:", error);
+        historyContainer.innerHTML = `<p class="text-red-500 dark:text-red-400 text-center">Error loading lesson plans. Please try again.</p>`;
       });
     };
 
@@ -433,14 +539,37 @@
             let userDocSnap = await getDoc(userDocRef);
 
             if (!userDocSnap.exists()) {
-                await setDoc(userDocRef, { email: user.email, gender: 'default', createdAt: serverTimestamp() });
+                // Create user document if it doesn't exist
+                await setDoc(userDocRef, { 
+                  email: user.email, 
+                  gender: 'default', 
+                  createdAt: serverTimestamp() 
+                });
                 userDocSnap = await getDoc(userDocRef);
             }
 
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data();
-                userNameEl.textContent = userData.username || 'Welcome Member';
-                joinDateEl.textContent = userData.createdAt?.toDate ? userData.createdAt.toDate().toLocaleDateString() : new Date().toLocaleDateString();
+                
+                // Display username or fallback to email
+                if (userData.username) {
+                    userNameEl.textContent = userData.username;
+                } else if (user.displayName) {
+                    userNameEl.textContent = user.displayName;
+                } else {
+                    // Extract username from email if no display name is set
+                    const emailUsername = user.email.split('@')[0];
+                    userNameEl.textContent = emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
+                }
+                
+                // Display join date
+                if (userData.createdAt?.toDate) {
+                    joinDateEl.textContent = userData.createdAt.toDate().toLocaleDateString();
+                } else {
+                    joinDateEl.textContent = new Date().toLocaleDateString();
+                }
+                
+                // Display gender
                 const savedGender = userData.gender || 'default';
                 updateProfileColor(savedGender);
                 displaySavedGender(savedGender);
@@ -472,12 +601,15 @@
       if (target.classList.contains('delete-btn')) {
         if (confirm("Are you sure you want to delete this lesson plan? This action cannot be undone.")) {
           try {
+            showLoading();
             const docRef = doc(db, "users", user.uid, "lessonPlans", planId);
             await deleteDoc(docRef);
             showToast("Lesson plan deleted successfully!", "success");
           } catch (error) {
             console.error("Error deleting plan:", error);
             showToast("Could not delete the plan. Please try again.", "error");
+          } finally {
+            hideLoading();
           }
         }
       }
@@ -511,6 +643,7 @@
         }
         
         try {
+            showLoading();
             // Re-authenticate user before password change
             const credential = EmailAuthProvider.credential(user.email, currentPassword);
             await reauthenticateWithCredential(user, credential);
@@ -540,6 +673,8 @@
             }
             
             passwordMessageEl.className = 'text-sm text-center mt-2 text-red-500';
+        } finally {
+            hideLoading();
         }
     });
 

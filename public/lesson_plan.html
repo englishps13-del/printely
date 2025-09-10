@@ -511,6 +511,50 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      color: #333;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.success {
+      border-left: 4px solid #10b981;
+    }
+    
+    .toast.error {
+      border-left: 4px solid #ef4444;
+    }
+    
+    .toast i {
+      margin-right: 12px;
+      font-size: 20px;
+    }
+    
+    .toast.success i {
+      color: #10b981;
+    }
+    
+    .toast.error i {
+      color: #ef4444;
+    }
   </style>
 </head>
 <body>
@@ -518,6 +562,12 @@
 <!-- Loading Indicator -->
 <div id="loadingIndicator" class="loading-indicator" style="display: none;">
   <div class="loading-spinner"></div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toast-message">Success!</span>
 </div>
 
 <select id="theme-select" class="no-print">
@@ -1462,7 +1512,7 @@ sectionSelect.addEventListener("change", () => {
     // --- IMPORT FIREBASE MODULES ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp, updateDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     // --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
@@ -1480,6 +1530,18 @@ sectionSelect.addEventListener("change", () => {
     const auth = getAuth(app);
     const db = getFirestore(app);
     
+    // Enable offline persistence
+    try {
+      await enableIndexedDbPersistence(db);
+      console.log("Offline persistence enabled");
+    } catch (err) {
+      if (err.code === 'failed-precondition') {
+        console.log("Multiple tabs open, persistence can only be enabled in one tab at a time");
+      } else if (err.code === 'unimplemented') {
+        console.log("The current browser does not support persistence");
+      }
+    }
+    
     // --- DOM ELEMENTS ---
     const saveButton = document.getElementById('savePlanBtn');
     const newButton = document.getElementById('newPlanBtn');
@@ -1489,6 +1551,8 @@ sectionSelect.addEventListener("change", () => {
     const confirmSaveBtn = document.getElementById('confirmSaveBtn');
     const saveStatusEl = document.getElementById('saveStatus');
     const loadingIndicator = document.getElementById('loadingIndicator');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
     
     // --- FORM ELEMENTS ---
     const primarySchoolInput = document.getElementById('primarySchoolInput');
@@ -1529,6 +1593,30 @@ sectionSelect.addEventListener("change", () => {
     // Hide loading indicator
     function hideLoading() {
       loadingIndicator.style.display = 'none';
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      toastMessage.textContent = message;
+      toast.className = 'toast ' + type;
+      
+      // Update icon based on type
+      const icon = toast.querySelector('i');
+      if (type === 'success') {
+        icon.className = 'fas fa-check-circle';
+      } else if (type === 'error') {
+        icon.className = 'fas fa-exclamation-circle';
+      }
+      
+      // Show toast
+      setTimeout(() => {
+        toast.classList.add('show');
+      }, 100);
+      
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3100);
     }
 
     // Clear all form fields
@@ -1612,7 +1700,7 @@ sectionSelect.addEventListener("change", () => {
           activity1: activity1Area.innerHTML,
           activity2: activity2Area.innerHTML
         },
-        createdAt: serverTimestamp(),
+        createdAt: isEditMode ? undefined : serverTimestamp(),
         updatedAt: serverTimestamp()
       };
     }
@@ -1700,13 +1788,14 @@ sectionSelect.addEventListener("change", () => {
           currentPlanId = planId;
           isEditMode = true;
           populateFormData(planData);
+          showToast("Lesson plan loaded successfully!", "success");
         } else {
           console.error("No such plan!");
-          alert("Lesson plan not found.");
+          showToast("Lesson plan not found.", "error");
         }
       } catch (error) {
         console.error("Error loading plan:", error);
-        alert("Could not load the lesson plan. Please try again.");
+        showToast("Could not load the lesson plan. Please try again.", "error");
       } finally {
         hideLoading();
       }
@@ -1729,16 +1818,14 @@ sectionSelect.addEventListener("change", () => {
             ...formData,
             updatedAt: serverTimestamp()
           });
-          saveStatusEl.textContent = "Lesson plan updated successfully!";
-          saveStatusEl.style.color = "green";
+          showToast("Lesson plan updated successfully!", "success");
         } else {
           // Create new plan
           const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
           const docRef = await addDoc(plansRef, formData);
           currentPlanId = docRef.id;
           isEditMode = true;
-          saveStatusEl.textContent = "Lesson plan saved successfully!";
-          saveStatusEl.style.color = "green";
+          showToast("Lesson plan saved successfully!", "success");
         }
         
         // Close modal after a short delay
@@ -1750,8 +1837,7 @@ sectionSelect.addEventListener("change", () => {
         
       } catch (error) {
         console.error("Error saving plan:", error);
-        saveStatusEl.textContent = "Error saving lesson plan. Please try again.";
-        saveStatusEl.style.color = "red";
+        showToast("Error saving lesson plan. Please try again.", "error");
       } finally {
         hideLoading();
       }
