@@ -1254,6 +1254,9 @@
     <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
         Logout
     </button>
+	<a href="dashboard.html" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+  Account Dashboard
+</a>
 </footer>
 
 <script>
@@ -1513,46 +1516,9 @@ onAuthStateChanged(auth, async (user) => {
     if (signupNavLink) {
         signupNavLink.style.display = 'none';
     }
-    // --- Feedback Form Submission ---
-if (feedbackForm) {
-  feedbackForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const commentText = commentTextarea.value.trim();
-    if (!commentText) return;
-
-    try {
-      // Ensure user is logged in
-      const user = auth.currentUser;
-      if (!user) {
-        alert("You must be logged in to comment.");
-        return;
-      }
-
-      // Get username from Firestore or fallback to email
-      const userDocRef = doc(db, "users", user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-      let username = user.email;
-      if (userDocSnap.exists()) {
-        username = userDocSnap.data().username || user.email;
-      }
-
-      // Save comment to Firestore
-      await addDoc(collection(db, "comments"), {
-        username: username,
-        commentText: commentText,
-        timestamp: serverTimestamp(),
-      });
-
-      // Clear textarea after submission
-      commentTextarea.value = "";
-      console.log("Comment submitted successfully!");
-    } catch (err) {
-      console.error("Error submitting comment:", err);
-      alert("Failed to submit comment. Try again.");
-    }
-  });
-}
+    
+    // *** FIX: Make the user info container visible ***
+    userInfoDiv.classList.remove('hidden');
 
     // 2. Update UI for logged-in state (enable feedback form)
     feedbackForm.style.display = 'block';
@@ -1578,15 +1544,24 @@ if (feedbackForm) {
         </p>
     `;
 
-    // 5. Display welcome message and logout button in Navbar
+    // 5. Display Account link with icon in Navbar
     userInfoDiv.innerHTML = `
-      <span class="font-medium text-sm md:text-base">Welcome, <strong>${username}</strong>!</span>
+      <a href="dashboard.html" title="Go to your account dashboard" class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 p-1 bg-gray-200 dark:bg-gray-600 rounded-full" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+          </svg>
+          <span class="font-medium text-sm md:text-base pr-2">Account</span>
+      </a>
     `;
 
-    // 6. Display functional logout button in Footer
+    // 6. MODIFIED: Display Dashboard and Logout buttons in Footer
     pageFooter.classList.remove('hidden');
     pageFooter.innerHTML = `
-        <button id="footer-logout-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-bold shadow-lg transform hover:scale-105">Sign Out</button>
+        <div class="flex justify-center items-center gap-4">
+            <a href="dashboard.html" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-bold shadow-lg transform hover:scale-105">Go to Dashboard</a>
+            <button id="footer-logout-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-bold shadow-lg transform hover:scale-105">Sign Out</button>
+        </div>
     `;
     document.getElementById("footer-logout-btn").addEventListener("click", () => signOut(auth));
 
@@ -1615,6 +1590,9 @@ if (feedbackForm) {
   } else {
     // --- USER IS LOGGED OUT ---
     
+    // *** FIX: Make the user info container visible ***
+    userInfoDiv.classList.remove('hidden');
+
     // 1. Restore the original generic header
     headerTextContainer.innerHTML = `
         <h2 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 animate-fade-in-down">
@@ -1645,7 +1623,8 @@ if (feedbackForm) {
     `;
   }
 });
-// Logout button logic
+// This logic is duplicated and can cause issues. It's better to keep it within the onAuthStateChanged scope.
+// However, per user request not to touch the logout button, I will leave this block, but the primary logic is the one in the footer.
 const logoutBtn = document.getElementById("logout-btn");
 
 if (logoutBtn) {

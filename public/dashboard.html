@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard – Printely</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class' // Enable class-based dark mode
+    };
+  </script>
+
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+      transition: background 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
+      overflow-x: hidden;
+    }
+    body.dark {
+      background: linear-gradient(to bottom right, #1e1b4b, #4c1d95);
+      color: #e0e7ff;
+    }
+    
+    /* Background shapes & Animations */
+    .shape {
+      position: absolute; opacity: 0.1; z-index: 0; animation: float 15s ease-in-out infinite;
+    }
+    .shape-1 { top: 10%; left: 15%; width: 150px; height: 150px; background: #a855f7; border-radius: 50%; animation-delay: 0s; }
+    .shape-2 { bottom: 5%; right: 10%; width: 200px; height: 200px; background: #8b5cf6; border-radius: 50%; animation-delay: -5s; }
+    .shape-3 { top: 40%; right: 20%; width: 100px; height: 100px; background: #6d28d9; border-radius: 50%; animation-delay: -10s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Navbar & Form Card Styling */
+    nav {
+      background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); border-radius: 12px;
+      position: relative; z-index: 20; transition: background 0.3s ease;
+    }
+    .dark nav {
+      background: rgba(30, 30, 46, 0.7);
+    }
+    .main-card {
+      background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); transition: background-color 0.5s ease;
+    }
+    .dark .main-card {
+      background-color: rgba(30, 27, 75, 0.8); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    /* Dark Mode Toggle CSS */
+    .dot { transition: transform 0.3s ease-in-out; }
+    input:checked + .bg-gray-300 ~ .dot { transform: translateX(1.5rem); }
+
+    /* Pulsating placeholder animation */
+    @keyframes pulsate {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    .pulsate-placeholder {
+        display: inline-block;
+        min-width: 120px;
+        min-height: 1.2rem;
+        background-color: #e5e7eb;
+        border-radius: 0.25rem;
+        animation: pulsate 1.5s ease-in-out infinite;
+    }
+    .dark .pulsate-placeholder {
+        background-color: #4b5563;
+    }
+
+    /* NEW: Accordion styles for Change Password */
+    .accordion-header {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+    .accordion-icon {
+      transition: transform 0.3s ease;
+    }
+    .accordion-header.active .accordion-icon {
+      transform: rotate(180deg);
+    }
+    .accordion-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+    }
+  </style>
+
+</head>
+<body class="transition-colors duration-500">
+
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+  <div class="shape shape-3"></div>
+
+  <nav class="sticky top-4 max-w-5xl mx-auto z-50 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="index.html" class="flex items-center space-x-2">
+        <span class="text-xl font-bold">Printely</span>
+      </a>
+      <div class="flex items-center space-x-4">
+        <label for="darkModeToggle" class="flex items-center cursor-pointer">
+          <div class="relative">
+            <input type="checkbox" id="darkModeToggle" class="sr-only" />
+            <div class="block bg-gray-300 dark:bg-gray-600 w-14 h-8 rounded-full"></div>
+            <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full dot"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-4 py-8">
+    <div class="main-card w-full max-w-2xl mx-auto p-8 md:p-10 rounded-2xl shadow-lg text-center">
+      
+      <section class="flex flex-col items-center justify-center mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-24 h-24 mb-4 text-gray-400 dark:text-gray-500" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        </svg>
+        <h2 class="text-4xl font-bold min-h-[44px]" id="userName"><span class="pulsate-placeholder h-10"></span></h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Member since: <span id="joinDate"><span class="pulsate-placeholder w-24"></span></span></p>
+      </section>
+      
+      <section class="bg-gray-100 dark:bg-gray-700 rounded-lg p-6 space-y-4 text-left mb-6">
+        <h3 class="text-xl font-semibold mb-4">Account Details</h3>
+        <div class="flex items-center">
+           <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+           <p class="text-gray-700 dark:text-gray-300">Email: <span id="userEmail" class="font-bold"><span class="pulsate-placeholder w-40"></span></span></p>
+        </div>
+        <div class="flex items-center">
+           <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+           <p class="text-gray-700 dark:text-gray-300">User ID:</p>
+           <div class="flex items-center ml-2">
+             <span id="userIdValue" class="font-mono text-sm tracking-tighter"><span class="pulsate-placeholder w-48"></span></span>
+             <button id="toggleUserIdBtn" class="ml-2 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200" aria-label="Toggle User ID Visibility"></button>
+           </div>
+        </div>
+      </section>
+
+      <section class="bg-gray-100 dark:bg-gray-700 rounded-lg text-left">
+        <div id="accordion-header" class="accordion-header p-6 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+            <h3 class="text-xl font-semibold">Change Password</h3>
+            <svg class="accordion-icon w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+        <div id="accordion-panel" class="accordion-panel">
+            <form id="change-password-form" class="p-6 border-t border-gray-200 dark:border-gray-600 space-y-4">
+                <input type="password" id="current-password" required placeholder="Current Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <input type="password" id="new-password" required placeholder="New Password (min. 6 characters)" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <input type="password" id="confirm-new-password" required placeholder="Confirm New Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Update Password</button>
+                <div id="password-message" class="text-sm text-center mt-2"></div>
+            </form>
+        </div>
+      </section>
+
+      <div class="text-center mt-4">
+          <a href="reset.html" class="text-sm text-purple-600 dark:text-purple-400 hover:underline">Forgot Password?</a>
+      </div>
+
+      <section class="mt-8 text-center">
+        <a href="index.html" class="inline-block w-full mb-4 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+          Back to Main Page
+        </a>
+        <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+          Log Out
+        </button>
+      </section>
+
+    </div>
+  </main>
+  
+  <script type="module">
+    // --- IMPORT FIREBASE MODULES ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // --- FIREBASE CONFIGURATION ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    // --- INITIALIZE FIREBASE ---
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- DOM ELEMENTS ---
+    const userNameEl = document.getElementById('userName');
+    const joinDateEl = document.getElementById('joinDate');
+    const userEmailEl = document.getElementById('userEmail');
+    const userIdValueEl = document.getElementById('userIdValue');
+    const toggleUserIdBtn = document.getElementById('toggleUserIdBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    // New Elements
+    const accordionHeader = document.getElementById('accordion-header');
+    const accordionPanel = document.getElementById('accordion-panel');
+    const passwordForm = document.getElementById('change-password-form');
+    const passwordMessageEl = document.getElementById('password-message');
+
+    // --- ICONS ---
+    const eyeIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>`;
+    const eyeSlashIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.673.123 2.458.35M18.828 4.172a9.96 9.96 0 013.714 7.828 9.96 9.96 0 01-3.714 7.828M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>`;
+
+    // --- DARK MODE ---
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+        body.classList.add('dark');
+        darkModeToggle.checked = true;
+    }
+    darkModeToggle.addEventListener('change', () => {
+        body.classList.toggle('dark');
+        localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // --- ACCORDION LOGIC ---
+    accordionHeader.addEventListener('click', () => {
+        accordionHeader.classList.toggle('active');
+        const isOpen = accordionPanel.style.maxHeight;
+        if (isOpen) {
+            accordionPanel.style.maxHeight = null;
+        } else {
+            accordionPanel.style.maxHeight = accordionPanel.scrollHeight + "px";
+        }
+    });
+
+    // --- AUTHENTICATION & DATA ---
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // Fetch and display user data
+            const uid = user.uid;
+            let isUserIdVisible = false;
+            const maskedUid = '•'.repeat(uid.length);
+            userIdValueEl.textContent = maskedUid;
+            toggleUserIdBtn.innerHTML = eyeIcon;
+            
+            toggleUserIdBtn.addEventListener('click', () => {
+                isUserIdVisible = !isUserIdVisible;
+                userIdValueEl.textContent = isUserIdVisible ? uid : maskedUid;
+                toggleUserIdBtn.innerHTML = isUserIdVisible ? eyeSlashIcon : eyeIcon;
+            });
+            userEmailEl.textContent = user.email;
+
+            const userDocSnap = await getDoc(doc(db, "users", uid));
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                userNameEl.textContent = userData.username || 'Welcome!';
+                if (userData.createdAt?.toDate) {
+                    joinDateEl.textContent = userData.createdAt.toDate().toLocaleDateString();
+                } else {
+                    joinDateEl.textContent = 'N/A';
+                }
+            } else {
+                userNameEl.textContent = "User Profile";
+            }
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+    // --- PASSWORD CHANGE FORM LOGIC ---
+    passwordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const currentPassword = e.target['current-password'].value;
+        const newPassword = e.target['new-password'].value;
+        const confirmPassword = e.target['confirm-new-password'].value;
+        const user = auth.currentUser;
+
+        // Clear previous messages
+        passwordMessageEl.textContent = '';
+        passwordMessageEl.className = 'text-sm text-center mt-2';
+
+        // Client-side validation
+        if (newPassword.length < 6) {
+            passwordMessageEl.textContent = 'New password must be at least 6 characters long.';
+            passwordMessageEl.classList.add('text-red-500');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            passwordMessageEl.textContent = 'New passwords do not match.';
+            passwordMessageEl.classList.add('text-red-500');
+            return;
+        }
+
+        try {
+            // Re-authenticate user for security
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            await reauthenticateWithCredential(user, credential);
+            
+            // If re-authentication is successful, update the password
+            await updatePassword(user, newPassword);
+            
+            passwordMessageEl.textContent = 'Password updated successfully!';
+            passwordMessageEl.classList.add('text-green-500');
+            passwordForm.reset();
+            // Optional: close accordion after success
+            accordionHeader.click(); 
+
+        } catch (error) {
+            console.error("Password update error:", error);
+            if (error.code === 'auth/wrong-password') {
+                passwordMessageEl.textContent = 'Incorrect current password.';
+            } else {
+                passwordMessageEl.textContent = 'An error occurred. Please try again.';
+            }
+            passwordMessageEl.classList.add('text-red-500');
+        }
+    });
+
+    // --- LOGOUT ---
+    logoutBtn.addEventListener('click', () => {
+        signOut(auth).then(() => window.location.href = 'login.html');
+    });
+
+  </script>
+
+</body>
+</html>
