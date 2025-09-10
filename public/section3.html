@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign Up � Printely</title>
+  <title>Sign Up – Printely</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
   <script>tailwind.config = { darkMode: 'class' };</script>
@@ -202,7 +202,6 @@
 </head>
 <body class="min-h-screen">
 
-  <!-- Navbar -->
   <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
        <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
@@ -232,10 +231,8 @@
     </div>
   </nav>
 
-  <!-- Feedback Message -->
   <div id="message"></div>
 
-  <!-- SIGN-UP FORM -->
   <section class="max-w-lg mx-auto mt-16 bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-10 relative z-10">
     <h2 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-6">Create Your Account</h2>
     <form id="signup-form" class="space-y-5">
@@ -247,6 +244,16 @@
              class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
       <input type="password" name="confirm_password" placeholder="Confirm Password" required 
              class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" />
+      
+      <div>
+        <label for="signup-gender" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Gender</label>
+        <select id="signup-gender" name="gender" class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+            <option value="default">Prefer not to say</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+      </div>
+
       <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-lg transition duration-200">Sign Up</button>
     </form>
     <p class="text-center text-sm text-gray-700 dark:text-gray-400 mt-4">
@@ -255,7 +262,6 @@
     </p>
   </section>
 
-  <!-- Firebase Signup Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
@@ -277,6 +283,8 @@
 
     const signupForm = document.getElementById("signup-form");
     const messageDiv = document.getElementById("message");
+    // Get the gender dropdown element
+    const signupGenderSelect = document.getElementById("signup-gender");
 
     function showMessage(msg) {
       messageDiv.textContent = msg;
@@ -287,7 +295,7 @@
     // Redirect logged-in users automatically
     onAuthStateChanged(auth, user => {
       if (user) {
-        showMessage(`? Logged in as ${user.email}, redirecting...`);
+        showMessage(`👋 Logged in as ${user.email}, redirecting...`);
         setTimeout(() => {
           window.location.href = "index.html"; // redirect to main page
         }, 2000);
@@ -300,9 +308,11 @@
       const email = signupForm.email.value;
       const password = signupForm.password.value;
       const confirmPassword = signupForm.confirm_password.value;
+      // Get the selected gender value
+      const gender = signupGenderSelect.value;
 
       if (password !== confirmPassword) {
-        showMessage("? Passwords do not match!");
+        showMessage("⚠️ Passwords do not match!");
         return;
       }
 
@@ -310,18 +320,20 @@
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        // Save the user data to Firestore, including the new gender field
         await setDoc(doc(db, "users", user.uid), {
           username: name,
           email: email,
+          gender: gender, // <-- The new field is added here
           createdAt: serverTimestamp()
         });
 
-        showMessage("?? Account created! Redirecting to login...");
+        showMessage("✅ Account created! Redirecting to login...");
         signupForm.reset();
 
         setTimeout(() => window.location.href = "login.html", 2000);
       } catch (error) {
-        showMessage(`? Error: ${error.message}`);
+        showMessage(`❌ Error: ${error.message}`);
       }
     });
   </script>

@@ -151,15 +151,7 @@
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-3 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           <p class="text-gray-700 dark:text-gray-300">Gender:</p>
-          <div class="flex items-center ml-2" id="genderEditContainer">
-              <select id="genderSelect" class="px-2 py-1 rounded border border-gray-300 dark:bg-gray-800 dark:border-gray-500">
-                <option value="default">Prefer not to say</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-              <button id="saveGenderBtn" class="ml-2 px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm">Save</button>
-          </div>
-          <span id="genderText" class="ml-2 font-bold hidden"></span>
+          <span id="genderText" class="ml-2 font-bold"><span class="pulsate-placeholder w-20"></span></span>
         </div>
       </section>
 
@@ -199,7 +191,7 @@
     // --- IMPORT FIREBASE MODULES ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     // --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
@@ -230,10 +222,7 @@
     const accordionPanel = document.getElementById('accordion-panel');
     const passwordForm = document.getElementById('change-password-form');
     const passwordMessageEl = document.getElementById('password-message');
-    const genderSelect = document.getElementById('genderSelect'); 
-    const saveGenderBtn = document.getElementById('saveGenderBtn'); 
     const genderTextEl = document.getElementById('genderText'); 
-    const genderEditContainer = document.getElementById('genderEditContainer');
     const profileSvg = document.querySelector('.main-card svg'); 
 
     // --- ICONS ---
@@ -250,14 +239,12 @@
     // Function to update profile color
     const updateProfileColor = (gender) => {
       profileSvg.classList.remove('text-blue-500', 'text-pink-500', 'text-gray-400', 'dark:text-gray-500');
-      profileSvg.classList.add(genderColors[gender]);
+      profileSvg.classList.add(genderColors[gender] || genderColors['default']);
     };
     
-    // Function to show saved gender and hide dropdown
+    // Function to show saved gender
     const displaySavedGender = (gender) => {
-      genderEditContainer.classList.add('hidden');
       genderTextEl.textContent = gender.charAt(0).toUpperCase() + gender.slice(1);
-      genderTextEl.classList.remove('hidden');
     };
 
     // --- DARK MODE ---
@@ -274,11 +261,11 @@
     // --- ACCORDION LOGIC ---
     accordionHeader.addEventListener('click', () => {
         accordionHeader.classList.toggle('active');
-        const isOpen = accordionPanel.style.maxHeight;
-        if (isOpen) {
-            accordionPanel.style.maxHeight = null;
+        const panel = accordionPanel;
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
         } else {
-            accordionPanel.style.maxHeight = accordionPanel.scrollHeight + "px";
+            panel.style.maxHeight = panel.scrollHeight + "px";
         }
     });
 
@@ -286,6 +273,8 @@
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const uid = user.uid;
+            
+            // --- User ID Visibility Toggle ---
             let isUserIdVisible = false;
             const maskedUid = '•'.repeat(uid.length);
             userIdValueEl.textContent = maskedUid;
@@ -296,53 +285,60 @@
                 userIdValueEl.textContent = isUserIdVisible ? uid : maskedUid;
                 toggleUserIdBtn.innerHTML = isUserIdVisible ? eyeSlashIcon : eyeIcon;
             });
+            
             userEmailEl.textContent = user.email;
 
+            // --- Fetch or Create User Document ---
             const userDocRef = doc(db, "users", uid);
-            const userDocSnap = await getDoc(userDocRef);
+            let userDocSnap = await getDoc(userDocRef);
+
+            // **FIX**: If the user document doesn't exist, create it.
+            if (!userDocSnap.exists()) {
+                console.warn("User document not found in Firestore. Creating a new one.");
+                try {
+                    const defaultUsername = user.email.split('@')[0];
+                    await setDoc(userDocRef, {
+                        username: defaultUsername,
+                        email: user.email,
+                        gender: 'default',
+                        createdAt: serverTimestamp()
+                    });
+                    // Re-fetch the document after creating it
+                    userDocSnap = await getDoc(userDocRef);
+                } catch (error) {
+                    console.error("Error creating user document:", error);
+                    userNameEl.textContent = "Error loading profile";
+                    return; // Stop execution if creation fails
+                }
+            }
+
+            // --- Display User Data ---
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data();
+                
                 userNameEl.textContent = userData.username || 'Welcome!';
+                
                 if (userData.createdAt?.toDate) {
                     joinDateEl.textContent = userData.createdAt.toDate().toLocaleDateString();
                 } else {
-                    joinDateEl.textContent = 'N/A';
+                    joinDateEl.textContent = new Date().toLocaleDateString(); // Fallback to current date
                 }
                 
-                // Load and apply saved gender preference
                 const savedGender = userData.gender || 'default';
                 updateProfileColor(savedGender);
-                if (savedGender !== 'default') {
-                  displaySavedGender(savedGender);
-                } else {
-                  genderSelect.value = savedGender;
-                  genderEditContainer.classList.remove('hidden');
-                  genderTextEl.classList.add('hidden');
-                }
+                displaySavedGender(savedGender);
 
             } else {
+                // This block should rarely be reached now, but it's a safe fallback.
+                console.error("Failed to fetch or create user document.");
                 userNameEl.textContent = "User Profile";
                 updateProfileColor('default'); 
-                genderEditContainer.classList.remove('hidden');
-                genderTextEl.classList.add('hidden');
+                displaySavedGender('default');
             }
         } else {
+            // If no user is logged in, redirect to the login page.
             window.location.href = 'login.html';
         }
-    });
-
-    // NEW: Add click listener to the save button
-    saveGenderBtn.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-
-        const newGender = genderSelect.value;
-        const userDocRef = doc(db, "users", user.uid);
-        await setDoc(userDocRef, { gender: newGender }, { merge: true });
-        
-        // Update UI immediately after saving
-        updateProfileColor(newGender);
-        displaySavedGender(newGender);
     });
 
     // --- PASSWORD CHANGE FORM LOGIC ---
@@ -375,7 +371,9 @@
             passwordMessageEl.textContent = 'Password updated successfully!';
             passwordMessageEl.classList.add('text-green-500');
             passwordForm.reset();
-            accordionHeader.click(); 
+            if (accordionHeader.classList.contains('active')) {
+                accordionHeader.click();
+            }
 
         } catch (error) {
             console.error("Password update error:", error);
@@ -390,10 +388,14 @@
 
     // --- LOGOUT ---
     logoutBtn.addEventListener('click', () => {
-        signOut(auth).then(() => window.location.href = 'login.html');
+        signOut(auth).then(() => {
+            console.log('User signed out successfully.');
+            window.location.href = 'login.html';
+        }).catch((error) => {
+            console.error('Sign out error', error);
+        });
     });
 
   </script>
-
 </body>
 </html>
