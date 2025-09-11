@@ -200,19 +200,19 @@ body.theme-gray .bottom-buttons { color: #333; }
 
 
 /* Checkboxes */
-.custom-checkbox { 
-  position: relative; 
-  cursor: pointer; 
-  font-size: 13px; 
-  font-weight: 500; 
-  display: inline-flex; 
-  align-items: center; 
+.custom-checkbox {
+  position: relative;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
 }
 
-.custom-checkbox input { 
-  position: absolute; 
-  opacity: 0; 
-  cursor: pointer; 
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .custom-checkbox span {
@@ -246,18 +246,18 @@ body.theme-gray .bottom-buttons { color: #333; }
   background-color: #000;
   border-color: #000;
 }
+
 .custom-checkbox input:checked ~ span::after {
   display: block;
 }
-.checkbox-inline { 
-  display: flex; 
-  flex-direction: row; /* keep them in one line */
-  gap: 60px;          /* increase spacing between options */
-  align-items: center; 
-  flex-wrap: wrap;    /* allows wrapping if screen is too small */
-  margin-top: 6px; 
-}
 
+.checkbox-inline {
+  display: flex;
+  flex-wrap: wrap;      /* allows wrapping */
+  gap: 30px;            /* consistent spacing between each option */
+  align-items: center;
+  margin-top: 6px;
+}
 
 /* Theme overrides: use theme color for fill + checkmark bg */
 body.theme-blue .custom-checkbox input:checked ~ span {
@@ -556,7 +556,7 @@ body.theme-gray table td { background: #fafafa; }
     <!-- Row 5: Target Competencies & Teaching Materials -->
     <table>
       <tr>
-        <td style="width:60%">
+        <td style="width:40%">
           <strong>Target competencies:</strong>
           <div class="checkbox-inline">
             <label class="custom-checkbox">
@@ -570,19 +570,26 @@ body.theme-gray table td { background: #fafafa; }
             </label>
           </div>
         </td>
-        <td style="width:40%">
-          <strong>Teaching materials:</strong>
-          <div class="checkbox-inline">
-            <label class="custom-checkbox">
-              <input type="checkbox"><span></span> Textbook
-            </label>
-            <label class="custom-checkbox">
-              <input type="checkbox"><span></span> W.B
-            </label>
-          </div>
-        </td>
-      </tr>
-    </table>
+       <td style="width:60%">
+  <strong>Teaching materials:</strong>
+  <div class="checkbox-inline">
+    <label class="custom-checkbox">
+      <input type="checkbox"><span></span> Textbook
+    </label>
+    <label class="custom-checkbox">
+      <input type="checkbox"><span></span> W.B
+    </label>
+    <label class="custom-checkbox">
+      <input type="checkbox"><span></span> Flashcards
+    </label>
+    <label class="custom-checkbox">
+      <input type="checkbox"><span></span> Stale
+    </label>
+    <label class="custom-checkbox">
+      <input type="checkbox"><span></span> Song
+    </label>
+  </div>
+</td>
 
     <!-- Row 6: Lesson Plan Table -->
     <table>

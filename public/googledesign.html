@@ -346,7 +346,7 @@
     .checkbox-inline {
       display: flex;
       justify-content: center;   /* center them in the box */
-      gap: 20px;                 /* spacing between checkboxes */
+      gap: 10px;                 /* spacing between checkboxes */
       font-size: 0.8rem;          /* smaller text */
       flex-wrap: nowrap;          /* force single line */
     }
@@ -533,6 +533,9 @@
     .checkbox-inline label:nth-child(2) input { accent-color: var(--checkbox2); }
     .checkbox-inline label:nth-child(3) input { accent-color: var(--checkbox3); }
     .checkbox-inline label:nth-child(4) input { accent-color: var(--checkbox4); }
+	.checkbox-inline label:nth-child(5) input { accent-color: var(--checkbox2); }
+
+
 
 
     /* Make the paper exactly A4 with no browser margins */
@@ -892,6 +895,10 @@
         <div class="checkbox-inline" id="materials">
           <label><input type="checkbox" value="Textbook"> Textbook</label>
           <label><input type="checkbox" value="W.B"> W.B</label>
+		            <label><input type="checkbox" value="Flashcards">Flashcards</label>
+          <label><input type="checkbox" value="Stale">Stale</label>
+				<label><input type="checkbox" value="Song">Song</label>
+
         </div>
       </div>
     </div>

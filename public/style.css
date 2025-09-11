@@ -155,6 +155,70 @@ td {
 .competency-option { background-color: #cce0f5; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
 .competency-option input { display: none; }
 .competency-option.selected { background-color: #6699cc; font-weight: bold; color: white; text-decoration: underline; }
+/* Default (pastel blue look) */
+.competency-option {
+  background-color: #cce0f5;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  user-select: none;
+  color: #000;
+}
+.competency-option input {
+  display: none;
+}
+.competency-option.selected {
+  background-color: #6699cc;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ===== Theme 1 (Soft Blues) ===== */
+.theme1 .competency-option { background-color: #80bfff; color: #002244; }
+.theme1 .competency-option.selected { background-color: #4da6ff; color: #fff; }
+
+/* ===== Theme 2 (Warm Sunrise) ===== */
+.theme2 .competency-option { background-color: #ff9966; color: #663300; }
+.theme2 .competency-option.selected { background-color: #ff7733; color: #fff; }
+
+/* ===== Theme 3 (Calm Greens) ===== */
+.theme3 .competency-option { background-color: #9cd998; color: #003300; }
+.theme3 .competency-option.selected { background-color: #65bf5a; color: #fff; }
+
+/* ===== Theme 4 (Lavender Dream) ===== */
+.theme4 .competency-option { background-color: #cc99ff; color: #330066; }
+.theme4 .competency-option.selected { background-color: #b366ff; color: #fff; }
+
+/* ===== Theme 5 (Peachy Pastel) ===== */
+.theme5 .competency-option { background-color: #ffcc99; color: #660022; }
+.theme5 .competency-option.selected { background-color: #ffb366; color: #fff; }
+
+/* ===== Theme 6 (Ocean Breeze) ===== */
+.theme6 .competency-option { background-color: #99e6ff; color: #004466; }
+.theme6 .competency-option.selected { background-color: #33ccff; color: #fff; }
+
+/* ===== Theme 7 (Minty Fresh) ===== */
+.theme7 .competency-option { background-color: #b3ffd9; color: #004d33; }
+.theme7 .competency-option.selected { background-color: #80ffbf; color: #003322; }
+
+/* ===== Theme 8 (Rose Garden) ===== */
+.theme8 .competency-option { background-color: #ffb3c9; color: #660022; }
+.theme8 .competency-option.selected { background-color: #ff80a8; color: #fff; }
+
+/* ===== Theme 9 (Golden Glow) ===== */
+.theme9 .competency-option { background-color: #ffd966; color: #5c4300; }
+.theme9 .competency-option.selected { background-color: #ffbf00; color: #fff; }
+
+/* ===== Theme 10 (Twilight) ===== */
+.theme10 .competency-option { background-color: #b3b3ff; color: #330066; }
+.theme10 .competency-option.selected { background-color: #8080ff; color: #fff; }
+
+/* ===== Theme 11 (Dark Twilight) ===== */
+.theme11 .competency-option { background-color: #5c4d7d; color: #f0eaff; }
+.theme11 .competency-option.selected { background-color: #7a6da8; color: #fff; }
 
 /* -------- Default Theme -------- */
 .theme-default .c1 { background: #ffd6e6; }
@@ -439,13 +503,20 @@ td {
   color: #222;
 }
 <style>
-  .input-no-border {
-    width: 90%;
-    border: none;
-    background: transparent;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: inherit;
-    outline: none; /* removes focus highlight */
-  }
+  /* Make text fields blend with their parent theme cell */
+.input-no-border {
+  border: none;
+  outline: none;
+  padding: 4px 6px;
+  font-size: 13px;
+  width: calc(100% - 10px);
+  background-color: transparent; /* inherit background */
+  color: inherit; /* match text color of theme */
+}
+
+/* Optional: add subtle underline instead of box */
+.input-no-border:focus {
+  border-bottom: 1px solid currentColor;
+}
+
 </style>

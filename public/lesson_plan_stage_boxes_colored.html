@@ -50,8 +50,11 @@
     }
 
     .row { display: flex; gap: 12px; margin-top: 12px; }
+    .col-60 { flex: 0 0 59%; }
+    .col-40 { flex: 0 0 39%; }
+	.col-65 { flex: 0 0 64%; }
     .col-35 { flex: 0 0 34%; }
-    .col-65 { flex: 0 0 64%; }
+
 
     /* unified box style */
     .stage-box {
@@ -568,7 +571,7 @@
 </div>
 
 <div class="row">
-  <div class="col-65">
+  <div class="col-40">
     <div class="stage-box competencies">
       <span class="stage-tag">Target Competencies</span>
       <div class="inline-boxes">
@@ -578,12 +581,16 @@
       </div>
     </div>
   </div>
-  <div class="col-35">
+  <div class="col-60">
     <div class="stage-box materials">
       <span class="stage-tag">Teaching Materials</span>
       <div class="inline-boxes">
-        <div class="mini-box"><label><input type="checkbox"> Textbook</label></div>
-        <div class="mini-box"><label><input type="checkbox"> W.B</label></div>
+<div class="mini-box"><label><input type="checkbox"> Textbook</label></div>
+<div class="mini-box"><label><input type="checkbox"> W.B</label></div>
+<div class="mini-box"><label><input type="checkbox"> Slate</label></div>
+<div class="mini-box"><label><input type="checkbox"> Song</label></div>
+<div class="mini-box"><label><input type="checkbox"> Flashcards</label></div>
+
       </div>
     </div>
   </div>

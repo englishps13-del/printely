@@ -8,12 +8,9 @@ const themeSwitcher = document.getElementById("themeSwitcher");
 const tableContainer = document.getElementById("table-container");
 
 // Ensure initial class is correct
-// (HTML starts with class="theme-default")
 themeSwitcher.addEventListener("change", (e) => {
-  const val = e.target.value; // "default", "theme1", "theme2", ...
-  // Remove all theme classes
+  const val = e.target.value;
   tableContainer.className = "";
-  // Map "default" to "theme-default", others use the value as-is (theme1..theme5)
   const themeClass = val === "default" ? "theme-default" : val;
   tableContainer.classList.add(themeClass);
 });
@@ -23,7 +20,7 @@ document.querySelectorAll(".competency-option input").forEach((input) => {
   const label = input.closest(".competency-option");
   const setState = () => label.classList.toggle("selected", input.checked);
   input.addEventListener("change", setState);
-  setState(); // initialize visual state
+  setState(); // initialize
 });
 
 // ---------- Lesson plan data (Level -> Sequence -> Section -> Sessions) ----------
@@ -256,7 +253,8 @@ levelSelect.addEventListener("change", function () {
       opt.textContent = seq;
       sequenceSelect.appendChild(opt);
     });
-    // Append the new option for REMEDIATION & STANDARDISATION
+
+    // Add special option
     const remediationOpt = document.createElement("option");
     remediationOpt.value = "REMEDIATION & STANDARDISATION";
     remediationOpt.textContent = "REMEDIATION & STANDARDISATION";
@@ -271,19 +269,16 @@ sequenceSelect.addEventListener("change", function () {
   sectionSelect.innerHTML = '<option value="">-- Select Section --</option>';
   sessionSelect.innerHTML = '<option value="">-- Select Session --</option>';
 
-  // Conditional Rule: If "REMEDIATION & STANDARDISATION" is selected
   if (seq === "REMEDIATION & STANDARDISATION") {
     const remediationOpt = document.createElement("option");
     remediationOpt.value = "REMEDIATION & STANDARDISATION";
     remediationOpt.textContent = "REMEDIATION & STANDARDISATION";
     sectionSelect.appendChild(remediationOpt);
-    
-    // Also populate sessionSelect with the same option
+
     const remediationSessionOpt = document.createElement("option");
     remediationSessionOpt.value = "REMEDIATION & STANDARDISATION";
     remediationSessionOpt.textContent = "REMEDIATION & STANDARDISATION";
     sessionSelect.appendChild(remediationSessionOpt);
-
   } else if (data[level] && data[level][seq]) {
     Object.keys(data[level][seq]).forEach(section => {
       const opt = document.createElement("option");
@@ -293,7 +288,30 @@ sequenceSelect.addEventListener("change", function () {
     });
   }
 });
-// First register the image resize module (make sure you loaded the script before this)
+
+// Load sessions when section changes
+sectionSelect.addEventListener("change", function () {
+  const level = levelSelect.value;
+  const seq = sequenceSelect.value;
+  const section = this.value;
+  sessionSelect.innerHTML = '<option value="">-- Select Session --</option>';
+
+  if (seq === "REMEDIATION & STANDARDISATION") {
+    const remediationSessionOpt = document.createElement("option");
+    remediationSessionOpt.value = "REMEDIATION & STANDARDISATION";
+    remediationSessionOpt.textContent = "REMEDIATION & STANDARDISATION";
+    sessionSelect.appendChild(remediationSessionOpt);
+  } else if (data[level] && data[level][seq] && data[level][seq][section]) {
+    data[level][seq][section].forEach(session => {
+      const opt = document.createElement("option");
+      opt.value = session;
+      opt.textContent = session;
+      sessionSelect.appendChild(opt);
+    });
+  }
+});
+
+// ---------- Quill Editor ----------
 Quill.register('modules/imageResize', window.ImageResize);
 
 const quill = new Quill('#editor', {
@@ -312,45 +330,18 @@ const quill = new Quill('#editor', {
         [{ 'align': [] }],
         ['blockquote', 'code-block'],
         ['image'],
-        ['clean'],
-        ['increase-size', 'decrease-size']  // custom buttons
-      ],
-      
+        ['clean']
+      ]
     },
-    imageResize: {}  // Enable image resize
+    imageResize: {}
   }
 });
 
-
-// Load sessions when section changes
-sectionSelect.addEventListener("change", function () {
-  const level = levelSelect.value;
-  const seq = sequenceSelect.value;
-  const section = this.value;
-  sessionSelect.innerHTML = '<option value="">-- Select Session --</option>';
-  // The if condition for remediation is now in the sequenceSelect event listener
-  if (seq === "REMEDIATION & STANDARDISATION") {
-     const remediationSessionOpt = document.createElement("option");
-    remediationSessionOpt.value = "REMEDIATION & STANDARDISATION";
-    remediationSessionOpt.textContent = "REMEDIATION & STANDARDISATION";
-    sessionSelect.appendChild(remediationSessionOpt);
-
-  } else if (data[level] && data[level][seq] && data[level][seq][section]) {
-    data[level][seq][section].forEach(session => {
-      const opt = document.createElement("option");
-      opt.value = session;
-      opt.textContent = session;
-      sessionSelect.appendChild(opt);
-    });
-  }
-});
+// ---------- Font size adjust (safe checks) ----------
 function calculateNewSize(currentSize, delta) {
   const sizes = ['8px', '10px', '12px', '14px', '16px', '18px', '24px', '32px', '48px'];
   let index = sizes.indexOf(currentSize);
-  if (index === -1) {
-    // Default if not found
-    index = sizes.indexOf('16px');
-  }
+  if (index === -1) index = sizes.indexOf('16px');
   let newIndex = index + delta;
   if (newIndex < 0) newIndex = 0;
   if (newIndex >= sizes.length) newIndex = sizes.length - 1;
@@ -366,18 +357,15 @@ function adjustFontSize(delta) {
   const newSize = calculateNewSize(currentSize, delta);
 
   if (range.length === 0) {
-    // Cursor only: apply to future text
     quill.format('size', newSize);
   } else {
-    // Apply to selected text
     quill.formatText(range.index, range.length, 'size', newSize);
   }
 }
 
-document.getElementById('increase-size').addEventListener('click', () => {
-  adjustFontSize(1);
-});
+// Only attach if buttons exist in DOM
+const incBtn = document.getElementById('increase-size');
+const decBtn = document.getElementById('decrease-size');
 
-document.getElementById('decrease-size').addEventListener('click', () => {
-  adjustFontSize(-1);
-});
+if (incBtn) incBtn.addEventListener('click', () => adjustFontSize(1));
+if (decBtn) decBtn.addEventListener('click', () => adjustFontSize(-1));
