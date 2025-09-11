@@ -755,6 +755,15 @@
     .toast i { margin-right: 12px; font-size: 20px; }
     .toast.success { background-color: #27ae60; }
     .toast.error { background-color: #e74c3c; }
+.editable-area img,
+[contenteditable="true"] img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px;
+}
 
   </style>
 </head>
@@ -835,6 +844,11 @@
         <div class="group" aria-label="Actions">
           <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
         </div>
+<div class="group" aria-label="Insert">
+  <button class="btn-square insert-image-btn" title="Insert Image">
+    <i class="fa-solid fa-image"></i>
+  </button>
+</div>
 
         <div class="grow"></div>
 
@@ -1252,5 +1266,64 @@
     });
     initializeLevels();
   </script>
+<script>
+(function () {
+  // hidden file input
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+
+  // always target procedure editor
+  const procedureEditor = document.getElementById('install-procedure');
+
+  // click toolbar button → open file picker
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.insert-image-btn');
+    if (!btn) return;
+    e.preventDefault();
+    fileInput.click();
+  });
+
+  // file selected → insert into procedure editor
+  fileInput.addEventListener('change', function () {
+    const file = this.files && this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      const img = document.createElement('img');
+      img.src = ev.target.result;
+      img.style.width = '100px';
+      img.style.height = '100px';
+      img.style.objectFit = 'contain';
+      insertNodeAtCursor(img, procedureEditor);
+    };
+    reader.readAsDataURL(file);
+
+    this.value = '';
+  });
+
+  // helper: insert at caret
+  function insertNodeAtCursor(node, editor) {
+    editor.focus();
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) {
+      editor.appendChild(node);
+      return;
+    }
+    let range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(node);
+
+    range.setStartAfter(node);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+})();
+</script>
+
 </body>
 </html>
