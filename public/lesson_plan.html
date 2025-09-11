@@ -555,6 +555,15 @@
     .toast.error i {
       color: #ef4444;
     }
+    .editable-area img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 2px;
+}
+
   </style>
 </head>
 <body>
@@ -643,7 +652,13 @@
       <div class="group" aria-label="Actions">
         <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
       </div>
-      
+<div class="group" aria-label="Insert">
+  <button class="btn-square" id="insertImageBtn" title="Insert Image">
+    <i class="fa-solid fa-image"></i>
+  </button>
+  <input type="file" id="imageUploadInput" accept="image/*" style="display:none">
+</div>
+
       <div class="group" aria-label="File">
           <button class="btn" id="newPlanBtn" title="Create a new lesson plan"><i class="fas fa-file"></i> New</button>
           <button class="btn" id="savePlanBtn" title="You must be logged in to save" disabled><i class="fas fa-save"></i> Save Plan</button>
@@ -1481,35 +1496,44 @@ sectionSelect.addEventListener("change", () => {
             exec(btn.getAttribute('data-cmd')); 
         });
     });
+// --- INSERT IMAGE LOGIC ---
+const editorArea = document.getElementById('objective-area'); // editable area
+const insertImageBtn = document.getElementById('insertImageBtn');
+const imageUploadInput = document.getElementById('imageUploadInput');
 
-    function updateStatus() {
-      if (!activeEditor) {
-          document.getElementById('wordCount').textContent = '0 words';
-          document.getElementById('selectionInfo').textContent = 'No selection';
-          document.querySelectorAll('[data-cmd]').forEach(btn => btn.classList.remove('active'));
-          return;
-      }
-      const text = activeEditor.innerText.trim();
-      const words = text ? text.split(/\s+/).length : 0;
-      document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
+insertImageBtn.addEventListener('click', () => {
+  imageUploadInput.click(); // open file picker
+});
 
-      const sel = window.getSelection();
-      const selLen = (sel && sel.rangeCount) ? sel.toString().length : 0;
-      document.getElementById('selectionInfo').textContent = selLen > 0 ? `${selLen} chars selected` : 'No selection';
+imageUploadInput.addEventListener('change', () => {
+  const file = imageUploadInput.files[0];
+  if (!file) return;
 
-      document.querySelectorAll('[data-cmd]').forEach(btn => {
-        const cmd = btn.getAttribute('data-cmd');
-        try {
-            btn.classList.toggle('active', document.queryCommandState(cmd));
-        } catch (e) {
-            btn.classList.remove('active');
-        }
-      });
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.createElement("img");
+    img.src = e.target.result; // base64 image data
+    img.style.width = "100px";
+    img.style.height = "100px";
+    img.style.objectFit = "contain";
+    img.style.display = "inline-block";
+    img.style.verticalAlign = "middle";
+    img.style.margin = "2px";
+
+    // insert at cursor position
+    const sel = window.getSelection();
+    if (sel.rangeCount) {
+      const range = sel.getRangeAt(0);
+      range.insertNode(img);
+      range.collapse(false);
+    } else {
+      editorArea.appendChild(img);
     }
+  };
+  reader.readAsDataURL(file); // read as base64
+  imageUploadInput.value = ""; // reset input
+});
 
-    document.addEventListener('selectionchange', updateStatus);
-    document.querySelector('.container').addEventListener('keyup', updateStatus);
-    document.querySelector('.container').addEventListener('mouseup', updateStatus);
   </script>
 
   <script type="module">

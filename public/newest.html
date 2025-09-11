@@ -4,26 +4,39 @@
   <meta charset="UTF-8">
   <title>Lesson Plan</title>
   <link rel="icon" type="image/x-icon" href="icon.png">
-  <!-- Import nice Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
- <!-- Quill CSS -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-<!-- Quill JS -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 <style>
+  :root {
+      --paper-color: #ffffff;
+      --background-color: #ffffff;
+      --primary-text: #2c3e50;
+      --secondary-text: #7f8c8d;
+      --header-color: #8e44ad;
+      --line-color: #dcdcdc;
+      --box-bg-new: #f9f9f9;
+      --new-box-border: #e0e0e0;
+      --accent-color: #2c3e99;
+  }
+
   body {
     font-family: 'Poppins', 'Roboto', sans-serif;
     margin: 15px;
-    background: #fff;
+    background: #f0f2f5;
     font-size: 13px;
     transition: background 0.3s, color 0.3s;
+    display: flex;
+    justify-content: center;
   }
 
   .lesson-plan {
     margin-top: 10px;
+    background: #fff;
+    width: 8.5in;
+    min-height: 11in;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   /* Tables */
@@ -42,6 +55,14 @@
     font-weight: 600;
     font-size: 13px;
     letter-spacing: 0.3px;
+  }
+  
+  /* NEW: Styles for the main procedure table */
+  .procedure-table {
+      table-layout: fixed;
+  }
+  .procedure-table td {
+      word-wrap: break-word;
   }
 
   /* Inputs & selects clean */
@@ -71,528 +92,339 @@
     color: #999;
     font-style: italic;
   }
-
-  /* ---------- PRINT FIX ---------- */
-@media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
+  
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); display: none; align-items: center;
+    justify-content: center; z-index: 1000;
   }
-
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .lesson-plan {
-    width: 95%;
-    margin: auto;
-    transform: scale(0.98);
-    transform-origin: top center;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  select,
-  textarea {
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    font-size: 12px;
-    padding: 0;
-    width: 100%;
-  }
-
-  select {
-    background: transparent !important;
-  }
-@media print {
-  /* Ensure Quill content is visible and printable */
-  #installResourcesEditor,
-  #installResourcesEditor .ql-editor {
-    display: block !important;
-    visibility: visible !important;
-    height: auto !important;
-    min-height: 50px !important;
-    overflow: visible !important;
-  }
-
-  /* Remove toolbar */
-  .ql-toolbar {
-    display: none !important;
-  }
-}
-
-  /* Theme-specific table borders and headers */
-  body.default-theme table,
-  body.default-theme th,
-  body.default-theme td {
-    border: 1px solid #000 !important;
-  }
-  body.default-theme table th {
-    background-color: #f3f3f3 !important;
-    color: #000 !important;
-  }
-
-  body.theme-blue table,
-  body.theme-blue th,
-  body.theme-blue td {
-    border: 1px solid #2c3e99 !important;
-  }
-  body.theme-blue table th {
-    background-color: #d6e3ff !important;
-    color: #2c3e99 !important;
-  }
-
-  /* Repeat for other themes */
-  body.theme-green table, body.theme-green th, body.theme-green td { border: 1px solid #2d7a33 !important; }
-  body.theme-green table th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
-
-  body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border: 1px solid #b39700 !important; }
-  body.theme-yellow table th { background-color: #fff2cc !important; color: #b39700 !important; }
-
-  body.theme-pink table, body.theme-pink th, body.theme-pink td { border: 1px solid #cc3366 !important; }
-  body.theme-pink table th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
-
-  body.theme-purple table, body.theme-purple th, body.theme-purple td { border: 1px solid #5e2d91 !important; }
-  body.theme-purple table th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
-
-  body.theme-gray table, body.theme-gray th, body.theme-gray td { border: 1px solid #444 !important; }
-  body.theme-gray table th { background-color: #dddddd !important; color: #333 !important; }
-
-  .bottom-buttons {
-    display: none !important;
-  }
-}
-
-  /* Buttons */
-  .bottom-buttons {
-    margin-top: 15px;
+  .modal-content {
+    background: #fff; padding: 25px 30px; border-radius: 5px;
+    width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     text-align: center;
   }
- /* ---------- Bottom buttons: new bordered style ---------- */
-.bottom-buttons button,
-.bottom-buttons select {
-  background: transparent;        /* transparent instead of solid */
-  color: inherit;                 /* inherit text color from theme */
-  border: 2px solid currentColor; /* border matches text color */
-  padding: 8px 14px;
-  margin: 6px;
-  border-radius: 0px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  transition: all 0.3s ease;
+  .modal-content h3 { margin-top: 0; font-size: 18px; font-weight: 600; }
+  .modal-content p { margin-bottom: 15px; font-size: 14px; color: #555; }
+  .modal-content input {
+    width: 100%; padding: 10px; margin-bottom: 20px;
+    border: 1.5px solid #ccc; border-radius: 4px; font-size: 14px;
+  }
+  .modal-buttons button {
+    padding: 10px 20px; margin: 0 8px; border: none; border-radius: 4px;
+    cursor: pointer; font-weight: 500;
+  }
+  #confirmSaveBtn { background-color: var(--accent-color); color: white; }
+  #cancelSaveBtn { background-color: #eee; color: #333; }
+  
+  /* Auth Status */
+  .auth-status {
+    text-align: center; margin: -5px 0 15px 0;
+    font-size: 12px; color: #666;
+  }
+
+  /* --- RIBBON & EDITABLE AREA STYLES --- */
+  .ribbon {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+      background: var(--box-bg-new); border: 1px solid var(--new-box-border);
+      border-radius: 8px; padding: 10px; margin-bottom: 24px;
+  }
+  .group {
+      display: flex; align-items: center; gap: 6px; padding: 6px;
+      border: 1px solid var(--line-color); border-radius: 6px; background: var(--paper-color);
+  }
+  .group .label { font-size: 12px; color: var(--secondary-text); margin-left: 4px; white-space: nowrap; }
+  .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+      appearance: none; border: 1px solid var(--line-color); background: var(--paper-color);
+      padding: 7px 10px; border-radius: 5px; font-size: 14px; line-height: 1; cursor: pointer;
+      color: var(--primary-text); font-family: inherit;
+  }
+  .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+  .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f0f0f0; }
+  .ribbon .btn.active, .ribbon .btn-square.active { 
+      background: var(--accent-color); color: var(--paper-color); border-color: var(--accent-color); 
+  }
+  .ribbon .sep { width: 1px; background: var(--line-color); margin: 0 6px; align-self: stretch; }
+  .ribbon .grow { flex: 1 1 auto; }
+  .ribbon .pill {
+      font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line-color); 
+      background: var(--paper-color); color: var(--secondary-text);
+  }
+  .editable-area {
+      width: 100%; border: none; outline: none; font-family: inherit;
+      font-size: 13px; line-height: 1.6; background: transparent;
+      color: #000; padding: 5px; min-height: 120px; cursor: text;
+      resize: vertical; overflow: auto; position: relative;
+  }
+  .editable-area:focus { outline: none; box-shadow: 0 0 0 2px var(--accent-color); border-radius: 4px; }
+  .editable-area[data-placeholder]:empty::before {
+      content: attr(data-placeholder); color: #999; pointer-events: none; font-style: italic;
+  }
+
+  /* NEW: Styles for Image Resizing */
+.editable-area img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;   /* keeps proportions inside the box */
+  display: inline-block; /* only takes 100x100, not the full line */
+  vertical-align: middle; /* optional: aligns nicely with text */
 }
 
-/* Match table theme colors */
-body.default-theme .bottom-buttons { color: #000; }
-body.theme-blue .bottom-buttons { color: #2c3e99; }
-body.theme-green .bottom-buttons { color: #2d7a33; }
-body.theme-yellow .bottom-buttons { color: #b39700; }
-body.theme-pink .bottom-buttons { color: #cc3366; }
-body.theme-purple .bottom-buttons { color: #5e2d91; }
-body.theme-gray .bottom-buttons { color: #333; }
+
+  .editable-area img.resizable {
+      outline: 3px solid var(--accent-color);
+      outline-offset: 2px;
+  }
+  #image-resize-handle {
+      position: absolute; width: 12px; height: 12px;
+      background: var(--accent-color); border: 2px solid white;
+      border-radius: 2px; cursor: se-resize;
+      display: none; z-index: 10;
+  }
 
 
-/* Checkboxes */
-.custom-checkbox {
-  position: relative;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-}
+  /* ---------- PRINT STYLES ---------- */
+  @page { size: A4; margin: 0; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .lesson-plan {
+      width: 210mm !important; height: 297mm !important; margin: 0 !important;
+      padding: 10mm !important; box-shadow: none !important; border: none !important;
+      box-sizing: border-box !important;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      border: none !important; background: transparent !important; box-shadow: none !important;
+      appearance: none !important; -webkit-appearance: none !important;
+      font-size: 12px !important; padding: 0 !important; width: 100% !important;
+    }
+    select { background: transparent !important; }
+    .editable-area {
+        min-height: auto !important; resize: none !important; overflow: visible !important;
+    }
+    body.default-theme table, body.default-theme th, body.default-theme td { border: 1px solid #000 !important; }
+    body.default-theme table th { background-color: #f3f3f3 !important; color: #000 !important; }
+    body.theme-blue table, body.theme-blue th, body.theme-blue td { border: 1px solid #2c3e99 !important; }
+    body.theme-blue table th { background-color: #d6e3ff !important; color: #2c3e99 !important; }
+    body.theme-green table, body.theme-green th, body.theme-green td { border: 1px solid #2d7a33 !important; }
+    body.theme-green table th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
+    body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border: 1px solid #b39700 !important; }
+    body.theme-yellow table th { background-color: #fff2cc !important; color: #b39700 !important; }
+    body.theme-pink table, body.theme-pink th, body.theme-pink td { border: 1px solid #cc3366 !important; }
+    body.theme-pink table th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
+    body.theme-purple table, body.theme-purple th, body.theme-purple td { border: 1px solid #5e2d91 !important; }
+    body.theme-purple table th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
+    body.theme-gray table, body.theme-gray th, body.theme-gray td { border: 1px solid #444 !important; }
+    body.theme-gray table th { background-color: #dddddd !important; color: #333 !important; }
+    .bottom-buttons, .ribbon, .no-print, #image-resize-handle { display: none !important; }
+  }
 
-.custom-checkbox input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
+  /* Buttons */
+  .bottom-buttons { margin-top: 15px; text-align: center; }
+  .bottom-buttons button, .bottom-buttons select {
+    background: transparent; color: inherit; border: 2px solid currentColor;
+    padding: 8px 14px; margin: 6px; border-radius: 0px; cursor: pointer;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.2px; transition: all 0.3s ease;
+  }
+  .bottom-buttons button:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; }
 
-.custom-checkbox span {
-  display: inline-block;
-  height: 14px;
-  width: 14px;
-  border: 1.5px solid #000;
-  border-radius: 3px;
-  background-color: #fff;
-  margin-right: 6px;
-  flex-shrink: 0;
-  position: relative;
-}
+  /* Match table theme colors for buttons */
+  body.default-theme .bottom-buttons { color: #000; }
+  body.theme-blue .bottom-buttons { color: #2c3e99; }
+  body.theme-green .bottom-buttons { color: #2d7a33; }
+  body.theme-yellow .bottom-buttons { color: #b39700; }
+  body.theme-pink .bottom-buttons { color: #cc3366; }
+  body.theme-purple .bottom-buttons { color: #5e2d91; }
+  body.theme-gray .bottom-buttons { color: #333; }
 
-/* Default checkmark hidden */
-.custom-checkbox span::after {
-  content: "";
-  position: absolute;
-  display: none;
-  left: 3px;
-  top: 0px;
-  width: 4px;
-  height: 8px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
+  /* Checkboxes */
+  .custom-checkbox {
+    position: relative; cursor: pointer; font-size: 13px; font-weight: 500;
+    display: inline-flex; align-items: center;
+  }
+  .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
+  .custom-checkbox span {
+    display: inline-block; height: 14px; width: 14px; border: 1.5px solid #000;
+    border-radius: 3px; background-color: #fff; margin-right: 6px;
+    flex-shrink: 0; position: relative;
+  }
+  .custom-checkbox span::after {
+    content: ""; position: absolute; display: none; left: 3px; top: 0px;
+    width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .custom-checkbox input:checked ~ span { background-color: #000; border-color: #000; }
+  .custom-checkbox input:checked ~ span::after { display: block; }
+  .checkbox-inline { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; margin-top: 6px; }
 
-/* Show checkmark when checked */
-.custom-checkbox input:checked ~ span {
-  background-color: #000;
-  border-color: #000;
-}
-
-.custom-checkbox input:checked ~ span::after {
-  display: block;
-}
-
-.checkbox-inline {
-  display: flex;
-  flex-wrap: wrap;      /* allows wrapping */
-  gap: 30px;            /* consistent spacing between each option */
-  align-items: center;
-  margin-top: 6px;
-}
-
-/* Theme overrides: use theme color for fill + checkmark bg */
-body.theme-blue .custom-checkbox input:checked ~ span {
-  background-color: #4a6cff;
-  border-color: #4a6cff;
-}
-body.theme-green .custom-checkbox input:checked ~ span {
-  background-color: #4caf50;
-  border-color: #4caf50;
-}
-body.theme-yellow .custom-checkbox input:checked ~ span {
-  background-color: #e6c200;
-  border-color: #e6c200;
-}
-body.theme-pink .custom-checkbox input:checked ~ span {
-  background-color: #ff4d88;
-  border-color: #ff4d88;
-}
-body.theme-purple .custom-checkbox input:checked ~ span {
-  background-color: #8e44ad;
-  border-color: #8e44ad;
-}
-body.theme-gray .custom-checkbox input:checked ~ span {
-  background-color: #555;
-  border-color: #555;
-}
-
- 
-  /* ---------- THEMES (tables only) ---------- */
-  body.default-theme table th { background: #f3f3f3; }
-  body.default-theme table td { background: #fff; }
-
-  body.theme-blue table th { background: #e6f0ff; }
-  body.theme-blue table td { background: #f9fbff; }
+  /* Checkbox Theme overrides */
   body.theme-blue .custom-checkbox input:checked ~ span { background-color: #4a6cff; border-color: #4a6cff; }
-
-  body.theme-green table th { background: #e9f9e9; }
-  body.theme-green table td { background: #fafffa; }
   body.theme-green .custom-checkbox input:checked ~ span { background-color: #4caf50; border-color: #4caf50; }
-
-  body.theme-yellow table th { background: #fff9e6; }
-  body.theme-yellow table td { background: #fffdf5; }
   body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #e6c200; border-color: #e6c200; }
-
-  body.theme-pink table th { background: #ffe6f0; }
-  body.theme-pink table td { background: #fff5fa; }
   body.theme-pink .custom-checkbox input:checked ~ span { background-color: #ff4d88; border-color: #ff4d88; }
-
-  body.theme-purple table th { background: #f0e6ff; }
-  body.theme-purple table td { background: #faf5ff; }
   body.theme-purple .custom-checkbox input:checked ~ span { background-color: #8e44ad; border-color: #8e44ad; }
-
-  body.theme-gray table th { background: #eeeeee; }
-  body.theme-gray table td { background: #fafafa; }
   body.theme-gray .custom-checkbox input:checked ~ span { background-color: #555; border-color: #555; }
-  /* ---------- THEMES (tables + borders + headers) ---------- */
-body.default-theme table, 
-body.default-theme th, 
-body.default-theme td { border-color: #000; }
-body.default-theme table th { background: #f3f3f3; color: #000; }
-body.default-theme table td { background: #fff; }
-
-/* Blue Theme */
-body.theme-blue table, 
-body.theme-blue th, 
-body.theme-blue td { border-color: #2c3e99; }
-body.theme-blue table th { background: #d6e3ff; color: #2c3e99; }
-body.theme-blue table td { background: #f9fbff; }
-
-/* Green Theme */
-body.theme-green table, 
-body.theme-green th, 
-body.theme-green td { border-color: #2d7a33; }
-body.theme-green table th { background: #d9f5d9; color: #2d7a33; }
-body.theme-green table td { background: #fafffa; }
-
-/* Yellow Theme */
-body.theme-yellow table, 
-body.theme-yellow th, 
-body.theme-yellow td { border-color: #b39700; }
-body.theme-yellow table th { background: #fff2cc; color: #b39700; }
-body.theme-yellow table td { background: #fffdf5; }
-
-/* Pink Theme */
-body.theme-pink table, 
-body.theme-pink th, 
-body.theme-pink td { border-color: #cc3366; }
-body.theme-pink table th { background: #ffd6e6; color: #cc3366; }
-body.theme-pink table td { background: #fff5fa; }
-
-/* Purple Theme */
-body.theme-purple table, 
-body.theme-purple th, 
-body.theme-purple td { border-color: #5e2d91; }
-body.theme-purple table th { background: #e6d6ff; color: #5e2d91; }
-body.theme-purple table td { background: #faf5ff; }
-
-/* Gray Theme */
-body.theme-gray table, 
-body.theme-gray th, 
-body.theme-gray td { border-color: #444; }
-body.theme-gray table th { background: #dddddd; color: #333; }
-body.theme-gray table td { background: #fafafa; }
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-}
-@media print {
-  /* Hide Quill toolbar (already no-print) */
-  .ql-toolbar {
-    display: none !important;
-  }
-
-  /* Remove Quill editor borders for print */
-  #installResourcesEditor,
-  .ql-container {
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* Optional: make text fully visible and scale font */
-  #installResourcesEditor {
-    height: auto !important;
-    min-height: 50px;
-  }
-}
-	@media print {
-  /* Make Quill editor content visible */
-  .ql-editor {
-    height: auto !important;
-    min-height: 50px !important;
-    overflow: visible !important;
-  }
-
-  /* Optional: remove extra borders and padding */
-  #installResourcesEditor {
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-  }
-}
-@media print {
-  /* Show Quill content in print */
-  #installResourcesEditor .ql-editor {
-    height: auto !important;
-    min-height: 50px !important;
-    overflow: visible !important;
-  }
-
-  /* Remove borders/shadows for clean print */
-  #installResourcesEditor {
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* Hide the toolbar */
-  .ql-toolbar {
-    display: none !important;
-  }
-}
-#installResourcesEditor .ql-editor {
-  white-space: pre-wrap !important; /* wrap long lines */
-  word-break: break-word !important; /* break words if too long */
-}
-
-#installResourcesEditor {
-  min-height: 120px;   /* small starting height */
-  height: auto !important;
-}
-#installResourcesEditor .ql-editor {
-  min-height: 120px;
-  height: auto !important;
-  overflow-y: visible !important;
-}
-@media print {
-  body {
-    margin: 0;
-    padding: 20px;   /* add some breathing space */
-    font-size: 13px;
-  }
-
-  #installResourcesEditor,
-  #installResourcesEditor .ql-editor {
-    height: auto !important;
-    min-height: 100% !important;
-    overflow: visible !important;
-    white-space: pre-wrap !important;
-    word-break: break-word !important;
-  }
-
-  /* Hide editor toolbar when printing */
-  #installResourcesToolbar {
-    display: none !important;
-  }
-
-  /* Ensure each section uses full width of the page */
-  .lesson-plan {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-}
-@media print {
-  @page {
-    size: A4; /* Sets the page size to A4 */
-    margin: 0; /* Removes default page margins, allowing content to extend to the edges */
-  }
-
-  body {
-    width: 210mm; /* A4 width */
-    height: 297mm; /* A4 height */
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Optional: Add styles to manage content flow and breaks */
-  .page {
-    width: 210mm;
-    height: 297mm;
-    margin: 0;
-    padding: 0; /* Adjust padding as needed for content within the page */
-    page-break-after: always; /* Forces a new page after elements with this class */
-  }
-
-  /* Prevent elements from breaking across pages awkwardly */
-  h1, h2, h3, p, img {
-    page-break-inside: avoid;
-  }
-}
+  
+  /* Table Themes */
+  body.default-theme table, body.default-theme th, body.default-theme td { border-color: #000; }
+  body.default-theme table th { background: #f3f3f3; color: #000; }
+  body.default-theme table td { background: #fff; }
+  body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99; }
+  body.theme-blue table th { background: #d6e3ff; color: #2c3e99; }
+  body.theme-blue table td { background: #f9fbff; }
+  body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33; }
+  body.theme-green table th { background: #d9f5d9; color: #2d7a33; }
+  body.theme-green table td { background: #fafffa; }
+  body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700; }
+  body.theme-yellow table th { background: #fff2cc; color: #b39700; }
+  body.theme-yellow table td { background: #fffdf5; }
+  body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366; }
+  body.theme-pink table th { background: #ffd6e6; color: #cc3366; }
+  body.theme-pink table td { background: #fff5fa; }
+  body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91; }
+  body.theme-purple table th { background: #e6d6ff; color: #5e2d91; }
+  body.theme-purple table td { background: #faf5ff; }
+  body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444; }
+  body.theme-gray table th { background: #dddddd; color: #333; }
+  body.theme-gray table td { background: #fafafa; }
 </style>
 </head>
 <body class="default-theme">
+  
+  <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+  <div id="image-resize-handle"></div>
+
+  <div id="saveModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Save Lesson Plan</h3>
+      <p>Please enter a name for your project to save it.</p>
+      <input type="text" id="projectNameInput" placeholder="E.g., 4PS Family Lesson Week 1">
+      <div class="modal-buttons">
+        <button id="cancelSaveBtn">Cancel</button>
+        <button id="confirmSaveBtn">Confirm Save</button>
+      </div>
+    </div>
+  </div>
+
   <div class="lesson-plan">
-    <!-- your existing tables unchanged ... -->
-<!-- Row 1 -->
+    <div id="authStatus" class="auth-status no-print">Checking login status...</div>
+    
+    <div class="ribbon no-print" id="ribbon">
+        <div class="group" aria-label="Font">
+          <select id="fontFamily" title="Font family">
+            <option>Poppins</option><option>Roboto</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
+          </select>
+          <select id="fontSize" title="Font size">
+            <option value="1">10px</option><option value="2">12px</option><option value="3" selected>14px</option><option value="4">16px</option><option value="5">18px</option><option value="6">20px</option><option value="7">24px</option>
+          </select>
+        </div>
+
+        <div class="group" aria-label="Emphasis">
+          <button class="btn-square" data-cmd="bold" title="Bold"><b>B</b></button>
+          <button class="btn-square" data-cmd="italic" title="Italic"><i>I</i></button>
+          <button class="btn-square" data-cmd="underline" title="Underline"><u>U</u></button>
+          <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+        </div>
+
+        <div class="group" aria-label="Colors">
+          <label class="label" for="foreColor">Text</label>
+          <input type="color" id="foreColor" title="Text color" value="#2c3e50">
+          <span class="sep"></span>
+          <label class="label" for="hiliteColor">Highlight</label>
+          <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+        </div>
+
+        <div class="group" aria-label="Paragraph">
+          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+        </div>
+
+        <div class="group" aria-label="Actions">
+          <button class="btn" id="insertImageBtn" title="Insert Image"><i class="fas fa-image"></i> Image</button>
+          <button class="btn" data-cmd="removeFormat" title="Clear formatting"><i class="fas fa-eraser"></i> Clear</button>
+        </div>
+    </div>
+
     <table>
       <tr>
-        <td style="width:50%"><strong>Primary School:</strong> <input type="text" placeholder="Enter school name"></td>
-        <td style="width:50%"><strong>Teacher:</strong> <input type="text" placeholder="Enter teacher name"></td>
+        <td style="width:50%"><strong>Primary School:</strong> <input type="text" id="schoolName" placeholder="Enter school name"></td>
+        <td style="width:50%"><strong>Teacher:</strong> <input type="text" id="teacherName" placeholder="Enter teacher name"></td>
       </tr>
     </table>
 
-  <!-- Row 2: Level and Section -->
-<table>
-  <tr>
-    <td style="width:33%"><strong>Level:</strong> 
-      <select id="levelSelect">
-        <option value="">-- Select Level --</option>
-        <option value="3PS">3PS</option>
-        <option value="4PS">4PS</option>
-        <option value="5PS">5PS</option>
-      </select>
-    </td>
-    <td style="width:33%"><strong>Number of learners:</strong> 
-      <input type="number" placeholder="0">
-    </td>
-	<td style="width:34%"><strong>Sequence:</strong> 
-      <select id="sequenceSelect">
-        <option value="">-- Select Sequence --</option>
-      </select>
-    </td>
-    
-  </tr>
-</table>
+    <table>
+      <tr>
+        <td style="width:33%"><strong>Level:</strong> 
+          <select id="levelSelect">
+            <option value="">-- Select Level --</option>
+            <option value="3PS">3PS</option>
+            <option value="4PS">4PS</option>
+            <option value="5PS">5PS</option>
+          </select>
+        </td>
+        <td style="width:33%"><strong>Number of learners:</strong> 
+          <input type="number" id="learnerCount" placeholder="0">
+        </td>
+        <td style="width:34%"><strong>Sequence:</strong> 
+          <select id="sequenceSelect">
+            <option value="">-- Select Sequence --</option>
+          </select>
+        </td>
+      </tr>
+    </table>
 
-<!-- Row 3: Sequence and Session -->
-<table>
-  <tr>
- <td style="width:50%"><strong>Section:</strong> 
-      <select id="sectionSelect">
-        <option value="">-- Select Section --</option>
-      </select>
-    </td>
-    <td style="width:50%"><strong>Session:</strong> 
-      <select id="sessionSelect">
-        <option value="">-- Select Session --</option>
-      </select>
-    </td>
-  </tr>
-</table>
+    <table>
+      <tr>
+        <td style="width:50%"><strong>Section:</strong> 
+          <select id="sectionSelect">
+            <option value="">-- Select Section --</option>
+          </select>
+        </td>
+        <td style="width:50%"><strong>Session:</strong> 
+          <select id="sessionSelect">
+            <option value="">-- Select Session --</option>
+          </select>
+        </td>
+      </tr>
+    </table>
 
-
-    <!-- Row 4: Session Objective -->
     <table>
       <tr>
         <td>
           <strong>Session objective(s):</strong> 
-          <input type="text" placeholder="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." style="width:80%">
+          <input type="text" id="sessionObjective" placeholder="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." style="width:80%">
         </td>
       </tr>
     </table>
 
-    <!-- Row 5: Target Competencies & Teaching Materials -->
     <table>
       <tr>
         <td style="width:40%">
           <strong>Target competencies:</strong>
-          <div class="checkbox-inline">
-            <label class="custom-checkbox">
-              <input type="checkbox"><span></span> Interact
-            </label>
-            <label class="custom-checkbox">
-              <input type="checkbox"><span></span> Interpret
-            </label>
-            <label class="custom-checkbox">
-              <input type="checkbox"><span></span> Produce
-            </label>
+          <div class="checkbox-inline" id="targetCompetencies">
+            <label class="custom-checkbox"><input type="checkbox" value="Interact"><span></span> Interact</label>
+            <label class="custom-checkbox"><input type="checkbox" value="Interpret"><span></span> Interpret</label>
+            <label class="custom-checkbox"><input type="checkbox" value="Produce"><span></span> Produce</label>
           </div>
         </td>
-       <td style="width:60%">
-  <strong>Teaching materials:</strong>
-  <div class="checkbox-inline">
-    <label class="custom-checkbox">
-      <input type="checkbox"><span></span> Textbook
-    </label>
-    <label class="custom-checkbox">
-      <input type="checkbox"><span></span> W.B
-    </label>
-    <label class="custom-checkbox">
-      <input type="checkbox"><span></span> Flashcards
-    </label>
-    <label class="custom-checkbox">
-      <input type="checkbox"><span></span> Stale
-    </label>
-    <label class="custom-checkbox">
-      <input type="checkbox"><span></span> Song
-    </label>
-  </div>
-</td>
+        <td style="width:60%">
+          <strong>Teaching materials:</strong>
+          <div class="checkbox-inline" id="teachingMaterials">
+            <label class="custom-checkbox"><input type="checkbox" value="Textbook"><span></span> Textbook</label>
+            <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
+            <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
+            <label class="custom-checkbox"><input type="checkbox" value="Stale"><span></span> Stale</label>
+            <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
+          </div>
+        </td>
+      </tr>
+    </table>
 
-    <!-- Row 6: Lesson Plan Table -->
-    <table>
+    <table class="procedure-table">
       <tr>
         <th style="width:15%">STAGES</th>
         <th style="width:55%">PROCEDURE / TASKS</th>
@@ -600,37 +432,27 @@ body.theme-gray table td { background: #fafafa; }
         <th style="width:15%">TIME ?</th>
       </tr>
       <tr>
-       <tr>
-  <td>Warmer</td>
-  <td><textarea rows="1" placeholder="Write your Warmer procedure here..." style="width:100%;"></textarea></td>
-  <td><input type="text" placeholder="T -> T"></td>
-  <td><input type="text" placeholder="20 min"></td>
-</tr>
+        <td>Warmer</td>
+        <td><textarea id="warmerProcedure" rows="1" placeholder="Write your Warmer procedure here..."></textarea></td>
+        <td><input type="text" id="warmerInteraction" placeholder="T -> T"></td>
+        <td><input type="text" id="warmerTime" placeholder="20 min"></td>
+      </tr>
+      <tr>
+        <td>Install resources</td>
+        <td>
+          <div id="installResourcesProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your install resources procedure here..."></div>
+        </td>
+        <td><input type="text" id="installInteraction" placeholder="T -> T"></td>
+        <td><input type="text" id="installTime" placeholder="20 min"></td>
+      </tr>
+      <tr>
+        <td>Assessment</td>
+        <td><textarea id="assessmentProcedure" rows="1" placeholder="Write your assessment procedure here..."></textarea></td>
+        <td><input type="text" id="assessmentInteraction" placeholder="L -> L"></td>
+        <td><input type="text" id="assessmentTime" placeholder="15 min"></td>
+      </tr>
+    </table>
 
-
-<tr>
-  <td>Install resources</td>
-  <td>
-    <!-- Quill toolbar (hidden in print) -->
-
-
-    <!-- Quill editor container -->
-    <div id="installResourcesEditor" style="height:340px;">
-      Write your install resources procedure here...
-    </div>
-  </td>
-  <td><input type="text" placeholder="T -> T"></td>
-  <td><input type="text" placeholder="20 min"></td>
-</tr>
-
-<tr>
-  <td>Assessment</td>
-  <td><textarea rows="1" placeholder="Write your assessment procedure here..." style="width:100%;"></textarea></td>
-  <td><input type="text" placeholder="L -> L"></td>
-  <td><input type="text" placeholder="15 min"></td>
-</tr>
-
-    <!-- Bottom Section: Self-reflection -->
     <table class="reflection">
       <tr>
         <th>What Worked</th>
@@ -638,23 +460,18 @@ body.theme-gray table td { background: #fafafa; }
         <th>Action Points</th>
       </tr>
       <tr>
-        <td><textarea placeholder="Write here..."></textarea></td>
-        <td><textarea placeholder="Write here..."></textarea></td>
-        <td><textarea placeholder="Write here..."></textarea></td>
+        <td><textarea id="whatWorked" placeholder="Write here..."></textarea></td>
+        <td><textarea id="whatHindered" placeholder="Write here..."></textarea></td>
+        <td><textarea id="actionPoints" placeholder="Write here..."></textarea></td>
       </tr>
     </table>
-    <!-- Bottom buttons -->
+    
     <div class="bottom-buttons no-print">
       <button onclick="window.print()">Print</button>
+      <button id="saveBtn" disabled>Save</button>
       <button onclick="downloadPage()">Download</button>
-	    <button onclick="goToMain()">Go to Main Page</button>
-		<script>
-
-function goToMain() {
-  window.location.href = "index.html"; // Redirect to main page 
-  }
-</script>
-
+      <button onclick="goToMain()">Go to Main Page</button>
+      
       <select id="themeSelect" onchange="changeTheme(this.value)">
         <option value="default-theme">Default</option>
         <option value="theme-blue">Blue</option>
@@ -667,239 +484,281 @@ function goToMain() {
     </div>
   </div>
 
-  <script>
-  // ------------------ Curriculum Data ------------------
-const curriculum = {
-  "3PS": {
-    "Family and Friends": {
-      "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    },
-    "School": {
-      "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    },
-    "Home": {
-      "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    },
-    "Play Time": {
-      "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    },
-    "Pets": {
-      "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    },
-    "Birthday": {
-      "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"],
-      "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"]
-    }
-  },
+<script type="module">
+  // --- Import Firebase Modules ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-  "4PS": {
-    "Family and Friends": {
-      "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
-      "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
-    },
-    "School": {
-      "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
-      "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
-    },
-    "Fun Time and Games": {
-      "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"],
-      "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"]
-    }
-  },
+  // --- Firebase Configuration ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+    authDomain: "printelydz.firebaseapp.com",
+    projectId: "printelydz",
+    storageBucket: "printelydz.appspot.com",
+    messagingSenderId: "49201277305",
+    appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+    measurementId: "G-R4VJL5SR88"
+  };
 
-  "5PS": {
-    "Jobs, Occupations, and Hobbies": {
-      "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
-      "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
-    },
-    "Hometown, City, Village Amenities": {
-      "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
-      "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
-    },
-    "Holidays and Travelling": {
-      "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"],
-      "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"]
-    }
-  }
-};
+  // --- Initialize Firebase ---
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  let currentUser = null;
 
-// ------------------ Dropdown Handlers ------------------
-const levelSelect = document.getElementById("levelSelect");
-const sequenceSelect = document.getElementById("sequenceSelect");
-const sectionSelect = document.getElementById("sectionSelect");
-const sessionSelect = document.getElementById("sessionSelect");
+  // --- DOM Elements ---
+  const saveBtn = document.getElementById('saveBtn');
+  const saveModal = document.getElementById('saveModal');
+  const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+  const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+  const projectNameInput = document.getElementById('projectNameInput');
+  const authStatusDiv = document.getElementById('authStatus');
 
-levelSelect.addEventListener("change", () => {
-  sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>";
-  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
-  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
-  
-  if (curriculum[levelSelect.value]) {
-    Object.keys(curriculum[levelSelect.value]).forEach(seq => {
-      const opt = document.createElement("option");
-      opt.value = seq;
-      opt.textContent = seq;
-      sequenceSelect.appendChild(opt);
-    });
-    const remediationOption = document.createElement("option");
-    remediationOption.value = "Remediation & Standardisation";
-    remediationOption.textContent = "Remediation & Standardisation";
-    sequenceSelect.appendChild(remediationOption);
-  }
-});
-
-sequenceSelect.addEventListener("change", () => {
-  sectionSelect.innerHTML = "<option value=''>Select Section</option>";
-  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
-
-  if (sequenceSelect.value === "Remediation & Standardisation") {
-    const remediationSection = document.createElement("option");
-    remediationSection.value = "Remediation & Standardisation";
-    remediationSection.textContent = "Remediation & Standardisation";
-    sectionSelect.appendChild(remediationSection);
-    return;
-  }
-  
-  const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
-  if (seqData) {
-    Object.keys(seqData).forEach(sec => {
-      const opt = document.createElement("option");
-      opt.value = sec;
-      opt.textContent = sec;
-      sectionSelect.appendChild(opt);
-    });
-  }
-});
-
-sectionSelect.addEventListener("change", () => {
-  sessionSelect.innerHTML = "<option value=''>Select Session</option>";
-
-  if (sectionSelect.value === "Remediation & Standardisation") {
-    const remediationSession = document.createElement("option");
-    remediationSession.value = "Remediation & Standardisation";
-    remediationSession.textContent = "Remediation & Standardisation";
-    sessionSelect.appendChild(remediationSession);
-    return;
-  }
-
-  const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
-  if (sessData) {
-    sessData.forEach(ses => {
-      const opt = document.createElement("option");
-      opt.value = ses;
-      opt.textContent = ses;
-      sessionSelect.appendChild(opt);
-    });
-  }
-});
-    function downloadPage() {
-      const blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "lesson-plan.html";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function changeTheme(theme) {
-      document.body.className = theme;
-      localStorage.setItem("lessonTheme", theme);
-    }
-
-    window.onload = () => {
-      const saved = localStorage.getItem("lessonTheme");
-      if (saved) {
-        document.body.className = saved;
-        document.getElementById("themeSelect").value = saved;
-      }
-    };
-
-  // Register image resize module
-  Quill.register('modules/imageResize', window.ImageResize);
-
-  // Initialize Quill with full toolbar + image resize
-  var installResourcesQuill = new Quill('#installResourcesEditor', {
-    theme: 'snow',
-    placeholder: 'Write your lesson procedure here...',
-    modules: {
-      toolbar: {
-        container: [
-          [{ 'font': [] }],
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ 'color': [] }, { 'background': [] }],
-          [{ 'script': 'super' }, { 'script': 'sub' }],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-          [{ 'indent': '-1' }, { 'indent': '+1' }],
-          [{ 'align': [] }],
-          ['blockquote', 'code-block'],
-          ['image'],
-          ['clean'],
-          ['increase-size', 'decrease-size']  // custom buttons
-        ]
-      },
-      imageResize: {}
+  // --- Auth Listener ---
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      currentUser = user;
+      saveBtn.disabled = false;
+      authStatusDiv.innerHTML = `Logged in as: <strong>${user.email}</strong>`;
+      loadPlanFromSession();
+    } else {
+      currentUser = null;
+      saveBtn.disabled = true;
+      authStatusDiv.innerHTML = `Please <a href="/login.html">log in</a> to save your work.`;
     }
   });
 
-  // ---------- Font size increase/decrease ----------
-  function calculateNewSize(currentSize, delta) {
-    const sizes = ['8px','10px','12px','14px','16px','18px','24px','32px','48px'];
-    let index = sizes.indexOf(currentSize);
-    if(index === -1) index = sizes.indexOf('16px'); // default
-    let newIndex = index + delta;
-    if(newIndex < 0) newIndex = 0;
-    if(newIndex >= sizes.length) newIndex = sizes.length - 1;
-    return sizes[newIndex];
-  }
+  // --- Save Functionality ---
+  saveBtn.addEventListener('click', () => { saveModal.style.display = 'flex'; });
+  cancelSaveBtn.addEventListener('click', () => { 
+    saveModal.style.display = 'none';
+    projectNameInput.value = '';
+  });
 
-  function adjustFontSize(delta) {
-    const range = installResourcesQuill.getSelection();
-    if(!range) return;
-    const format = installResourcesQuill.getFormat(range);
-    const currentSize = format.size || '16px';
-    const newSize = calculateNewSize(currentSize, delta);
+  // --- Save to Firestore ---
+  confirmSaveBtn.addEventListener('click', async () => {
+    if (!currentUser) return alert("Error: You are not logged in.");
+    const planName = projectNameInput.value.trim();
+    if (!planName) return alert("Please enter a name for your project.");
 
-    if(range.length === 0) {
-      installResourcesQuill.format('size', newSize);
-    } else {
-      installResourcesQuill.formatText(range.index, range.length, 'size', newSize);
+    try {
+      confirmSaveBtn.disabled = true;
+      confirmSaveBtn.textContent = 'Saving...';
+      const lessonPlanData = {
+        planName, plannerType: 'newest',
+        school: document.getElementById('schoolName').value,
+        teacher: document.getElementById('teacherName').value,
+        level: document.getElementById('levelSelect').value,
+        learners: document.getElementById('learnerCount').value,
+        sequence: document.getElementById('sequenceSelect').value,
+        section: document.getElementById('sectionSelect').value,
+        session: document.getElementById('sessionSelect').value,
+        objective: document.getElementById('sessionObjective').value,
+        competencies: Array.from(document.querySelectorAll('#targetCompetencies input:checked')).map(cb => cb.value),
+        materials: Array.from(document.querySelectorAll('#teachingMaterials input:checked')).map(cb => cb.value),
+        warmer: {
+          procedure: document.getElementById('warmerProcedure').value,
+          interaction: document.getElementById('warmerInteraction').value,
+          time: document.getElementById('warmerTime').value,
+        },
+        install: {
+          procedure: document.getElementById('installResourcesProcedure').innerHTML,
+          interaction: document.getElementById('installInteraction').value,
+          time: document.getElementById('installTime').value,
+        },
+        assessment: {
+          procedure: document.getElementById('assessmentProcedure').value,
+          interaction: document.getElementById('assessmentInteraction').value,
+          time: document.getElementById('assessmentTime').value,
+        },
+        reflection: {
+          worked: document.getElementById('whatWorked').value,
+          hindered: document.getElementById('whatHindered').value,
+          actionPoints: document.getElementById('actionPoints').value,
+        },
+        createdAt: serverTimestamp(), authorId: currentUser.uid
+      };
+      await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
+      alert(`Lesson plan "${planName}" saved successfully!`);
+      saveModal.style.display = 'none';
+      projectNameInput.value = '';
+    } catch (error) {
+      console.error("Error saving document: ", error);
+      alert("There was an error saving your lesson plan.");
+    } finally {
+      confirmSaveBtn.disabled = false;
+      confirmSaveBtn.textContent = 'Confirm Save';
+    }
+  });
+
+  // --- Load from Session Storage ---
+  async function loadPlanFromSession() {
+    const planId = sessionStorage.getItem('planToLoadId');
+    const user = auth.currentUser;
+    if (!planId || !user) return;
+
+    try {
+      const docRef = doc(db, 'users', user.uid, 'lessonPlans', planId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('schoolName').value = data.school || '';
+        document.getElementById('teacherName').value = data.teacher || '';
+        document.getElementById('levelSelect').value = data.level || '';
+        document.getElementById('learnerCount').value = data.learners || '';
+        levelSelect.dispatchEvent(new Event('change'));
+        setTimeout(() => {
+          document.getElementById('sequenceSelect').value = data.sequence || '';
+          sequenceSelect.dispatchEvent(new Event('change'));
+          setTimeout(() => {
+            document.getElementById('sectionSelect').value = data.section || '';
+            sectionSelect.dispatchEvent(new Event('change'));
+            setTimeout(() => {
+              document.getElementById('sessionSelect').value = data.session || '';
+            }, 50);
+          }, 50);
+        }, 50);
+        document.getElementById('sessionObjective').value = data.objective || '';
+        if (data.competencies) data.competencies.forEach(val => {
+          const cb = document.querySelector(`#targetCompetencies input[value="${val}"]`);
+          if (cb) cb.checked = true;
+        });
+        if (data.materials) data.materials.forEach(val => {
+          const cb = document.querySelector(`#teachingMaterials input[value="${val}"]`);
+          if (cb) cb.checked = true;
+        });
+        document.getElementById('warmerProcedure').value = data.warmer?.procedure || '';
+        document.getElementById('warmerInteraction').value = data.warmer?.interaction || '';
+        document.getElementById('warmerTime').value = data.warmer?.time || '';
+        document.getElementById('installResourcesProcedure').innerHTML = data.install?.procedure || '';
+        document.getElementById('installInteraction').value = data.install?.interaction || '';
+        document.getElementById('installTime').value = data.install?.time || '';
+        document.getElementById('assessmentProcedure').value = data.assessment?.procedure || '';
+        document.getElementById('assessmentInteraction').value = data.assessment?.interaction || '';
+        document.getElementById('assessmentTime').value = data.assessment?.time || '';
+        document.getElementById('whatWorked').value = data.reflection?.worked || '';
+        document.getElementById('whatHindered').value = data.reflection?.hindered || '';
+        document.getElementById('actionPoints').value = data.reflection?.actionPoints || '';
+        sessionStorage.removeItem('planToLoadId');
+      } else {
+        alert("Could not find the lesson plan to load.");
+        sessionStorage.removeItem('planToLoadId');
+      }
+    } catch (error) {
+      console.error("Error loading lesson plan:", error);
+      alert("An error occurred while loading the plan.");
     }
   }
 
-  // Add custom buttons logic
-  const toolbar = installResourcesQuill.getModule('toolbar');
-function preparePrint() {
-  const editorContent = document.querySelector('#installResourcesEditor .ql-editor').innerHTML;
-  const printDiv = document.createElement('div');
-  printDiv.innerHTML = editorContent;
-  printDiv.style.fontFamily = "'Poppins', 'Roboto', sans-serif";
-  printDiv.style.fontSize = '13px';
-  printDiv.style.width = '100%';
+  // --- Curriculum Data ---
+  const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] } }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn and write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
 
-  // Temporarily append to body
-  document.body.appendChild(printDiv);
+  // --- Dropdown Handlers ---
+  const [levelSelect, sequenceSelect, sectionSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sectionSelect", "sessionSelect"].map(id => document.getElementById(id));
+  levelSelect.addEventListener("change", () => {
+    sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>"; sectionSelect.innerHTML = "<option value=''>Select Section</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (curriculum[levelSelect.value]) {
+      Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+      sequenceSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    }
+  });
+  sequenceSelect.addEventListener("change", () => {
+    sectionSelect.innerHTML = "<option value=''>Select Section</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (sequenceSelect.value === "Remediation & Standardisation") return sectionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+    if (seqData) Object.keys(seqData).forEach(sec => sectionSelect.add(new Option(sec, sec)));
+  });
+  sectionSelect.addEventListener("change", () => {
+    sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (sectionSelect.value === "Remediation & Standardisation") return sessionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
+    if (sessData) sessData.forEach(ses => sessionSelect.add(new Option(ses, ses)));
+  });
 
-  // Hide original editor
-  document.querySelector('#installResourcesEditor').style.display = 'none';
+  // --- Global Functions ---
+  window.downloadPage = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([document.documentElement.outerHTML], {type: "text/html"}));
+    a.download = "lesson-plan.html";
+    a.click();
+  };
+  window.goToMain = () => window.location.href = "index.html";
+  window.changeTheme = theme => {
+    document.body.className = theme;
+    localStorage.setItem("lessonTheme", theme);
+  };
 
-  window.print();
+  // --- Page Load Logic ---
+  window.onload = () => {
+    const saved = localStorage.getItem("lessonTheme");
+    if (saved) {
+      document.body.className = saved;
+      document.getElementById("themeSelect").value = saved;
+    }
+  };
 
-  // Restore
-  document.querySelector('#installResourcesEditor').style.display = 'block';
-  document.body.removeChild(printDiv);
+  // --- Ribbon Editor & Image Logic ---
+  let activeEditor = null;
+  document.addEventListener('focusin', e => { if (e.target.isContentEditable) activeEditor = e.target; });
+  function exec(cmd, val = null) { if (activeEditor) document.execCommand(cmd, false, val); }
+  document.querySelectorAll('[data-cmd]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); exec(btn.dataset.cmd); }));
+  document.getElementById('fontFamily').addEventListener('change', e => exec('fontName', e.target.value));
+  document.getElementById('fontSize').addEventListener('change', e => exec('fontSize', e.target.value));
+  document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+  document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
+
+  // Image Upload
+  const imageUpload = document.getElementById('imageUpload');
+  document.getElementById('insertImageBtn').addEventListener('click', () => imageUpload.click());
+  imageUpload.addEventListener('change', e => {
+    if (!e.target.files || !e.target.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = () => exec('insertImage', reader.result);
+    reader.readAsDataURL(e.target.files[0]);
+    e.target.value = null; // Reset input
+  });
+  
+  // Image Resize
+ const editorArea = document.getElementById('installResourcesProcedure');
+const resizeHandle = document.getElementById('image-resize-handle');
+let targetImage = null;
+
+function showResizeHandle(img) {
+    if (targetImage) targetImage.classList.remove('resizable');
+    targetImage = img;
+    targetImage.classList.add('resizable');
+    const rect = targetImage.getBoundingClientRect();
+    const editorRect = editorArea.getBoundingClientRect();
+    resizeHandle.style.display = 'block';
+    resizeHandle.style.left = `${rect.right - editorRect.left - 8}px`;
+    resizeHandle.style.top = `${rect.bottom - editorRect.top - 8}px`;
 }
 
-// Then change your print button
-// <button onclick="preparePrint()">Print</button>
+function hideResizeHandle() {
+    if (targetImage) targetImage.classList.remove('resizable');
+    targetImage = null;
+    resizeHandle.style.display = 'none';
+}
 
-  </script>
-  
+editorArea.addEventListener('click', e => {
+    if (e.target.tagName === 'IMG') {
+        showResizeHandle(e.target);
+    } else if (!e.target.matches('#image-resize-handle')) {
+        hideResizeHandle();
+    }
+});
+
+// Force image to 100x100 when handle is clicked
+resizeHandle.addEventListener('mousedown', e => {
+    e.preventDefault();
+    if (targetImage) {
+        targetImage.style.width = "10px";
+        targetImage.style.height = "10px";
+        showResizeHandle(targetImage); // update handle position
+    }
+});
+
+</script>
 </body>
 </html>
