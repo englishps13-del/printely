@@ -400,7 +400,15 @@
             from {bottom: 30px; opacity: 1;} 
             to {bottom: 0; opacity: 0;}
         }
- 
+ .editable-area img, [contenteditable="true"] img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px;
+}
+
     </style>
 </head>
 <body>
@@ -481,11 +489,10 @@
           <div class="group" aria-label="Actions">
             <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
           </div>
-          <div class="group" aria-label="Insert">
-  <button class="btn-square" id="insertImageBtn" title="Insert Image">
+<div class="group" aria-label="Insert">
+  <button class="btn-square insert-image-btn" title="Insert Image">
     <i class="fa-solid fa-image"></i>
   </button>
-  <input type="file" id="imageUploadInput" accept="image/*" style="display:none">
 </div>
 
           <div class="grow"></div>
@@ -765,166 +772,302 @@
         }
     }
 
-    function showLoading() {
-        if (!document.getElementById('loadingOverlay')) {
-            const overlay = document.createElement('div');
-            overlay.id = 'loadingOverlay';
-            overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 5000;`;
-            const spinner = document.createElement('div');
-            spinner.style.cssText = `width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--accent-primary); border-radius: 50%; animation: spin 1s linear infinite;`;
-            const keyframes = document.createElement('style');
-            keyframes.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
-            document.head.appendChild(keyframes);
-            overlay.appendChild(spinner);
-            document.body.appendChild(overlay);
+        function showLoading() {
+            if (!document.getElementById('loadingOverlay')) {
+                const overlay = document.createElement('div');
+                overlay.id = 'loadingOverlay';
+                overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 5000;`;
+                const spinner = document.createElement('div');
+                spinner.style.cssText = `width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--accent-primary); border-radius: 50%; animation: spin 1s linear infinite;`;
+                const keyframes = document.createElement('style');
+                keyframes.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+                document.head.appendChild(keyframes);
+                overlay.appendChild(spinner);
+                document.body.appendChild(overlay);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
         }
-        document.getElementById('loadingOverlay').style.display = 'flex';
-    }
 
-    function hideLoading() {
-        const overlay = document.getElementById('loadingOverlay');
-        if (overlay) overlay.style.display = 'none';
-    }
-
-    // Theme switcher
-    themeSelector.addEventListener('change', function() {
-        document.documentElement.className = this.value;
-        localStorage.setItem('selectedTheme', this.value);
-    });
-
-    const savedTheme = localStorage.getItem('selectedTheme');
-    if (savedTheme) {
-        document.documentElement.className = savedTheme;
-        themeSelector.value = savedTheme;
-    }
-
-    printBtn.addEventListener('click', function() {
-        window.print();
-    });
-
-    saveButton.addEventListener('click', function() {
-        if (!currentUser) {
-            showToast('Please log in to save your lesson plan', 'error');
-            return;
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.style.display = 'none';
         }
-        saveModal.style.display = 'block';
-        planNameInput.focus();
-    });
 
-    closeModal.addEventListener('click', function() {
-        saveModal.style.display = 'none';
-        planNameInput.value = '';
-    });
+        // Theme switcher
+        themeSelector.addEventListener('change', function() {
+            document.documentElement.className = this.value;
+            localStorage.setItem('selectedTheme', this.value);
+        });
 
-    cancelSaveBtn.addEventListener('click', function() {
-        saveModal.style.display = 'none';
-        planNameInput.value = '';
-    });
+        const savedTheme = localStorage.getItem('selectedTheme');
+        if (savedTheme) {
+            document.documentElement.className = savedTheme;
+            themeSelector.value = savedTheme;
+        }
 
-    window.addEventListener('click', function(event) {
-        if (event.target === saveModal) {
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+
+        saveButton.addEventListener('click', function() {
+            if (!currentUser) {
+                showToast('Please log in to save your lesson plan', 'error');
+                return;
+            }
+            saveModal.style.display = 'block';
+            planNameInput.focus();
+        });
+
+        closeModal.addEventListener('click', function() {
             saveModal.style.display = 'none';
             planNameInput.value = '';
-        }
-    });
+        });
 
-    // Corrected SAVE FUNCTION
-    confirmSaveBtn.addEventListener('click', async function() {
-        const planName = planNameInput.value.trim();
-
-        if (!planName) {
-            showToast('Please enter a name for your lesson plan', 'error');
-            return;
-        }
-        if (!currentUser) {
-            showToast('You must be logged in to save', 'error');
-            return;
-        }
-        
-        showLoading();
-
-        try {
-            const lessonPlanData = {
-                planName: planName,
-                school: document.getElementById('school')?.innerHTML || '',
-                teacher: document.getElementById('teacher')?.innerHTML || '',
-                date: document.getElementById('date')?.value || '',
-                learners: document.getElementById('learners')?.value || '',
-                level: document.getElementById('levelSelect')?.value || '',
-                sequence: document.getElementById('sequenceSelect')?.value || '',
-                section: document.getElementById('sectionSelect')?.value || '',
-                session: document.getElementById('sessionSelect')?.value || '',
-                objectives: document.getElementById('objectives-editor')?.innerHTML || '',
-                competencies: [],
-                materials: [],
-                warmer: {
-                    procedure: document.getElementById('warmer-proc')?.innerHTML || '',
-                    interaction: document.getElementById('warmer-interact')?.innerHTML || '',
-                    time: document.getElementById('warmer-time')?.innerHTML || ''
-                },
-                presentation: {
-                    procedure: document.getElementById('pres-proc')?.innerHTML || '',
-                    interaction: document.getElementById('pres-interact')?.innerHTML || '',
-                    time: document.getElementById('pres-time')?.innerHTML || ''
-                },
-                assessment: {
-                    procedure: document.getElementById('assess-proc')?.innerHTML || '',
-                    interaction: document.getElementById('assess-interact')?.innerHTML || '',
-                    time: document.getElementById('assess-time')?.innerHTML || ''
-                },
-                homework: {
-                    task: document.getElementById('homework-task')?.innerHTML || '',
-                    materials: document.getElementById('homework-materials')?.innerHTML || '',
-                    due: document.getElementById('homework-due')?.innerHTML || ''
-                },
-                theme: themeSelector.value,
-                plannerType: 'artisan',
-                createdAt: serverTimestamp(),
-                createdBy: currentUser.uid
-            };
-
-            if (document.getElementById('comp-interact')?.checked) lessonPlanData.competencies.push('Interact');
-            if (document.getElementById('comp-interpret')?.checked) lessonPlanData.competencies.push('Interpret');
-            if (document.getElementById('comp-produce')?.checked) lessonPlanData.competencies.push('Produce');
-
-            if (document.getElementById('mat-textbook')?.checked) lessonPlanData.materials.push('Textbook');
-            if (document.getElementById('mat-wb')?.checked) lessonPlanData.materials.push('W.B');
-            if (document.getElementById('mat-flashcards')?.checked) lessonPlanData.materials.push('Flashcards');
-			if (document.getElementById('mat-song')?.checked) lessonPlanData.materials.push('Song');
-			if (document.getElementById('mat-slate')?.checked) lessonPlanData.materials.push('Slate');
-
-            const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
-            await addDoc(plansRef, lessonPlanData);
-
+        cancelSaveBtn.addEventListener('click', function() {
             saveModal.style.display = 'none';
             planNameInput.value = '';
-            showToast('Lesson plan saved successfully!');
-        } catch (error) {
-            console.error("Error saving lesson plan: ", error);
-            showToast('Error saving lesson plan: ' + error.message, 'error');
-        } finally {
-            hideLoading();
-        }
-    });
+        });
 
-    // Toast
-    function showToast(message, type = 'success') {
-        toast.textContent = message;
-        toast.style.backgroundColor = type === 'error' ? '#d9534f' : 'var(--accent-primary)';
-        toast.className = "toast show";
-        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-    }
-
-    // Rich text commands
-    document.querySelectorAll('.ribbon [data-cmd]').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const cmd = this.dataset.cmd;
-            if (cmd) {
-                document.execCommand(cmd, false, null);
+        window.addEventListener('click', function(event) {
+            if (event.target === saveModal) {
+                saveModal.style.display = 'none';
+                planNameInput.value = '';
             }
         });
-    });
+
+        // Corrected SAVE FUNCTION
+        confirmSaveBtn.addEventListener('click', async function() {
+            const planName = planNameInput.value.trim();
+
+            if (!planName) {
+                showToast('Please enter a name for your lesson plan', 'error');
+                return;
+            }
+            if (!currentUser) {
+                showToast('You must be logged in to save', 'error');
+                return;
+            }
+            
+            showLoading();
+
+            try {
+                const lessonPlanData = {
+                    planName: planName,
+                    school: document.getElementById('school')?.innerHTML || '',
+                    teacher: document.getElementById('teacher')?.innerHTML || '',
+                    date: document.getElementById('date')?.value || '',
+                    learners: document.getElementById('learners')?.value || '',
+                    level: document.getElementById('levelSelect')?.value || '',
+                    sequence: document.getElementById('sequenceSelect')?.value || '',
+                    section: document.getElementById('sectionSelect')?.value || '',
+                    session: document.getElementById('sessionSelect')?.value || '',
+                    objectives: document.getElementById('objectives-editor')?.innerHTML || '',
+                    competencies: [],
+                    materials: [],
+                    warmer: {
+                        procedure: document.getElementById('warmer-proc')?.innerHTML || '',
+                        interaction: document.getElementById('warmer-interact')?.innerHTML || '',
+                        time: document.getElementById('warmer-time')?.innerHTML || ''
+                    },
+                    presentation: {
+                        procedure: document.getElementById('pres-proc')?.innerHTML || '',
+                        interaction: document.getElementById('pres-interact')?.innerHTML || '',
+                        time: document.getElementById('pres-time')?.innerHTML || ''
+                    },
+                    assessment: {
+                        procedure: document.getElementById('assess-proc')?.innerHTML || '',
+                        interaction: document.getElementById('assess-interact')?.innerHTML || '',
+                        time: document.getElementById('assess-time')?.innerHTML || ''
+                    },
+                    homework: {
+                        task: document.getElementById('homework-task')?.innerHTML || '',
+                        materials: document.getElementById('homework-materials')?.innerHTML || '',
+                        due: document.getElementById('homework-due')?.innerHTML || ''
+                    },
+                    theme: themeSelector.value,
+                    plannerType: 'artisan',
+                    createdAt: serverTimestamp(),
+                    createdBy: currentUser.uid
+                };
+
+                if (document.getElementById('comp-interact')?.checked) lessonPlanData.competencies.push('Interact');
+                if (document.getElementById('comp-interpret')?.checked) lessonPlanData.competencies.push('Interpret');
+                if (document.getElementById('comp-produce')?.checked) lessonPlanData.competencies.push('Produce');
+
+                if (document.getElementById('mat-textbook')?.checked) lessonPlanData.materials.push('Textbook');
+                if (document.getElementById('mat-wb')?.checked) lessonPlanData.materials.push('W.B');
+                if (document.getElementById('mat-flashcards')?.checked) lessonPlanData.materials.push('Flashcards');
+    			if (document.getElementById('mat-song')?.checked) lessonPlanData.materials.push('Song');
+    			if (document.getElementById('mat-slate')?.checked) lessonPlanData.materials.push('Slate');
+
+                const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
+                await addDoc(plansRef, lessonPlanData);
+
+                saveModal.style.display = 'none';
+                planNameInput.value = '';
+                showToast('Lesson plan saved successfully!');
+            } catch (error) {
+                console.error("Error saving lesson plan: ", error);
+                showToast('Error saving lesson plan: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Toast
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.style.backgroundColor = type === 'error' ? '#d9534f' : 'var(--accent-primary)';
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // Rich text commands
+        document.querySelectorAll('.ribbon [data-cmd]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const cmd = this.dataset.cmd;
+                if (cmd) {
+                    document.execCommand(cmd, false, null);
+                }
+            });
+        });
+    /* --- IMAGE UPLOAD / INSERT (reusable) --- */
+    (function () {
+      // create one global hidden file input (re-used for all ribbons)
+      let fileInput = document.getElementById('globalImageUploader');
+      if (!fileInput) {
+        fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        fileInput.id = 'globalImageUploader';
+        document.body.appendChild(fileInput);
+      }
+
+      function findEditor(button) {
+        // 1) if button has data-editor or data-target, use that selector
+        const selector = button && (button.dataset?.editor || button.dataset?.target);
+        if (selector) {
+          const el = document.querySelector(selector);
+          if (el) return el;
+        }
+
+        // 2) if selection/caret inside editable, use that
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount) {
+          let node = sel.anchorNode;
+          while (node) {
+            if (node.nodeType === 1 && node.isContentEditable) return node;
+            node = node.parentNode;
+          }
+        }
+
+        // 3) if a contenteditable element is focused, use it
+        const active = document.activeElement;
+        if (active && active.isContentEditable) return active;
+
+        // 4) try to find editable area within same ribbon as button
+        if (button) {
+          const ribbon = button.closest('.ribbon') || button.closest('[role="toolbar"]') || document;
+          const maybe = ribbon.querySelector('[contenteditable="true"], .editable-area');
+          if (maybe) return maybe;
+        }
+
+        // 5) fallback: first editable-area on page
+        return document.querySelector('[contenteditable="true"], .editable-area');
+      }
+
+      // click handler for any inserted button (event delegation)
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.insert-image-btn');
+        if (!btn) return;
+        e.preventDefault();
+
+        const editor = findEditor(btn);
+        if (!editor) {
+          alert('No editable area found. Click inside the editor (to place caret) or give the button a data-editor selector.');
+          return;
+        }
+
+        // remember which editor the upload should go into
+        fileInput._targetEditor = editor;
+        fileInput.click();
+      });
+
+      // when file chosen, read and insert
+      fileInput.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        if (!file) {
+          this.value = '';
+          this._targetEditor = null;
+          return;
+        }
+
+        const reader = new FileReader();
+        const targetEditor = this._targetEditor || document.querySelector('[contenteditable="true"], .editable-area');
+
+        reader.onload = function (ev) {
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          img.className = 'fixed-inserted-image';
+          // inline styles are optional — CSS rule above should take precedence
+          img.style.width = '100px';
+          img.style.height = '100px';
+          img.style.objectFit = 'contain';
+          img.style.display = 'inline-block';
+          img.style.verticalAlign = 'middle';
+          img.style.margin = '4px';
+
+          insertNodeAtCursor(img, targetEditor);
+        };
+
+        reader.readAsDataURL(file);
+
+        // reset
+        this.value = '';
+        this._targetEditor = null;
+      });
+
+      function insertNodeAtCursor(node, editor) {
+        editor.focus();
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) {
+          // no selection: append and put caret after
+          editor.appendChild(node);
+          const r = document.createRange();
+          r.setStartAfter(node);
+          r.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(r);
+          return;
+        }
+
+        let range = sel.getRangeAt(0);
+
+        // ensure range is inside the editor; if not, append
+        let container = range.commonAncestorContainer;
+        while (container && container !== editor) container = container.parentNode;
+        if (!container) {
+          editor.appendChild(node);
+          const r = document.createRange();
+          r.setStartAfter(node);
+          r.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(r);
+          return;
+        }
+
+        // insert at current caret / selection
+        range.deleteContents();
+        range.insertNode(node);
+        // move caret after inserted image
+        range.setStartAfter(node);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    })();
 
     document.getElementById('fontFamily').addEventListener('change', function(e) {
         e.preventDefault();
