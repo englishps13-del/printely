@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard – Printely</title>
+  <title>Dashboard â€“ Printely</title>
   <link rel="icon" type="image/x-icon" href="icon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -352,7 +352,7 @@
            <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
            <p class="text-gray-700 dark:text-gray-300">User ID:</p>
            <div class="flex items-center ml-2">
-             <span id="userIdValue" class="font-mono text-sm tracking-tighter">••••••••••••••••••••••••</span>
+             <span id="userIdValue" class="font-mono text-sm tracking-tighter">â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢</span>
              <button id="toggleUserIdBtn" class="ml-2 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200" aria-label="Toggle User ID Visibility"></button>
            </div>
         </div>
@@ -474,7 +474,6 @@
       toastMessage.textContent = message;
       toast.className = 'toast ' + type;
       
-      // Update icon based on type
       const icon = toast.querySelector('i');
       if (type === 'success') {
         icon.className = 'fas fa-check-circle';
@@ -482,12 +481,10 @@
         icon.className = 'fas fa-exclamation-circle';
       }
       
-      // Show toast
       setTimeout(() => {
         toast.classList.add('show');
       }, 100);
       
-      // Hide toast after 3 seconds
       setTimeout(() => {
         toast.classList.remove('show');
       }, 3100);
@@ -545,7 +542,7 @@
       const q = query(historyRef, orderBy("createdAt", "desc"));
 
       onSnapshot(q, (snapshot) => {
-        historyContainer.innerHTML = ''; // Clear previous content
+        historyContainer.innerHTML = '';
         
         if (snapshot.empty) {
           historyContainer.innerHTML = `<p class="text-gray-500 dark:text-gray-400 text-center">You have no saved lesson plans yet.</p>`;
@@ -558,19 +555,19 @@
           
           const date = plan.createdAt ? plan.createdAt.toDate().toLocaleDateString() : 'N/A';
           
-          // Create a more detailed history item
           const planElement = document.createElement('div');
           planElement.className = "history-item bg-white dark:bg-gray-800 rounded-lg shadow-sm";
           
-          // Get competencies as a comma-separated string
           const competencies = plan.competencies && plan.competencies.length > 0 
             ? plan.competencies.join(', ') 
             : 'None specified';
             
-          // Get materials as a comma-separated string
           const materials = plan.materials && plan.materials.length > 0 
             ? plan.materials.join(', ') 
             : 'None specified';
+          
+          // MODIFICATION: Get the planner type, defaulting for old plans
+          const plannerType = plan.plannerType || 'classic';
           
           planElement.innerHTML = `
             <div class="history-header">
@@ -588,7 +585,7 @@
               </div>
               <div class="history-detail">
                 <i class="fas fa-book"></i>
-                <span>${plan.sequence || 'Not specified'}</span>
+                <span>Sequence: ${plan.sequence || 'Not specified'}</span>
               </div>
               <div class="history-detail">
                 <i class="fas fa-bookmark"></i>
@@ -598,10 +595,9 @@
                 <i class="fas fa-calendar-day"></i>
                 <span>${plan.session || 'Not specified'}</span>
               </div>
-              
             </div>
             <div class="history-actions">
-              <button data-id="${planId}" class="history-btn load-btn">Load</button>
+              <button data-id="${planId}" data-type="${plannerType}" class="history-btn load-btn">Load</button>
               <button data-id="${planId}" class="history-btn delete-btn">Delete</button>
             </div>
           `;
@@ -618,9 +614,8 @@
         if (user) {
             const uid = user.uid;
             
-            // --- User ID Visibility Toggle ---
             let isUserIdVisible = false;
-            const maskedUid = '•'.repeat(uid.length);
+            const maskedUid = 'â€¢'.repeat(uid.length);
             userIdValueEl.textContent = maskedUid;
             toggleUserIdBtn.innerHTML = eyeIcon;
             
@@ -632,12 +627,10 @@
             
             userEmailEl.textContent = user.email;
 
-            // --- Fetch or Create User Document ---
             const userDocRef = doc(db, "users", uid);
             let userDocSnap = await getDoc(userDocRef);
 
             if (!userDocSnap.exists()) {
-                // Create user document if it doesn't exist
                 await setDoc(userDocRef, { 
                   email: user.email, 
                   gender: 'default', 
@@ -649,31 +642,26 @@
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data();
                 
-                // Display username or fallback to email
                 if (userData.username) {
                     userNameEl.textContent = userData.username;
                 } else if (user.displayName) {
                     userNameEl.textContent = user.displayName;
                 } else {
-                    // Extract username from email if no display name is set
                     const emailUsername = user.email.split('@')[0];
                     userNameEl.textContent = emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
                 }
                 
-                // Display join date
                 if (userData.createdAt?.toDate) {
                     joinDateEl.textContent = userData.createdAt.toDate().toLocaleDateString();
                 } else {
                     joinDateEl.textContent = new Date().toLocaleDateString();
                 }
                 
-                // Display gender
                 const savedGender = userData.gender || 'default';
                 updateProfileColor(savedGender);
                 displaySavedGender(savedGender);
             }
 
-            // --- Load the user's history ---
             loadHistory(uid);
 
         } else {
@@ -690,10 +678,24 @@
       if (!planId || !user) return;
 
       if (target.classList.contains('load-btn')) {
-        // Store the ID of the plan to load in sessionStorage
+        const plannerType = target.dataset.type;
         sessionStorage.setItem('planToLoadId', planId);
-        // Redirect to the lesson plan editor
-        window.location.href = 'lesson_plan.html';
+
+        let redirectUrl;
+        switch (plannerType) {
+            case 'artisan':
+                redirectUrl = 'design999.html';
+                break;
+            case 'google':
+                redirectUrl = 'googledesign.html';
+                break;
+            case 'classic':
+            default:
+                redirectUrl = 'lesson_plan.html';
+                break;
+        }
+        
+        window.location.href = redirectUrl;
       }
 
       if (target.classList.contains('delete-btn')) {
@@ -722,18 +724,15 @@
         const confirmNewPassword = document.getElementById('confirm-new-password').value;
         const user = auth.currentUser;
         
-        // Reset message
         passwordMessageEl.textContent = '';
         passwordMessageEl.className = 'text-sm text-center mt-2';
         
-        // Validate new password
         if (newPassword.length < 6) {
             passwordMessageEl.textContent = 'New password must be at least 6 characters long.';
             passwordMessageEl.className = 'text-sm text-center mt-2 text-red-500';
             return;
         }
         
-        // Check if passwords match
         if (newPassword !== confirmNewPassword) {
             passwordMessageEl.textContent = 'New passwords do not match.';
             passwordMessageEl.className = 'text-sm text-center mt-2 text-red-500';
@@ -742,21 +741,16 @@
         
         try {
             showLoading();
-            // Re-authenticate user before password change
             const credential = EmailAuthProvider.credential(user.email, currentPassword);
             await reauthenticateWithCredential(user, credential);
             
-            // Update password
             await updatePassword(user, newPassword);
             
-            // Show success message
             passwordMessageEl.textContent = 'Password updated successfully!';
             passwordMessageEl.className = 'text-sm text-center mt-2 text-green-500';
             
-            // Reset form
             passwordForm.reset();
             
-            // Show toast notification
             showToast("Password updated successfully!", "success");
             
         } catch (error) {
@@ -790,3 +784,4 @@
   </script>
 </body>
 </html>
+

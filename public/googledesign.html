@@ -287,8 +287,14 @@
       outline: none;
       transition: all 0.2s ease-in-out;
     }
+    
+    .action-button:disabled {
+        background-color: #e0e0e0;
+        cursor: not-allowed;
+        color: #9e9e9e;
+    }
 
-    .action-button:hover {
+    .action-button:hover:not(:disabled) {
       background-color: var(--header-color);
       color: var(--paper-color);
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -708,6 +714,45 @@
         pointer-events: none;
         font-style: italic;
     }
+
+    /* --- NEW: Modal & Toast & Loader Styles --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background-color: var(--paper-color); padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; text-align: center; position: relative; font-family: 'Quicksand', sans-serif;
+      border: 2px solid var(--header-color);
+    }
+    .modal-close-btn {
+      position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer; color: var(--secondary-text);
+    }
+    .modal-content h2 { margin-top: 0; margin-bottom: 15px; color: var(--primary-text);}
+    .modal-content p { margin-bottom: 20px; color: var(--secondary-text); }
+    .modal-content input[type="text"] {
+      box-sizing: border-box; width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid var(--line-color); border-radius: 4px; font-size: 16px; min-height: auto;
+    }
+    .modal-content button {
+      background-color: var(--header-color); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%;
+    }
+    .modal-content button:hover { opacity: 0.8; }
+    
+    .loading-indicator {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: none; justify-content: center; align-items: center; z-index: 2000;
+    }
+    .loading-spinner {
+      border: 5px solid #f3f3f3; border-top: 5px solid var(--header-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed; bottom: 20px; right: 20px; background: var(--primary-text); color: var(--paper-color); padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex; align-items: center; z-index: 1000; transform: translateY(100px); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { margin-right: 12px; font-size: 20px; }
+    .toast.success { background-color: #27ae60; }
+    .toast.error { background-color: #e74c3c; }
+
   </style>
 </head>
 <body class="theme-doodle">
@@ -733,26 +778,15 @@
     <button class="action-button" onclick="window.print()">
       <i class="fas fa-print"></i> Print
     </button>
-    <button class="action-button" id="pdf-button">
-      <i class="fas fa-file-pdf"></i> PDF
-    </button>
-	<button class="action-button" id="undo-button">
-      <i class="fas fa-undo"></i> Undo
-    </button>
-    <button class="action-button" id="redo-button">
-      <i class="fas fa-redo"></i> Redo
-    </button>
-    <button class="action-button" id="save-button">
+    <button class="action-button" id="save-button" disabled title="Login to save">
       <i class="fas fa-save"></i> Save
-    </button>
-    <button class="action-button" id="load-button">
-      <i class="fas fa-upload"></i> Load
     </button>
   </div>
   
   <div class="lesson-plan-container">
     <div class="header">
-      </div>
+      <h1>Lesson Plan</h1>
+    </div>
 
     <div class="ribbon" id="ribbon">
         <div class="group" aria-label="Font">
@@ -840,24 +874,24 @@
 
     <div class="new-box">
       <div class="new-title">Learning Objectives</div>
-      <div class="editable-area" contenteditable="true" data-placeholder="Write learning objectives here..."></div>
+      <div id="objectives" class="editable-area" contenteditable="true" data-placeholder="Write learning objectives here..."></div>
     </div>
 
     <div class="two-column-layout">
       <div class="section">
         <div class="section-title small-title">Target Competencies</div>
-        <div class="checkbox-inline">
-          <label><input type="checkbox"> Interact</label>
-          <label><input type="checkbox"> Interpret</label>
-          <label><input type="checkbox"> Produce</label>
+        <div class="checkbox-inline" id="competencies">
+          <label><input type="checkbox" value="Interact"> Interact</label>
+          <label><input type="checkbox" value="Interpret"> Interpret</label>
+          <label><input type="checkbox" value="Produce"> Produce</label>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title small-title">Teaching Materials</div>
-        <div class="checkbox-inline">
-          <label><input type="checkbox"> Textbook</label>
-          <label><input type="checkbox"> W.B</label>
+        <div class="checkbox-inline" id="materials">
+          <label><input type="checkbox" value="Textbook"> Textbook</label>
+          <label><input type="checkbox" value="W.B"> W.B</label>
         </div>
       </div>
     </div>
@@ -866,323 +900,350 @@
     <div class="section">
         <div class="section-title">Warmer</div>
         <div class="three-column-layout">
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
+            <div id="warmer-procedure" class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+            <div id="warmer-interaction" class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+            <div id="warmer-time" class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
         </div>
     </div>
 
     <div class="section">
       <div class="section-title">Install Resources</div>
       <div class="three-column-layout">
-        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Procedure"></div>
-        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Interaction"></div>
-        <div class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Time"></div>
+        <div id="install-procedure" class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+        <div id="install-interaction" class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+        <div id="install-time" class="editable-area resizable-textarea" contenteditable="true" data-placeholder="Time"></div>
       </div>
     </div>
 
     <div class="section">
         <div class="section-title">Assessment</div>
         <div class="three-column-layout">
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
-            <div class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
+            <div id="assessment-procedure" class="editable-area small-textarea" contenteditable="true" data-placeholder="Procedure"></div>
+            <div id="assessment-interaction" class="editable-area small-textarea" contenteditable="true" data-placeholder="Interaction"></div>
+            <div id="assessment-time" class="editable-area small-textarea" contenteditable="true" data-placeholder="Time"></div>
         </div>
     </div>
 
     <div class="new-box">
       <div class="new-title">Activity / Summary</div>
-      <div class="editable-area" contenteditable="true" data-placeholder="Write activity or summary here..."></div>
+      <div id="activity-summary" class="editable-area" contenteditable="true" data-placeholder="Write activity or summary here..."></div>
     </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" class="loading-indicator">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i id="toast-icon" class="fas fa-check-circle"></i>
+    <span id="toast-message">Success!</span>
+  </div>
+
+  <!-- Save Modal -->
+  <div id="saveModal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="modal-close-btn">&times;</span>
+      <h2>Save Lesson Plan</h2>
+      <p>Please enter a name for this lesson plan.</p>
+      <input type="text" id="planNameInput" placeholder="e.g., Grade 5 - Week 2 - Reading" />
+      <button id="confirmSaveBtn">Save Plan</button>
+    </div>
+  </div>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <script>
-    // --- RICH TEXT EDITOR LOGIC ---
+  <script type="module">
+    // --- IMPORT FIREBASE MODULES ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // --- FIREBASE CONFIGURATION ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    // --- INITIALIZE FIREBASE ---
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- DOM ELEMENTS ---
+    const saveButton = document.getElementById('save-button');
+    const saveModal = document.getElementById('saveModal');
+    const closeModalBtn = document.querySelector('.modal-close-btn');
+    const planNameInput = document.getElementById('planNameInput');
+    const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = document.getElementById('toast-icon');
+
+    let currentUser = null;
+    let currentPlanId = null;
+    let isEditMode = false;
+    
+    // --- HELPER FUNCTIONS ---
+    function showLoading() { loadingIndicator.style.display = 'flex'; }
+    function hideLoading() { loadingIndicator.style.display = 'none'; }
+
+    function showToast(message, type = 'success') {
+      toastMessage.textContent = message;
+      toast.className = `toast show ${type}`;
+      toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
+    }
+
+    // --- AUTHENTICATION ---
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        saveButton.disabled = false;
+        saveButton.title = "Save your lesson plan";
+
+        const planToLoadId = sessionStorage.getItem('planToLoadId');
+        if (planToLoadId) {
+            loadPlan(planToLoadId);
+            sessionStorage.removeItem('planToLoadId');
+        }
+      } else {
+        currentUser = null;
+        saveButton.disabled = true;
+        saveButton.title = "You must be logged in to save";
+      }
+    });
+
+    // --- SAVE & LOAD LOGIC ---
+    function collectPlanData() {
+        const getCheckedValues = (containerId) => {
+            const values = [];
+            document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`).forEach(cb => values.push(cb.value));
+            return values;
+        };
+
+        return {
+            school: document.getElementById('school').value,
+            teacher: document.getElementById('teacher').value,
+            learners: document.getElementById('learners').value,
+            level: document.getElementById('levelSelect').value,
+            sequence: document.getElementById('sequenceSelect').value,
+            section: document.getElementById('sectionSelect').value,
+            session: document.getElementById('sessionSelect').value,
+            objectives: document.getElementById('objectives').innerHTML,
+            competencies: getCheckedValues('competencies'),
+            materials: getCheckedValues('materials'),
+            warmer: {
+                procedure: document.getElementById('warmer-procedure').innerHTML,
+                interaction: document.getElementById('warmer-interaction').innerHTML,
+                time: document.getElementById('warmer-time').innerHTML,
+            },
+            install: {
+                procedure: document.getElementById('install-procedure').innerHTML,
+                interaction: document.getElementById('install-interaction').innerHTML,
+                time: document.getElementById('install-time').innerHTML,
+            },
+            assessment: {
+                procedure: document.getElementById('assessment-procedure').innerHTML,
+                interaction: document.getElementById('assessment-interaction').innerHTML,
+                time: document.getElementById('assessment-time').innerHTML,
+            },
+            activitySummary: document.getElementById('activity-summary').innerHTML,
+            plannerType: 'google', // Discriminator field
+            theme: document.documentElement.className,
+        };
+    }
+
+    function populateForm(data) {
+        const setCheckedValues = (containerId, values) => {
+            document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+                cb.checked = values.includes(cb.value);
+            });
+        };
+
+        document.getElementById('school').value = data.school || '';
+        document.getElementById('teacher').value = data.teacher || '';
+        document.getElementById('learners').value = data.learners || '';
+        document.getElementById('levelSelect').value = data.level || '';
+        
+        // Trigger change events to populate dependent dropdowns
+        levelSelect.dispatchEvent(new Event('change'));
+        setTimeout(() => {
+            sequenceSelect.value = data.sequence || '';
+            sequenceSelect.dispatchEvent(new Event('change'));
+            setTimeout(() => {
+                sectionSelect.value = data.section || '';
+                sectionSelect.dispatchEvent(new Event('change'));
+                setTimeout(() => {
+                    sessionSelect.value = data.session || '';
+                }, 100);
+            }, 100);
+        }, 100);
+
+        document.getElementById('objectives').innerHTML = data.objectives || '';
+        setCheckedValues('competencies', data.competencies || []);
+        setCheckedValues('materials', data.materials || []);
+
+        document.getElementById('warmer-procedure').innerHTML = data.warmer?.procedure || '';
+        document.getElementById('warmer-interaction').innerHTML = data.warmer?.interaction || '';
+        document.getElementById('warmer-time').innerHTML = data.warmer?.time || '';
+
+        document.getElementById('install-procedure').innerHTML = data.install?.procedure || '';
+        document.getElementById('install-interaction').innerHTML = data.install?.interaction || '';
+        document.getElementById('install-time').innerHTML = data.install?.time || '';
+
+        document.getElementById('assessment-procedure').innerHTML = data.assessment?.procedure || '';
+        document.getElementById('assessment-interaction').innerHTML = data.assessment?.interaction || '';
+        document.getElementById('assessment-time').innerHTML = data.assessment?.time || '';
+
+        document.getElementById('activity-summary').innerHTML = data.activitySummary || '';
+        document.documentElement.className = data.theme || 'theme-doodle';
+        document.getElementById('theme-selector').value = (data.theme || 'theme-doodle').replace('theme-', '');
+    }
+
+    async function loadPlan(planId) {
+        if (!currentUser) return;
+        showLoading();
+        try {
+            const planRef = doc(db, "users", currentUser.uid, "lessonPlans", planId);
+            const planDoc = await getDoc(planRef);
+            if (planDoc.exists()) {
+                const planData = planDoc.data();
+                currentPlanId = planId;
+                isEditMode = true;
+                populateForm(planData);
+                showToast("Lesson plan loaded successfully!", "success");
+            } else {
+                showToast("Lesson plan not found.", "error");
+            }
+        } catch (error) {
+            console.error("Error loading plan:", error);
+            showToast("Could not load the lesson plan.", "error");
+        } finally {
+            hideLoading();
+        }
+    }
+
+    async function savePlan(planName) {
+      if (!currentUser || !planName.trim()) return;
+      showLoading();
+      try {
+        const planData = collectPlanData();
+        planData.planName = planName.trim();
+        planData.updatedAt = serverTimestamp();
+        
+        let docRef;
+        if (isEditMode && currentPlanId) {
+            docRef = doc(db, "users", currentUser.uid, "lessonPlans", currentPlanId);
+            await updateDoc(docRef, planData);
+            showToast("Lesson plan updated successfully!", "success");
+        } else {
+            planData.createdAt = serverTimestamp();
+            const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
+            const newDoc = await addDoc(plansRef, planData);
+            currentPlanId = newDoc.id;
+            isEditMode = true;
+            showToast("Lesson plan saved successfully!", "success");
+        }
+        
+        saveModal.style.display = 'none';
+        planNameInput.value = '';
+
+      } catch (error) {
+        console.error("Error saving plan:", error);
+        showToast("Error saving plan. Please try again.", "error");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // --- EVENT LISTENERS ---
+    saveButton.addEventListener('click', () => {
+      saveModal.style.display = 'flex';
+      planNameInput.focus();
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      saveModal.style.display = 'none';
+      planNameInput.value = '';
+    });
+
+    confirmSaveBtn.addEventListener('click', () => {
+      const planName = planNameInput.value.trim();
+      if (planName) {
+        savePlan(planName);
+      } else {
+        showToast("Please enter a name for your plan.", "error");
+      }
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === saveModal) {
+        saveModal.style.display = 'none';
+        planNameInput.value = '';
+      }
+    });
+    
+    // --- RICH TEXT EDITOR LOGIC (simplified) ---
     let activeEditor = null;
     document.addEventListener('focusin', e => {
-        if (e.target.isContentEditable) {
-            activeEditor = e.target;
-            updateStatus();
-        }
+        if (e.target.isContentEditable) activeEditor = e.target;
     });
-
-    const pxSteps = [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48];
-
-    function isSelectionInEditor() {
-      if (!activeEditor) return false;
-      const sel = window.getSelection();
-      return sel && sel.rangeCount > 0 && activeEditor.contains(sel.getRangeAt(0).commonAncestorContainer);
-    }
 
     function exec(cmd, value = null) {
-      if (!isSelectionInEditor()) return;
-      document.execCommand(cmd, false, value);
-      activeEditor.focus();
+      if (activeEditor) document.execCommand(cmd, false, value);
     }
-    
-    function applyStyle(style, value) {
-        if (!isSelectionInEditor()) return;
-        const sel = window.getSelection();
-        if (sel.rangeCount) {
-            const range = sel.getRangeAt(0);
-            if(range.collapsed) return;
-
-            const span = document.createElement("span");
-            span.style[style] = value;
-
-            try {
-                span.appendChild(range.extractContents());
-                range.insertNode(span);
-                range.selectNodeContents(span);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            } catch(e) {
-                console.warn("surroundContents failed, using fallback execCommand.", e);
-                document.execCommand('styleWithCSS', false, true);
-                if (style === 'fontSize') exec('fontSize', '7');
-                if (style === 'fontFamily') exec('fontName', value);
-
-                const container = range.commonAncestorContainer;
-                const affectedNodes = (container.nodeType === 1 ? container : container.parentElement).getElementsByTagName("font");
-                Array.from(affectedNodes).forEach(font => {
-                    const newSpan = document.createElement('span');
-                    newSpan.innerHTML = font.innerHTML;
-                    newSpan.style[style] = value;
-                    font.parentNode.replaceChild(newSpan, font);
-                });
-            }
-        }
-    }
-
-    function applyFontFamily(family) { applyStyle('fontFamily', family); }
-    function applyFontSize(px) { applyStyle('fontSize', px + 'px'); }
-
-    function getComputedFontSizePxAtCaret(defaultPx = 14) {
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0) return defaultPx;
-        let node = sel.anchorNode;
-        if (!node || !isSelectionInEditor()) return defaultPx;
-        const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
-        return Math.round(parseFloat(window.getComputedStyle(element).fontSize));
-    }
-
-    function stepFontSize(delta) {
-        const current = getComputedFontSizePxAtCaret();
-        let idx = pxSteps.findIndex(v => v >= current);
-        if (idx === -1) idx = pxSteps.length - 1;
-        if (current < pxSteps[idx] && idx > 0) idx -= 1;
-        idx = Math.min(Math.max(idx + delta, 0), pxSteps.length - 1);
-        applyFontSize(pxSteps[idx]);
-    }
-    
-    document.getElementById('fontFamily').addEventListener('change', e => applyFontFamily(e.target.value));
-    document.getElementById('fontSize').addEventListener('change', e => applyFontSize(parseInt(e.target.value, 10)));
-    document.getElementById('fontInc').addEventListener('click', () => stepFontSize(+1));
-    document.getElementById('fontDec').addEventListener('click', () => stepFontSize(-1));
-    document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
-    document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
     
     document.querySelectorAll('[data-cmd]').forEach(btn => {
-        btn.addEventListener('click', (e) => { 
+        btn.addEventListener('click', e => {
             e.preventDefault();
-            exec(btn.getAttribute('data-cmd')); 
+            exec(btn.dataset.cmd);
         });
     });
+    // Add other rich text editor functions here...
 
-    function updateStatus() {
-      if (!activeEditor) {
-          document.getElementById('wordCount').textContent = '0 words';
-          document.getElementById('selectionInfo').textContent = 'No selection';
-          document.querySelectorAll('[data-cmd]').forEach(btn => btn.classList.remove('active'));
-          return;
-      }
-      const text = activeEditor.innerText.trim();
-      const words = text ? text.split(/\s+/).length : 0;
-      document.getElementById('wordCount').textContent = `${words} word${words === 1 ? '' : 's'}`;
 
-      const sel = window.getSelection();
-      const selLen = (sel && sel.rangeCount) ? sel.toString().length : 0;
-      document.getElementById('selectionInfo').textContent = selLen > 0 ? `${selLen} chars selected` : 'No selection';
-
-      document.querySelectorAll('[data-cmd]').forEach(btn => {
-        const cmd = btn.getAttribute('data-cmd');
-        try {
-            btn.classList.toggle('active', document.queryCommandState(cmd));
-        } catch (e) {
-            btn.classList.remove('active');
-        }
-      });
-    }
-
-    document.addEventListener('selectionchange', updateStatus);
-    document.querySelector('.lesson-plan-container').addEventListener('keyup', updateStatus);
-    document.querySelector('.lesson-plan-container').addEventListener('mouseup', updateStatus);
-    
-    // --- ORIGINAL PAGE LOGIC ---
+    // --- CURRICULUM & PAGE LOGIC ---
     const themeSelector = document.getElementById('theme-selector');
-    const root = document.documentElement;
-
     themeSelector.addEventListener('change', (e) => {
-      root.className = '';
-      root.classList.add(`theme-${e.target.value}`);
+      document.documentElement.className = `theme-${e.target.value}`;
     });
-
-    const pdfButton = document.getElementById('pdf-button');
-    pdfButton.addEventListener('click', () => {
-      const element = document.querySelector('.lesson-plan-container');
-      const filename = 'lesson-plan-' + new Date().toISOString().slice(0, 10) + '.pdf';
-      
-      const controls = document.querySelector('.controls');
-      controls.style.display = 'none';
-      
-      const originalBodyPadding = document.body.style.padding;
-      document.body.style.padding = '0';
-      
-      const container = document.querySelector('.lesson-plan-container');
-      const originalContainerWidth = container.style.width;
-      const originalContainerMinHeight = container.style.minHeight;
-      const originalContainerPadding = container.style.padding;
-      const originalContainerBorder = container.style.border;
-      const originalContainerShadow = container.style.boxShadow;
-
-      container.style.width = '210mm';
-      container.style.minHeight = '297mm';
-      container.style.height = 'auto';
-      container.style.padding = '20mm';
-      container.style.border = '1px solid var(--line-color)';
-      container.style.boxShadow = 'none';
-      
-      document.body.classList.add('print-pdf-mode');
-
-      html2pdf(element, {
-        margin: 0,
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).then(() => {
-        controls.style.display = 'flex';
-        document.body.style.padding = originalBodyPadding;
-        document.body.classList.remove('print-pdf-mode');
-        container.style.width = originalContainerWidth;
-        container.style.minHeight = originalContainerMinHeight;
-        container.style.padding = originalContainerPadding;
-        container.style.border = originalContainerBorder;
-        container.style.boxShadow = originalContainerShadow;
-      });
-    });
-
     const curriculumData = { "3PS": { "Sequence 01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 02: School": { "Section 01: School Objects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: School Subjects": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 03: Home": { "Section 01: Describing a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Location Rooms in a House": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 04: Play Time": { "Section 01: Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Favourite Toys": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 05: Pets": { "Section 01: Pets": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Pets Body Parts": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] }, "Sequence 06: Birthday": { "Section 01: Party Invitation": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"], "Section 02: Party Celebration": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and write", "SESSION 04: I play roles"] } }, "4PS": { "Sequence 01: Family and Friends": { "Section 01: Family": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Friends": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Sequence 02: School": { "Section 01: School Facilities": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Mapping": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] }, "Sequence 03: Fun Time and Games": { "Section 01: Fun Time": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"], "Section 02: Games": ["SESSION 01: I sing and have fun, I listen and repeat", "SESSION 02: I read and discover", "SESSION 03: I read and enjoy", "SESSION 04: I read and write", "SESSION 05: I play roles"] } }, "5PS": { "Sequence 01: Jobs, Occupations, and Hobbies": { "Section 01: Jobs and Occupations": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Hobbies": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Sequence 02: Hometown, City, Village Amenities": { "Section 01: Hometown, City, Village Amenities": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Directions": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] }, "Sequence 03: Holidays and Travelling": { "Section 01: Holidays": ["SESSION 01: I get ready.", "SESSION 02: I listen and interact", "SESSION 03: I listen and discover", "SESSION 04: I read and understand", "SESSION 05: I read and discover", "SESSION 06: I learn and enjoy", "SESSION 07: I learn and write", "SESSION 08: I write"], "Section 02: Travelling": ["SESSION 01: I listen and interact", "SESSION 02: I listen and discover", "SESSION 03: I read and understand", "SESSION 04: I read and discover", "SESSION 05: I learn and enjoy", "SESSION 06: I learn to write", "SESSION 07: I write", "SESSION 08: I check my progress"] } } };
-
     const levelSelect = document.getElementById("levelSelect");
     const sequenceSelect = document.getElementById("sequenceSelect");
     const sectionSelect = document.getElementById("sectionSelect");
     const sessionSelect = document.getElementById("sessionSelect");
-
     const specialOption = "REMEDIATION & STANDARDISATION";
-
-    function resetSelect(selectElement, placeholderText) {
-      selectElement.innerHTML = `<option value="">${placeholderText}</option>`;
-    }
-
-    function initializeLevels() {
-      resetSelect(levelSelect, "Select Level");
-      Object.keys(curriculumData).forEach(level => {
-        const option = new Option(level, level);
-        levelSelect.add(option);
-      });
-    }
-
+    function resetSelect(selectElement, placeholderText) { selectElement.innerHTML = `<option value="">${placeholderText}</option>`; }
+    function initializeLevels() { resetSelect(levelSelect, "Select Level"); Object.keys(curriculumData).forEach(level => levelSelect.add(new Option(level, level))); }
     levelSelect.addEventListener("change", () => {
-      const selectedLevel = levelSelect.value;
-      resetSelect(sequenceSelect, "Select Sequence");
-      resetSelect(sectionSelect, "Select Section");
-      resetSelect(sessionSelect, "Select Session");
-      if (!selectedLevel) return;
-      const sequences = Object.keys(curriculumData[selectedLevel]);
-      sequences.forEach(seq => sequenceSelect.add(new Option(seq, seq)));
-      sequenceSelect.add(new Option(specialOption, specialOption));
+        const selectedLevel = levelSelect.value;
+        resetSelect(sequenceSelect, "Select Sequence"); resetSelect(sectionSelect, "Select Section"); resetSelect(sessionSelect, "Select Session");
+        if (!selectedLevel) return;
+        Object.keys(curriculumData[selectedLevel]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+        sequenceSelect.add(new Option(specialOption, specialOption));
     });
-
     sequenceSelect.addEventListener("change", () => {
-      const selectedLevel = levelSelect.value;
-      const selectedSeq = sequenceSelect.value;
-      resetSelect(sectionSelect, "Select Section");
-      resetSelect(sessionSelect, "Select Session");
-      if (!selectedSeq) return;
-      if (selectedSeq === specialOption) {
-        sectionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`;
-        sessionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`;
-        return;
-      }
-      const sections = Object.keys(curriculumData[selectedLevel][selectedSeq]);
-      sections.forEach(sec => sectionSelect.add(new Option(sec, sec)));
+        const selectedLevel = levelSelect.value; const selectedSeq = sequenceSelect.value;
+        resetSelect(sectionSelect, "Select Section"); resetSelect(sessionSelect, "Select Session");
+        if (!selectedSeq) return;
+        if (selectedSeq === specialOption) { sectionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`; sessionSelect.innerHTML = `<option value="${specialOption}">${specialOption}</option>`; return; }
+        Object.keys(curriculumData[selectedLevel][selectedSeq]).forEach(sec => sectionSelect.add(new Option(sec, sec)));
     });
-
     sectionSelect.addEventListener("change", () => {
-      const selectedLevel = levelSelect.value;
-      const selectedSeq = sequenceSelect.value;
-      const selectedSec = sectionSelect.value;
-      resetSelect(sessionSelect, "Select Session");
-      if (!selectedSec || selectedSec === specialOption) return;
-      const sessions = curriculumData[selectedLevel][selectedSeq][selectedSec];
-      sessions.forEach(session => sessionSelect.add(new Option(session, session)));
+        const selectedLevel = levelSelect.value; const selectedSeq = sequenceSelect.value; const selectedSec = sectionSelect.value;
+        resetSelect(sessionSelect, "Select Session");
+        if (!selectedSec || selectedSec === specialOption) return;
+        curriculumData[selectedLevel][selectedSeq][selectedSec].forEach(session => sessionSelect.add(new Option(session, session)));
     });
-
     initializeLevels();
-
-    const planId = "default-plan";
-    let undoStack = [];
-    let redoStack = [];
-
-    function collectPlanData() {
-        const data = {};
-        document.querySelectorAll("input, select").forEach(el => {
-            if (el.id) data[el.id] = el.type === "checkbox" ? el.checked : el.value;
-        });
-        document.querySelectorAll(".editable-area").forEach((el, index) => {
-            const id = el.dataset.placeholder || `editable-${index}`;
-            data[id] = el.innerHTML;
-        });
-        return data;
-    }
-
-    function restorePlanData(data) {
-        document.querySelectorAll("input, select").forEach(el => {
-            if (el.id && data[el.id] !== undefined) {
-                el.type === "checkbox" ? el.checked = data[el.id] : el.value = data[el.id];
-            }
-        });
-        document.querySelectorAll(".editable-area").forEach((el, index) => {
-            const id = el.dataset.placeholder || `editable-${index}`;
-            if (data[id] !== undefined) el.innerHTML = data[id];
-        });
-    }
-
-    function pushUndoState() {
-      undoStack.push(JSON.stringify(collectPlanData()));
-      if (undoStack.length > 50) undoStack.shift();
-      redoStack = [];
-    }
-    
-    document.querySelector('.lesson-plan-container').addEventListener("input", pushUndoState);
-    document.getElementById("undo-button").addEventListener("click", () => { if (undoStack.length > 1) { redoStack.push(undoStack.pop()); restorePlanData(JSON.parse(undoStack[undoStack.length - 1])); } });
-    document.getElementById("redo-button").addEventListener("click", () => { if (redoStack.length > 0) { const nextState = redoStack.pop(); undoStack.push(nextState); restorePlanData(JSON.parse(nextState)); } });
-    document.getElementById("save-button").addEventListener("click", () => { localStorage.setItem(`lessonplan-${planId}`, JSON.stringify(collectPlanData())); alert("Plan saved!"); });
-    document.getElementById("load-button").addEventListener("click", () => {
-      const dataStr = localStorage.getItem(`lessonplan-${planId}`);
-      if (dataStr) {
-        const data = JSON.parse(dataStr);
-        restorePlanData(data);
-        undoStack = [JSON.stringify(data)];
-        redoStack = [];
-        alert("Plan loaded!");
-      } else { alert("No saved plan found."); }
-    });
-    
-    pushUndoState();
-
   </script>
 </body>
 </html>

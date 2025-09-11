@@ -1530,7 +1530,6 @@ sectionSelect.addEventListener("change", () => {
     const auth = getAuth(app);
     const db = getFirestore(app);
     
-    // Enable offline persistence
     try {
       await enableIndexedDbPersistence(db);
       console.log("Offline persistence enabled");
@@ -1554,7 +1553,6 @@ sectionSelect.addEventListener("change", () => {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
     
-    // --- FORM ELEMENTS ---
     const primarySchoolInput = document.getElementById('primarySchoolInput');
     const teacherInput = document.getElementById('teacherInput');
     const levelSelect = document.getElementById('level');
@@ -1566,7 +1564,6 @@ sectionSelect.addEventListener("change", () => {
     const competenciesGroup = document.getElementById('competencies-group');
     const materialsGroup = document.getElementById('materials-group');
     
-    // Table cells
     const warmerProcArea = document.getElementById('warmer-proc-area');
     const warmerIntArea = document.getElementById('warmer-int-area');
     const warmerTimeArea = document.getElementById('warmer-time-area');
@@ -1577,7 +1574,6 @@ sectionSelect.addEventListener("change", () => {
     const assessmentIntArea = document.getElementById('assessment-int-area');
     const assessmentTimeArea = document.getElementById('assessment-time-area');
     
-    // Activities
     const activity1Area = document.getElementById('activity1-area');
     const activity2Area = document.getElementById('activity2-area');
 
@@ -1585,22 +1581,18 @@ sectionSelect.addEventListener("change", () => {
     let currentPlanId = null;
     let isEditMode = false;
 
-    // Show loading indicator
     function showLoading() {
       loadingIndicator.style.display = 'flex';
     }
 
-    // Hide loading indicator
     function hideLoading() {
       loadingIndicator.style.display = 'none';
     }
 
-    // Show toast notification
     function showToast(message, type = 'success') {
       toastMessage.textContent = message;
       toast.className = 'toast ' + type;
       
-      // Update icon based on type
       const icon = toast.querySelector('i');
       if (type === 'success') {
         icon.className = 'fas fa-check-circle';
@@ -1608,18 +1600,15 @@ sectionSelect.addEventListener("change", () => {
         icon.className = 'fas fa-exclamation-circle';
       }
       
-      // Show toast
       setTimeout(() => {
         toast.classList.add('show');
       }, 100);
       
-      // Hide toast after 3 seconds
       setTimeout(() => {
         toast.classList.remove('show');
       }, 3100);
     }
 
-    // Clear all form fields
     function clearForm() {
       primarySchoolInput.value = '';
       teacherInput.value = '';
@@ -1641,7 +1630,6 @@ sectionSelect.addEventListener("change", () => {
       activity1Area.innerHTML = '';
       activity2Area.innerHTML = '';
       
-      // Uncheck all checkboxes
       document.querySelectorAll('#competencies-group input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = false;
       });
@@ -1654,15 +1642,12 @@ sectionSelect.addEventListener("change", () => {
       isEditMode = false;
     }
 
-    // Collect form data
     function collectFormData() {
-      // Get selected competencies
       const competencies = [];
       document.querySelectorAll('#competencies-group input[type="checkbox"]:checked').forEach(checkbox => {
         competencies.push(checkbox.value);
       });
       
-      // Get selected materials
       const materials = [];
       document.querySelectorAll('#materials-group input[type="checkbox"]:checked').forEach(checkbox => {
         materials.push(checkbox.value);
@@ -1700,22 +1685,20 @@ sectionSelect.addEventListener("change", () => {
           activity1: activity1Area.innerHTML,
           activity2: activity2Area.innerHTML
         },
+        plannerType: 'classic', // MODIFICATION: Added planner type
         createdAt: isEditMode ? undefined : serverTimestamp(),
         updatedAt: serverTimestamp()
       };
     }
 
-    // Populate form with data
     function populateFormData(data) {
       primarySchoolInput.value = data.primarySchool || '';
       teacherInput.value = data.teacher || '';
       levelSelect.value = data.level || '';
       learnersInput.value = data.learners || '';
       
-      // Trigger change events to populate dependent dropdowns
       levelSelect.dispatchEvent(new Event('change'));
       
-      // Set sequence, section, and session after a delay to ensure dropdowns are populated
       setTimeout(() => {
         sequenceSelect.value = data.sequence || '';
         sequenceSelect.dispatchEvent(new Event('change'));
@@ -1743,7 +1726,6 @@ sectionSelect.addEventListener("change", () => {
       activity1Area.innerHTML = data.activities?.activity1 || '';
       activity2Area.innerHTML = data.activities?.activity2 || '';
       
-      // Set checkboxes
       document.querySelectorAll('#competencies-group input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = data.competencies && data.competencies.includes(checkbox.value);
       });
@@ -1753,14 +1735,12 @@ sectionSelect.addEventListener("change", () => {
       });
     }
 
-    // Check if user is authenticated
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUser = user;
             saveButton.disabled = false;
             saveButton.title = "Save your lesson plan";
             
-            // Check if we need to load a plan
             const planToLoadId = sessionStorage.getItem('planToLoadId');
             if (planToLoadId) {
                 loadPlan(planToLoadId);
@@ -1773,7 +1753,6 @@ sectionSelect.addEventListener("change", () => {
         }
     });
 
-    // Load a lesson plan
     async function loadPlan(planId) {
       if (!currentUser) return;
       
@@ -1801,7 +1780,6 @@ sectionSelect.addEventListener("change", () => {
       }
     }
 
-    // Save a lesson plan
     async function savePlan(planName) {
       if (!currentUser || !planName.trim()) return;
       
@@ -1812,7 +1790,6 @@ sectionSelect.addEventListener("change", () => {
         formData.planName = planName.trim();
         
         if (isEditMode && currentPlanId) {
-          // Update existing plan
           const planRef = doc(db, "users", currentUser.uid, "lessonPlans", currentPlanId);
           await updateDoc(planRef, {
             ...formData,
@@ -1820,7 +1797,6 @@ sectionSelect.addEventListener("change", () => {
           });
           showToast("Lesson plan updated successfully!", "success");
         } else {
-          // Create new plan
           const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
           const docRef = await addDoc(plansRef, formData);
           currentPlanId = docRef.id;
@@ -1828,7 +1804,6 @@ sectionSelect.addEventListener("change", () => {
           showToast("Lesson plan saved successfully!", "success");
         }
         
-        // Close modal after a short delay
         setTimeout(() => {
           saveModal.style.display = 'none';
           planNameInput.value = '';
@@ -1843,7 +1818,6 @@ sectionSelect.addEventListener("change", () => {
       }
     }
 
-    // --- EVENT LISTENERS ---
     saveButton.addEventListener('click', () => {
       saveModal.style.display = 'flex';
       planNameInput.focus();
@@ -1871,7 +1845,6 @@ sectionSelect.addEventListener("change", () => {
       }
     });
 
-    // Close modal when clicking outside
     window.addEventListener('click', (e) => {
       if (e.target === saveModal) {
         saveModal.style.display = 'none';
@@ -1880,7 +1853,6 @@ sectionSelect.addEventListener("change", () => {
       }
     });
 
-    // Handle Enter key in plan name input
     planNameInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         const planName = planNameInput.value.trim();
