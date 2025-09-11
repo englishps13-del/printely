@@ -381,7 +381,15 @@
       </section>
       
       <section id="history-section" class="mt-8 text-left">
-        <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">Lesson Plan History</h3>
+		<section id="history-section" class="mt-8 text-left">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Lesson Plan History</h3>
+    <button id="deleteAllBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+      Delete All
+    </button>
+  </div>
+
+</section>
         <div id="history-container" class="space-y-3 bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[80px]">
           <p id="loading-history" class="text-gray-500 dark:text-gray-400">Loading history...</p>
         </div>
@@ -407,9 +415,7 @@
     // --- IMPORT FIREBASE MODULES ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot, deleteDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-
-    // --- FIREBASE CONFIGURATION ---
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot, deleteDoc, enableIndexedDbPersistence, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";		// --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
       apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
       authDomain: "printelydz.firebaseapp.com",
@@ -780,7 +786,44 @@
             showToast("Error signing out. Please try again.", "error");
         });
     });
+// Add this after the existing event listeners
+const deleteAllBtn = document.getElementById('deleteAllBtn');
 
+// Function to delete all lesson plans for a user
+async function deleteAllLessonPlans(uid) {
+  const historyRef = collection(db, "users", uid, "lessonPlans");
+  const q = query(historyRef);
+  const querySnapshot = await getDocs(q);
+  
+  const deletePromises = [];
+  querySnapshot.forEach((doc) => {
+    deletePromises.push(deleteDoc(doc.ref));
+  });
+  
+  return Promise.all(deletePromises);
+}
+
+// Event listener for delete all button
+deleteAllBtn.addEventListener('click', async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    showToast("You must be logged in to perform this action.", "error");
+    return;
+  }
+  
+  if (confirm("Are you sure you want to delete all lesson plans? This action cannot be undone.")) {
+    try {
+      showLoading();
+      await deleteAllLessonPlans(user.uid);
+      showToast("All lesson plans deleted successfully!", "success");
+    } catch (error) {
+      console.error("Error deleting all lesson plans:", error);
+      showToast("Could not delete all lesson plans. Please try again.", "error");
+    } finally {
+      hideLoading();
+    }
+  }
+});
   </script>
 </body>
 </html>
