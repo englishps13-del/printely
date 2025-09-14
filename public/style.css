@@ -13,9 +13,142 @@ table {
 
 td {
   border: 1px solid #999;
-  padding: 6px;
+  padding: 8px; /* Increased padding slightly for better spacing */
   vertical-align: middle;
   text-align: left;
+  word-wrap: break-word; /* Allow long words to break and wrap */
+}
+
+
+/* --- NEW: ACTION CONTROLS BAR --- */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Allows controls to wrap on smaller screens */
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.controls label {
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+.action-btn {
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+.action-btn i {
+  font-size: 1.1em;
+}
+.save-btn {
+  background: #28a745;
+  color: #fff;
+}
+.save-btn:hover {
+  background: #218838;
+}
+.print-btn {
+  background: #007bff;
+  color: #fff;
+}
+.print-btn:hover {
+  background: #0056b3;
+}
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+}
+.back-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- RIBBON & EDITABLE AREA STYLES --- */
+.ribbon {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.group {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    background: #ffffff;
+}
+.group .label { font-size: 12px; color: #7f8c8d; margin-left: 4px; white-space: nowrap; }
+.ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+    appearance: none; border: 1px solid #dcdcdc; background: #ffffff;
+    padding: 7px 10px; border-radius: 5px; font-size: 14px;
+    line-height: 1; cursor: pointer; color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
+}
+.ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+.ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f9f9f9; }
+.ribbon .btn.active, .ribbon .btn-square.active {
+    background: #6699cc; color: #ffffff; border-color: #6699cc;
+}
+.ribbon .sep { width: 1px; background: #dcdcdc; margin: 0 6px; align-self: stretch; }
+.editable-area {
+    width: 100%;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 8px;
+    min-height: 150px;
+    cursor: text;
+    box-sizing: border-box;
+    resize: vertical;
+}
+.editable-area.small {
+    min-height: 40px;
+    height: 40px;
+    resize: none;
+    overflow: auto;
+}
+.editable-area:focus {
+    outline: none;
+    border-color: #6699cc;
+    box-shadow: 0 0 0 2px rgba(102, 153, 204, 0.4);
+}
+.editable-area[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #999;
+    pointer-events: none;
+    font-style: italic;
+}
+.editable-area img,
+[contenteditable="true"] img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px;
+  border: 1px solid #ddd;
 }
 
 /* Header cell colors (soft pastel palette) */
@@ -34,91 +167,55 @@ td {
 .highlight-yellow { background: #fff7b3; color: #000; }
 .highlight-red { background: #ffcccc; color: #000; }
 
-/* Dropdown Styling */
+/* --- FIXED: Dropdown Styling --- */
 .level-select {
+  /* Remove default browser appearance (arrow) */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
   border: none;
   font-family: inherit;
   font-size: 14px;
   font-weight: bold;
-  padding: 2px 4px;
+  padding: 4px 8px;
   outline: none;
   cursor: pointer;
-  width: auto;
+  width: 100%;
+  box-sizing: border-box;
   color: #000;
   background-color: transparent;
   transition: all 0.3s ease;
+  border-radius: 4px;
+  
+  /* Allow select to grow for long text */
+  height: auto;
+  min-height: 38px; /* Set a min-height to align with other inputs */
+  line-height: 1.4; /* Improve readability for wrapped text */
+  display: block; /* Helps control padding and height */
 }
-/* Default */
-.theme-default .c3 .level-select { background-color: #cce5ff; color: #000; }
-.theme-default .c5 .level-select { background-color: #fff7b3; color: #000; }
-.theme-default .c6 .level-select { background-color: #ffe0e0; color: #000; }
-
-/* Theme 1 */
-.theme1 .c3 .level-select { background-color: #80bfff; color: #002244; }
-.theme1 .c5 .level-select { background-color: #4da6ff; color: #002244; }
-.theme1 .c6 .level-select { background-color: #3399ff; color: #fff; }
-
-/* Theme 2 */
-.theme2 .c3 .level-select { background-color: #ff9966; color: #663300; }
-.theme2 .c5 .level-select { background-color: #ff7733; color: #fff; }
-.theme2 .c6 .level-select { background-color: #ff661a; color: #fff; }
-
-/* Theme 3 */
-.theme3 .c3 .level-select { background-color: #9cd998; color: #003300; }
-.theme3 .c5 .level-select { background-color: #65bf5a; color: #fff; }
-.theme3 .c6 .level-select { background-color: #4db146; color: #fff; }
-
-/* Theme 4 */
-.theme4 .c3 .level-select { background-color: #cc99ff; color: #330066; }
-.theme4 .c5 .level-select { background-color: #b366ff; color: #fff; }
-.theme4 .c6 .level-select { background-color: #a64dff; color: #fff; }
-
-/* Theme 5 */
-.theme5 .c3 .level-select { background-color: #ffcc99; color: #660022; }
-.theme5 .c5 .level-select { background-color: #ffb366; color: #fff; }
-.theme5 .c6 .level-select { background-color: #ffa64d; color: #fff; }
-
-.theme6 .c3 .level-select { background-color: #99e6ff; color: #660022; }
-.theme6 .c5 .level-select { background-color: #33ccff; color: #fff; }
-.theme6 .c6 .level-select { background-color: #00bfff; color: #fff; }
-
-.theme7 .c3 .level-select { background-color: #b3ffd9; color: ##99e6ff; }
-.theme7 .c5 .level-select { background-color: #80ffbf; color: #fff; }
-.theme7 .c6 .level-select { background-color: #66ffb3; color: #fff; }
-
-.theme8 .c3 .level-select { background-color: #ffb3c9; color: #660022; }
-.theme8 .c5 .level-select { background-color: #ff80a8; color: #fff; }
-.theme8 .c6 .level-select { background-color: #ff6699; color: #fff; }
-
-.theme9 .c3 .level-select { background-color: #ffd966; color: #660022; }
-.theme9 .c5 .level-select { background-color: #ffbf00; color: #fff; }
-.theme9 .c6 .level-select { background-color: #e6ac00; color: #fff; }
-
-.theme10 .c3 .level-select { background-color: #b3b3ff; color: #660022; }
-.theme10 .c5 .level-select { background-color: #8080ff; color: #fff; }
-.theme10 .c6 .level-select { background-color: #6666ff; color: #fff; }
-
-/* … repeat for theme6–10 */
+.level-select:hover {
+  background-color: rgba(0,0,0,0.05); /* Subtle hover effect */
+}
 
 
-/* Inputs */
+/* --- FIXED: Input Styling --- */
 .input-no-border {
-  display: inline-block;
   border: none;
   outline: none;
   font-weight: bold;
-  color: #000;
-  width: auto;
-  margin-left: 6px;
-  text-align: center;
-  border-radius: 4px;
-  padding: 2px 4px;
+  color: inherit; /* Inherit color from parent cell */
+  width: 100%; /* Fill the available space */
+  box-sizing: border-box;
+  padding: 4px;
   background-color: transparent;
   transition: all 0.3s ease;
 }
-.c4 .input-no-border { width: 50px; }
-.input-no-border:focus { background-color: rgba(255,255,255,0.5); }
-.level-select:hover { transform: scale(1.05); }
+.input-no-border:focus { 
+  background-color: rgba(255,255,255,0.5); 
+  box-shadow: 0 1px 0 currentColor; /* Use box-shadow instead of border for a cleaner look */
+}
+
 
 /* Sections styling */
 .section-title td {
@@ -127,35 +224,17 @@ td {
   text-align: center;
   font-weight: bold;
 }
-.stage-col { width: 15%; }
-.procedure { width: 50%; }
-.interaction-col { width: 15%; text-align: center; }
+.stage-col { width: 10%; }
+.procedure { width: 61%; }
+.interaction-col { width: 10%; text-align: center; }
 .time-col { width: 10%; text-align: center; }
-
-/* Colored text */
-.red-text { color: #d94f4f; font-weight: bold; }
-.green-text { color: #4fbf4f; font-weight: bold; }
-.yellow-text { color: #ffd633; font-weight: bold; }
 
 /* Fade-in animation */
 @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-/* Resizable table */
-.resizable-table { resize: both; overflow: auto; display: block; max-width: 100%; min-width: 300px; border-collapse: collapse; width: 100%; }
-.resizable-table th, .resizable-table td { border: 1px solid #333; padding: 8px; position: relative; }
-.resizer { position: absolute; right: 0; top: 0; width: 5px; cursor: col-resize; user-select: none; height: 100%; }
-
-/* Procedure textareas */
-.procedure-textarea { width: 100%; height: 200px; border: 1px solid #ccc; resize: vertical; font-family: Arial, sans-serif; font-size: 14px; padding: 8px; box-sizing: border-box; }
-.procedure-textarea.small { height: 35px; }
-
 /* Competencies */
 .competency-group { display: flex; gap: 10px; margin-top: 5px; }
-.competency-group-inline { display: inline-flex; gap: 8px; vertical-align: middle; }
-.competency-option { background-color: #cce0f5; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
-.competency-option input { display: none; }
-.competency-option.selected { background-color: #6699cc; font-weight: bold; color: white; text-decoration: underline; }
-/* Default (pastel blue look) */
+.competency-group-inline { display: inline-flex; flex-wrap: wrap; gap: 8px; vertical-align: middle; }
 .competency-option {
   background-color: #cce0f5;
   border-radius: 4px;
@@ -166,59 +245,13 @@ td {
   user-select: none;
   color: #000;
 }
-.competency-option input {
-  display: none;
-}
+.competency-option input { display: none; }
 .competency-option.selected {
   background-color: #6699cc;
   font-weight: bold;
   color: #fff;
   text-decoration: underline;
 }
-
-/* ===== Theme 1 (Soft Blues) ===== */
-.theme1 .competency-option { background-color: #80bfff; color: #002244; }
-.theme1 .competency-option.selected { background-color: #4da6ff; color: #fff; }
-
-/* ===== Theme 2 (Warm Sunrise) ===== */
-.theme2 .competency-option { background-color: #ff9966; color: #663300; }
-.theme2 .competency-option.selected { background-color: #ff7733; color: #fff; }
-
-/* ===== Theme 3 (Calm Greens) ===== */
-.theme3 .competency-option { background-color: #9cd998; color: #003300; }
-.theme3 .competency-option.selected { background-color: #65bf5a; color: #fff; }
-
-/* ===== Theme 4 (Lavender Dream) ===== */
-.theme4 .competency-option { background-color: #cc99ff; color: #330066; }
-.theme4 .competency-option.selected { background-color: #b366ff; color: #fff; }
-
-/* ===== Theme 5 (Peachy Pastel) ===== */
-.theme5 .competency-option { background-color: #ffcc99; color: #660022; }
-.theme5 .competency-option.selected { background-color: #ffb366; color: #fff; }
-
-/* ===== Theme 6 (Ocean Breeze) ===== */
-.theme6 .competency-option { background-color: #99e6ff; color: #004466; }
-.theme6 .competency-option.selected { background-color: #33ccff; color: #fff; }
-
-/* ===== Theme 7 (Minty Fresh) ===== */
-.theme7 .competency-option { background-color: #b3ffd9; color: #004d33; }
-.theme7 .competency-option.selected { background-color: #80ffbf; color: #003322; }
-
-/* ===== Theme 8 (Rose Garden) ===== */
-.theme8 .competency-option { background-color: #ffb3c9; color: #660022; }
-.theme8 .competency-option.selected { background-color: #ff80a8; color: #fff; }
-
-/* ===== Theme 9 (Golden Glow) ===== */
-.theme9 .competency-option { background-color: #ffd966; color: #5c4300; }
-.theme9 .competency-option.selected { background-color: #ffbf00; color: #fff; }
-
-/* ===== Theme 10 (Twilight) ===== */
-.theme10 .competency-option { background-color: #b3b3ff; color: #330066; }
-.theme10 .competency-option.selected { background-color: #8080ff; color: #fff; }
-
-/* ===== Theme 11 (Dark Twilight) ===== */
-.theme11 .competency-option { background-color: #5c4d7d; color: #f0eaff; }
-.theme11 .competency-option.selected { background-color: #7a6da8; color: #fff; }
 
 /* -------- Default Theme -------- */
 .theme-default .c1 { background: #ffd6e6; }
@@ -233,6 +266,9 @@ td {
 .theme-default .highlight-green { background: #ccffcc; }
 .theme-default .highlight-yellow { background: #fff7b3; }
 .theme-default .highlight-red { background: #ffcccc; }
+.theme-default .c3 .level-select { background-color: #cce5ff; color: #000; }
+.theme-default .c5 .level-select { background-color: #fff7b3; color: #000; }
+.theme-default .c6 .level-select { background-color: #ffe0e0; color: #000; }
 
 /* -------- Theme 1: Soft Blues -------- */
 .theme1 .c1 { background: #b3d9ff; }
@@ -247,6 +283,12 @@ td {
 .theme1 .highlight-green { background: #66b2ff; }
 .theme1 .highlight-yellow { background: #4da6ff; }
 .theme1 .highlight-red { background: #99ccff; }
+.theme1 .c3 .level-select { background-color: #80bfff; color: #002244; }
+.theme1 .c5 .level-select { background-color: #4da6ff; color: #002244; }
+.theme1 .c6 .level-select { background-color: #3399ff; color: #fff; }
+.theme1 .competency-option { background-color: #80bfff; color: #002244; }
+.theme1 .competency-option.selected { background-color: #4da6ff; color: #fff; }
+
 
 /* -------- Theme 2: Warm Sunrise -------- */
 .theme2 .c1 { background: #ffd1b3; }
@@ -261,6 +303,11 @@ td {
 .theme2 .highlight-green { background: #ff884d; }
 .theme2 .highlight-yellow { background: #ff7733; }
 .theme2 .highlight-red { background: #ffbb80; }
+.theme2 .c3 .level-select { background-color: #ff9966; color: #663300; }
+.theme2 .c5 .level-select { background-color: #ff7733; color: #fff; }
+.theme2 .c6 .level-select { background-color: #ff661a; color: #fff; }
+.theme2 .competency-option { background-color: #ff9966; color: #663300; }
+.theme2 .competency-option.selected { background-color: #ff7733; color: #fff; }
 
 /* -------- Theme 3: Calm Greens -------- */
 .theme3 .c1 { background: #d4f4dd; }
@@ -275,6 +322,11 @@ td {
 .theme3 .highlight-green { background: #81cc79; }
 .theme3 .highlight-yellow { background: #65bf5a; }
 .theme3 .highlight-red { background: #b8e6be; }
+.theme3 .c3 .level-select { background-color: #9cd998; color: #003300; }
+.theme3 .c5 .level-select { background-color: #65bf5a; color: #fff; }
+.theme3 .c6 .level-select { background-color: #4db146; color: #fff; }
+.theme3 .competency-option { background-color: #9cd998; color: #003300; }
+.theme3 .competency-option.selected { background-color: #65bf5a; color: #fff; }
 
 /* -------- Theme 4: Lavender Dream -------- */
 .theme4 .c1 { background: #e6ccff; }
@@ -289,6 +341,11 @@ td {
 .theme4 .highlight-green { background: #bf80ff; }
 .theme4 .highlight-yellow { background: #b366ff; }
 .theme4 .highlight-red { background: #d9b3ff; }
+.theme4 .c3 .level-select { background-color: #cc99ff; color: #330066; }
+.theme4 .c5 .level-select { background-color: #b366ff; color: #fff; }
+.theme4 .c6 .level-select { background-color: #a64dff; color: #fff; }
+.theme4 .competency-option { background-color: #cc99ff; color: #330066; }
+.theme4 .competency-option.selected { background-color: #b366ff; color: #fff; }
 
 /* -------- Theme 5: Peachy Pastel -------- */
 .theme5 .c1 { background: #ffe6cc; }
@@ -303,6 +360,12 @@ td {
 .theme5 .highlight-green { background: #ffbf80; }
 .theme5 .highlight-yellow { background: #ffb366; }
 .theme5 .highlight-red { background: #ffd9b3; }
+.theme5 .c3 .level-select { background-color: #ffcc99; color: #660022; }
+.theme5 .c5 .level-select { background-color: #ffb366; color: #fff; }
+.theme5 .c6 .level-select { background-color: #ffa64d; color: #fff; }
+.theme5 .competency-option { background-color: #ffcc99; color: #660022; }
+.theme5 .competency-option.selected { background-color: #ffb366; color: #fff; }
+
 
 /* -------- Theme 6: Ocean Breeze -------- */
 .theme6 .c1 { background: #d6f5f5; }
@@ -317,6 +380,11 @@ td {
 .theme6 .highlight-green { background: #66d9ff; }
 .theme6 .highlight-yellow { background: #33ccff; }
 .theme6 .highlight-red { background: #b3ecff; }
+.theme6 .c3 .level-select { background-color: #99e6ff; color: #660022; }
+.theme6 .c5 .level-select { background-color: #33ccff; color: #fff; }
+.theme6 .c6 .level-select { background-color: #00bfff; color: #fff; }
+.theme6 .competency-option { background-color: #99e6ff; color: #004466; }
+.theme6 .competency-option.selected { background-color: #33ccff; color: #fff; }
 
 /* -------- Theme 7: Minty Fresh -------- */
 .theme7 .c1 { background: #e0fff5; }
@@ -331,6 +399,12 @@ td {
 .theme7 .highlight-green { background: #99ffcc; }
 .theme7 .highlight-yellow { background: #80ffbf; }
 .theme7 .highlight-red { background: #ccffe6; }
+.theme7 .c3 .level-select { background-color: #b3ffd9; color: #004d33; }
+.theme7 .c5 .level-select { background-color: #80ffbf; color: #fff; }
+.theme7 .c6 .level-select { background-color: #66ffb3; color: #fff; }
+.theme7 .competency-option { background-color: #b3ffd9; color: #004d33; }
+.theme7 .competency-option.selected { background-color: #80ffbf; color: #003322; }
+
 
 /* -------- Theme 8: Rose Garden -------- */
 .theme8 .c1 { background: #ffe6f0; }
@@ -345,6 +419,12 @@ td {
 .theme8 .highlight-green { background: #ff99b8; }
 .theme8 .highlight-yellow { background: #ff80a8; }
 .theme8 .highlight-red { background: #ffccd9; }
+.theme8 .c3 .level-select { background-color: #ffb3c9; color: #660022; }
+.theme8 .c5 .level-select { background-color: #ff80a8; color: #fff; }
+.theme8 .c6 .level-select { background-color: #ff6699; color: #fff; }
+.theme8 .competency-option { background-color: #ffb3c9; color: #660022; }
+.theme8 .competency-option.selected { background-color: #ff80a8; color: #fff; }
+
 
 /* -------- Theme 9: Golden Glow -------- */
 .theme9 .c1 { background: #fff2cc; }
@@ -359,6 +439,12 @@ td {
 .theme9 .highlight-green { background: #ffcc33; }
 .theme9 .highlight-yellow { background: #ffbf00; }
 .theme9 .highlight-red { background: #ffe699; }
+.theme9 .c3 .level-select { background-color: #ffd966; color: #660022; }
+.theme9 .c5 .level-select { background-color: #ffbf00; color: #fff; }
+.theme9 .c6 .level-select { background-color: #e6ac00; color: #fff; }
+.theme9 .competency-option { background-color: #ffd966; color: #5c4300; }
+.theme9 .competency-option.selected { background-color: #ffbf00; color: #fff; }
+
 
 /* -------- Theme 10: Twilight -------- */
 .theme10 .c1 { background: #e6e6ff; }
@@ -373,150 +459,127 @@ td {
 .theme10 .highlight-green { background: #9999ff; }
 .theme10 .highlight-yellow { background: #8080ff; }
 .theme10 .highlight-red { background: #ccccff; }
+.theme10 .c3 .level-select { background-color: #b3b3ff; color: #660022; }
+.theme10 .c5 .level-select { background-color: #8080ff; color: #fff; }
+.theme10 .c6 .level-select { background-color: #6666ff; color: #fff; }
+.theme10 .competency-option { background-color: #b3b3ff; color: #330066; }
+.theme10 .competency-option.selected { background-color: #8080ff; color: #fff; }
 
-/* Print/PDF */
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal box */
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Input */
+.modal-content input {
+  width: 90%;
+  padding: 8px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Buttons */
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.cancel-btn, .confirm-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.cancel-btn { background: #ccc; }
+.confirm-btn { background: #007bff; color: #fff; }
+.confirm-btn:hover { background: #0056b3; }
+
+
+/* --- FIXED: Print/PDF Styles --- */
 @media print {
-  @page { margin: 0; size: A4 portrait; }
+ @page { margin: 0; size: A4 portrait; }
   body { margin: 0; padding: 0; }
-  #table-container { width: 100%; min-height: 100vh; margin: 0; padding: 0; box-sizing: border-box; }
-  table { width: 100%; border-collapse: collapse; }
-  textarea, input, select { border: none !important; resize: none !important; outline: none !important; }
-}
-@media print {
-  #themeControls { display: none !important; }
-}
-/* ===== Theme 8 – Golden Glow ===== */
-.theme8 table {
-  background-color: #fff9e6; /* very soft golden */
-}
-.theme8 .section-title td {
-  background-color: #ffd966; /* stronger golden */
-  color: #5c4300;
-}
-.theme8 textarea,
-.theme8 input,
-.theme8 select {
-  background-color: #fff2cc;
-  border: 1px solid #e6b800;
-  color: #3d2b00;
-}
-
-/* ===== Theme 9 – Minty Fresh ===== */
-.theme9 table {
-  background-color: #eafff5; /* light mint */
-}
-.theme9 .section-title td {
-  background-color: #99f2d6; /* medium mint */
-  color: #004d33;
-}
-.theme9 textarea,
-.theme9 input,
-.theme9 select {
-  background-color: #ccffee;
-  border: 1px solid #33cc99;
-  color: #003322;
-}
-
-/* ===== Theme 5 – Peachy Pastel (improved to match big table & controls) ===== */
-.theme5 table {
-  background-color: #fff5f7; /* soft peach */
-}
-.theme5 .section-title td {
-  background-color: #ffcce0;
-  color: #660022;
-}
-.theme5 textarea,
-.theme5 input,
-.theme5 select {
-  background-color: #ffe6ee;
-  border: 1px solid #ff99bb;
-  color: #440011;
-}
-
-/* ===== Theme 11 – Twilight (Dark Mode) ===== */
-.theme11 table {
-  background-color: #2a2a3d; /* deep gray */
-}
-.theme11 .section-title td {
-  background-color: #5c4d7d; /* muted purple */
-  color: #f0eaff;
-}
-.theme11 textarea,
-.theme11 input,
-.theme11 select {
-  background-color: #3a3a4d; /* dark slate */
-  border: 1px solid #7a6da8;
-  color: #f5f5f5;
-}
-@media print {
-  .ql-toolbar {
+  /* Hide all non-printable elements */
+  .no-print {
     display: none !important;
   }
-}
+  
+  #table-container { 
+    width: 100%; 
+    min-height: auto; 
+    margin: 0; 
+    padding: 0; 
+    box-shadow: none;
+    border: none;
+  }
+  
+  table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    page-break-inside: auto;
+    /* Let content determine column width for printing */
+    table-layout: auto !important; 
+    word-wrap: break-word;
+  }
 
-@media print {
-  .ql-editor {
+  tr {
+    page-break-inside: avoid; /* Try to keep rows on the same page */
+    page-break-after: auto;
+  }
+
+  td {
+      word-wrap: break-word;
+  }
+  
+  /* Make form elements look like plain text */
+  textarea, input, select { 
+    border: none !important; 
+    resize: none !important; 
+    outline: none !important; 
+    background-color: transparent !important;
+    -webkit-print-color-adjust: exact; /* Ensure background colors print */
+    color-adjust: exact;
+    width: 100% !important;
+    padding: 0 !important;
+    font-size: 10pt !important; /* Smaller font for printing */
+    /* Ensure long text in selects wraps when printing */
+    white-space: normal !important; 
+    height: auto !important;
+    word-break: break-all;
+  }
+  
+  .editable-area {
     border: none !important;
     padding: 0 !important;
-    font-size: 12pt; /* Optional: make text more readable */
-  }
-}
-#editor {
-  resize: vertical;
-  overflow: auto;
-  min-height: 150px;
-  max-height: 800px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-@media print {
-  #editor {
-    font-size: 12px !important;
-    line-height: 1.4 !important;
-    overflow: visible !important;
+    font-size: 11pt;
+    line-height: 1.4;
+    overflow: visible !important; /* Let content expand */
     resize: none !important;
     height: auto !important;
+    min-height: 0 !important;
     max-height: none !important;
-    white-space: normal !important;
-    word-wrap: break-word !important;
-    width: 100% !important;
-  }
-
-  .ql-toolbar {
-    display: none !important; /* Hide toolbar when printing */
   }
 }
 
-
-.ql-increase-size::before {
-  content: 'A';
-  font-weight: bold;
-  font-size: 18px;
-  color: #222;
-}
-
-.ql-decrease-size::before {
-  content: 'a';
-  font-weight: bold;
-  font-size: 14px;
-  color: #222;
-}
-<style>
-  /* Make text fields blend with their parent theme cell */
-.input-no-border {
-  border: none;
-  outline: none;
-  padding: 4px 6px;
-  font-size: 13px;
-  width: calc(100% - 10px);
-  background-color: transparent; /* inherit background */
-  color: inherit; /* match text color of theme */
-}
-
-/* Optional: add subtle underline instead of box */
-.input-no-border:focus {
-  border-bottom: 1px solid currentColor;
-}
-
-</style>

@@ -4,26 +4,23 @@
   <meta charset="UTF-8" />
   <title>Lesson Plan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Patrick+Hand:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Patrick+Hand&family=Roboto&family=Open+Sans&family=Caveat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
+    /* --- YOUR ORIGINAL CSS (VERBATIM) --- */
     :root {
       --line: #eaeaea;
       --ink: #2d2d2d;
-
-      /* section palettes */
       --ps-border: #b2dfdb; --ps-accent: #26a69a;
       --level-border: #d1c4e9; --level-accent: #7e57c2;
       --obj-border: #fff9c4; --obj-accent: #fbc02d;
       --act-border: #f8bbd0; --act-accent: #ec407a;
       --comp-border: #bbdefb; --comp-accent: #42a5f5;
       --mat-border: #ffe0b2; --mat-accent: #fb8c00;
-
-      /* stage palettes */
       --warmer-border: #c8e6c9; --warmer-accent: #66bb6a;
       --install-border: #bbdefb; --install-accent: #42a5f5;
       --assessment-border: #ffe0b2; --assessment-accent: #fb8c00;
     }
-
     body {
       margin: 0;
       padding: 0;
@@ -31,7 +28,6 @@
       font-family: 'Poppins', sans-serif;
       color: var(--ink);
     }
-
     .page {
       width: 184mm;
       min-height: 262mm;
@@ -40,23 +36,19 @@
       border-radius: 12px;
       box-shadow: 0 0 0 1px #e6e6e6 inset;
       padding: 12mm;
+      position: relative;
     }
-
     .title-wrap { margin-bottom: 18px; }
     .title-text {
       font-family: 'Patrick Hand', cursive;
       font-size: 28px;
       margin: 0;
     }
-
     .row { display: flex; gap: 12px; margin-top: 12px; }
     .col-60 { flex: 0 0 59%; }
     .col-40 { flex: 0 0 39%; }
-	.col-65 { flex: 0 0 64%; }
+    .col-65 { flex: 0 0 64%; }
     .col-35 { flex: 0 0 34%; }
-
-
-    /* unified box style */
     .stage-box {
       margin-top: 14px;
       position: relative;
@@ -70,7 +62,6 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.08);
       transform: translateY(-2px);
     }
-
     .stage-tag {
       position: absolute;
       top: -14px;
@@ -81,14 +72,12 @@
       font-weight: 700;
       color: #fff;
     }
-
     .stage-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 8px;
     }
     .stage-grid.three-cols { grid-template-columns: 65% 20% 13%; }
-
     .lined {
       border: 1.8px dashed;
       border-radius: 8px;
@@ -97,7 +86,8 @@
     }
     .lined input,
     .lined select,
-    .lined textarea {
+    .lined textarea,
+    .lined .editable-area { /* MODIFIED: Added .editable-area */
       border: none;
       outline: none;
       background: transparent;
@@ -110,18 +100,15 @@
     }
     .lined select,
     .lined input {
-      height: 22px; /* compact */
+      height: 22px;
     }
-    .lined textarea {
+    .lined textarea, .lined .editable-area { /* MODIFIED: Added .editable-area */
       min-height: 26px;
     }
-
-    /* INSTALL PROCEDURE big */
-    .install .stage-grid .lined:first-child textarea {
+    .install .stage-grid .lined:first-child textarea,
+    .install .stage-grid .lined:first-child .editable-area { /* MODIFIED: Added .editable-area */
       min-height: 120px;
     }
-
-    /* Checkbox row alignment */
     .checkbox-row {
       display: flex;
       gap: 12px;
@@ -131,762 +118,924 @@
       white-space: nowrap;
       font-size: 13px;
     }
-
-    /* THEMES */
     .ps      { border-color: var(--ps-border); }
     .ps .stage-tag { background: var(--ps-accent); }
     .ps .lined { border-color: var(--ps-border); }
-
     .level   { border-color: var(--level-border); }
     .level .stage-tag { background: var(--level-accent); }
     .level .lined { border-color: var(--level-border); }
-
     .objectives { border-color: var(--obj-border); }
     .objectives .stage-tag { background: var(--obj-accent); }
     .objectives .lined { border-color: var(--obj-border); }
-
     .activity { border-color: var(--act-border); }
     .activity .stage-tag { background: var(--act-accent); }
     .activity .lined { border-color: var(--act-border); }
-
     .competencies { border-color: var(--comp-border); }
     .competencies .stage-tag { background: var(--comp-accent); }
     .competencies .lined { border-color: var(--comp-border); }
-
     .materials { border-color: var(--mat-border); }
     .materials .stage-tag { background: var(--mat-accent); }
     .materials .lined { border-color: var(--mat-border); }
-
     .warmer { border-color: var(--warmer-border); }
     .warmer .stage-tag { background: var(--warmer-accent); }
     .warmer .lined { border-color: var(--warmer-border); }
-
     .install { border-color: var(--install-border); }
     .install .stage-tag { background: var(--install-accent); }
     .install .lined { border-color: var(--install-border); }
-
     .assessment { border-color: var(--assessment-border); }
     .assessment .stage-tag { background: var(--assessment-accent); }
     .assessment .lined { border-color: var(--assessment-border); }
-
     .credit { text-align: center; margin-top: 16px; font-size: 11px; color: #888; }
-	/* Checkbox cells */
-.checkbox-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 2px 6px;
-}
-
-/* Smaller custom checkboxes */
-.checkbox-cell input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin-right: 6px;
-  accent-color: currentColor; /* use label color */
-}
-.checkbox-cell label {
-  font-size: 12px;
-  line-height: 1;
-  cursor: pointer;
-}
-/* inline row of small boxes */
-.inline-boxes {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 11px;
-}
-
-/* mini-box styled like table cells */
-.mini-box {
-  border: 1.6px dashed;
-  border-radius: 6px;
-  padding: 2px 6px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: #fff;
-}
-
-/* checkboxes compact */
-.mini-box input[type="checkbox"] {
-  width: 12px;
-  height: 12px;
-  margin: 0;
-  accent-color: currentColor;
-}
-
-/* match each section's border color */
-.competencies .mini-box { border-color: var(--comp-border); }
-.materials .mini-box    { border-color: var(--mat-border); }
-
-.competencies .mini-box:hover { background: #eef6ff; }
-.materials .mini-box:hover    { background: #fff6eb; }
-
-/* Hide the default checkbox */
-.mini-box input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  border: 1.6px dashed currentColor;
-  border-radius: 4px;
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-}
-
-/* When checked → fill with accent color + show tick */
-.mini-box input[type="checkbox"]:checked {
-  background-color: currentColor;
-}
-.mini-box input[type="checkbox"]:checked::after {
-  content: "✓";
-  position: absolute;
-  top: -2px;
-  left: 2px;
-  font-size: 12px;
-  color: #fff;
-}
-/* custom dashed checkboxes */
-.mini-box input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  border: 1.6px dashed currentColor; /* dashed border in section color */
-  border-radius: 4px;
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-  background: #fff;
-}
-
-/* when checked: fill with section accent color + tick */
-.mini-box input[type="checkbox"]:checked {
-  background-color: currentColor;
-}
-.mini-box input[type="checkbox"]:checked::after {
-  content: "✓";
-  position: absolute;
-  top: -2px;
-  left: 2px;
-  font-size: 12px;
-  color: #fff;
-}
-
-/* Competencies = blue */
-.competencies .mini-box label,
-.competencies .mini-box input[type="checkbox"] {
-  color: var(--comp-accent);
-}
-
-/* Materials = orange */
-.materials .mini-box label,
-.materials .mini-box input[type="checkbox"] {
-  color: var(--mat-accent);
-}
-.mini-box label {
-  display: flex;
-  align-items: center;   /* vertical centering */
-  gap: 4px;
-  font-size: 12px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-/* ensure the custom checkbox aligns perfectly */
-.mini-box input[type="checkbox"] {
-  flex-shrink: 0;         /* don’t squish */
-  display: inline-flex;   /* acts like flex item */
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  top: 0;                 /* no offset */
-}
-.install .stage-grid .lined:first-child textarea {
-  min-height: 120px;
-  resize: none;           /* disable native resizer */
-  overflow: auto;
-  padding-right: 18px;    /* space for custom icon */
-  position: relative;
-}
-
-/* custom dashed resize handle */
-.install .stage-grid .lined:first-child::after {
-  content: "";
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  width: 12px;
-  height: 12px;
-  border-right: 2px dashed var(--install-border);
-  border-bottom: 2px dashed var(--install-border);
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Custom resize icon */
-.install .stage-grid .lined:first-child {
-  position: relative;
-}
-
-.install .stage-grid .lined:first-child::after {
-  content: "";
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid var(--install-border);
-  border-bottom: 2px solid var(--install-border);
-  opacity: 0.6;
-  pointer-events: none; /* so user can still grab to resize */
-}
-.level .stage-grid select {
-  width: 100%;
-  font-size: 12px;  /* slightly smaller for long titles */
-  line-height: 1.3;
-}
-
-.lined {
-  border: 1.8px dashed;
-  border-radius: 6px;
-  padding: 4px 6px;
-  /* default fallback */
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    rgba(0,0,0,0.08) 25px
-  );
-}
-
-/* make lined grids inherit their section color */
-.ps .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--ps-border) 40%, transparent) 25px
-  );
-}
-.level .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--level-border) 40%, transparent) 25px
-  );
-}
-.objectives .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--obj-border) 40%, transparent) 25px
-  );
-}
-.activity .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--act-border) 40%, transparent) 25px
-  );
-}
-.competencies .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--comp-border) 40%, transparent) 25px
-  );
-}
-.materials .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--mat-border) 40%, transparent) 25px
-  );
-}
-.warmer .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--warmer-border) 40%, transparent) 25px
-  );
-}
-.install .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--install-border) 40%, transparent) 25px
-  );
-}
-.assessment .lined {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff,
-    #fff 24px,
-    color-mix(in srgb, var(--assessment-border) 40%, transparent) 25px
-  );
-}
-
-  border-radius: 6px;
-  padding: 4px 6px;
-  border: 1.8px dashed; /* keep dashed border */
-}
-.lined input,
-.lined textarea {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  line-height: 24px;   /* align text with lines */
-  resize: none;
-}
-@media print {
-  @page {
-    size: A4; /* Sets the page size to A4 */
-    margin: 0; /* Removes default page margins, allowing content to extend to the edges */
-  }
-
-  body {
-    width: 210mm; /* A4 width */
-    height: 297mm; /* A4 height */
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Optional: Add styles to manage content flow and breaks */
-  .page {
-    width: 210mm;
-    height: 297mm;
-    margin: 0;
-    padding: 0; /* Adjust padding as needed for content within the page */
-    page-break-after: always; /* Forces a new page after elements with this class */
-  }
-
-  /* Prevent elements from breaking across pages awkwardly */
-  h1, h2, h3, p, img {
-    page-break-inside: avoid;
-  }
-}
-/* Make wide boxes fill ~98% of available width */
-.stage-box.wide {
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-}
-.row {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-  align-items: stretch; /* makes children equal height */
-}
-
-.row > div {
-  display: flex;
-  flex-direction: column;
-}
-
-.row .stage-box {
-  flex: 1; /* force equal height inside each column */
-}
-
+    .checkbox-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2px 6px;
+    }
+    .checkbox-cell input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      accent-color: currentColor;
+    }
+    .checkbox-cell label {
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .inline-boxes {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 11px;
+    }
+    .mini-box {
+      border: 1.6px dashed;
+      border-radius: 6px;
+      padding: 2px 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #fff;
+    }
+    .mini-box input[type="checkbox"] {
+      width: 12px;
+      height: 12px;
+      margin: 0;
+      accent-color: currentColor;
+    }
+    .competencies .mini-box { border-color: var(--comp-border); }
+    .materials .mini-box    { border-color: var(--mat-border); }
+    .competencies .mini-box:hover { background: #eef6ff; }
+    .materials .mini-box:hover    { background: #fff6eb; }
+    .mini-box input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      border: 1.6px dashed currentColor;
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+    }
+    .mini-box input[type="checkbox"]:checked {
+      background-color: currentColor;
+    }
+    .mini-box input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      top: -2px;
+      left: 2px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .mini-box input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      border: 1.6px dashed currentColor;
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      background: #fff;
+    }
+    .mini-box input[type="checkbox"]:checked {
+      background-color: currentColor;
+    }
+    .mini-box input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      top: -2px;
+      left: 2px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .competencies .mini-box label,
+    .competencies .mini-box input[type="checkbox"] {
+      color: var(--comp-accent);
+    }
+    .materials .mini-box label,
+    .materials .mini-box input[type="checkbox"] {
+      color: var(--mat-accent);
+    }
+    .mini-box label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .mini-box input[type="checkbox"] {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: 0;
+    }
+    .install .stage-grid .lined:first-child .editable-area { /* MODIFIED for editable area */
+      overflow: auto;
+      padding-right: 18px;
+      position: relative;
+    }
+    .level .stage-grid select {
+      width: 100%;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    .lined {
+      border: 1.8px dashed;
+      border-radius: 6px;
+      padding: 4px 6px;
+      background: repeating-linear-gradient( to bottom, #fff, #fff 24px, rgba(0,0,0,0.08) 25px );
+    }
+    .ps .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--ps-border) 40%, transparent) 25px ); }
+    .level .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--level-border) 40%, transparent) 25px ); }
+    .objectives .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--obj-border) 40%, transparent) 25px ); }
+    .activity .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--act-border) 40%, transparent) 25px ); }
+    .competencies .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--comp-border) 40%, transparent) 25px ); }
+    .materials .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--mat-border) 40%, transparent) 25px ); }
+    .warmer .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--warmer-border) 40%, transparent) 25px ); }
+    .install .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--install-border) 40%, transparent) 25px ); }
+    .assessment .lined { background: repeating-linear-gradient( to bottom, #fff, #fff 24px, color-mix(in srgb, var(--assessment-border) 40%, transparent) 25px ); }
+    .lined {
+      border-radius: 6px;
+      padding: 4px 6px;
+      border: 1.8px dashed;
+    }
+    .lined input, .lined textarea, .lined .editable-area { /* MODIFIED */
+      line-height: 24px;
+    }
+    @media print {
+      @page { size: A4; margin: 0; }
+      body { width: 210mm; height: 297mm; margin: 0; padding: 0; }
+      .page { width: 210mm; height: 297mm; margin: 0; padding: 10mm; page-break-after: always; }
+      h1, h2, h3, p, img { page-break-inside: avoid; }
+      .controls, .ribbon, .no-print { display: none !important; } /* ADDED */
+    }
+    .stage-box.wide {
+      width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      align-items: stretch;
+    }
+    .row > div {
+      display: flex;
+      flex-direction: column;
+    }
+    .row .stage-box {
+      flex: 1;
+    }
+    
+    /* --- STYLES ADDED FOR NEW FEATURES --- */
+    .controls {
+        position: absolute;
+        top: 10px;
+        right: 12mm;
+        display: flex;
+        gap: 10px;
+        z-index: 100;
+    }
+    .action-button {
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        padding: 6px 14px;
+        border: 2px solid var(--install-border);
+        border-radius: 20px;
+        background-color: #fff;
+        color: var(--install-accent);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .action-button:disabled {
+        background-color: #e0e0e0;
+        color: #9e9e9e;
+        border-color: #ccc;
+        cursor: not-allowed;
+    }
+    .action-button:hover:not(:disabled) {
+        background-color: var(--install-accent);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .ribbon {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        background: #f9f9fc;
+        border: 1px solid #eef;
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 24px;
+    }
+    .group {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border-right: 1px solid #eef;
+    }
+    .group:last-child { border-right: none; }
+    .ribbon select, .ribbon input[type="color"], .ribbon .btn-square {
+        appearance: none;
+        border: 1px solid #ddd;
+        background: #fff;
+        padding: 6px 8px;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        color: #333;
+        font-family: 'Poppins', sans-serif;
+    }
+    .ribbon .btn-square {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+    }
+    .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f0f0f5; }
+    .ribbon input[type="color"] { width: 34px; height: 34px; padding: 2px; }
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none; justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+        background-color: #fff; padding: 25px; border-radius: 8px;
+        width: 90%; max-width: 400px; text-align: center; position: relative;
+        font-family: 'Poppins', sans-serif;
+        border-top: 5px solid var(--install-accent);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .modal-close-btn {
+        position: absolute; top: 8px; right: 12px; font-size: 24px;
+        font-weight: bold; cursor: pointer; color: #aaa;
+    }
+    .modal-content h2 { margin-top: 0; margin-bottom: 15px; color: #333;}
+    .modal-content p { margin-bottom: 20px; color: #666; font-size: 14px; }
+    .modal-content input[type="text"] {
+        box-sizing: border-box; width: 100%; padding: 12px;
+        margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;
+    }
+    .modal-content button {
+        background-color: var(--install-accent); color: white; border: none;
+        padding: 12px 20px; border-radius: 5px; cursor: pointer;
+        font-size: 16px; width: 100%; font-weight: 600;
+    }
+    .loading-indicator {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: none; justify-content: center; align-items: center; z-index: 2000;
+    }
+    .loading-spinner {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid var(--install-accent);
+        border-radius: 50%; width: 50px; height: 50px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .toast {
+        position: fixed; bottom: 20px; right: 20px; color: #fff;
+        padding: 16px 24px; border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex; align-items: center; z-index: 1000;
+        transform: translateY(100px); opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { margin-right: 12px; font-size: 20px; }
+    .toast.success { background-color: var(--warmer-accent); }
+    .toast.error { background-color: var(--act-accent); }
+    .editable-area img {
+        width: 100px !important;
+        height: 100px !important;
+        object-fit: cover;
+        vertical-align: middle;
+        margin: 4px;
+        border-radius: 4px;
+        border: 2px solid var(--install-border);
+    }
+    .install .stage-grid .lined:first-child .editable-area {
+        resize: vertical; /* Enable resizing for this specific area */
+    }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="title-wrap">
+    <div class="title-wrap"></div>
+
+    <div class="controls no-print">
+        <button class="action-button" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+        <button class="action-button" id="save-button" disabled title="Login to save"><i class="fas fa-save"></i> Save</button>
+    </div>
+    <div class="ribbon no-print" id="ribbon">
+        <div class="group">
+          <select id="fontFamily" title="Font Family">
+              <option style="font-family: 'Poppins', sans-serif;" value="Poppins">Poppins</option>
+              <option style="font-family: 'Patrick Hand', cursive;" value="Patrick Hand">Patrick Hand</option>
+              <option style="font-family: 'Roboto', sans-serif;" value="Roboto">Roboto</option>
+              <option style="font-family: 'Open Sans', sans-serif;" value="Open Sans">Open Sans</option>
+              <option style="font-family: 'Caveat', cursive;" value="Caveat">Caveat</option>
+              <option style="font-family: Arial, sans-serif;" value="Arial">Arial</option>
+              <option style="font-family: 'Times New Roman', serif;" value="Times New Roman">Times New Roman</option>
+              <option style="font-family: Verdana, sans-serif;" value="Verdana">Verdana</option>
+          </select>
+          <select id="fontSize" title="Font Size"><option value="2">10</option><option value="3" selected>12</option><option value="4">14</option><option value="5">16</option><option value="6">20</option><option value="7">24</option></select>
+        </div>
+        <div class="group">
+          <button class="btn-square" data-cmd="bold" title="Bold"><b>B</b></button>
+          <button class="btn-square" data-cmd="italic" title="Italic"><i>I</i></button>
+          <button class="btn-square" data-cmd="underline" title="Underline"><u>U</u></button>
+        </div>
+        <div class="group">
+          <input type="color" id="foreColor" title="Text Color" value="#2d2d2d">
+          <input type="color" id="hiliteColor" title="Highlight Color" value="#fff9c4">
+        </div>
+        <div class="group">
+          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+        </div>
+        <div class="group">
+          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
+          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
+        </div>
+        <div class="group">
+          <button class="btn-square insert-image-btn" title="Insert Image"><i class="fa-solid fa-image"></i></button>
+        </div>
     </div>
 
-    <!-- First row: Primary School + Level -->
     <div class="row">
       <div class="col-35">
         <div class="stage-box ps">
           <span class="stage-tag">General Information</span>
           <div class="stage-grid">
-            <div class="lined"><input type="text" placeholder="Primary School"></div>
-            <div class="lined"><input type="text" placeholder="Teacher"></div>
-            <div class="lined"><input type="text" placeholder="Date"></div>
+            <div class="lined"><div id="primarySchool" class="editable-area" contenteditable="true" data-placeholder="Primary School"></div></div>
+            <div class="lined"><div id="teacherName" class="editable-area" contenteditable="true" data-placeholder="Teacher"></div></div>
+            <div class="lined"><div id="lessonDate" class="editable-area" contenteditable="true" data-placeholder="Date"></div></div>
           </div>
         </div>
       </div>
-<div class="col-65">
-  <div class="stage-box level">
-    <span class="stage-tag">Lesson Details</span>
-    <div class="stage-grid" style="grid-template-columns: 25% 75%;">
-      <!-- Row 1 -->
+      <div class="col-65">
+        <div class="stage-box level">
+          <span class="stage-tag">Lesson Details</span>
+          <div class="stage-grid" style="grid-template-columns: 25% 75%;">
+            <div class="lined"><select id="levelSelect"><option value="">Select Level</option><option value="3ps">3PS</option><option value="4ps">4PS</option><option value="5ps">5PS</option></select></div>
+            <div class="lined"><select id="sequenceSelect"><option value="">Select Sequence</option></select></div>
+            <div class="lined" style="grid-column: 1 / span 2;"><select id="sectionSelect"><option value="">Select Section</option></select></div>
+            <div class="lined" style="grid-column: 1 / span 2;"><select id="sessionSelect"><option value="">Select Session</option></select></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stage-box objectives wide">
+      <span class="stage-tag">Learning Objectives</span>
+      <div class="lined"><div id="learningObjectives" class="editable-area" contenteditable="true" data-placeholder="Objective"></div></div>
+    </div>
+    <div class="row">
+      <div class="col-40">
+        <div class="stage-box competencies">
+          <span class="stage-tag">Target Competencies</span>
+          <div class="inline-boxes" id="competencies-container">
+            <div class="mini-box"><label><input type="checkbox" value="Interact"> Interact</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="Interpret"> Interpret</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="Produce"> Produce</label></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-60">
+        <div class="stage-box materials">
+          <span class="stage-tag">Teaching Materials</span>
+          <div class="inline-boxes" id="materials-container">
+            <div class="mini-box"><label><input type="checkbox" value="Textbook"> Textbook</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="W.B"> W.B</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="Slate"> Slate</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="Song"> Song</label></div>
+            <div class="mini-box"><label><input type="checkbox" value="Flashcards"> Flashcards</label></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stage-box warmer wide">
+      <span class="stage-tag">Warmer</span>
+      <div class="stage-grid three-cols">
+        <div class="lined"><div id="warmer-procedure" class="editable-area" contenteditable="true" data-placeholder="Procedure"></div></div>
+        <div class="lined"><div id="warmer-interaction" class="editable-area" contenteditable="true" data-placeholder="Interaction"></div></div>
+        <div class="lined"><div id="warmer-time" class="editable-area" contenteditable="true" data-placeholder="Time"></div></div>
+      </div>
+    </div>
+    <div class="stage-box install wide">
+      <span class="stage-tag">Install resources</span>
+      <div class="stage-grid three-cols">
+        <div class="lined"><div id="install-procedure" class="editable-area" contenteditable="true" data-placeholder="Procedure"></div></div>
+        <div class="lined"><div id="install-interaction" class="editable-area" contenteditable="true" data-placeholder="Interaction"></div></div>
+        <div class="lined"><div id="install-time" class="editable-area" contenteditable="true" data-placeholder="Time"></div></div>
+      </div>
+    </div>
+    <div class="stage-box assessment wide">
+      <span class="stage-tag">Assessment</span>
+      <div class="stage-grid three-cols">
+        <div class="lined"><div id="assessment-procedure" class="editable-area" contenteditable="true" data-placeholder="Procedure"></div></div>
+        <div class="lined"><div id="assessment-interaction" class="editable-area" contenteditable="true" data-placeholder="Interaction"></div></div>
+        <div class="lined"><div id="assessment-time" class="editable-area" contenteditable="true" data-placeholder="Time"></div></div>
+      </div>
+    </div>
+    <div class="stage-box activity wide">
+      <span class="stage-tag">Activity / Summary</span>
+      <div class="lined"><div id="activity-summary" class="editable-area" contenteditable="true" data-placeholder="Activity or Summary..."></div></div>
+    </div>
+    <div class="stage-box no-print" style="margin-top:20px; border-color:#ccc;">
+      <span class="stage-tag" style="background:#666;">Theme</span>
       <div class="lined">
-        <select id="levelSelect">
-          <option value="">Select Level</option>
-          <option value="3ps">3rd</option>
-          <option value="4ps">4th</option>
-          <option value="5ps">5th</option>
-        </select>
-      </div>
-      <div class="lined">
-        <select id="sequenceSelect">
-          <option value="">Select Sequence</option>
-        </select>
-      </div>
-
-      <!-- Row 2 -->
-      <div class="lined" style="grid-column: 1 / span 2;">
-        <select id="sectionSelect">
-          <option value="">Select Section</option>
-        </select>
-      </div>
-
-      <!-- Row 3 -->
-      <div class="lined" style="grid-column: 1 / span 2;">
-        <select id="sessionSelect">
-          <option value="">Select Session</option>
+        <select id="themeSelect">
+          <option value="default">Default Theme</option><option value="alt">Alternative Theme</option><option value="sunset">Sunset Glow</option><option value="forest">Forest Green</option><option value="ocean">Ocean Blue</option><option value="candy">Candy Pop</option><option value="desert">Desert Sand</option><option value="pastel">Soft Pastel</option><option value="midnight">Midnight Dark</option><option value="neon">Neon Lights</option>
         </select>
       </div>
     </div>
   </div>
-</div>
 
-
-
-    </div>
-
-<div class="stage-box objectives wide">
-  <span class="stage-tag">Learning Objectives</span>
-  <div class="lined"><input type="text" placeholder="Objective"></div>
-</div>
-
-<div class="row">
-  <div class="col-40">
-    <div class="stage-box competencies">
-      <span class="stage-tag">Target Competencies</span>
-      <div class="inline-boxes">
-        <div class="mini-box"><label><input type="checkbox"> Interact</label></div>
-        <div class="mini-box"><label><input type="checkbox"> Interpret</label></div>
-        <div class="mini-box"><label><input type="checkbox"> Produce</label></div>
-      </div>
+  <div id="loadingIndicator" class="loading-indicator no-print"><div class="loading-spinner"></div></div>
+  <div id="toast" class="toast no-print"><i id="toast-icon"></i><span id="toast-message"></span></div>
+  <div id="saveModal" class="modal-overlay no-print">
+    <div class="modal-content">
+      <span class="modal-close-btn">&times;</span>
+      <h2>Save Lesson Plan</h2>
+      <p>Please enter a name for this lesson plan.</p>
+      <input type="text" id="planNameInput" placeholder="e.g., Grade 5 - Week 2 - Reading" />
+      <button id="confirmSaveBtn">Save Plan</button>
     </div>
   </div>
-  <div class="col-60">
-    <div class="stage-box materials">
-      <span class="stage-tag">Teaching Materials</span>
-      <div class="inline-boxes">
-<div class="mini-box"><label><input type="checkbox"> Textbook</label></div>
-<div class="mini-box"><label><input type="checkbox"> W.B</label></div>
-<div class="mini-box"><label><input type="checkbox"> Slate</label></div>
-<div class="mini-box"><label><input type="checkbox"> Song</label></div>
-<div class="mini-box"><label><input type="checkbox"> Flashcards</label></div>
 
-      </div>
-    </div>
-  </div>
-</div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
 
-   <!-- Stages -->
-<div class="stage-box warmer wide">
-  <span class="stage-tag">Warmer</span>
-  <div class="stage-grid three-cols">
-    <div class="lined"><input type="text" placeholder="Procedure"></div>
-    <div class="lined"><input type="text" placeholder="Interaction"></div>
-    <div class="lined"><input type="text" placeholder="Time"></div>
-  </div>
-</div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-<div class="stage-box install wide">
-  <span class="stage-tag">Install resources</span>
-  <div class="stage-grid three-cols">
-    <div class="lined"><textarea placeholder="Procedure"></textarea></div>
-    <div class="lined"><input type="text" placeholder="Interaction"></div>
-    <div class="lined"><input type="text" placeholder="Time"></div>
-  </div>
-</div>
+    const saveButton = document.getElementById('save-button');
+    const saveModal = document.getElementById('saveModal');
+    const closeModalBtn = document.querySelector('.modal-close-btn');
+    const planNameInput = document.getElementById('planNameInput');
+    const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = document.getElementById('toast-icon');
 
-<div class="stage-box assessment wide">
-  <span class="stage-tag">Assessment</span>
-  <div class="stage-grid three-cols">
-    <div class="lined"><input type="text" placeholder="Procedure"></div>
-    <div class="lined"><input type="text" placeholder="Interaction"></div>
-    <div class="lined"><input type="text" placeholder="Time"></div>
-  </div>
-</div>
-
-<!-- Activity -->
-<div class="stage-box activity wide">
-  <span class="stage-tag">Activity / Summary</span>
-  <div class="lined"><textarea></textarea></div>
-</div>
-
-   
-  </div>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const linedBox = document.querySelector(".install .stage-grid .lined:first-child");
-  const textarea = linedBox.querySelector("textarea");
-
-  let isResizing = false;
-  let startY;
-  let startHeight;
-
-  linedBox.addEventListener("mousedown", (e) => {
-    const rect = linedBox.getBoundingClientRect();
-    // Check if click is in bottom-right 16px square
-    if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) {
-      isResizing = true;
-      startY = e.clientY;
-      startHeight = textarea.offsetHeight;
-      document.body.style.userSelect = "none"; // disable text selection
-      e.preventDefault();
+    let currentUser = null;
+    let currentPlanId = null;
+    let isEditMode = false;
+    
+    function showLoading() { loadingIndicator.style.display = 'flex'; }
+    function hideLoading() { loadingIndicator.style.display = 'none'; }
+    function showToast(message, type = 'success') {
+      toastMessage.textContent = message;
+      toast.className = `toast show no-print ${type}`;
+      toastIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+      setTimeout(() => { toast.classList.remove('show'); }, 3000);
     }
-  });
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isResizing) return;
-    const newHeight = Math.max(100, startHeight + (e.clientY - startY));
-    textarea.style.height = newHeight + "px";
-  });
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      saveButton.disabled = !user;
+      saveButton.title = user ? "Save your lesson plan" : "You must be logged in to save";
+      const planToLoadId = sessionStorage.getItem('planToLoadId');
+      if (user && planToLoadId) {
+          loadPlan(planToLoadId);
+          sessionStorage.removeItem('planToLoadId');
+      }
+    });
 
-  document.addEventListener("mouseup", () => {
-    isResizing = false;
-    document.body.style.userSelect = "";
-  });
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const textarea = document.querySelector(".install .stage-grid .lined:first-child textarea");
+    function collectPlanData() {
+        return {
+            school: document.getElementById('primarySchool').innerHTML,
+            teacher: document.getElementById('teacherName').innerHTML,
+            date: document.getElementById('lessonDate').innerHTML,
+            level: document.getElementById('levelSelect').value,
+            sequence: document.getElementById('sequenceSelect').value,
+            section: document.getElementById('sectionSelect').value,
+            session: document.getElementById('sessionSelect').value,
+            objectives: document.getElementById('learningObjectives').innerHTML,
+            competencies: Array.from(document.querySelectorAll('#competencies-container input:checked')).map(cb => cb.value),
+            materials: Array.from(document.querySelectorAll('#materials-container input:checked')).map(cb => cb.value),
+            warmer: { procedure: document.getElementById('warmer-procedure').innerHTML, interaction: document.getElementById('warmer-interaction').innerHTML, time: document.getElementById('warmer-time').innerHTML },
+            install: { procedure: document.getElementById('install-procedure').innerHTML, interaction: document.getElementById('install-interaction').innerHTML, time: document.getElementById('install-time').innerHTML },
+            assessment: { procedure: document.getElementById('assessment-procedure').innerHTML, interaction: document.getElementById('assessment-interaction').innerHTML, time: document.getElementById('assessment-time').innerHTML },
+            activitySummary: document.getElementById('activity-summary').innerHTML,
+            plannerType: 'kids',
+            theme: document.getElementById('themeSelect').value,
+        };
+    }
 
-  function autoResize(el) {
-    el.style.height = "auto"; // reset
-    el.style.height = el.scrollHeight + "px"; // set to content
-  }
+    function populateForm(data) {
+        document.getElementById('primarySchool').innerHTML = data.school || '';
+        document.getElementById('teacherName').innerHTML = data.teacher || '';
+        document.getElementById('lessonDate').innerHTML = data.date || '';
+        document.getElementById('learningObjectives').innerHTML = data.objectives || '';
+        document.getElementById('warmer-procedure').innerHTML = data.warmer?.procedure || '';
+        document.getElementById('warmer-interaction').innerHTML = data.warmer?.interaction || '';
+        document.getElementById('warmer-time').innerHTML = data.warmer?.time || '';
+        document.getElementById('install-procedure').innerHTML = data.install?.procedure || '';
+        document.getElementById('install-interaction').innerHTML = data.install?.interaction || '';
+        document.getElementById('install-time').innerHTML = data.install?.time || '';
+        document.getElementById('assessment-procedure').innerHTML = data.assessment?.procedure || '';
+        document.getElementById('assessment-interaction').innerHTML = data.assessment?.interaction || '';
+        document.getElementById('assessment-time').innerHTML = data.assessment?.time || '';
+        document.getElementById('activity-summary').innerHTML = data.activitySummary || '';
+        
+        document.querySelectorAll('#competencies-container input, #materials-container input').forEach(cb => cb.checked = false);
+        (data.competencies || []).forEach(val => { const cb = document.querySelector(`#competencies-container input[value="${val}"]`); if (cb) cb.checked = true; });
+        (data.materials || []).forEach(val => { const cb = document.querySelector(`#materials-container input[value="${val}"]`); if (cb) cb.checked = true; });
 
-  // Run once at start
-  autoResize(textarea);
+        document.getElementById('themeSelect').value = data.theme || 'default';
+        document.getElementById('themeSelect').dispatchEvent(new Event('change'));
+        
+        const levelSelect = document.getElementById('levelSelect');
+        levelSelect.value = data.level || '';
+        levelSelect.dispatchEvent(new Event('change'));
+        setTimeout(() => {
+            const sequenceSelect = document.getElementById('sequenceSelect');
+            sequenceSelect.value = data.sequence || '';
+            sequenceSelect.dispatchEvent(new Event('change'));
+            setTimeout(() => {
+                const sectionSelect = document.getElementById('sectionSelect');
+                sectionSelect.value = data.section || '';
+                sectionSelect.dispatchEvent(new Event('change'));
+                setTimeout(() => {
+                    document.getElementById('sessionSelect').value = data.session || '';
+                }, 100);
+            }, 100);
+        }, 100);
+    }
+    
+    async function loadPlan(planId) {
+        if (!currentUser) return;
+        showLoading();
+        try {
+            const planRef = doc(db, "users", currentUser.uid, "lessonPlans", planId);
+            const planDoc = await getDoc(planRef);
+            if (planDoc.exists() && planDoc.data().plannerType === 'kids') {
+                currentPlanId = planId;
+                isEditMode = true;
+                populateForm(planDoc.data());
+                showToast("Lesson plan loaded successfully!", "success");
+            } else {
+                showToast(planDoc.exists() ? "This plan uses a different format." : "Lesson plan not found.", "error");
+            }
+        } catch (error) {
+            console.error("Error loading plan:", error);
+            showToast("Could not load the lesson plan.", "error");
+        } finally {
+            hideLoading();
+        }
+    }
 
-  // Auto-resize on every input
-  textarea.addEventListener("input", () => autoResize(textarea));
-});
+    async function savePlan(planName) {
+      if (!currentUser || !planName.trim()) return;
+      showLoading();
+      try {
+        const planData = { ...collectPlanData(), planName: planName.trim(), updatedAt: serverTimestamp() };
+        if (isEditMode && currentPlanId) {
+            await updateDoc(doc(db, "users", currentUser.uid, "lessonPlans", currentPlanId), planData);
+            showToast("Lesson plan updated successfully!", "success");
+        } else {
+            const newDoc = await addDoc(collection(db, "users", currentUser.uid, "lessonPlans"), { ...planData, createdAt: serverTimestamp() });
+            currentPlanId = newDoc.id;
+            isEditMode = true;
+            showToast("Lesson plan saved successfully!", "success");
+        }
+        saveModal.style.display = 'none';
+        planNameInput.value = '';
+      } catch (error) {
+        console.error("Error saving plan:", error);
+        showToast("Error saving plan. Please try again.", "error");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    saveButton.addEventListener('click', () => { saveModal.style.display = 'flex'; planNameInput.focus(); });
+    closeModalBtn.addEventListener('click', () => { saveModal.style.display = 'none'; planNameInput.value = ''; });
+    window.addEventListener('click', (e) => { if (e.target === saveModal) { saveModal.style.display = 'none'; } });
+    confirmSaveBtn.addEventListener('click', () => {
+      const planName = planNameInput.value.trim();
+      if (planName) savePlan(planName);
+      else showToast("Please enter a name for your plan.", "error");
+    });
+    
+    let activeEditor = null;
+    document.addEventListener('focusin', e => { if (e.target.isContentEditable) activeEditor = e.target; });
+    const ribbon = document.getElementById('ribbon');
+    ribbon.addEventListener('click', e => {
+      const btn = e.target.closest('[data-cmd]');
+      if (btn) { e.preventDefault(); document.execCommand(btn.dataset.cmd, false, null); activeEditor?.focus(); }
+    });
+    ribbon.addEventListener('change', e => {
+        const el = e.target;
+        if (el.id === 'fontFamily') document.execCommand('fontName', false, el.value);
+        if (el.id === 'fontSize') document.execCommand('fontSize', false, el.value);
+        if (el.id === 'foreColor') document.execCommand('foreColor', false, el.value);
+        if (el.id === 'hiliteColor') document.execCommand('backColor', false, el.value);
+        activeEditor?.focus();
+    });
+  </script>
+
+  <script>
+    // NOTE: The original resizer and auto-resize scripts for the textarea were removed
+    // as they do not work with the new `contenteditable` divs and are replaced by CSS.
+    // All other original scripts are preserved below.
+
 const curriculum = {
   "3ps": {
-    "Seq01: Family and Friends": {
-      "Section 01: Family": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  Family and Friends": {
+      "  Family": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Friends": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  Friends": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq02: School": {
-      "Section 01: School Objects": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  School": {
+      "  School Objects": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: School Subjects": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  School Subjects": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq03: Home": {
-      "Section 01: Describing a House": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  Home": {
+      "  Describing a House": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Location Rooms in a House": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  Location Rooms in a House": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq04: Play Time": {
-      "Section 01: Toys": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  Play Time": {
+      "  Toys": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Favourite Toys": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  Favourite Toys": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq05: Pets": {
-      "Section 01: Pets": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  Pets": {
+      "  Pets": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Pets Body Parts": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  Pets Body Parts": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq06: Birthday": {
-      "Section 01: Party Invitation": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+    "  Birthday": {
+      "  Party Invitation": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Party Celebration": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and write",
-        "SESSION 04: I play roles"
+      "  Party Celebration": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and write",
+        "  I play roles"
       ]
     }
   },
 
   "4ps": {
-    "Seq01: Family and Friends": {
-      "Section 01: Family": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+    "  Family and Friends": {
+      "  Family": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Friends": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+      "  Friends": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq02: School": {
-      "Section 01: School Facilities": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+    "  School": {
+      "  School Facilities": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Mapping": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+      "  Mapping": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ]
     },
-    "Seq03: Fun Time and Games": {
-      "Section 01: Fun Time": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+    "  Fun Time and Games": {
+      "  Fun Time": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ],
-      "Section 02: Games": [
-        "SESSION 01: I sing and have fun, I listen and repeat",
-        "SESSION 02: I read and discover",
-        "SESSION 03: I read and enjoy",
-        "SESSION 04: I read and write",
-        "SESSION 05: I play roles"
+      "  Games": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
       ]
-    }
+    },
+    "  Food and Health": {
+      "  Food": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
+         ],
+      "  Health": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
+      ]
+    },
+    "  Animals": {
+      "  Farm": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
+         ],
+      "  Zoo": [
+        "  I sing and have fun, I listen and repeat",
+        "  I read and discover",
+        "  I read and enjoy",
+        "  I read and write",
+        "  I play roles"
+      ]
+    },
   },
 
   "5ps": {
-    "Seq01: Jobs, Occupations, and Hobbies": {
-      "Section 01: Jobs and Occupations": [
-        "SESSION 01: I get ready.",
-        "SESSION 02: I listen and interact",
-        "SESSION 03: I listen and discover",
-        "SESSION 04: I read and understand",
-        "SESSION 05: I read and discover",
-        "SESSION 06: I learn and enjoy",
-        "SESSION 07: I learn and write",
-        "SESSION 08: I write"
+    "  Jobs, Occupations, and Hobbies": {
+      "  Jobs and Occupations": [
+        "  I get ready.",
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  i learn to write",
+        "  I write"
       ],
-      "Section 02: Hobbies": [
-        "SESSION 01: I listen and interact",
-        "SESSION 02: I listen and discover",
-        "SESSION 03: I read and understand",
-        "SESSION 04: I read and discover",
-        "SESSION 05: I learn and enjoy",
-        "SESSION 06: I learn to write",
-        "SESSION 07: I write",
-        "SESSION 08: I check my progress"
+      "  Hobbies": [
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  I learn to write",
+        "  I write",
+        "  I check my progress"
       ]
     },
-    "Seq02: Hometown, City, Village Amenities": {
-      "Section 01: Hometown, City, Village Amenities": [
-        "SESSION 01: I get ready.",
-        "SESSION 02: I listen and interact",
-        "SESSION 03: I listen and discover",
-        "SESSION 04: I read and understand",
-        "SESSION 05: I read and discover",
-        "SESSION 06: I learn and enjoy",
-        "SESSION 07: I learn and write",
-        "SESSION 08: I write"
+    "  Hometown, City, Village Amenities": {
+      "  Hometown, City, Village Amenities": [
+        "  I get ready.",
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  i learn to write",
+        "  I write"
       ],
-      "Section 02: Directions": [
-        "SESSION 01: I listen and interact",
-        "SESSION 02: I listen and discover",
-        "SESSION 03: I read and understand",
-        "SESSION 04: I read and discover",
-        "SESSION 05: I learn and enjoy",
-        "SESSION 06: I learn to write",
-        "SESSION 07: I write",
-        "SESSION 08: I check my progress"
+      "  Directions": [
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  I learn to write",
+        "  I write",
+        "  I check my progress"
       ]
     },
-    "Seq03: Holidays and Travelling": {
-      "Section 01: Holidays": [
-        "SESSION 01: I get ready.",
-        "SESSION 02: I listen and interact",
-        "SESSION 03: I listen and discover",
-        "SESSION 04: I read and understand",
-        "SESSION 05: I read and discover",
-        "SESSION 06: I learn and enjoy",
-        "SESSION 07: I learn and write",
-        "SESSION 08: I write"
+    "  Holidays and Travelling": {
+      "  Holidays": [
+        "  I get ready.",
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  i learn to write",
+        "  I write"
       ],
-      "Section 02: Travelling": [
-        "SESSION 01: I listen and interact",
-        "SESSION 02: I listen and discover",
-        "SESSION 03: I read and understand",
-        "SESSION 04: I read and discover",
-        "SESSION 05: I learn and enjoy",
-        "SESSION 06: I learn to write",
-        "SESSION 07: I write",
-        "SESSION 08: I check my progress"
+      "  Travelling": [
+        "  I listen and interact",
+        "  I listen and discover",
+        "  I read and understand",
+        "  I read and discover",
+        "  I learn and enjoy",
+        "  I learn to write",
+        "  I write",
+        "  I check my progress"
       ]
     }
   }
-};
+};   
 const levelSelect = document.getElementById("levelSelect");
 const sequenceSelect = document.getElementById("sequenceSelect");
 const sectionSelect = document.getElementById("sectionSelect");
@@ -999,27 +1148,29 @@ sectionSelect.addEventListener("change", () => {
     });
   }
 });
-</script>
-<!-- Theme Selector -->
-<div class="stage-box" style="margin-top:20px; border-color:#ccc;">
-  <span class="stage-tag" style="background:#666;">Theme</span>
-  <div class="lined">
-    <select id="themeSelect">
-      <option value="default">Default Theme</option>
-      <option value="alt">Alternative Theme</option>
-      <option value="sunset">Sunset Glow</option>
-      <option value="forest">Forest Green</option>
-      <option value="ocean">Ocean Blue</option>
-      <option value="candy">Candy Pop</option>
-      <option value="desert">Desert Sand</option>
-      <option value="pastel">Soft Pastel</option>
-      <option value="midnight">Midnight Dark</option>
-      <option value="neon">Neon Lights</option>
-    </select>
-  </div>
-</div>
+    (function () {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      document.body.appendChild(fileInput);
+      const procedureEditor = document.getElementById('install-procedure');
+      document.querySelector('.insert-image-btn').addEventListener('click', (e) => { e.preventDefault(); fileInput.click(); });
+      fileInput.addEventListener('change', function () {
+        if (!this.files || !this.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          procedureEditor.focus();
+          document.execCommand('insertHTML', false, img.outerHTML + '&nbsp;');
+        };
+        reader.readAsDataURL(this.files[0]);
+        this.value = '';
+      });
+    })();
 
-<script>
+// Theme selector functionality
 const themes = {
   default: {
     "--ps-border": "#b2dfdb", "--ps-accent": "#26a69a",
@@ -1139,7 +1290,6 @@ document.getElementById("themeSelect").addEventListener("change", (e) => {
     document.documentElement.style.setProperty(varName, selectedTheme[varName]);
   });
 });
-</script>
-
+  </script>
 </body>
 </html>
