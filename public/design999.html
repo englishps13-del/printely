@@ -279,7 +279,7 @@
                 display: none !important; /* Hide on-screen controls */
             }
         }
-		.controls button i {
+        .controls button i {
   font-size: 0.9rem;
 }
 
@@ -408,6 +408,31 @@
   vertical-align: middle;
   margin: 4px;
 }
+/* Hide dropdown arrows for various browsers */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none; /* In case any default background arrow exists */
+  padding-right: 1.5rem; /* Maintain padding for text alignment */
+}
+
+/* Optional: Add a custom down arrow using pseudo-elements */
+.form-group::after {
+  font-weight: 900;
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Allows clicks to pass through to the select element */
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Position the pseudo-element correctly within the form group */
+.form-group {
+    position: relative;
+}
 
     </style>
 </head>
@@ -513,7 +538,7 @@
                 <div class="form-group"><label for="date">Date</label><input type="date" id="date"></div>
                 <div class="form-group"><label for="learners">Number of Learners</label><input type="number" id="learners"></div>
                 <div class="form-group"><label for="level">Level</label><select id="levelSelect">
-                    <option value="">Select Level</option><option value="3ps">3rd</option><option value="4ps">4th</option><option value="5ps">5th</option></select></div>
+                    <option value="">Select Level</option><option value="3PS">3PS</option><option value="4PS">4PS</option><option value="5PS">5PS</option></select></div>
             </div>
             <div class="form-group" style="margin-bottom: 1rem;">
                 <label for="sequence">Sequence</label><select id="sequenceSelect"><option value="">Select Sequence</option></select>
@@ -537,7 +562,7 @@
             <div class="block">
                 <h2 class="block-header"><i class="fas fa-paperclip"></i> Teaching Materials</h2>
                
-			   <div class="checkbox-group">
+               <div class="checkbox-group">
                   <label><input type="checkbox" id="mat-textbook"> Textbook</label>
                   <label><input type="checkbox" id="mat-wb"> W.B</label>
                   <label><input type="checkbox" id="mat-flashcards"> Flashcards</label>
@@ -631,8 +656,7 @@
         </div>
     </div>
 
-   <!-- Save Modal -->
-    <div id="saveModal" class="modal">
+   <div id="saveModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Save Lesson Plan</h2>
@@ -728,9 +752,9 @@
                 document.getElementById('mat-textbook').checked = planData.materials?.includes('Textbook');
                 document.getElementById('mat-wb').checked = planData.materials?.includes('W.B');
                 document.getElementById('mat-flashcards').checked = planData.materials?.includes('Flashcards');
-				document.getElementById('mat-song').checked = planData.materials?.includes('Song');
-				document.getElementById('mat-slate').checked = planData.materials?.includes('Slate');
-				
+                document.getElementById('mat-song').checked = planData.materials?.includes('Song');
+                document.getElementById('mat-slate').checked = planData.materials?.includes('Slate');
+                
                 if (planData.warmer) {
                     document.getElementById('warmer-proc').innerHTML = planData.warmer.procedure || '';
                     document.getElementById('warmer-interact').innerHTML = planData.warmer.interaction || '';
@@ -897,8 +921,8 @@
                 if (document.getElementById('mat-textbook')?.checked) lessonPlanData.materials.push('Textbook');
                 if (document.getElementById('mat-wb')?.checked) lessonPlanData.materials.push('W.B');
                 if (document.getElementById('mat-flashcards')?.checked) lessonPlanData.materials.push('Flashcards');
-    			if (document.getElementById('mat-song')?.checked) lessonPlanData.materials.push('Song');
-    			if (document.getElementById('mat-slate')?.checked) lessonPlanData.materials.push('Slate');
+                if (document.getElementById('mat-song')?.checked) lessonPlanData.materials.push('Song');
+                if (document.getElementById('mat-slate')?.checked) lessonPlanData.materials.push('Slate');
 
                 const plansRef = collection(db, "users", currentUser.uid, "lessonPlans");
                 await addDoc(plansRef, lessonPlanData);
@@ -1131,6 +1155,35 @@
     });
 
     updateWordCount();
+     // --- Curriculum Data ---
+  const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
+  "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
+"Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
+ "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
+
+ }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
+// --- Dropdown Handlers ---
+  const [levelSelect, sequenceSelect, sectionSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sectionSelect", "sessionSelect"].map(id => document.getElementById(id));
+  levelSelect.addEventListener("change", () => {
+    sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>"; sectionSelect.innerHTML = "<option value=''>Select Section</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (curriculum[levelSelect.value]) {
+      Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+      sequenceSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    }
+  });
+  sequenceSelect.addEventListener("change", () => {
+    sectionSelect.innerHTML = "<option value=''>Select Section</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (sequenceSelect.value === "Remediation & Standardisation") return sectionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+    if (seqData) Object.keys(seqData).forEach(sec => sectionSelect.add(new Option(sec, sec)));
+  });
+  sectionSelect.addEventListener("change", () => {
+    sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (sectionSelect.value === "Remediation & Standardisation") return sessionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+    const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
+    if (sessData) sessData.forEach(ses => sessionSelect.add(new Option(ses, ses)));
+  });
+
 </script>
 
 
