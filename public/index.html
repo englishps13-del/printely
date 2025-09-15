@@ -1230,12 +1230,16 @@
         <form id="feedback-form" class="space-y-6">
             <div>
                 <label for="comment-text" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
-                <textarea id="comment-text" name="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
-            </div>
+                
+			<textarea id="comment-text" name="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
+           
+		   </div>
             <button type="submit" id="submit-feedback-btn" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
                        bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
                 Submit Feedback
             </button>
+<div id="comments-container">
+  </div>
         </form>
 
         <div id="login-prompt" class="hidden text-center mt-6 p-4 bg-yellow-100/50 dark:bg-yellow-900/30 rounded-lg">
@@ -1259,7 +1263,11 @@
   Account Dashboard
 </a>
 </footer>
-
+<footer>
+  <div class="text-center text-sm py-4 text-gray-500 dark:text-gray-400">
+    Designed by <a href="https://facebook.com/bahloulidjaafar" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline">@Bahlouli djaafar</a>
+  </div>
+</footer>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar and Dark Mode Script ---
@@ -1680,7 +1688,40 @@ if (feedbackForm) {
     }
   });
 }
+// --- Display Comments on Page Load ---
+const commentsContainer = document.getElementById('comments-container');
 
+// Check if the comments container exists
+if (commentsContainer) {
+  // Set up a real-time listener for the 'comments' collection
+  const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    // Clear any existing comments to prevent duplicates
+    commentsContainer.innerHTML = '';
+    
+    // Loop through each document (comment)
+    snapshot.forEach((doc) => {
+      const comment = doc.data();
+
+      // Create a div for each comment
+      const commentElement = document.createElement('div');
+      commentElement.classList.add('bg-gray-100', 'dark:bg-gray-800', 'p-4', 'rounded-lg', 'shadow', 'mb-4');
+      
+      // Construct the HTML for the comment
+      commentElement.innerHTML = `
+        <div class="flex items-center mb-2">
+          <p class="font-bold text-gray-900 dark:text-gray-100">${comment.username}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 ml-auto">${new Date(comment.timestamp.toDate()).toLocaleDateString()}</p>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300">${comment.commentText}</p>
+      `;
+
+      // Add the new comment element to the container
+      commentsContainer.appendChild(commentElement);
+    });
+  });
+}
 // --- Initial call to display comments when the page loads ---
 displayComments();
 
