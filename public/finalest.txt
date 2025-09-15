@@ -24,7 +24,7 @@
         margin: auto;
         background: #fff;
         padding: 25px;
-        border-radius: 10px;
+        border-radius: 5px; /* Sharper edges */
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
@@ -41,31 +41,31 @@
         font-size: 12px; color: #666;
     }
 
-    /* Box container styles - Inspired by the uploaded image */
+    /* Box container styles - Sharper edges */
     .box {
         border: 2.5px solid #000; /* Thicker border */
-        border-radius: 14px; /* More rounded corners */
-        padding: 30px 15px 15px 15px; /* Increased top padding for the label */
-        margin-bottom: 30px; /* Increased margin to avoid overlap */
+        border-radius: 5px; /* Sharper corners */
+        padding: 20px 10px 10px 10px; /* Reduced padding */
+        margin-bottom: 20px; /* Reduced margin */
         position: relative;
         background-color: #fff;
     }
 
     .box-label {
         position: absolute;
-        top: -18px; /* Pulled up to sit over the border */
-        left: 25px; /* Positioned from the left */
+        top: -15px; /* Pulled up to sit over the border */
+        left: 20px; /* Positioned from the left */
         background: #f0f0f0;
-        padding: 5px 15px;
+        padding: 3px 12px; /* Reduced padding */
         font-weight: 600;
-        font-size: 14px;
+        font-size: 12px; /* Smaller font size */
         color: #000;
         letter-spacing: 0.5px;
         border: 2.5px solid #000; /* Matching border */
-        border-radius: 10px;
+        border-radius: 5px; /* Sharper corners */
         display: inline-flex; /* To align hearts */
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         white-space: nowrap; /* Keep label on one line */
         transition: all 0.3s;
     }
@@ -74,7 +74,7 @@
     .box-label::before,
     .box-label::after {
         content: '?';
-        font-size: 12px;
+        font-size: 10px; /* Smaller hearts */
         color: inherit;
     }
 
@@ -93,17 +93,17 @@
     
     /* Compact grid for top section */
     .compact-grid .box {
-        padding: 20px 12px 8px 12px; /* Reduced padding for compact boxes */
+        padding: 15px 8px 5px 8px; /* Reduced padding for compact boxes */
     }
     .compact-grid .box-label {
-        font-size: 11px; /* Smaller label */
-        padding: 4px 10px;
-        top: -15px;
-        left: 15px;
+        font-size: 10px; /* Smaller label */
+        padding: 2px 8px;
+        top: -12px;
+        left: 12px;
     }
     .compact-grid .box-label::before,
     .compact-grid .box-label::after {
-        font-size: 10px;
+        font-size: 8px;
         gap: 5px;
     }
     
@@ -131,7 +131,7 @@
     /* Checkboxes */
     .custom-checkbox { position: relative; cursor: pointer; display: inline-flex; align-items: center; }
     .custom-checkbox input { position: absolute; opacity: 0; }
-    .custom-checkbox span { display: inline-block; height: 14px; width: 14px; border: 1.5px solid #000; border-radius: 3px; background-color: #fff; margin-right: 6px; position: relative; }
+    .custom-checkbox span { display: inline-block; height: 14px; width: 14px; border: 1.5px solid #000; border-radius: 2px; /* Sharper corners */ background-color: #fff; margin-right: 6px; position: relative; }
     .custom-checkbox input:checked ~ span { background-color: #000; }
     .custom-checkbox input:checked ~ span::after { content: ""; position: absolute; display: block; left: 3px; top: 0px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
     .checkbox-inline { display: flex; flex-wrap: wrap; gap: 10px 20px; padding-top: 5px; }
@@ -143,7 +143,7 @@
         gap: 8px; 
         background: #f9f9f9; 
         border: 1px solid #e0e0e0; 
-        border-radius: 8px; 
+        border-radius: 4px; /* Sharper corners */
         padding: 10px; 
         margin-bottom: 24px; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -154,7 +154,7 @@
         gap: 6px; 
         padding: 6px; 
         border: 1px solid #dcdcdc; 
-        border-radius: 6px; 
+        border-radius: 4px; /* Sharper corners */
         background: #fff;
         transition: all 0.2s ease;
     }
@@ -167,7 +167,7 @@
         border: 1px solid #dcdcdc; 
         background: #fff; 
         padding: 7px 10px; 
-        border-radius: 5px; 
+        border-radius: 4px; /* Sharper corners */
         font-size: 14px; 
         cursor: pointer; 
         color: #333; 
@@ -212,7 +212,7 @@
     }
     .editable-area:focus { 
         box-shadow: 0 0 0 2px var(--accent-color); 
-        border-radius: 4px; 
+        border-radius: 2px; /* Sharper corners */
     }
     .editable-area[data-placeholder]:empty::before { 
         content: attr(data-placeholder); 
@@ -238,7 +238,7 @@
         border: 2px solid currentColor; 
         padding: 8px 14px; 
         margin: 6px; 
-        border-radius: 5px; 
+        border-radius: 4px; /* Sharper corners */
         cursor: pointer; 
         font-weight: 500; 
         transition: all 0.3s ease; 
@@ -264,7 +264,7 @@
         left: 0;
         background: white;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 4px; /* Sharper corners */
         padding: 10px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         z-index: 100;
@@ -275,7 +275,7 @@
         width: 100px;
         height: 100px;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: 2px; /* Sharper corners */
         margin-bottom: 8px;
     }
     .image-preview button {
@@ -283,7 +283,7 @@
         color: white;
         border: none;
         padding: 5px 10px;
-        border-radius: 4px;
+        border-radius: 4px; /* Sharper corners */
         cursor: pointer;
         font-size: 12px;
         margin-right: 5px;
@@ -335,78 +335,154 @@
     body.theme-gray .box-label { color: #444; background-color: #dddddd; border-color: #444; }
     body.theme-gray th { background-color: #dddddd; }
     body.theme-gray .custom-checkbox input:checked ~ span { background-color: #444; border-color: #444; }
+    
+    /* New themes with more colors */
+    body.theme-red { color: #c0392b; }
+    body.theme-red .box, body.theme-red th, body.theme-red td { border-color: #c0392b; }
+    body.theme-red .box-label { color: #c0392b; background-color: #fadbd8; border-color: #c0392b; }
+    body.theme-red th { background-color: #fadbd8; }
+    body.theme-red .custom-checkbox input:checked ~ span { background-color: #c0392b; border-color: #c0392b; }
+    
+    body.theme-orange { color: #d35400; }
+    body.theme-orange .box, body.theme-orange th, body.theme-orange td { border-color: #d35400; }
+    body.theme-orange .box-label { color: #d35400; background-color: #fdebd0; border-color: #d35400; }
+    body.theme-orange th { background-color: #fdebd0; }
+    body.theme-orange .custom-checkbox input:checked ~ span { background-color: #d35400; border-color: #d35400; }
+    
+    body.theme-teal { color: #16a085; }
+    body.theme-teal .box, body.theme-teal th, body.theme-teal td { border-color: #16a085; }
+    body.theme-teal .box-label { color: #16a085; background-color: #d0ece7; border-color: #16a085; }
+    body.theme-teal th { background-color: #d0ece7; }
+    body.theme-teal .custom-checkbox input:checked ~ span { background-color: #16a085; border-color: #16a085; }
+    
+    body.theme-indigo { color: #1a237e; }
+    body.theme-indigo .box, body.theme-indigo th, body.theme-indigo td { border-color: #1a237e; }
+    body.theme-indigo .box-label { color: #1a237e; background-color: #e8eaf6; border-color: #1a237e; }
+    body.theme-indigo th { background-color: #e8eaf6; }
+    body.theme-indigo .custom-checkbox input:checked ~ span { background-color: #1a237e; border-color: #1a237e; }
+    
+    body.theme-cyan { color: #00acc1; }
+    body.theme-cyan .box, body.theme-cyan th, body.theme-cyan td { border-color: #00acc1; }
+    body.theme-cyan .box-label { color: #00acc1; background-color: #e0f7fa; border-color: #00acc1; }
+    body.theme-cyan th { background-color: #e0f7fa; }
+    body.theme-cyan .custom-checkbox input:checked ~ span { background-color: #00acc1; border-color: #00acc1; }
+    
+    body.theme-amber { color: #ff8f00; }
+    body.theme-amber .box, body.theme-amber th, body.theme-amber td { border-color: #ff8f00; }
+    body.theme-amber .box-label { color: #ff8f00; background-color: #fff8e1; border-color: #ff8f00; }
+    body.theme-amber th { background-color: #fff8e1; }
+    body.theme-amber .custom-checkbox input:checked ~ span { background-color: #ff8f00; border-color: #ff8f00; }
 
     /* ---------- PRINT STYLES ---------- */
     @media print {
-        @page { size: A4; margin: 0; }
+        @page { size: A4; margin: 5mm; } /* Reduced margins for more space */
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-        body { margin: 0 !important; padding: 0 !important; background: #fff !important; font-size: 10px !important; }
-        .lesson-plan-container { width: 210mm !important; height: 297mm !important; margin: 0 !important; padding: 6mm !important; box-shadow: none !important; border: none !important; box-sizing: border-box !important; overflow: hidden !important; }
+        body { margin: 0 !important; padding: 0 !important; background: #fff !important; font-size: 9px !important; } /* Smaller font to fit on one page */
+        .lesson-plan-container { width: 200mm !important; height: 287mm !important; margin: 0 !important; padding: 4mm !important; box-shadow: none !important; border: none !important; box-sizing: border-box !important; overflow: hidden !important; }
         .box, th, td { border: 1px solid #000 !important; background: #fff !important; }
-        .box { padding: 10px !important; margin-bottom: 10px !important; }
-        .box-label { position: static !important; transform: none !important; border: none !important; border-bottom: 1px solid #000 !important; background: #f0f0f0 !important; color: #000 !important; border-radius: 0 !important; padding: 2px 0 5px 0 !important; text-align: left !important; width: 100% !important; margin-bottom: 5px; font-size: 11px !important; font-weight: bold; }
+        .box { padding: 8px !important; margin-bottom: 8px !important; }
+        .box-label { position: static !important; transform: none !important; border: none !important; border-bottom: 1px solid #000 !important; background: #f0f0f0 !important; color: #000 !important; border-radius: 0 !important; padding: 2px 0 4px 0 !important; text-align: left !important; width: 100% !important; margin-bottom: 4px; font-size: 10px !important; font-weight: bold; }
         .box-label::before, .box-label::after { display: none !important; }
         th { background-color: #f0f0f0 !important; color: #000 !important; }
         input, select, textarea { border: none !important; padding: 0 !important; width: 100% !important; background: transparent !important; }
         textarea { overflow: visible !important; height: auto !important; }
         .no-print, .ribbon, .custom-select-print-view { display: none !important; }
         select.print-hidden { display: none !important; }
-        .print-only-text { display: block !important; font-size: 10px !important; color: #000 !important; white-space: pre-wrap !important; word-wrap: break-word !important; overflow-wrap: break-word !important; margin-top: 3px; line-height: 1.3; width: 100% !important; max-width: 100% !important; }
-        #installResourcesProcedure { min-height: 200px !important; }
-        .compact-grid .box { padding: 8px !important; }
-        .compact-grid .box-label { font-size: 9px !important; }
+        .print-only-text { display: block !important; font-size: 9px !important; color: #000 !important; white-space: pre-wrap !important; word-wrap: break-word !important; overflow-wrap: break-word !important; margin-top: 2px; line-height: 1.2; width: 100% !important; max-width: 100% !important; }
+        #installResourcesProcedure { min-height: 150px !important; } /* Reduced height */
+        .compact-grid .box { padding: 6px !important; }
+        .compact-grid .box-label { font-size: 8px !important; }
+        
+        /* Theme colors for print */
         body.theme-blue .box, body.theme-blue th, body.theme-blue td { border-color: #2c3e99 !important; }
         body.theme-blue th { background-color: #d6e3ff !important; color: #2c3e99 !important; }
+        body.theme-blue .box-label { background-color: #d6e3ff !important; color: #2c3e99 !important; border-bottom-color: #2c3e99 !important; }
+        
         body.theme-green .box, body.theme-green th, body.theme-green td { border-color: #2d7a33 !important; }
         body.theme-green th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
+        body.theme-green .box-label { background-color: #d9f5d9 !important; color: #2d7a33 !important; border-bottom-color: #2d7a33 !important; }
+        
         body.theme-yellow .box, body.theme-yellow th, body.theme-yellow td { border-color: #b39700 !important; }
         body.theme-yellow th { background-color: #fff2cc !important; color: #b39700 !important; }
+        body.theme-yellow .box-label { background-color: #fff2cc !important; color: #b39700 !important; border-bottom-color: #b39700 !important; }
+        
         body.theme-pink .box, body.theme-pink th, body.theme-pink td { border-color: #cc3366 !important; }
         body.theme-pink th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
+        body.theme-pink .box-label { background-color: #ffd6e6 !important; color: #cc3366 !important; border-bottom-color: #cc3366 !important; }
+        
         body.theme-purple .box, body.theme-purple th, body.theme-purple td { border-color: #5e2d91 !important; }
         body.theme-purple th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
+        body.theme-purple .box-label { background-color: #e6d6ff !important; color: #5e2d91 !important; border-bottom-color: #5e2d91 !important; }
+        
         body.theme-gray .box, body.theme-gray th, body.theme-gray td { border-color: #444 !important; }
         body.theme-gray th { background-color: #dddddd !important; color: #444 !important; }
+        body.theme-gray .box-label { background-color: #dddddd !important; color: #444 !important; border-bottom-color: #444 !important; }
+        
+        /* New theme colors for print */
+        body.theme-red .box, body.theme-red th, body.theme-red td { border-color: #c0392b !important; }
+        body.theme-red th { background-color: #fadbd8 !important; color: #c0392b !important; }
+        body.theme-red .box-label { background-color: #fadbd8 !important; color: #c0392b !important; border-bottom-color: #c0392b !important; }
+        
+        body.theme-orange .box, body.theme-orange th, body.theme-orange td { border-color: #d35400 !important; }
+        body.theme-orange th { background-color: #fdebd0 !important; color: #d35400 !important; }
+        body.theme-orange .box-label { background-color: #fdebd0 !important; color: #d35400 !important; border-bottom-color: #d35400 !important; }
+        
+        body.theme-teal .box, body.theme-teal th, body.theme-teal td { border-color: #16a085 !important; }
+        body.theme-teal th { background-color: #d0ece7 !important; color: #16a085 !important; }
+        body.theme-teal .box-label { background-color: #d0ece7 !important; color: #16a085 !important; border-bottom-color: #16a085 !important; }
+        
+        body.theme-indigo .box, body.theme-indigo th, body.theme-indigo td { border-color: #1a237e !important; }
+        body.theme-indigo th { background-color: #e8eaf6 !important; color: #1a237e !important; }
+        body.theme-indigo .box-label { background-color: #e8eaf6 !important; color: #1a237e !important; border-bottom-color: #1a237e !important; }
+        
+        body.theme-cyan .box, body.theme-cyan th, body.theme-cyan td { border-color: #00acc1 !important; }
+        body.theme-cyan th { background-color: #e0f7fa !important; color: #00acc1 !important; }
+        body.theme-cyan .box-label { background-color: #e0f7fa !important; color: #00acc1 !important; border-bottom-color: #00acc1 !important; }
+        
+        body.theme-amber .box, body.theme-amber th, body.theme-amber td { border-color: #ff8f00 !important; }
+        body.theme-amber th { background-color: #fff8e1 !important; color: #ff8f00 !important; }
+        body.theme-amber .box-label { background-color: #fff8e1 !important; color: #ff8f00 !important; border-bottom-color: #ff8f00 !important; }
+        
         .target-competence-container select, .cross-curricular-container select { display: none !important; }
         .target-competence-container textarea, .cross-curricular-container textarea { display: none !important; }
         .target-competence-container .print-only-text, .cross-curricular-container .print-only-text { display: block !important; margin-top: 0; white-space: pre-wrap !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
-        .dropdown-print-text { display: block !important; font-size: 10px !important; color: #000 !important; white-space: pre-wrap !important; word-wrap: break-word !important; overflow-wrap: break-word !important; margin-top: 2px; line-height: 1.2; }
+        .dropdown-print-text { display: block !important; font-size: 9px !important; color: #000 !important; white-space: pre-wrap !important; word-wrap: break-word !important; overflow-wrap: break-word !important; margin-top: 2px; line-height: 1.2; }
     }
     .print-only-text { display: none; }
     
     /* Custom table headers design */
-    .custom-table-header { display: flex; margin-bottom: 10px; border-bottom: 1.5px solid #ccc; padding-bottom: 5px; }
-    .custom-table-header div { font-weight: 600; font-size: 12px; color: #555; letter-spacing: 0.5px; }
+    .custom-table-header { display: flex; margin-bottom: 8px; border-bottom: 1.5px solid #ccc; padding-bottom: 4px; }
+    .custom-table-header div { font-weight: 600; font-size: 11px; color: #555; letter-spacing: 0.5px; }
     .custom-table-header .stages { width: 15%; }
     .custom-table-header .procedure { width: 55%; }
     .custom-table-header .interaction { width: 15%; }
     .custom-table-header .time { width: 15%; }
     
     /* Table row styling */
-    .procedure-row { display: flex; margin-bottom: 10px; align-items: center; padding-bottom: 10px; border-bottom: 1px dashed #ccc; }
+    .procedure-row { display: flex; margin-bottom: 8px; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #ccc; }
     .procedure-row:last-child { border-bottom: none; }
-    .procedure-row > div { padding: 5px; }
+    .procedure-row > div { padding: 4px; }
     .procedure-row .stages { width: 15%; font-weight: 500; }
     .procedure-row .procedure { width: 55%; }
     .procedure-row .interaction { width: 15%; }
     .procedure-row .time { width: 15%; }
     
     /* Self-reflection custom styling */
-    .reflection-header { display: flex; margin-bottom: 10px; border-bottom: 1.5px solid #ccc; padding-bottom: 5px; }
-    .reflection-header div { font-weight: 600; font-size: 12px; color: #555; letter-spacing: 0.5px; }
+    .reflection-header { display: flex; margin-bottom: 8px; border-bottom: 1.5px solid #ccc; padding-bottom: 4px; }
+    .reflection-header div { font-weight: 600; font-size: 11px; color: #555; letter-spacing: 0.5px; }
     .reflection-header .what-worked { width: 33.33%; }
     .reflection-header .what-hindered { width: 33.33%; }
     .reflection-header .action-points { width: 33.33%; }
-    .reflection-row { display: flex; margin-bottom: 10px; }
-    .reflection-row > div { padding: 5px; width: 33.33%; }
+    .reflection-row { display: flex; margin-bottom: 8px; }
+    .reflection-row > div { padding: 4px; width: 33.33%; }
     
     /* Focusable text areas */
     .focusable { position: relative; }
-    .focusable:focus { outline: none; box-shadow: 0 0 0 2px var(--accent-color); border-radius: 4px; }
+    .focusable:focus { outline: none; box-shadow: 0 0 0 2px var(--accent-color); border-radius: 2px; /* Sharper corners */ }
     
     /* Target and Cross-curricular containers */
     .target-competence-container, .cross-curricular-container { position: relative; }
-    .target-competence-container select, .cross-curricular-container select { margin-bottom: 8px; }
+    .target-competence-container select, .cross-curricular-container select { margin-bottom: 6px; }
     
     /* Dropdown text container */
     .dropdown-text-container { position: relative; }
@@ -608,8 +684,19 @@
             <button id="saveBtn" disabled>Save to Cloud</button>
             <button onclick="downloadPage()">Download PDF</button>
             <select id="themeSelect" onchange="changeTheme(this.value)">
-                <option value="default-theme">Default</option><option value="theme-blue">Blue</option><option value="theme-green">Green</option>
-                <option value="theme-yellow">Yellow</option><option value="theme-pink">Pink</option><option value="theme-purple">Purple</option><option value="theme-gray">Gray</option>
+                <option value="default-theme">Default</option>
+                <option value="theme-blue">Blue</option>
+                <option value="theme-green">Green</option>
+                <option value="theme-yellow">Yellow</option>
+                <option value="theme-pink">Pink</option>
+                <option value="theme-purple">Purple</option>
+                <option value="theme-gray">Gray</option>
+                <option value="theme-red">Red</option>
+                <option value="theme-orange">Orange</option>
+                <option value="theme-teal">Teal</option>
+                <option value="theme-indigo">Indigo</option>
+                <option value="theme-cyan">Cyan</option>
+                <option value="theme-amber">Amber</option>
             </select>
         </div>
     </div>
@@ -665,7 +752,7 @@
             saveBtn.textContent = 'Saving...';
             const lessonPlanData = {
                 planName,
-                plannerType: 'final',
+                plannerType: 'finalest',
                 school: document.getElementById('schoolName').value,
                 teacher: document.getElementById('teacherName').value,
                 level: document.getElementById('levelSelect').value,
@@ -771,213 +858,135 @@
     });
     sequenceSelect.addEventListener("change", () => {
         sectionSelect.innerHTML = "<option value=''>-- Select --</option>"; sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
-        if (sequenceSelect.value === "Remediation & Standardisation") return sectionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
-        const seqData = curriculum[levelSelect.value]?.[sequenceSelect.value];
-        if (seqData) Object.keys(seqData).forEach(sec => sectionSelect.add(new Option(sec, sec)));
+        if (sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value]) {
+            Object.keys(curriculum[levelSelect.value][sequenceSelect.value]).forEach(sec => sectionSelect.add(new Option(sec, sec)));
+            if (sequenceSelect.value === "Remediation & Standardisation") {
+                sectionSelect.add(new Option("Remediation", "Remediation"));
+                sectionSelect.add(new Option("Standardisation", "Standardisation"));
+            }
+        }
         updateDropdownPrintText('sequenceSelect');
     });
     sectionSelect.addEventListener("change", () => {
         sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
-        if (sectionSelect.value === "Remediation & Standardisation") return sessionSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
-        const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value]?.[sectionSelect.value];
-        if (sessData) sessData.forEach(ses => sessionSelect.add(new Option(ses, ses)));
+        if (sectionSelect.value && sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value] && curriculum[levelSelect.value][sequenceSelect.value][sectionSelect.value]) {
+            curriculum[levelSelect.value][sequenceSelect.value][sectionSelect.value].forEach(sess => sessionSelect.add(new Option(sess, sess)));
+        }
         updateDropdownPrintText('sectionSelect');
     });
     sessionSelect.addEventListener("change", () => {
         updateDropdownPrintText('sessionSelect');
     });
 
-    // --- Auto-resize and Competence Logic ---
-    function autoResize(el) { el.style.height = 'auto'; el.style.height = (el.scrollHeight) + 'px'; }
-    function autoResizeAllTextareas() { document.querySelectorAll('textarea').forEach(autoResize); }
-    document.querySelectorAll('textarea').forEach(el => el.addEventListener('input', () => autoResize(el)));
-    
-    document.getElementById('targetCompetenceSelect').addEventListener('change', (e) => { 
-        const targetText = document.getElementById('targetCompetenceText');
-        targetText.value = e.target.value; 
-        autoResize(targetText);
-        
-        // Update print-only text with FULL value
-        const printText = document.querySelector('.target-competence-container .print-only-text');
-        if (printText) {
-            printText.textContent = e.target.value.replace(/&#10;/g, '\n');
-        }
-    });
-    document.getElementById('crossCurricularSelect').addEventListener('change', (e) => { 
-        const crossText = document.getElementById('crossCurricularText');
-        crossText.value = e.target.value.replace(/&#10;/g, '\n'); 
-        autoResize(crossText);
-        
-        // Update print-only text with FULL value
-        const printText = document.querySelector('.cross-curricular-container .print-only-text');
-        if (printText) {
-            printText.textContent = e.target.value.replace(/&#10;/g, '\n');
-        }
-    });
-
-    // --- Page Functions ---
-window.downloadPage = () => {
-  window.print();
-};
-    window.changeTheme = theme => { document.body.className = theme; localStorage.setItem("lessonTheme", theme); };
-
-    // --- Image Upload Functionality ---
-    let currentImageFile = null;
-    
-    document.getElementById('insertImageBtn').addEventListener('click', () => {
-        document.getElementById('imageUpload').click();
-    });
-    
-    document.getElementById('imageUpload').addEventListener('change', (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            if (file.type.startsWith('image/')) {
-                currentImageFile = file;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    document.getElementById('previewImg').src = event.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Please select a valid image file.');
-            }
-        }
-    });
-    
-    document.getElementById('confirmImage').addEventListener('click', () => {
-        if (currentImageFile) {
-            const editableArea = document.getElementById('installResourcesProcedure');
-            editableArea.focus();
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.style.width = '100px';
-                img.style.height = '100px';
-                img.style.objectFit = 'cover';
-                
-                const selection = window.getSelection();
-                if (selection.rangeCount > 0) {
-                    const range = selection.getRangeAt(0);
-                    range.deleteContents();
-                    range.insertNode(img);
-                    
-                    // Move cursor after the image
-                    range.setStartAfter(img);
-                    range.setEndAfter(img);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                } else {
-                    editableArea.appendChild(img);
-                }
-                
-                // Hide preview
-                document.getElementById('imagePreview').style.display = 'none';
-                currentImageFile = null;
-            };
-            reader.readAsDataURL(currentImageFile);
-        }
-    });
-    
-    document.getElementById('cancelImage').addEventListener('click', () => {
-        document.getElementById('imagePreview').style.display = 'none';
-        currentImageFile = null;
-    });
-    
-    // Close preview when clicking outside
-    document.addEventListener('click', (e) => {
-        const preview = document.getElementById('imagePreview');
-        const uploadBtn = document.getElementById('insertImageBtn');
-        
-        if (preview.style.display === 'block' && 
-            !preview.contains(e.target) && 
-            e.target !== uploadBtn) {
-            preview.style.display = 'none';
-            currentImageFile = null;
-        }
-    });
-
-    // --- Update Dropdown Print Text ---
+    // --- Update dropdown print text ---
     function updateDropdownPrintText(selectId) {
         const select = document.getElementById(selectId);
-        const container = select.closest('.dropdown-text-container');
-        const printText = container.querySelector('.dropdown-print-text');
-        
+        const printText = select.parentElement.querySelector('.dropdown-print-text');
         if (printText) {
-            printText.textContent = select.value || '';
+            printText.textContent = select.options[select.selectedIndex].text;
         }
     }
 
-    // --- On Load ---
-    window.addEventListener('load', () => {
-        const saved = localStorage.getItem("lessonTheme");
-        if (saved) { document.body.className = saved; document.getElementById("themeSelect").value = saved; }
-        autoResizeAllTextareas();
-        setupPrinting();
-        setupRibbonControls();
-        
-        // Initialize dropdown print text
-        updateDropdownPrintText('levelSelect');
-        updateDropdownPrintText('sequenceSelect');
-        updateDropdownPrintText('sectionSelect');
-        updateDropdownPrintText('sessionSelect');
+    // --- Target Competence and Cross-Curricular Dropdowns ---
+    const targetCompetenceSelect = document.getElementById('targetCompetenceSelect');
+    const targetCompetenceText = document.getElementById('targetCompetenceText');
+    const crossCurricularSelect = document.getElementById('crossCurricularSelect');
+    const crossCurricularText = document.getElementById('crossCurricularText');
+    const targetPrintText = document.querySelector('.target-competence-container .print-only-text');
+    const crossPrintText = document.querySelector('.cross-curricular-container .print-only-text');
+
+    targetCompetenceSelect.addEventListener('change', () => {
+        targetCompetenceText.value = targetCompetenceSelect.value;
+        if (targetPrintText) targetPrintText.textContent = targetCompetenceSelect.value;
+        autoResize(targetCompetenceText);
     });
 
-    // --- Setup Ribbon Controls ---
-    function setupRibbonControls() {
-        // Command buttons
-        document.querySelectorAll('#ribbon-toolbar button[data-command]').forEach(button => {
-            button.addEventListener('click', () => {
-                const command = button.getAttribute('data-command');
-                if (command === 'createLink') {
-                    const url = prompt('Enter the link URL:');
-                    if (url) document.execCommand(command, false, url);
-                } else {
-                    document.execCommand(command, false, null);
-                }
-                // Update active state for formatting buttons
-                updateActiveState();
-            });
-        });
+    crossCurricularSelect.addEventListener('change', () => {
+        crossCurricularText.value = crossCurricularSelect.value.replace(/&#10;/g, '\n');
+        if (crossPrintText) crossPrintText.textContent = crossCurricularSelect.value.replace(/&#10;/g, '\n');
+        autoResize(crossCurricularText);
+    });
 
-        // Font size
-        document.getElementById('fontSize').addEventListener('change', function() {
-            document.execCommand('fontSize', false, this.value);
-        });
-
-        // Font color
-        document.getElementById('fontColor').addEventListener('change', function() {
-            document.execCommand('foreColor', false, this.value);
-        });
-
-        // Update active state for buttons
-        function updateActiveState() {
-            const commands = ['bold', 'italic', 'underline', 'strikeThrough', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList'];
-            commands.forEach(command => {
-                const button = document.querySelector(`#ribbon-toolbar button[data-command="${command}"]`);
-                if (button) {
-                    if (document.queryCommandState(command)) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                }
-            });
-        }
-
-        // Initial update
-        updateActiveState();
-
-        // Update on selection change
-        document.addEventListener('selectionchange', updateActiveState);
+    // --- Auto-resize textareas ---
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
     }
 
-    // --- Setup Printing ---
-    function setupPrinting() {
-        // This function is called on load to handle any print-specific setup
-        // The ribbon is already hidden during print via the .no-print class
+    function autoResizeAllTextareas() {
+        document.querySelectorAll('textarea').forEach(autoResize);
+    }
+
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', () => autoResize(textarea));
+    });
+
+    // --- Rich Text Editor ---
+    document.querySelectorAll('.btn-square').forEach(button => {
+        button.addEventListener('click', () => {
+            const command = button.getAttribute('data-command');
+            if (command === 'createLink') {
+                const url = prompt('Enter the link URL:');
+                if (url) document.execCommand(command, false, url);
+            } else {
+                document.execCommand(command, false, null);
+            }
+        });
+    });
+
+    document.getElementById('fontSize').addEventListener('change', function() {
+        document.execCommand('fontSize', false, this.value);
+    });
+
+    document.getElementById('fontColor').addEventListener('change', function() {
+        document.execCommand('foreColor', false, this.value);
+    });
+
+    // --- Image Upload ---
+    const imageUpload = document.getElementById('imageUpload');
+    const insertImageBtn = document.getElementById('insertImageBtn');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const confirmImage = document.getElementById('confirmImage');
+    const cancelImage = document.getElementById('cancelImage');
+
+    insertImageBtn.addEventListener('click', () => {
+        imageUpload.click();
+    });
+
+    imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                previewImg.src = event.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    confirmImage.addEventListener('click', () => {
+        if (previewImg.src) {
+            document.execCommand('insertImage', false, previewImg.src);
+            imagePreview.style.display = 'none';
+            imageUpload.value = '';
+        }
+    });
+
+    cancelImage.addEventListener('click', () => {
+        imagePreview.style.display = 'none';
+        imageUpload.value = '';
+    });
+
+    // --- Theme Selection ---
+    function changeTheme(theme) {
+        document.body.className = theme;
+    }
+
+    // --- Download PDF ---
+    function downloadPage() {
+        window.print();
     }
 </script>
 </body>
