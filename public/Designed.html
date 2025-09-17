@@ -14,7 +14,8 @@
         font-family: 'Poppins', 'Roboto', sans-serif;
         margin: 15px;
         background: #f4f4f9;
-        font-size: 13px;
+        /* Made fonts smaller */
+        font-size: 12px;
         transition: background 0.3s, color 0.3s;
         color: #333;
     }
@@ -23,9 +24,10 @@
         max-width: 1000px;
         margin: auto;
         background: #fff;
-        padding: 20px;
+        /* Reduced padding */
+        padding: 15px;
         border-radius: 0;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* Enhanced shadow */
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
 
     .plan-title {
@@ -41,68 +43,72 @@
         font-size: 12px; color: #666;
     }
 
-    /* ---------- NEW BOX STYLES ---------- */
-    .styled-box {
+    /* Reinforced size rules with higher specificity */
+    .lesson-plan-container .styled-box {
         width: 100%;
         background-color: #ffffff;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
-        border: 2px solid #000; /* Default border color */
-        margin-bottom: 15px;
+        border: 2px solid #000;
+        /* Reduced margin */
+        margin-bottom: 10px;
         transition: all 0.3s ease-in-out;
     }
 
-    .styled-box-header {
-        background-color: #f3f3f3; /* Default header bg */
-        color: #000; /* Default header text color */
+    .lesson-plan-container .styled-box-header {
+        background-color: #f3f3f3;
+        color: #000;
         font-weight: 600;
         text-align: center;
-        padding: 10px;
-        border-bottom: 2px solid #000; /* Default border color */
-        font-size: 11px;
+        /* Reduced padding and font size */
+        padding: 8px;
+        border-bottom: 2px solid #000;
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         transition: all 0.3s;
     }
 
-    .styled-box-content {
+    .lesson-plan-container .styled-box-content {
         flex-grow: 1;
         background-color: #ffffff;
-        padding: 15px;
+        /* Reduced padding */
+        padding: 10px;
     }
     
     .content-grid .styled-box { margin-bottom: 0; }
     
-    .compact-grid .styled-box-content { padding: 10px; }
-    .compact-grid .styled-box-header { font-size: 9px; padding: 8px; }
+    /* Reinforced size rules with higher specificity */
+    .lesson-plan-container .compact-grid .styled-box-content { padding: 8px; }
+    .lesson-plan-container .compact-grid .styled-box-header { font-size: 9px; padding: 6px; }
 
     .content-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 12px;
+        /* Reduced gap and margin */
+        gap: 8px;
+        margin-bottom: 8px;
     }
     .grid-col-span-1 { grid-column: span 1; }
     .grid-col-span-2 { grid-column: span 2; }
     .grid-col-span-3 { grid-column: span 3; }
     .grid-col-span-4 { grid-column: span 4; }
     
-    /* Inputs & selects with improved focus */
     input[type="text"], input[type="number"], select, textarea {
         width: 100%;
         border: none;
-        border-bottom: 1px solid #ddd; /* Subtle bottom border */
+        border-bottom: 1px solid #ddd;
         outline: none;
         background: transparent;
         font-family: inherit;
-        font-size: 13px;
-        padding: 2px 1px; /* Adjusted padding */
+        font-size: 12px; /* Adjusted to match body */
+        padding: 2px 1px;
         box-sizing: border-box;
-        transition: border-color 0.3s ease; /* Transition for focus */
+        transition: border-color 0.3s ease;
     }
     input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-        border-bottom: 2px solid var(--accent-color); /* Highlight on focus */
+        border-bottom: 2px solid var(--accent-color);
     }
 
     textarea {
@@ -146,7 +152,7 @@
     .ribbon .btn:active, .ribbon .btn-square:active, .ribbon select:active { background: #e0e0e0; transform: translateY(1px); }
     
     .editable-area { 
-        width: 100%; border: none; outline: none; font-size: 13px; line-height: 1.5; 
+        width: 100%; border: none; outline: none; font-size: 12px; line-height: 1.5; 
         min-height: 100px; cursor: text; resize: vertical; padding: 4px; 
     }
     .editable-area:focus { box-shadow: 0 0 0 2px var(--accent-color); border-radius: 0; }
@@ -183,7 +189,6 @@
     body.default-theme .styled-box-header { color: #000; background-color: #f3f3f3; border-bottom-color: #000; }
     body.default-theme th { background-color: #f3f3f3; color: #000; }
     
-    /* Existing Themes */
     body.theme-blue { color: #2c3e99; }
     body.theme-blue .styled-box, body.theme-blue th, body.theme-blue td { border-color: #2c3e99; }
     body.theme-blue .styled-box-header { color: #2c3e99; background-color: #d6e3ff; border-bottom-color: #2c3e99; }
@@ -268,8 +273,6 @@
     body.theme-amber .custom-checkbox input:checked ~ span { background-color: #ff8f00; border-color: #ff8f00; }
     body.theme-amber .bottom-buttons button, body.theme-amber .bottom-buttons select { border-color: #ff8f00; color: #ff8f00; }
     body.theme-amber .bottom-buttons button:hover { background-color: rgba(255, 143, 0, 0.1); }
-    
-    /* ---------- 10 NEW THEMES ---------- */
     body.theme-ocean-mist { color: #00796b; }
     body.theme-ocean-mist .styled-box, body.theme-ocean-mist th, body.theme-ocean-mist td { border-color: #00796b; }
     body.theme-ocean-mist .styled-box-header { color: #00796b; background-color: #b2dfdb; border-bottom-color: #00796b; }
@@ -342,7 +345,7 @@
     body.theme-emerald-isle .bottom-buttons button:hover { background-color: rgba(46, 125, 50, 0.1); }
 
 
-/* ---------- NEW & IMPROVED PRINT STYLES ---------- */
+/* ---------- OPTIMIZED PRINT STYLES TO FIT ONE PAGE ---------- */
 @media print {
     @page {
         size: A4 portrait;
@@ -361,7 +364,8 @@
         margin: 0 !important;
         padding: 0 !important;
         background: #fff !important;
-        font-size: 13px;
+        font-size: 10pt; /* Reduced font size for print */
+        line-height: 1.2;
     }
 
     .lesson-plan-container {
@@ -371,9 +375,8 @@
         border: none !important;
         position: static !important;
         transform: none !important;
-        transform-origin: unset !important;
+        padding: 8mm !important; /* Reduced page margins */
         box-sizing: border-box;
-        padding: 10mm;
     }
 
     .no-print, .ribbon, .bottom-buttons, input, textarea, select, .custom-checkbox {
@@ -383,33 +386,57 @@
     .print-only-text, .dropdown-print-text {
         display: block !important;
         width: 100%;
-        min-height: 22px;
-        padding: 2px 1px;
+        min-height: 1em;
+        padding: 1px;
         box-sizing: border-box;
         white-space: pre-wrap;
         word-wrap: break-word;
-        line-height: 1.5;
+        line-height: 1.3;
         color: inherit !important;
         background: transparent !important;
     }
 
     #installResourcesProcedure {
         display: block !important;
-        min-height: 100px !important;
         height: auto !important;
+        min-height: 0 !important; /* Allow it to shrink */
         overflow: visible !important;
         resize: none !important;
     }
 
-    .styled-box, th, td {
-        border-width: 2px !important;
-        border-style: solid !important;
-        border-color: inherit !important; /* Keep original color */
+    .styled-box {
+        margin-bottom: 4px !important;
+        page-break-inside: avoid;
+        border-width: 0.75pt !important; /* Use pt for consistent print rendering */
     }
 
+    .styled-box-header {
+        padding: 3px !important;
+        font-size: 8pt !important;
+        border-bottom-width: 0.75pt !important; /* Use pt for consistent print rendering */
+    }
+    
+    .styled-box-content {
+        padding: 4px 6px !important;
+    }
+
+    .custom-table-header, .reflection-header {
+        padding-bottom: 2px !important;
+        margin-bottom: 3px !important;
+        font-size: 7pt !important;
+        border-bottom-width: 1.5pt !important;
+    }
+    .procedure-row, .reflection-row {
+        margin-bottom: 2px !important;
+        padding-bottom: 2px !important;
+    }
+    .procedure-row > div, .reflection-row > div {
+        padding: 1px !important;
+    }
+    
     .procedure-row {
-        border-bottom: 1px dashed !important;
-        border-color: inherit !important; /* Keep original color */
+        border-bottom: 0.75pt dashed !important; /* Use pt for consistent print rendering */
+        border-color: inherit !important;
     }
     .procedure-row:last-child {
         border-bottom: none !important;
@@ -442,7 +469,7 @@
     .reflection-row > div { padding: 3px; width: 33.33%; }
     
     .focusable { position: relative; }
-    .focusable:focus { outline: none; } /* Removed box-shadow, handled by input focus style */
+    .focusable:focus { outline: none; }
     
     .target-competence-container, .cross-curricular-container { position: relative; }
     .target-competence-container select, .cross-curricular-container select { margin-bottom: 4px; }
