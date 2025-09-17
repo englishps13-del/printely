@@ -1,0 +1,10 @@
+cb5e0f085ebf7d6b323c4b7430de342a79311af7 Updated FNA pointer (#4618 fix-up).
+cab0bee849d181a9be2d11fae1f5e37cb95cc545 Add opt-out of mod building in tModLoader.targets (#4731)
+eefc96e242d57024670ec08e5623f862a9fb63b1 tModCodeAssist: Fix in-game build issue caused by duplicate IdDictionary classes
+c5deabd94bd454d5ec04e06ac2be6406875b7e99 Update HookGen (Fix #4734)
+c64259dea74135a0e25de5a9ebf5ab67771f99ac Attempt 2 to fix tModCodeAssist in Release build
+47afd66ad8f96436abc795cc88ef6376d1d1f07d Attempt to fix tModCodeAssist in Release build
+24a0dd33814f6a5073384f689d82f5087554af72 tModCodeAssist port (#4727)
+2e52d5b854c588234d6fe397aeaf39322c7c9b3f Update CommonDocs.xml
+5aa6abe3bde8b51f093515daa9637c2e45c5050c PreHoverInteract hook for NPCs (#4539)
+a00f15cf3d50a0fd13a74c523ded541a377f5f17 `icon_small` generates by default when creating mods and shows up in the configs list besides the mod's name (#4715)

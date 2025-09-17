@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson Plan Editor</title>
+    <link rel="icon" type="image/x-icon" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+<style>
+    :root { --accent-color: #2c3e99; }
+
+    body {
+        font-family: 'Poppins', 'Roboto', sans-serif;
+        margin: 15px;
+        background: #f4f4f9;
+        /* Made fonts slightly smaller for a more compact view */
+        font-size: 9px;
+        transition: background 0.3s, color 0.3s;
+        color: #333;
+    }
+
+    .lesson-plan-container {
+        max-width: 1000px;
+        margin: auto;
+        background: #fff;
+        /* Reduced padding */
+        padding: 15px;
+        border-radius: 0;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .plan-title {
+        font-family: 'Dancing Script', cursive;
+        font-size: 48px;
+        text-align: left;
+        margin: 0 0 15px 0;
+        color: #000;
+    }
+    
+    .auth-status {
+        text-align: center; margin: -12px 0 12px 0;
+        font-size: 12px; color: #666;
+    }
+
+    /* ---------- NEW BOX STYLES ---------- */
+    .styled-box {
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #000; /* Default border color */
+        /* Reduced margin */
+        margin-bottom: 10px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .styled-box-header {
+        background-color: #f3f3f3; /* Default header bg */
+        color: #000; /* Default header text color */
+        font-weight: 600;
+        text-align: center;
+        /* Reduced padding and font size */
+        padding: 8px;
+        border-bottom: 1px solid #000; /* Default border color */
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+
+    .styled-box-content {
+        flex-grow: 1;
+        background-color: #ffffff;
+        /* Reduced padding */
+        padding: 10px;
+    }
+    
+    .content-grid .styled-box { margin-bottom: 0; }
+    
+    /* Further reduced padding for compact grid */
+    .compact-grid .styled-box-content { padding: 8px; }
+    .compact-grid .styled-box-header { font-size: 9px; padding: 6px; }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* Reduced gap and margin */
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .grid-col-span-1 { grid-column: span 1; }
+    .grid-col-span-2 { grid-column: span 2; }
+    .grid-col-span-3 { grid-column: span 3; }
+    .grid-col-span-4 { grid-column: span 4; }
+    
+    input[type="text"], input[type="number"], select, textarea {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        outline: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 12px; /* Adjusted to match body */
+        padding: 2px 1px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    textarea { resize: none; overflow: hidden; }
+    select {
+        appearance: none;
+        padding-right: 20px;
+        background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><polyline points='1,1 6,6 11,1' stroke='%23333' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") no-repeat right 5px center;
+    }
+
+    .custom-checkbox { position: relative; cursor: pointer; display: inline-flex; align-items: center; }
+    .custom-checkbox input { position: absolute; opacity: 0; }
+    .custom-checkbox span { display: inline-block; height: 12px; width: 12px; border: 1.5px solid #000; border-radius: 0; background-color: #fff; margin-right: 5px; position: relative; }
+    .custom-checkbox input:checked ~ span { background-color: #000; }
+    .custom-checkbox input:checked ~ span::after { content: ""; position: absolute; display: block; left: 3px; top: 0px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+    .checkbox-inline { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-top: 3px; }
+    
+    .ribbon { 
+        display: flex; flex-wrap: wrap; gap: 6px; background: #f9f9f9; 
+        border: 1px solid #e0e0e0; border-radius: 0;
+        padding: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .group { 
+        display: flex; align-items: center; gap: 5px; padding: 5px; 
+        border: 1px solid #dcdcdc; border-radius: 0; background: #fff;
+        transition: all 0.2s ease;
+    }
+    .group:hover { box-shadow: 0 2px 5px rgba(0,0,0,0.1); transform: translateY(-1px); }
+    .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square { 
+        appearance: none; border: 1px solid #dcdcdc; background: #fff; padding: 6px 8px; 
+        border-radius: 0; font-size: 14px; cursor: pointer; color: #333; 
+        display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+        transition: all 0.2s ease;
+    }
+    .ribbon .btn-square { width: 34px; height: 34px; padding: 0; }
+    .ribbon .btn.active, .ribbon .btn-square.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+    .ribbon select:disabled, .ribbon input[type="color"]:disabled, .ribbon .btn:disabled, .ribbon .btn-square:disabled { opacity: 0.5; cursor: not-allowed; }
+    .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background: #f0f0f0; border-color: #bbb; }
+    .ribbon .btn:active, .ribbon .btn-square:active, .ribbon select:active { background: #e0e0e0; transform: translateY(1px); }
+    
+    .editable-area { 
+        width: 100%; border: none; outline: none; font-size: 12px; line-height: 1.5; 
+        min-height: 100px; cursor: text; resize: vertical; padding: 4px; 
+    }
+    .editable-area:focus { box-shadow: 0 0 0 2px var(--accent-color); border-radius: 0; }
+    .editable-area[data-placeholder]:empty::before { content: attr(data-placeholder); color: #999; pointer-events: none; font-style: italic; }
+    .editable-area img { max-width: 100%; height: auto; object-fit: contain; vertical-align: middle; }
+
+    .bottom-buttons { margin-top: 12px; text-align: center; }
+    .bottom-buttons button, .bottom-buttons select { 
+        background: transparent; color: inherit; border: 2px solid currentColor; 
+        padding: 6px 12px; margin: 4px; border-radius: 0; cursor: pointer; 
+        font-weight: 500; transition: all 0.3s ease; 
+    }
+    .bottom-buttons button:hover { background: rgba(0,0,0,0.05); transform: translateY(-2px); }
+    .bottom-buttons button:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; }
+
+    .image-upload-container { position: relative; display: inline-block; }
+    .image-preview {
+        position: absolute; top: 35px; left: 0; background: white; border: 1px solid #ddd;
+        border-radius: 0; padding: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 100;
+        display: none; max-width: 280px;
+    }
+    .image-preview img { width: 90px; height: 90px; object-fit: cover; border-radius: 0; margin-bottom: 6px; }
+    .image-preview button {
+        background: var(--accent-color); color: white; border: none; padding: 4px 8px;
+        border-radius: 0; cursor: pointer; font-size: 11px; margin-right: 4px;
+    }
+    .image-preview button:hover { background: #1a2550; }
+
+    /* ---------- THEMES ---------- */
+    .styled-box, th, td { transition: border-color 0.3s; }
+    th { transition: background-color 0.3s, color 0.3s; }
+    
+    body.default-theme .styled-box, body.default-theme th, body.default-theme td { border-color: #f3f3f3; }
+    body.default-theme .styled-box-header { color: #000; background-color: #f3f3f3; border-bottom-color: #f3f3f3; }
+    body.default-theme th { background-color: #f3f3f3; color: #000; }
+    
+    body.theme-blue { color: #2c3e99; }
+    body.theme-blue .styled-box, body.theme-blue th, body.theme-blue td { border-color: #d6e3ff; }
+    body.theme-blue .styled-box-header { color: #2c3e99; background-color: #d6e3ff; border-bottom-color: #d6e3ff; }
+    body.theme-blue th { background-color: #d6e3ff; }
+    body.theme-blue .custom-checkbox input:checked ~ span { background-color: #2c3e99; border-color: #2c3e99; }
+    body.theme-blue .bottom-buttons button, body.theme-blue .bottom-buttons select { border-color: #2c3e99; color: #2c3e99; }
+    body.theme-blue .bottom-buttons button:hover { background-color: rgba(44, 62, 153, 0.1); }
+    body.theme-green { color: #2d7a33; }
+    body.theme-green .styled-box, body.theme-green th, body.theme-green td { border-color: #d9f5d9; }
+    body.theme-green .styled-box-header { color: #2d7a33; background-color: #d9f5d9; border-bottom-color: #d9f5d9; }
+    body.theme-green th { background-color: #d9f5d9; }
+    body.theme-green .custom-checkbox input:checked ~ span { background-color: #2d7a33; border-color: #2d7a33; }
+    body.theme-green .bottom-buttons button, body.theme-green .bottom-buttons select { border-color: #2d7a33; color: #2d7a33; }
+    body.theme-green .bottom-buttons button:hover { background-color: rgba(45, 122, 51, 0.1); }
+    body.theme-yellow { color: #b39700; }
+    body.theme-yellow .styled-box, body.theme-yellow th, body.theme-yellow td { border-color: #fff2cc; }
+    body.theme-yellow .styled-box-header { color: #b39700; background-color: #fff2cc; border-bottom-color: #fff2cc; }
+    body.theme-yellow th { background-color: #fff2cc; }
+    body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #b39700; border-color: #b39700; }
+    body.theme-yellow .bottom-buttons button, body.theme-yellow .bottom-buttons select { border-color: #b39700; color: #b39700; }
+    body.theme-yellow .bottom-buttons button:hover { background-color: rgba(179, 151, 0, 0.1); }
+    body.theme-pink { color: #cc3366; }
+    body.theme-pink .styled-box, body.theme-pink th, body.theme-pink td { border-color: #ffd6e6; }
+    body.theme-pink .styled-box-header { color: #cc3366; background-color: #ffd6e6; border-bottom-color: #ffd6e6; }
+    body.theme-pink th { background-color: #ffd6e6; }
+    body.theme-pink .custom-checkbox input:checked ~ span { background-color: #cc3366; border-color: #cc3366; }
+    body.theme-pink .bottom-buttons button, body.theme-pink .bottom-buttons select { border-color: #cc3366; color: #cc3366; }
+    body.theme-pink .bottom-buttons button:hover { background-color: rgba(204, 51, 102, 0.1); }
+    body.theme-purple { color: #5e2d91; }
+    body.theme-purple .styled-box, body.theme-purple th, body.theme-purple td { border-color: #e6d6ff; }
+    body.theme-purple .styled-box-header { color: #5e2d91; background-color: #e6d6ff; border-bottom-color: #e6d6ff; }
+    body.theme-purple th { background-color: #e6d6ff; }
+    body.theme-purple .custom-checkbox input:checked ~ span { background-color: #5e2d91; border-color: #5e2d91; }
+    body.theme-purple .bottom-buttons button, body.theme-purple .bottom-buttons select { border-color: #5e2d91; color: #5e2d91; }
+    body.theme-purple .bottom-buttons button:hover { background-color: rgba(94, 45, 145, 0.1); }
+    body.theme-gray { color: #444; }
+    body.theme-gray .styled-box, body.theme-gray th, body.theme-gray td { border-color: #dddddd; }
+    body.theme-gray .styled-box-header { color: #444; background-color: #dddddd; border-bottom-color: #dddddd; }
+    body.theme-gray th { background-color: #dddddd; }
+    body.theme-gray .custom-checkbox input:checked ~ span { background-color: #444; border-color: #444; }
+    body.theme-gray .bottom-buttons button, body.theme-gray .bottom-buttons select { border-color: #444; color: #444; }
+    body.theme-gray .bottom-buttons button:hover { background-color: rgba(68, 68, 68, 0.1); }
+    body.theme-red { color: #c0392b; }
+    body.theme-red .styled-box, body.theme-red th, body.theme-red td { border-color: #fadbd8; }
+    body.theme-red .styled-box-header { color: #c0392b; background-color: #fadbd8; border-bottom-color: #fadbd8; }
+    body.theme-red th { background-color: #fadbd8; }
+    body.theme-red .custom-checkbox input:checked ~ span { background-color: #c0392b; border-color: #c0392b; }
+    body.theme-red .bottom-buttons button, body.theme-red .bottom-buttons select { border-color: #c0392b; color: #c0392b; }
+    body.theme-red .bottom-buttons button:hover { background-color: rgba(192, 57, 43, 0.1); }
+    body.theme-orange { color: #d35400; }
+    body.theme-orange .styled-box, body.theme-orange th, body.theme-orange td { border-color: #fdebd0; }
+    body.theme-orange .styled-box-header { color: #d35400; background-color: #fdebd0; border-bottom-color: #fdebd0; }
+    body.theme-orange th { background-color: #fdebd0; }
+    body.theme-orange .custom-checkbox input:checked ~ span { background-color: #d35400; border-color: #d35400; }
+    body.theme-orange .bottom-buttons button, body.theme-orange .bottom-buttons select { border-color: #d35400; color: #d35400; }
+    body.theme-orange .bottom-buttons button:hover { background-color: rgba(211, 84, 0, 0.1); }
+    body.theme-teal { color: #16a085; }
+    body.theme-teal .styled-box, body.theme-teal th, body.theme-teal td { border-color: #d0ece7; }
+    body.theme-teal .styled-box-header { color: #16a085; background-color: #d0ece7; border-bottom-color: #d0ece7; }
+    body.theme-teal th { background-color: #d0ece7; }
+    body.theme-teal .custom-checkbox input:checked ~ span { background-color: #16a085; border-color: #16a085; }
+    body.theme-teal .bottom-buttons button, body.theme-teal .bottom-buttons select { border-color: #16a085; color: #16a085; }
+    body.theme-teal .bottom-buttons button:hover { background-color: rgba(22, 160, 133, 0.1); }
+    body.theme-indigo { color: #1a237e; }
+    body.theme-indigo .styled-box, body.theme-indigo th, body.theme-indigo td { border-color: #e8eaf6; }
+    body.theme-indigo .styled-box-header { color: #1a237e; background-color: #e8eaf6; border-bottom-color: #e8eaf6; }
+    body.theme-indigo th { background-color: #e8eaf6; }
+    body.theme-indigo .custom-checkbox input:checked ~ span { background-color: #1a237e; border-color: #1a237e; }
+    body.theme-indigo .bottom-buttons button, body.theme-indigo .bottom-buttons select { border-color: #1a237e; color: #1a237e; }
+    body.theme-indigo .bottom-buttons button:hover { background-color: rgba(26, 35, 126, 0.1); }
+    body.theme-cyan { color: #00acc1; }
+    body.theme-cyan .styled-box, body.theme-cyan th, body.theme-cyan td { border-color: #e0f7fa; }
+    body.theme-cyan .styled-box-header { color: #00acc1; background-color: #e0f7fa; border-bottom-color: #e0f7fa; }
+    body.theme-cyan th { background-color: #e0f7fa; }
+    body.theme-cyan .custom-checkbox input:checked ~ span { background-color: #00acc1; border-color: #00acc1; }
+    body.theme-cyan .bottom-buttons button, body.theme-cyan .bottom-buttons select { border-color: #00acc1; color: #00acc1; }
+    body.theme-cyan .bottom-buttons button:hover { background-color: rgba(0, 172, 193, 0.1); }
+    body.theme-amber { color: #ff8f00; }
+    body.theme-amber .styled-box, body.theme-amber th, body.theme-amber td { border-color: #fff8e1; }
+    body.theme-amber .styled-box-header { color: #ff8f00; background-color: #fff8e1; border-bottom-color: #fff8e1; }
+    body.theme-amber th { background-color: #fff8e1; }
+    body.theme-amber .custom-checkbox input:checked ~ span { background-color: #ff8f00; border-color: #ff8f00; }
+    body.theme-amber .bottom-buttons button, body.theme-amber .bottom-buttons select { border-color: #ff8f00; color: #ff8f00; }
+    body.theme-amber .bottom-buttons button:hover { background-color: rgba(255, 143, 0, 0.1); }
+    body.theme-ocean-mist { color: #00796b; }
+    body.theme-ocean-mist .styled-box, body.theme-ocean-mist th, body.theme-ocean-mist td { border-color: #b2dfdb; }
+    body.theme-ocean-mist .styled-box-header { color: #00796b; background-color: #b2dfdb; border-bottom-color: #b2dfdb; }
+    body.theme-ocean-mist th { background-color: #b2dfdb; }
+    body.theme-ocean-mist .custom-checkbox input:checked ~ span { background-color: #00796b; border-color: #00796b; }
+    body.theme-ocean-mist .bottom-buttons button, body.theme-ocean-mist .bottom-buttons select { border-color: #00796b; color: #00796b; }
+    body.theme-ocean-mist .bottom-buttons button:hover { background-color: rgba(0, 121, 107, 0.1); }
+    body.theme-sunset-glow { color: #e65100; }
+    body.theme-sunset-glow .styled-box, body.theme-sunset-glow th, body.theme-sunset-glow td { border-color: #ffcc80; }
+    body.theme-sunset-glow .styled-box-header { color: #e65100; background-color: #ffcc80; border-bottom-color: #ffcc80; }
+    body.theme-sunset-glow th { background-color: #ffcc80; }
+    body.theme-sunset-glow .custom-checkbox input:checked ~ span { background-color: #e65100; border-color: #e65100; }
+    body.theme-sunset-glow .bottom-buttons button, body.theme-sunset-glow .bottom-buttons select { border-color: #e65100; color: #e65100; }
+    body.theme-sunset-glow .bottom-buttons button:hover { background-color: rgba(230, 81, 0, 0.1); }
+    body.theme-royal-amethyst { color: #6a1b9a; }
+    body.theme-royal-amethyst .styled-box, body.theme-royal-amethyst th, body.theme-royal-amethyst td { border-color: #e1bee7; }
+    body.theme-royal-amethyst .styled-box-header { color: #6a1b9a; background-color: #e1bee7; border-bottom-color: #e1bee7; }
+    body.theme-royal-amethyst th { background-color: #e1bee7; }
+    body.theme-royal-amethyst .custom-checkbox input:checked ~ span { background-color: #6a1b9a; border-color: #6a1b9a; }
+    body.theme-royal-amethyst .bottom-buttons button, body.theme-royal-amethyst .bottom-buttons select { border-color: #6a1b9a; color: #6a1b9a; }
+    body.theme-royal-amethyst .bottom-buttons button:hover { background-color: rgba(106, 27, 154, 0.1); }
+    body.theme-forest-haze { color: #387002; }
+    body.theme-forest-haze .styled-box, body.theme-forest-haze th, body.theme-forest-haze td { border-color: #c8e6c9; }
+    body.theme-forest-haze .styled-box-header { color: #387002; background-color: #c8e6c9; border-bottom-color: #c8e6c9; }
+    body.theme-forest-haze th { background-color: #c8e6c9; }
+    body.theme-forest-haze .custom-checkbox input:checked ~ span { background-color: #387002; border-color: #387002; }
+    body.theme-forest-haze .bottom-buttons button, body.theme-forest-haze .bottom-buttons select { border-color: #387002; color: #387002; }
+    body.theme-forest-haze .bottom-buttons button:hover { background-color: rgba(56, 112, 2, 0.1); }
+    body.theme-crimson-night { color: #b71c1c; }
+    body.theme-crimson-night .styled-box, body.theme-crimson-night th, body.theme-crimson-night td { border-color: #ffcdd2; }
+    body.theme-crimson-night .styled-box-header { color: #b71c1c; background-color: #ffcdd2; border-bottom-color: #ffcdd2; }
+    body.theme-crimson-night th { background-color: #ffcdd2; }
+    body.theme-crimson-night .custom-checkbox input:checked ~ span { background-color: #b71c1c; border-color: #b71c1c; }
+    body.theme-crimson-night .bottom-buttons button, body.theme-crimson-night .bottom-buttons select { border-color: #b71c1c; color: #b71c1c; }
+    body.theme-crimson-night .bottom-buttons button:hover { background-color: rgba(183, 28, 28, 0.1); }
+    body.theme-golden-sands { color: #ffab00; }
+    body.theme-golden-sands .styled-box, body.theme-golden-sands th, body.theme-golden-sands td { border-color: #fff9c4; }
+    body.theme-golden-sands .styled-box-header { color: #ffab00; background-color: #fff9c4; border-bottom-color: #fff9c4; }
+    body.theme-golden-sands th { background-color: #fff9c4; }
+    body.theme-golden-sands .custom-checkbox input:checked ~ span { background-color: #ffab00; border-color: #ffab00; }
+    body.theme-golden-sands .bottom-buttons button, body.theme-golden-sands .bottom-buttons select { border-color: #ffab00; color: #ffab00; }
+    body.theme-golden-sands .bottom-buttons button:hover { background-color: rgba(255, 171, 0, 0.1); }
+    body.theme-graphite-sky { color: #37474f; }
+    body.theme-graphite-sky .styled-box, body.theme-graphite-sky th, body.theme-graphite-sky td { border-color: #cfd8dc; }
+    body.theme-graphite-sky .styled-box-header { color: #37474f; background-color: #cfd8dc; border-bottom-color: #cfd8dc; }
+    body.theme-graphite-sky th { background-color: #cfd8dc; }
+    body.theme-graphite-sky .custom-checkbox input:checked ~ span { background-color: #37474f; border-color: #37474f; }
+    body.theme-graphite-sky .bottom-buttons button, body.theme-graphite-sky .bottom-buttons select { border-color: #37474f; color: #37474f; }
+    body.theme-graphite-sky .bottom-buttons button:hover { background-color: rgba(55, 71, 79, 0.1); }
+    body.theme-espresso-cream { color: #4e342e; }
+    body.theme-espresso-cream .styled-box, body.theme-espresso-cream th, body.theme-espresso-cream td { border-color: #d7ccc8; }
+    body.theme-espresso-cream .styled-box-header { color: #4e342e; background-color: #d7ccc8; border-bottom-color: #d7ccc8; }
+    body.theme-espresso-cream th { background-color: #d7ccc8; }
+    body.theme-espresso-cream .custom-checkbox input:checked ~ span { background-color: #4e342e; border-color: #4e342e; }
+    body.theme-espresso-cream .bottom-buttons button, body.theme-espresso-cream .bottom-buttons select { border-color: #4e342e; color: #4e342e; }
+    body.theme-espresso-cream .bottom-buttons button:hover { background-color: rgba(78, 52, 46, 0.1); }
+    body.theme-midnight-sapphire { color: #0d47a1; }
+    body.theme-midnight-sapphire .styled-box, body.theme-midnight-sapphire th, body.theme-midnight-sapphire td { border-color: #bbdefb; }
+    body.theme-midnight-sapphire .styled-box-header { color: #0d47a1; background-color: #bbdefb; border-bottom-color: #bbdefb; }
+    body.theme-midnight-sapphire th { background-color: #bbdefb; }
+    body.theme-midnight-sapphire .custom-checkbox input:checked ~ span { background-color: #0d47a1; border-color: #0d47a1; }
+    body.theme-midnight-sapphire .bottom-buttons button, body.theme-midnight-sapphire .bottom-buttons select { border-color: #0d47a1; color: #0d47a1; }
+    body.theme-midnight-sapphire .bottom-buttons button:hover { background-color: rgba(13, 71, 161, 0.1); }
+    body.theme-emerald-isle { color: #2e7d32; }
+    body.theme-emerald-isle .styled-box, body.theme-emerald-isle th, body.theme-emerald-isle td { border-color: #a5d6a7; }
+    body.theme-emerald-isle .styled-box-header { color: #2e7d32; background-color: #a5d6a7; border-bottom-color: #a5d6a7; }
+    body.theme-emerald-isle th { background-color: #a5d6a7; }
+    body.theme-emerald-isle .custom-checkbox input:checked ~ span { background-color: #2e7d32; border-color: #2e7d32; }
+    body.theme-emerald-isle .bottom-buttons button, body.theme-emerald-isle .bottom-buttons select { border-color: #2e7d32; color: #2e7d32; }
+    body.theme-emerald-isle .bottom-buttons button:hover { background-color: rgba(46, 125, 50, 0.1); }
+
+
+/* ---------- NEW & IMPROVED PRINT STYLES TO FIT ONE PAGE ---------- */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        box-shadow: none !important;
+        transition: none !important;
+    }
+
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        /* Smaller font size for print */
+        font-size: 10pt;
+        line-height: 1.2;
+    }
+
+    .lesson-plan-container {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 auto !important;
+        border: none !important;
+        position: static !important;
+        transform: none !important;
+        transform-origin: unset !important;
+        box-sizing: border-box;
+        /* Reduced page margins */
+        padding: 8mm !important;
+    }
+
+    .no-print, .ribbon, .bottom-buttons, input, textarea, select, .custom-checkbox {
+        display: none !important;
+    }
+
+    .print-only-text, .dropdown-print-text {
+        display: block !important;
+        width: 100%;
+        min-height: 1em; /* Adjusted height */
+        padding: 1px;
+        box-sizing: border-box;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.3;
+        color: inherit !important;
+        background: transparent !important;
+    }
+    
+    /* Ensure rich text content is visible */
+    #installResourcesProcedure {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important; /* Allow it to shrink if content is small */
+        overflow: visible !important;
+        resize: none !important;
+    }
+
+    .styled-box, .table1-container, .table2-container {
+        border-width: 1px !important; /* Thinner border for print */
+        border-style: solid !important;
+        border-color: inherit !important;
+        /* Heavily reduced margins to save space */
+        margin-bottom: 4px !important;
+        page-break-inside: avoid; /* Prevent boxes from splitting */
+    }
+
+    .table1-header, .styled-box-header, .table2-header {
+        padding: 3px !important;
+        font-size: 8pt !important;
+    }
+
+    .table1-content, .styled-box-content, .table2-content {
+        padding: 4px !important;
+    }
+    
+    /* Compact the procedure/reflection tables */
+    .custom-table-header, .reflection-header {
+        padding-bottom: 2px !important;
+        margin-bottom: 3px !important;
+        font-size: 7pt !important;
+    }
+    .procedure-row, .reflection-row {
+        margin-bottom: 2px !important;
+        padding-bottom: 2px !important;
+    }
+    .procedure-row > div, .reflection-row > div {
+        padding: 1px !important;
+    }
+
+    .procedure-row {
+        border-bottom: 1px dashed !important;
+        border-color: inherit !important;
+    }
+    .procedure-row:last-child {
+        border-bottom: none !important;
+    }
+}
+ 
+    .print-only-text { display: none; }
+    
+    .custom-table-header { display: flex; margin-bottom: 6px; border-bottom: 1px solid; border-color: inherit; opacity: 0.7; padding-bottom: 4px; }
+    .custom-table-header div { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .custom-table-header .stages { width: 15%; }
+    .custom-table-header .procedure { width: 55%; }
+    .custom-table-header .interaction { width: 15%; }
+    .custom-table-header .time { width: 15%; }
+    
+    .procedure-row { display: flex; margin-bottom: 6px; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed #ccc; }
+    .procedure-row:last-child { border-bottom: none; }
+    .procedure-row > div { padding: 3px; }
+    .procedure-row .stages { width: 15%; font-weight: 500; }
+    .procedure-row .procedure { width: 55%; }
+    .procedure-row .interaction { width: 15%; }
+    .procedure-row .time { width: 15%; }
+    
+    .reflection-header { display: flex; margin-bottom: 6px; border-bottom: 2px solid; border-color: inherit; opacity: 0.7; padding-bottom: 4px; }
+    .reflection-header div { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .reflection-header .what-worked { width: 33.33%; }
+    .reflection-header .what-hindered { width: 33.33%; }
+    .reflection-header .action-points { width: 33.33%; }
+    .reflection-row { display: flex; margin-bottom: 6px; }
+    .reflection-row > div { padding: 3px; width: 33.33%; }
+    
+    .focusable { position: relative; }
+    .focusable:focus { outline: none; }
+    
+    .target-competence-container, .cross-curricular-container { position: relative; }
+    .target-competence-container select, .cross-curricular-container select { margin-bottom: 4px; }
+    
+    .dropdown-text-container { position: relative; }
+    
+    .table1-container {
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #000;
+        margin-bottom: 10px; /* Reduced margin */
+        transition: all 0.3s ease-in-out;
+    }
+
+    .table1-header {
+        background-color: #f3f3f3;
+        color: #000;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px; /* Reduced padding */
+        border-bottom: 1px solid #000;
+        font-size: 10px; /* Reduced font size */
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+
+    .table1-content {
+        flex-grow: 1;
+        background-color: #ffffff;
+        padding: 8px; /* Reduced padding */
+    }
+    
+    .table2-container {
+        width: 100%;
+        padding: 0;
+        background-color: #ffffff;
+        border: 1px solid #000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: stretch;
+        margin-bottom: 10px; /* Reduced margin */
+        transition: all 0.3s ease-in-out;
+    }
+
+    .table2-header {
+        background-color: #f3f3f3;
+        color: #000;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 5px; /* Reduced padding */
+        writing-mode: vertical-rl;
+        text-orientation: sideways;
+        white-space: nowrap;
+        border-right: 1px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .table2-content {
+        flex-grow: 1;
+        background-color: #ffffff;
+        padding: 8px; /* Reduced padding */
+        display: flex;
+        align-items: center;
+    }
+    
+    .one-line-input {
+        width: 100%; border: none; outline: none; padding: 0; margin: 0; height: 100%;
+        line-height: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        font-family: inherit; font-size: 12px;
+    }
+    
+    /* Theme styles for new table containers */
+    body.default-theme .table1-container, body.default-theme .table2-container { border-color: #f3f3f3; }
+    body.default-theme .table1-header, body.default-theme .table2-header {
+        background-color: #f3f3f3; color: #000; border-color: #f3f3f3;
+    }
+    body.theme-blue .table1-container, body.theme-blue .table2-container { border-color: #d6e3ff; }
+    body.theme-blue .table1-header, body.theme-blue .table2-header { background-color: #d6e3ff; color: #2c3e99; border-color: #d6e3ff; }
+    body.theme-green .table1-container, body.theme-green .table2-container { border-color: #d9f5d9; }
+    body.theme-green .table1-header, body.theme-green .table2-header { background-color: #d9f5d9; color: #2d7a33; border-color: #d9f5d9; }
+    body.theme-yellow .table1-container, body.theme-yellow .table2-container { border-color: #fff2cc; }
+    body.theme-yellow .table1-header, body.theme-yellow .table2-header { background-color: #fff2cc; color: #b39700; border-color: #fff2cc; }
+    body.theme-pink .table1-container, body.theme-pink .table2-container { border-color: #ffd6e6; }
+    body.theme-pink .table1-header, body.theme-pink .table2-header { background-color: #ffd6e6; color: #cc3366; border-color: #ffd6e6; }
+    body.theme-purple .table1-container, body.theme-purple .table2-container { border-color: #e6d6ff; }
+    body.theme-purple .table1-header, body.theme-purple .table2-header { background-color: #e6d6ff; color: #5e2d91; border-color: #e6d6ff; }
+    body.theme-gray .table1-container, body.theme-gray .table2-container { border-color: #dddddd; }
+    body.theme-gray .table1-header, body.theme-gray .table2-header { background-color: #dddddd; color: #444; border-color: #dddddd; }
+    body.theme-red .table1-container, body.theme-red .table2-container { border-color: #fadbd8; }
+    body.theme-red .table1-header, body.theme-red .table2-header { background-color: #fadbd8; color: #c0392b; border-color: #fadbd8; }
+    body.theme-orange .table1-container, body.theme-orange .table2-container { border-color: #fdebd0; }
+    body.theme-orange .table1-header, body.theme-orange .table2-header { background-color: #fdebd0; color: #d35400; border-color: #fdebd0; }
+    body.theme-teal .table1-container, body.theme-teal .table2-container { border-color: #d0ece7; }
+    body.theme-teal .table1-header, body.theme-teal .table2-header { background-color: #d0ece7; color: #16a085; border-color: #d0ece7; }
+    body.theme-indigo .table1-container, body.theme-indigo .table2-container { border-color: #e8eaf6; }
+    body.theme-indigo .table1-header, body.theme-indigo .table2-header { background-color: #e8eaf6; color: #1a237e; border-color: #e8eaf6; }
+    body.theme-cyan .table1-container, body.theme-cyan .table2-container { border-color: #e0f7fa; }
+    body.theme-cyan .table1-header, body.theme-cyan .table2-header { background-color: #e0f7fa; color: #00acc1; border-color: #e0f7fa; }
+    body.theme-amber .table1-container, body.theme-amber .table2-container { border-color: #fff8e1; }
+    body.theme-amber .table1-header, body.theme-amber .table2-header { background-color: #fff8e1; color: #ff8f00; border-color: #fff8e1; }
+    body.theme-ocean-mist .table1-container, body.theme-ocean-mist .table2-container { border-color: #b2dfdb; }
+    body.theme-ocean-mist .table1-header, body.theme-ocean-mist .table2-header { background-color: #b2dfdb; color: #00796b; border-color: #b2dfdb; }
+    body.theme-sunset-glow .table1-container, body.theme-sunset-glow .table2-container { border-color: #ffcc80; }
+    body.theme-sunset-glow .table1-header, body.theme-sunset-glow .table2-header { background-color: #ffcc80; color: #e65100; border-color: #ffcc80; }
+    body.theme-royal-amethyst .table1-container, body.theme-royal-amethyst .table2-container { border-color: #e1bee7; }
+    body.theme-royal-amethyst .table1-header, body.theme-royal-amethyst .table2-header { background-color: #e1bee7; color: #6a1b9a; border-color: #e1bee7; }
+    body.theme-forest-haze .table1-container, body.theme-forest-haze .table2-container { border-color: #c8e6c9; }
+    body.theme-forest-haze .table1-header, body.theme-forest-haze .table2-header { background-color: #c8e6c9; color: #387002; border-color: #c8e6c9; }
+    body.theme-crimson-night .table1-container, body.theme-crimson-night .table2-container { border-color: #ffcdd2; }
+    body.theme-crimson-night .table1-header, body.theme-crimson-night .table2-header { background-color: #ffcdd2; color: #b71c1c; border-color: #ffcdd2; }
+    body.theme-golden-sands .table1-container, body.theme-golden-sands .table2-container { border-color: #fff9c4; }
+    body.theme-golden-sands .table1-header, body.theme-golden-sands .table2-header { background-color: #fff9c4; color: #ffab00; border-color: #fff9c4; }
+    body.theme-graphite-sky .table1-container, body.theme-graphite-sky .table2-container { border-color: #cfd8dc; }
+    body.theme-graphite-sky .table1-header, body.theme-graphite-sky .table2-header { background-color: #cfd8dc; color: #37474f; border-color: #cfd8dc; }
+    body.theme-espresso-cream .table1-container, body.theme-espresso-cream .table2-container { border-color: #d7ccc8; }
+    body.theme-espresso-cream .table1-header, body.theme-espresso-cream .table2-header { background-color: #d7ccc8; color: #4e342e; border-color: #d7ccc8; }
+    body.theme-midnight-sapphire .table1-container, body.theme-midnight-sapphire .table2-container { border-color: #bbdefb; }
+    body.theme-midnight-sapphire .table1-header, body.theme-midnight-sapphire .table2-header { background-color: #bbdefb; color: #0d47a1; border-color: #bbdefb; }
+    body.theme-emerald-isle .table1-container, body.theme-emerald-isle .table2-container { border-color: #a5d6a7; }
+    body.theme-emerald-isle .table1-header, body.theme-emerald-isle .table2-header { background-color: #a5d6a7; color: #2e7d32; border-color: #a5d6a7; }
+	
+</style>
+</head>
+
+<body class="default-theme">
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+
+    <div class="lesson-plan-container">
+        <div id="authStatus" class="auth-status no-print">Checking login status...</div>
+
+        <div id="ribbon-toolbar" class="ribbon no-print">
+            <div class="group">
+                <button type="button" class="btn-square" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                <button type="button" class="btn-square" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                <button type="button" class="btn-square" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+                <button type="button" class="btn-square" data-command="strikeThrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+            </div>
+            <div class="group">
+                <button type="button" class="btn-square" data-command="justifyLeft" title="Align Left"><i class="fas fa-align-left"></i></button>
+                <button type="button" class="btn-square" data-command="justifyCenter" title="Align Center"><i class="fas fa-align-center"></i></button>
+                <button type="button" class="btn-square" data-command="justifyRight" title="Align Right"><i class="fas fa-align-right"></i></button>
+                <button type="button" class="btn-square" data-command="justifyFull" title="Justify"><i class="fas fa-align-justify"></i></button>
+            </div>
+            <div class="group">
+                <button type="button" class="btn-square" data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                <button type="button" class="btn-square" data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+            </div>
+            <div class="group">
+                <button type="button" class="btn-square" data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+                <button type="button" class="btn-square" data-command="unlink" title="Remove Link"><i class="fas fa-unlink"></i></button>
+                <div class="image-upload-container">
+                <button type="button" id="insertImageBtn" class="btn-square" title="Insert Image"><i class="fas fa-image"></i></button>
+                <div class="image-preview" id="imagePreview">
+                    <img id="previewImg" src="" alt="Preview">
+                    <div>
+                    <button id="confirmImage">Insert</button>
+                    <button id="cancelImage">Cancel</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="group">
+                <select id="fontSize" title="Font Size">
+                <option value="1">Small</option>
+                <option value="3" selected>Normal</option>
+                <option value="5">Large</option>
+                <option value="7">Huge</option>
+                </select>
+                <input type="color" id="fontColor" title="Text Color" />
+            </div>
+            <div class="group">
+                <button type="button" class="btn-square" data-command="undo" title="Undo"><i class="fas fa-undo"></i></button>
+                <button type="button" class="btn-square" data-command="redo" title="Redo"><i class="fas fa-redo"></i></button>
+            </div>
+        </div>
+
+
+        <div class="content-grid compact-grid">
+            <div class="table1-container grid-col-span-2">
+                <div class="table1-header">PRIMARY SCHOOL</div>
+                <div class="table1-content">
+                    <input type="text" id="schoolName" placeholder="Enter school name" class="focusable"><span class="print-only-text"></span>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-2">
+                <div class="table1-header">TEACHER</div>
+                <div class="table1-content">
+                    <input type="text" id="teacherName" placeholder="Enter teacher name" class="focusable"><span class="print-only-text"></span>
+                </div>
+            </div>
+            
+            <div class="table1-container grid-col-span-2 dropdown-text-container">
+                <div class="table1-header">LEVEL</div>
+                <div class="table1-content">
+                    <select id="levelSelect" class="dropdown-select">
+                        <option value="">-- Select --</option>
+                        <option value="3PS">3PS</option>
+                        <option value="4PS">4PS</option>
+                        <option value="5PS">5PS</option>
+                    </select>
+                    <span class="print-only-text dropdown-print-text"></span>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-2">
+                <div class="table1-header"># OF LEARNERS</div>
+                <div class="table1-content">
+                    <input type="number" id="learnerCount" placeholder="0" class="focusable"><span class="print-only-text"></span>
+                </div>
+            </div>
+
+            <div class="table1-container grid-col-span-2 dropdown-text-container">
+                <div class="table1-header">SEQUENCE</div>
+                <div class="table1-content">
+                    <select id="sequenceSelect" class="dropdown-select">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span class="print-only-text dropdown-print-text"></span>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-1 dropdown-text-container">
+                <div class="table1-header">SECTION</div>
+                <div class="table1-content">
+                    <select id="sectionSelect" class="dropdown-select">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span class="print-only-text dropdown-print-text"></span>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-1 dropdown-text-container">
+                <div class="table1-header">SESSION</div>
+                <div class="table1-content">
+                    <select id="sessionSelect" class="dropdown-select">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span class="print-only-text dropdown-print-text"></span>
+                </div>
+            </div>
+            
+            <div class="table2-container grid-col-span-4">
+                <div class="table2-header">SESSION OBJECTIVE(S)</div>
+                <div class="table2-content">
+                    <input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="one-line-input focusable"><span class="print-only-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="table1-container grid-col-span-3 target-competence-container">
+                <div class="table1-header">TARGET COMPETENCE</div>
+                <div class="table1-content">
+                    <select id="targetCompetenceSelect">
+                        <option value="" selected disabled>-- Select an option --</option>
+                        <option value="Comprehend oral messages and identify the meaning of words, expressions and sentences in a familiar context using paralinguistic features.">Comprehend oral messages and identify the meaning...</option>
+                        <option value="Decode symbols, read simple messages of about 30? words and understand the meaning of words and structures using graphemic/phonemic knowledge, reading basics, and decoding strategies.">Decode symbols, read simple messages...</option>
+                        <option value="Write letters, words, and simple sentences using correct handwriting and punctuation / Produce words using correct handwriting to fill in a form with specific details related to the learners' immediate environment, daily concern and interests.">Write letters, words, and simple sentences...</option>
+                        <option value="Interact orally in communicative situations related to the learner's immediate environment, daily concern and interests using simple words, expressions and sentences.">Interact orally in communicative situations...</option>
+                        <option value="Transfer notes into a message of about 10? words related to the learner's immediate environment using writing mechanics / Decode a short simple message of about 20? words and understand its meaning using reading skills.">Transfer notes into a message...</option>
+                        <option value="Written Comprehension: Learners can decode a short, simple message of about 20 words and understand its meaning using reading skills.">Written Comprehension: Decode a short message...</option>
+                        <option value="Oral Production: Learners can interact orally in communicative situations related to their immediate environment.">Oral Production: Interact orally...</option>
+                        <option value="Oral Comprehension: Learners can interpret oral messages in communicative situations related to their immediate environment using paralinguistic features.">Oral Comprehension: Interpret oral messages...</option>
+                        <option value="Written Production: Learners can transfer notes into a message of about 10 words related to their immediate environment using writing mechanics.">Written Production: Transfer notes into a message...</option>
+                    </select>
+                    <textarea id="targetCompetenceText" placeholder="Selected competence will appear here..." class="focusable" rows="1"></textarea>
+                    <div class="print-only-text"></div>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-1">
+                <div class="table1-header">MATERIALS</div>
+                <div class="table1-content">
+                    <div class="checkbox-inline" id="teachingMaterials">
+                        <label class="custom-checkbox"><input type="checkbox" value="Textbook"><span></span> Textbook</label>
+                        <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
+                        <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
+                        <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
+                    </div>
+                    <span class="print-only-text"></span>
+                </div>
+            </div>
+            <div class="table1-container grid-col-span-4 cross-curricular-container">
+                <div class="table1-header">CROSS-CURRICULAR COMPETENCES</div>
+                <div class="table1-content">
+                    <select id="crossCurricularSelect">
+                        <option value="" selected disabled>-- Select an option --</option>
+                        <option value="Intellectual competency: The learner discovers the relationship between the context, paralinguistic features, and the meaning of words, expressions and sentences.&#10;Methodological competency: The learner makes use of the context and paralinguistic features to identify the meaning of words, expressions and sentences.&#10;Communicative competency: The learner reacts to verbal and non-verbal messages to show understanding.&#10;Personal and social competency: The learner considers the context and paralinguistic features when interacting orally.">Intellectual: Discovers relationship between context...</option>
+                        <option value="Intellectual competency: The learner demonstrates understanding of reading basics and the decoding strategies.&#10;Methodological competency: The learner employs reading basics and the decoding strategies to understand messages.&#10;Communicative competency: The learner communicates reading basics and the decoding strategies to peers.&#10;Personal and social competency: The learner considers reading basics and the decoding strategies to achieve others' understanding.">Intellectual: Demonstrates understanding of reading basics...</option>
+                        <option value="Intellectual competency: The learner demonstrates understanding of the features of correct handwriting.&#10;Methodological competency: The learner implements the features of correct handwriting.&#10;Communicative competency: The learner achieves readability through the appropriate use of the features of correct handwriting.&#10;Personal and social competency: The learner values others' writings.">Intellectual: Demonstrates understanding of handwriting...</option>
+                        <option value="Intellectual competency: The learner discovers the importance of words, chunks, and paralinguistic features used in oral interaction.&#10;Methodological competency: The learner exploits the linguistic repertoire and paralinguistic features to interact orally.&#10;Communicative competency: The learner selects the appropriate words, expressions, and paralinguistic features to interact orally.&#10;Personal and social competency: The learner considers speech acts and context when interacting.">Intellectual: Discovers importance of words/chunks...</option>
+                        <option value="Intellectual competency: The learner demonstrates understanding of the writing mechanics and the relevant information to write a message.&#10;Methodological competency: The learner implements the writing mechanics and reading skills to produce or understand a message.&#10;Communicative competency: The learner communicates the writing mechanics and reading comprehension to peers.&#10;Personal and social competency: The learner publishes one's production and collaborates with peers.">Intellectual: Demonstrates understanding of writing mechanics...</option>
+                        <option value="Intellectual: The learner demonstrates an understanding of reading skills, writing mechanics, and the relevant information needed to write or interpret a message.&#10;Methodological: The learner employs reading skills, context, paralinguistic features, listening skills, and writing mechanics to comprehend or produce a short message.&#10;Communicative: The learner selects and communicates appropriate words, expressions, sentences, writing mechanics, and paralinguistic features to peers.&#10;Personal and Social: The learner publishes their own production, collaborates with peers verbally and non-verbally, and considers the context and paralinguistic features when interacting orally.">Intellectual: Demonstrates understanding of reading/writing skills...</option>
+                    </select>
+                    <textarea id="crossCurricularText" placeholder="Selected competences will appear here..." class="focusable" rows="1"></textarea>
+                    <div class="print-only-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table1-container">
+            <div class="table1-header">LESSON PROCEDURE</div>
+            <div class="table1-content">
+                <div class="custom-table-header">
+                    <div class="stages">Stages</div>
+                    <div class="procedure">Procedure / Tasks</div>
+                    <div class="interaction">Interaction</div>
+                    <div class="time">Time</div>
+                </div>
+                
+                <div class="procedure-row">
+                    <div class="stages"><input type="text" id="warmerStage" value="Warmer" class="focusable" style="font-weight: 500;"><span class="print-only-text" style="font-weight: 500;"></span></div>
+                    <div class="procedure"><textarea id="warmerProcedure" rows="1" placeholder="..." class="focusable"></textarea><div class="print-only-text"></div></div>
+                    <div class="interaction"><input type="text" id="warmerInteraction" placeholder="T -> Ls" class="focusable"><span class="print-only-text"></span></div>
+                    <div class="time"><input type="text" id="warmerTime" placeholder="5 min" class="focusable"><span class="print-only-text"></span></div>
+                </div>
+                
+                <div class="procedure-row">
+                    <div class="stages"><input type="text" id="installStage" value="Install resources" class="focusable" style="font-weight: 500;"><span class="print-only-text" style="font-weight: 500;"></span></div>
+                    <div class="procedure"><div id="installResourcesProcedure" class="editable-area focusable" contenteditable="true" data-placeholder="Write your main procedure here..."></div></div>
+                    <div class="interaction"><input type="text" id="installInteraction" placeholder="T -> Ls" class="focusable"><span class="print-only-text"></span></div>
+                    <div class="time"><input type="text" id="installTime" placeholder="20 min" class="focusable"><span class="print-only-text"></span></div>
+                </div>
+                
+                <div class="procedure-row">
+                    <div class="stages"><input type="text" id="assessmentStage" value="Assessment" class="focusable" style="font-weight: 500;"><span class="print-only-text" style="font-weight: 500;"></span></div>
+                    <div class="procedure"><textarea id="assessmentProcedure" rows="1" placeholder="..." class="focusable"></textarea><div class="print-only-text"></div></div>
+                    <div class="interaction"><input type="text" id="assessmentInteraction" placeholder="L -> L" class="focusable"><span class="print-only-text"></span></div>
+                    <div class="time"><input type="text" id="assessmentTime" placeholder="15 min" class="focusable"><span class="print-only-text"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="styled-box">
+            <div class="styled-box-header">SELF-REFLECTION</div>
+            <div class="styled-box-content">
+                <div class="reflection-header">
+                    <div class="what-worked">What Worked</div>
+                    <div class="what-hindered">What Hindered</div>
+                    <div class="action-points">Action Points</div>
+                </div>
+                
+                <div class="reflection-row">
+                    <div class="what-worked"><textarea id="whatWorked" placeholder="..." class="focusable"></textarea><div class="print-only-text"></div></div>
+                    <div class="what-hindered"><textarea id="whatHindered" placeholder="..." class="focusable"></textarea><div class="print-only-text"></div></div>
+                    <div class="action-points"><textarea id="actionPoints" placeholder="..." class="focusable"></textarea><div class="print-only-text"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-buttons no-print">
+            <button onclick="window.print()">Print</button>
+            <button id="saveBtn" disabled>Save to Cloud</button>
+            <button id="downloadBtn">Download PDF</button> 
+            <select id="themeSelect">
+                <option value="default-theme">Default</option>
+                <option value="theme-blue">Blue</option>
+                <option value="theme-green">Green</option>
+                <option value="theme-yellow">Yellow</option>
+                <option value="theme-pink">Pink</option>
+                <option value="theme-purple">Purple</option>
+                <option value="theme-gray">Gray</option>
+                <option value="theme-red">Red</option>
+                <option value="theme-orange">Orange</option>
+                <option value="theme-teal">Teal</option>
+                <option value="theme-indigo">Indigo</option>
+                <option value="theme-cyan">Cyan</option>
+                <option value="theme-amber">Amber</option>
+                <option value="theme-ocean-mist">Ocean Mist</option>
+                <option value="theme-sunset-glow">Sunset Glow</option>
+                <option value="theme-royal-amethyst">Royal Amethyst</option>
+                <option value="theme-forest-haze">Forest Haze</option>
+                <option value="theme-crimson-night">Crimson Night</option>
+                <option value="theme-golden-sands">Golden Sands</option>
+                <option value="theme-graphite-sky">Graphite Sky</option>
+                <option value="theme-espresso-cream">Espresso Cream</option>
+                <option value="theme-midnight-sapphire">Midnight Sapphire</option>
+                <option value="theme-emerald-isle">Emerald Isle</option>
+            </select>
+        </div>
+    </div>
+
+<script type="module">
+    // --- Import Firebase Modules ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, addDoc, getDoc, serverTimestamp, collection } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // --- Firebase Configuration ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+        authDomain: "printelydz.firebaseapp.com",
+        projectId: "printelydz",
+        storageBucket: "printelydz.appspot.com",
+        messagingSenderId: "49201277305",
+        appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+    };
+
+    // --- Initialize Firebase ---
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    let currentUser = null;
+
+    // --- DOM Elements ---
+    const saveBtn = document.getElementById('saveBtn');
+    const authStatusDiv = document.getElementById('authStatus');
+    const themeSelect = document.getElementById('themeSelect');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // --- Auth Listener ---
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            currentUser = user;
+            saveBtn.disabled = false;
+            authStatusDiv.innerHTML = `Logged in: <strong>${user.email}</strong>`;
+            loadPlanFromSession();
+        } else {
+            currentUser = null;
+            saveBtn.disabled = true;
+            authStatusDiv.innerHTML = `Please <a href="/login.html" style="color: var(--accent-color);">log in</a> to save your work online.`;
+        }
+    });
+
+    // --- Save to Firestore ---
+    saveBtn.addEventListener('click', async () => {
+        if (!currentUser) return alert("You must be logged in to save.");
+        const planName = prompt("Please enter a name for your lesson plan:", "My Lesson Plan");
+        if (!planName) return;
+
+        try {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+            const lessonPlanData = {
+                planName,
+                plannerType: 'best',
+                school: document.getElementById('schoolName').value,
+                teacher: document.getElementById('teacherName').value,
+                level: document.getElementById('levelSelect').value,
+                learners: document.getElementById('learnerCount').value,
+                sequence: document.getElementById('sequenceSelect').value,
+                section: document.getElementById('sectionSelect').value,
+                session: document.getElementById('sessionSelect').value,
+                objective: document.getElementById('sessionObjective').value,
+                targetCompetence: document.getElementById('targetCompetenceText').value,
+                crossCurricular: document.getElementById('crossCurricularText').value,
+                materials: Array.from(document.querySelectorAll('#teachingMaterials input:checked')).map(cb => cb.value),
+                warmer: { stage: document.getElementById('warmerStage').value, procedure: document.getElementById('warmerProcedure').value, interaction: document.getElementById('warmerInteraction').value, time: document.getElementById('warmerTime').value },
+                install: { stage: document.getElementById('installStage').value, procedure: document.getElementById('installResourcesProcedure').innerHTML, interaction: document.getElementById('installInteraction').value, time: document.getElementById('installTime').value },
+                assessment: { stage: document.getElementById('assessmentStage').value, procedure: document.getElementById('assessmentProcedure').value, interaction: document.getElementById('assessmentInteraction').value, time: document.getElementById('assessmentTime').value },
+                reflection: { worked: document.getElementById('whatWorked').value, hindered: document.getElementById('whatHindered').value, actionPoints: document.getElementById('actionPoints').value },
+                createdAt: serverTimestamp(), authorId: currentUser.uid
+            };
+            await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
+            alert(`Lesson plan "${planName}" saved successfully!`);
+        } catch (error) {
+            console.error("Error saving document: ", error);
+            alert("There was an error saving your lesson plan.");
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save to Cloud';
+        }
+    });
+    
+    // --- Load from Session Storage ---
+    async function loadPlanFromSession() {
+        const planId = sessionStorage.getItem('planToLoadId');
+        if (!planId || !currentUser) return;
+        try {
+            const docRef = doc(db, 'users', currentUser.uid, 'lessonPlans', planId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('schoolName').value = data.school || '';
+                document.getElementById('teacherName').value = data.teacher || '';
+                document.getElementById('levelSelect').value = data.level || '';
+                document.getElementById('learnerCount').value = data.learners || '';
+                document.getElementById('sessionObjective').value = data.objective || '';
+                document.getElementById('targetCompetenceText').value = data.targetCompetence || '';
+                document.getElementById('crossCurricularText').value = data.crossCurricular || '';
+                
+                if (data.materials) data.materials.forEach(val => {
+                  const cb = document.querySelector(`#teachingMaterials input[value="${val}"]`);
+                  if (cb) cb.checked = true;
+                });
+
+                document.getElementById('warmerStage').value = data.warmer?.stage || 'Warmer';
+                document.getElementById('warmerProcedure').value = data.warmer?.procedure || '';
+                document.getElementById('warmerInteraction').value = data.warmer?.interaction || '';
+                document.getElementById('warmerTime').value = data.warmer?.time || '';
+                document.getElementById('installStage').value = data.install?.stage || 'Install resources';
+                document.getElementById('installResourcesProcedure').innerHTML = data.install?.procedure || '';
+                document.getElementById('installInteraction').value = data.install?.interaction || '';
+                document.getElementById('installTime').value = data.install?.time || '';
+                document.getElementById('assessmentStage').value = data.assessment?.stage || 'Assessment';
+                document.getElementById('assessmentProcedure').value = data.assessment?.procedure || '';
+                document.getElementById('assessmentInteraction').value = data.assessment?.interaction || '';
+                document.getElementById('assessmentTime').value = data.assessment?.time || '';
+                document.getElementById('whatWorked').value = data.reflection?.worked || '';
+                document.getElementById('whatHindered').value = data.reflection?.hindered || '';
+                document.getElementById('actionPoints').value = data.reflection?.actionPoints || '';
+                
+                autoResizeAllTextareas();
+                
+                levelSelect.dispatchEvent(new Event('change'));
+                setTimeout(() => {
+                  document.getElementById('sequenceSelect').value = data.sequence || '';
+                  sequenceSelect.dispatchEvent(new Event('change'));
+                  setTimeout(() => {
+                    document.getElementById('sectionSelect').value = data.section || '';
+                    sectionSelect.dispatchEvent(new Event('change'));
+                    setTimeout(() => {
+                      document.getElementById('sessionSelect').value = data.session || '';
+                      sessionSelect.dispatchEvent(new Event('change'));
+                    }, 50);
+                  }, 50);
+                }, 50);
+            }
+        } catch (error) { console.error("Error loading plan:", error); }
+        finally { 
+            sessionStorage.removeItem('planToLoadId'); 
+            syncAllPrintViews(); // Sync after loading data
+        }
+    }
+
+    // --- Curriculum Data ---
+    const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] } }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
+    
+    const [levelSelect, sequenceSelect, sectionSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sectionSelect", "sessionSelect"].map(id => document.getElementById(id));
+    levelSelect.addEventListener("change", () => {
+        sequenceSelect.innerHTML = "<option value=''>-- Select --</option>"; sectionSelect.innerHTML = "<option value=''>-- Select --</option>"; sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
+        if (curriculum[levelSelect.value]) {
+            Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+            sequenceSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
+        }
+    });
+    sequenceSelect.addEventListener("change", () => {
+        sectionSelect.innerHTML = "<option value=''>-- Select --</option>"; sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
+        if (sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value]) {
+            Object.keys(curriculum[levelSelect.value][sequenceSelect.value]).forEach(sec => sectionSelect.add(new Option(sec, sec)));
+            if (sequenceSelect.value === "Remediation & Standardisation") {
+                sectionSelect.add(new Option("Remediation", "Remediation"));
+                sectionSelect.add(new Option("Standardisation", "Standardisation"));
+            }
+        }
+    });
+    sectionSelect.addEventListener("change", () => {
+        sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
+        if (sectionSelect.value && sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value] && curriculum[levelSelect.value][sequenceSelect.value][sectionSelect.value]) {
+            curriculum[levelSelect.value][sequenceSelect.value][sectionSelect.value].forEach(sess => sessionSelect.add(new Option(sess, sess)));
+        }
+    });
+
+    const targetCompetenceSelect = document.getElementById('targetCompetenceSelect');
+    const targetCompetenceText = document.getElementById('targetCompetenceText');
+    const crossCurricularSelect = document.getElementById('crossCurricularSelect');
+    const crossCurricularText = document.getElementById('crossCurricularText');
+
+    targetCompetenceSelect.addEventListener('change', () => {
+        targetCompetenceText.value = targetCompetenceSelect.value;
+        autoResize(targetCompetenceText);
+    });
+
+    crossCurricularSelect.addEventListener('change', () => {
+        crossCurricularText.value = crossCurricularSelect.value.replace(/&#10;/g, '\n');
+        autoResize(crossCurricularText);
+    });
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    function autoResizeAllTextareas() {
+        document.querySelectorAll('textarea').forEach(autoResize);
+    }
+
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', () => autoResize(textarea));
+    });
+
+    // --- Rich Text Editor ---
+    document.querySelectorAll('.btn-square').forEach(button => {
+        button.addEventListener('click', () => {
+            const command = button.getAttribute('data-command');
+            if (command === 'createLink') {
+                const url = prompt('Enter the link URL:');
+                if (url) document.execCommand(command, false, url);
+            } else {
+                document.execCommand(command, false, null);
+            }
+        });
+    });
+    document.getElementById('fontSize').addEventListener('change', function() { document.execCommand('fontSize', false, this.value); });
+    document.getElementById('fontColor').addEventListener('change', function() { document.execCommand('foreColor', false, this.value); });
+
+    // --- Image Upload ---
+    const imageUpload = document.getElementById('imageUpload');
+    const insertImageBtn = document.getElementById('insertImageBtn');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const confirmImage = document.getElementById('confirmImage');
+    const cancelImage = document.getElementById('cancelImage');
+
+    insertImageBtn.addEventListener('click', () => imageUpload.click());
+    imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                previewImg.src = event.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    confirmImage.addEventListener('click', () => {
+        if (previewImg.src) {
+            document.execCommand('insertImage', false, previewImg.src);
+            imagePreview.style.display = 'none';
+            imageUpload.value = '';
+        }
+    });
+    cancelImage.addEventListener('click', () => {
+        imagePreview.style.display = 'none';
+        imageUpload.value = '';
+    });
+
+    // --- Theme Selection ---
+    function changeTheme(theme) {
+        const themeClasses = [
+            'default-theme', 'theme-blue', 'theme-green', 'theme-yellow', 'theme-pink', 
+            'theme-purple', 'theme-gray', 'theme-red', 'theme-orange', 'theme-teal', 
+            'theme-indigo', 'theme-cyan', 'theme-amber', 'theme-ocean-mist', 'theme-sunset-glow',
+            'theme-royal-amethyst', 'theme-forest-haze', 'theme-crimson-night', 'theme-golden-sands',
+            'theme-graphite-sky', 'theme-espresso-cream', 'theme-midnight-sapphire', 'theme-emerald-isle'
+        ];
+        document.body.classList.remove(...themeClasses);
+        document.body.classList.add(theme);
+        
+        const themeColors = {
+            'default-theme': '#2c3e99', 'theme-blue': '#2c3e99', 'theme-green': '#2d7a33',
+            'theme-yellow': '#b39700', 'theme-pink': '#cc3366', 'theme-purple': '#5e2d91',
+            'theme-gray': '#444', 'theme-red': '#c0392b', 'theme-orange': '#d35400',
+            'theme-teal': '#16a085', 'theme-indigo': '#1a237e', 'theme-cyan': '#00acc1',
+            'theme-amber': '#ff8f00', 'theme-ocean-mist': '#00796b', 'theme-sunset-glow': '#e65100',
+            'theme-royal-amethyst': '#6a1b9a', 'theme-forest-haze': '#387002', 'theme-crimson-night': '#b71c1c',
+            'theme-golden-sands': '#ffab00', 'theme-graphite-sky': '#37474f', 'theme-espresso-cream': '#4e342e',
+            'theme-midnight-sapphire': '#0d47a1', 'theme-emerald-isle': '#2e7d32'
+        };
+        document.documentElement.style.setProperty('--accent-color', themeColors[theme] || '#2c3e99');
+    }
+
+    // --- Download PDF ---
+    function downloadPage() { window.print(); }
+
+    themeSelect.addEventListener('change', () => changeTheme(themeSelect.value));
+    downloadBtn.addEventListener('click', downloadPage);
+
+    // --- Sync Content to Print-Only Elements ---
+    function syncAllPrintViews() {
+        // Sync all simple inputs and textareas
+        document.querySelectorAll('input[type="text"], input[type="number"]').forEach(el => {
+            const printEl = el.nextElementSibling;
+            if (printEl && printEl.classList.contains('print-only-text')) {
+                printEl.textContent = el.value;
+            }
+        });
+
+        document.querySelectorAll('textarea').forEach(el => {
+            const printEl = el.nextElementSibling;
+            if (printEl && printEl.classList.contains('print-only-text')) {
+                printEl.innerHTML = el.value.replace(/\n/g, '<br>');
+            }
+        });
+
+        // Sync all dropdowns
+        document.querySelectorAll('select').forEach(el => {
+            const container = el.closest('.dropdown-text-container, .target-competence-container, .cross-curricular-container');
+            if (container) {
+                const printEl = container.querySelector('.print-only-text, .dropdown-print-text');
+                if(printEl) {
+                    let textValue = (el.selectedIndex > -1) ? el.options[el.selectedIndex].text : '';
+                    if (el.id === 'crossCurricularSelect') {
+                        textValue = el.value.replace(/&#10;/g, '\n');
+                    } else if (el.id === 'targetCompetenceSelect') {
+                        textValue = el.value;
+                    }
+                    printEl.textContent = textValue;
+                }
+            }
+        });
+        
+        // Sync checkboxes
+        const materialsContainer = document.getElementById('teachingMaterials');
+        const materialsPrintEl = materialsContainer.nextElementSibling;
+        if (materialsPrintEl && materialsPrintEl.classList.contains('print-only-text')) {
+            const checked = Array.from(materialsContainer.querySelectorAll('input:checked')).map(cb => cb.value);
+            materialsPrintEl.textContent = checked.join(', ');
+        }
+    }
+
+    // Set up listeners to sync on any user interaction
+    document.querySelector('.lesson-plan-container').addEventListener('input', syncAllPrintViews);
+    document.querySelector('.lesson-plan-container').addEventListener('change', syncAllPrintViews);
+
+    // Initial sync when the page loads
+    document.addEventListener('DOMContentLoaded', syncAllPrintViews);
+
+</script>
+</body>
+</html>
