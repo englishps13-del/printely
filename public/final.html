@@ -71,15 +71,23 @@
         gap: 15px;
         margin-bottom: 15px;
     }
+    /* Specific override for the compact top grid to use 12 columns */
+    .content-grid.compact-grid {
+        grid-template-columns: repeat(12, 1fr);
+    }
     .grid-col-span-1 { grid-column: span 1; }
     .grid-col-span-2 { grid-column: span 2; }
     .grid-col-span-3 { grid-column: span 3; }
     .grid-col-span-4 { grid-column: span 4; }
+    .grid-col-span-5 { grid-column: span 5; } /* New */
+    .grid-col-span-12 { grid-column: span 12; } /* New */
     .content-grid .box { margin-bottom: 0; }
     
     /* Compact grid for top section */
     .compact-grid .box {
-        padding: 6px 12px 4px 12px; /* Even more reduced padding */
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
     }
     .compact-grid .box-label {
         font-size: 11px; /* Smaller label */
@@ -183,7 +191,7 @@
         outline: none; 
         font-size: 13px; 
         line-height: 1.6; 
-        min-height: 120px; 
+        min-height: 250px; /* Increased from 120px for more lines */
         cursor: text; 
         resize: vertical; 
         padding: 5px; 
@@ -271,7 +279,7 @@
     }
 
     /* ---------- THEMES ---------- */
-    .box, th, td { transition: border-color 0.3s; }
+    .box, th, td { transition: border-color: 0.3s; }
     th { transition: background-color 0.3s, color 0.3s; }
     
     body.default-theme .box, body.default-theme th, body.default-theme td { border-color: #000; }
@@ -355,6 +363,10 @@
         .no-print, .ribbon, .custom-select-print-view { 
             display: none !important; 
         }
+        /* Hide dropdowns in the header for print */
+        .dropdown-text-container select {
+            display: none !important;
+        }
         select.print-hidden { 
             display: none !important; 
         }
@@ -373,7 +385,7 @@
         
         /* More space for install resources in print */
         #installResourcesProcedure {
-            min-height: 200px !important; /* Increased height */
+            min-height: 350px !important; /* Increased height for more lines */
         }
         
         /* Smaller compact grid in print */
@@ -510,9 +522,9 @@
     .target-competence-container, .cross-curricular-container {
         position: relative;
     }
-    /* Add some space between select and textarea */
+    /* Removed margin-bottom from select to make it fit perfectly */
     .target-competence-container select, .cross-curricular-container select {
-        margin-bottom: 8px;
+        /* margin-bottom: 8px; */
     }
 
     
@@ -581,11 +593,14 @@
   </div>
 </div>
 
-
+        <!-- This grid has been restructured based on your request -->
         <div class="content-grid compact-grid">
-            <div class="box grid-col-span-2"><div class="box-label">PRIMARY SCHOOL</div><input type="text" id="schoolName" placeholder="Enter school name" class="focusable"></div>
-            <div class="box grid-col-span-2"><div class="box-label">TEACHER</div><input type="text" id="teacherName" placeholder="Enter teacher name" class="focusable"></div>
-            
+            <!-- Row 1: Primary, Teacher, Learners -->
+            <div class="box grid-col-span-5"><div class="box-label">PRIMARY SCHOOL</div><input type="text" id="schoolName" placeholder="Enter school name" class="focusable"></div>
+            <div class="box grid-col-span-5"><div class="box-label">TEACHER</div><input type="text" id="teacherName" placeholder="Enter teacher name" class="focusable"></div>
+            <div class="box grid-col-span-2"><div class="box-label"># OF LEARNERS</div><input type="number" id="learnerCount" placeholder="0" class="focusable"></div>
+
+            <!-- Row 2: Level, Sequence, Section, Session -->
             <div class="box grid-col-span-2 dropdown-text-container">
                 <div class="box-label">LEVEL</div>
                 <select id="levelSelect" class="dropdown-select">
@@ -596,23 +611,21 @@
                 </select>
                 <span class="print-only-text dropdown-print-text"></span>
             </div>
-            <div class="box grid-col-span-2"><div class="box-label"># OF LEARNERS</div><input type="number" id="learnerCount" placeholder="0" class="focusable"></div>
-
-            <div class="box grid-col-span-2 dropdown-text-container">
+            <div class="box grid-col-span-4 dropdown-text-container">
                 <div class="box-label">SEQUENCE</div>
                 <select id="sequenceSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
                 </select>
                 <span class="print-only-text dropdown-print-text"></span>
             </div>
-            <div class="box grid-col-span-1 dropdown-text-container">
+            <div class="box grid-col-span-3 dropdown-text-container">
                 <div class="box-label">SECTION</div>
                 <select id="sectionSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
                 </select>
                 <span class="print-only-text dropdown-print-text"></span>
             </div>
-            <div class="box grid-col-span-1 dropdown-text-container">
+            <div class="box grid-col-span-3 dropdown-text-container">
                 <div class="box-label">SESSION</div>
                 <select id="sessionSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
@@ -620,11 +633,13 @@
                 <span class="print-only-text dropdown-print-text"></span>
             </div>
             
-            <div class="box grid-col-span-4"><div class="box-label">SESSION OBJECTIVE(S)</div><input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="focusable"></div>
+            <!-- Row 3: Session Objective -->
+            <div class="box grid-col-span-12"><div class="box-label">SESSION OBJECTIVE(S)</div><input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="focusable"></div>
         </div>
 
+
         <div class="content-grid">
-            <div class="box grid-col-span-3 target-competence-container">
+            <div class="box grid-col-span-3 target-competence-container"> <!-- 75% width -->
                 <div class="box-label">TARGET COMPETENCE</div>
                 <select id="targetCompetenceSelect">
                     <option value="" selected disabled>-- Select an option --</option>
@@ -641,16 +656,18 @@
                 <textarea id="targetCompetenceText" placeholder="Selected competence will appear here..." class="focusable" rows="1"></textarea>
                 <span class="print-only-text"></span>
             </div>
-            <div class="box grid-col-span-1">
+            <div class="box grid-col-span-1"> <!-- 25% width -->
                 <div class="box-label">TEACHING MATERIALS</div>
                 <div class="checkbox-inline" id="teachingMaterials">
                     <label class="custom-checkbox"><input type="checkbox" value="Textbook"><span></span> Textbook</label>
                     <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
                     <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
                     <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
+					<label class="custom-checkbox"><input type="checkbox" value="Slate"><span></span> Slate</label>
+
                 </div>
             </div>
-            <div class="box grid-col-span-4 cross-curricular-container">
+            <div class="box grid-col-span-4 cross-curricular-container"> <!-- Full width -->
                 <div class="box-label">CROSS-CURRICULAR COMPETENCES</div>
                 <select id="crossCurricularSelect">
                     <option value="" selected disabled>-- Select an option --</option>
@@ -708,9 +725,9 @@
             </div>
             
             <div class="reflection-row">
-                <div class="what-worked"><textarea id="whatWorked" placeholder="..." class="focusable"></textarea></div>
-                <div class="what-hindered"><textarea id="whatHindered" placeholder="..." class="focusable"></textarea></div>
-                <div class="action-points"><textarea id="actionPoints" placeholder="..." class="focusable"></textarea></div>
+                <div class="what-worked"><textarea id="whatWorked" rows="1" placeholder="..." class="focusable"></textarea></div>
+                <div class="what-hindered"><textarea id="whatHindered" rows="1" placeholder="..." class="focusable"></textarea></div>
+                <div class="action-points"><textarea id="actionPoints" rows="1" placeholder="..." class="focusable"></textarea></div>
             </div>
         </div>
 
@@ -1093,3 +1110,4 @@ window.downloadPage = () => {
 </script>
 </body>
 </html>
+

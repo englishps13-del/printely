@@ -444,6 +444,16 @@
     .procedure-row:last-child {
         border-bottom: none !important;
     }
+    .objective-box-content {
+        padding: 2px 4px !important;
+    }
+    .objective-box-label {
+        font-size: 8pt !important;
+        font-weight: bold;
+    }
+    .objective-box .print-only-text {
+        flex-grow: 1;
+    }
 }
  
     .print-only-text { display: none; }
@@ -550,6 +560,24 @@
         line-height: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         font-family: inherit; font-size: 12px;
     }
+
+    /* Styles for the new compact objective box */
+    .objective-box.table1-container {
+        margin-bottom: 0 !important;
+    }
+    .objective-box-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 8px !important; /* More compact padding */
+    }
+    .objective-box-label {
+        font-weight: 600;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0; /* Prevents the label from shrinking */
+    }
     
     /* Theme styles for new table containers */
     body.default-theme .table1-container, body.default-theme .table2-container { border-color: #f3f3f3; }
@@ -600,7 +628,15 @@
     body.theme-midnight-sapphire .table1-header, body.theme-midnight-sapphire .table2-header { background-color: #bbdefb; color: #0d47a1; border-color: #bbdefb; }
     body.theme-emerald-isle .table1-container, body.theme-emerald-isle .table2-container { border-color: #a5d6a7; }
     body.theme-emerald-isle .table1-header, body.theme-emerald-isle .table2-header { background-color: #a5d6a7; color: #2e7d32; border-color: #a5d6a7; }
-	
+	.editable-area img {
+    width: 100px;           /* Sets a fixed width of 100 pixels */
+    height: 100px;          /* Sets a fixed height of 100 pixels */
+    object-fit: cover;      /* Fills the 100x100 area without distorting the image */
+    float: left;            /* Allows text to wrap around the image's right side */
+    margin-right: 10px;     /* Adds some space between the image and the text */
+    margin-bottom: 5px;     /* Adds a little space below the image */
+    vertical-align: middle; /* Keeps the image aligned with the text */
+}
 </style>
 </head>
 
@@ -664,14 +700,20 @@
                     <input type="text" id="schoolName" placeholder="Enter school name" class="focusable"><span class="print-only-text"></span>
                 </div>
             </div>
-            <div class="table1-container grid-col-span-2">
+            <div class="table1-container grid-col-span-1">
                 <div class="table1-header">TEACHER</div>
                 <div class="table1-content">
                     <input type="text" id="teacherName" placeholder="Enter teacher name" class="focusable"><span class="print-only-text"></span>
                 </div>
             </div>
-            
-            <div class="table1-container grid-col-span-2 dropdown-text-container">
+            <div class="table1-container grid-col-span-1">
+                <div class="table1-header"># OF LEARNERS</div>
+                <div class="table1-content">
+                    <input type="number" id="learnerCount" placeholder="0" class="focusable"><span class="print-only-text"></span>
+                </div>
+            </div>
+
+            <div class="table1-container grid-col-span-1 dropdown-text-container">
                 <div class="table1-header">LEVEL</div>
                 <div class="table1-content">
                     <select id="levelSelect" class="dropdown-select">
@@ -683,14 +725,7 @@
                     <span class="print-only-text dropdown-print-text"></span>
                 </div>
             </div>
-            <div class="table1-container grid-col-span-2">
-                <div class="table1-header"># OF LEARNERS</div>
-                <div class="table1-content">
-                    <input type="number" id="learnerCount" placeholder="0" class="focusable"><span class="print-only-text"></span>
-                </div>
-            </div>
-
-            <div class="table1-container grid-col-span-2 dropdown-text-container">
+            <div class="table1-container grid-col-span-1 dropdown-text-container">
                 <div class="table1-header">SEQUENCE</div>
                 <div class="table1-content">
                     <select id="sequenceSelect" class="dropdown-select">
@@ -718,10 +753,11 @@
                 </div>
             </div>
             
-            <div class="table2-container grid-col-span-4">
-                <div class="table2-header">SESSION OBJECTIVE(S)</div>
-                <div class="table2-content">
-                    <input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="one-line-input focusable"><span class="print-only-text"></span>
+            <div class="table1-container grid-col-span-4 objective-box">
+                <div class="table1-content objective-box-content">
+                    <label for="sessionObjective" class="objective-box-label">SESSION OBJECTIVE(S):</label>
+                    <input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="focusable">
+                    <span class="print-only-text"></span>
                 </div>
             </div>
         </div>
@@ -754,6 +790,8 @@
                         <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
                         <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
                         <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
+						<label class="custom-checkbox"><input type="checkbox" value="Slate"><span></span> Slate</label>
+
                     </div>
                     <span class="print-only-text"></span>
                 </div>
