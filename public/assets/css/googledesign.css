@@ -1,0 +1,748 @@
+:root {
+  --paper-color: #ffffff;
+  --background-color: #ffffff;
+  --primary-text: #2c3e50;
+  --secondary-text: #7f8c8d;
+  --header-color: #8e44ad;
+  --line-color: #dcdcdc;
+  --box-bg: #f9f9f9;
+  --box-border: #e0e0e0;
+  --title-font: 'Rubik Doodle Shadow', sans-serif;
+  --body-font: 'Quicksand', sans-serif;
+}
+
+/* Base styles with Doodle theme as default */
+:root {
+    --paper-color: #ffffff;
+    --background-color: #ffffff;
+    --primary-text: #2c3e50;
+    --secondary-text: #7f8c8d;
+    --header-color: #8e44ad;
+    --line-color: #dcdcdc;
+    --box-bg-new: #f9f9f9;
+    --new-box-border: #e0e0e0;
+}
+
+/* Theme-specific variables */
+.theme-minimalist {
+    --primary-text: #334e68;
+    --secondary-text: #6d8093;
+    --header-color: #5585b5;
+    --line-color: #e2e8f0;
+    --box-bg-new: #f7f9fc;
+    --new-box-border: #cdd9e8;
+    --title-font: 'Rubik Doodle Shadow', sans-serif;
+    --body-font: 'Quicksand', sans-serif;
+}
+
+.theme-vibrant {
+    --primary-text: #2c3e50;
+    --secondary-text: #7f8c8d;
+    --header-color: #e74c3c;
+    --line-color: #f39c12;
+    --box-bg-new: #fdf3f0;
+    --new-box-border: #e74c3c;
+    --title-font: 'Quicksand', sans-serif;
+    --body-font: 'Quicksand', sans-serif;
+}
+
+/* 10 New Themes */
+.theme-autumn {
+    --primary-text: #5D4037;
+    --secondary-text: #8D6E63;
+    --header-color: #E65100;
+    --line-color: #A5D6A7;
+    --box-bg-new: #FFF3E0;
+    --new-box-border: #FFAB91;
+}
+.theme-spring {
+    --primary-text: #6A1B9A;
+    --secondary-text: #9575CD;
+    --header-color: #C8E6C9;
+    --line-color: #B2EBF2;
+    --box-bg-new: #F1F8E9;
+    --new-box-border: #B9F6CA;
+}
+.theme-fire {
+    --primary-text: #BF360C;
+    --secondary-text: #FFAB91;
+    --header-color: #D32F2F;
+    --line-color: #FFCDD2;
+    --box-bg-new: #FFCDD2;
+    --new-box-border: #FF5252;
+}
+.theme-ice {
+    --primary-text: #283593;
+    --secondary-text: #5C6BC0;
+    --header-color: #81D4FA;
+    --line-color: #B3E5FC;
+    --box-bg-new: #E1F5FE;
+    --new-box-border: #4FC3F7;
+}
+.theme-grapevine {
+    --primary-text: #4A148C;
+    --secondary-text: #7B1FA2;
+    --header-color: #BA68C8;
+    --line-color: #D1C4E9;
+    --box-bg-new: #F3E5F5;
+    --new-box-border: #E1BEE7;
+}
+.theme-skyline {
+    --primary-text: #263238;
+    --secondary-text: #546E7A;
+    --header-color: #78909C;
+    --line-color: #9E9E9E;
+    --box-bg-new: #ECEFF1;
+    --new-box-border: #B0BEC5;
+}
+.theme-beach {
+    --primary-text: #795548;
+    --secondary-text: #BCAAA4;
+    --header-color: #FFB74D;
+    --line-color: #B3E5FC;
+    --box-bg-new: #FFFDE7;
+    --new-box-border: #FFE0B2;
+}
+.theme-cityscape {
+    --primary-text: #455A64;
+    --secondary-text: #9E9E9E;
+    --header-color: #607D8B;
+    --line-color: #CFD8DC;
+    --box-bg-new: #F5F5F5;
+    --new-box-border: #BDBDBD;
+}
+.theme-lavender {
+    --primary-text: #6A1B9A;
+    --secondary-text: #7B1FA2;
+    --header-color: #D1C4E9;
+    --line-color: #E1BEE7;
+    --box-bg-new: #F3E5F5;
+    --new-box-border: #E1BEE7;
+}
+.theme-mint {
+    --primary-text: #004D40;
+    --secondary-text: #26A69A;
+    --header-color: #4DB6AC;
+    --line-color: #B2DFDB;
+    --box-bg-new: #E0F2F1;
+    --new-box-border: #B9F6CA;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--background-color);
+  margin: 0;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.lesson-plan-container {
+  width: 8.5in;
+  min-height: 11in;
+  background: var(--paper-color);
+  border: 1px solid var(--line-color);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-family: var(--title-font);
+  font-size: 3rem;
+  color: var(--header-color);
+  margin: 0;
+  line-height: 1;
+}
+
+.meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* spacing between rows */
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+}
+
+.meta-item label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--primary-text);
+  margin-right: 10px;
+}
+
+.meta-item input {
+  flex-grow: 1;
+  border: none;
+  border-bottom: 2px solid var(--header-color);
+  font-family: var(--body-font);
+  font-size: 1rem;
+  padding: 4px 0;
+  background: transparent;
+  font-weight: 500;
+  color: var(--primary-text);
+  outline: none;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+  padding: 25px 20px 20px;
+  position: relative;
+  background: var(--box-bg);
+}
+
+.section-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper-color);
+  padding: 5px 15px;
+  border: 1px solid var(--line-color);
+  border-radius: 5px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--header-color);
+  letter-spacing: 0.5px;
+}
+
+textarea, select, input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: var(--body-font);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background: transparent;
+  color: var(--primary-text);
+  padding: 5px;
+  min-height: 40px;
+}
+
+.two-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.three-column-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--secondary-text);
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px dashed var(--line-color);
+}
+
+.controls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.theme-switcher select, .action-button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border: 1px solid var(--line-color);
+  border-radius: 5px;
+  background-color: var(--paper-color);
+  color: var(--primary-text);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.action-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    color: #9e9e9e;
+}
+
+.action-button:hover:not(:disabled) {
+  background-color: var(--header-color);
+  color: var(--paper-color);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.new-box {
+  border: 1px solid var(--new-box-border);
+  border-radius: 8px;
+  background-color: var(--box-bg-new);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.new-box .new-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--header-color); /* stays theme-aware */
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--header-color);
+  padding-bottom: 4px;
+}
+
+.checkbox-inline {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--primary-text);
+}
+
+.checkbox-inline label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.new-box .new-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--header-color);   /* same purple as other titles */
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--header-color);
+  padding-bottom: 4px;
+}
+.checkbox-inline {
+  display: flex;
+  justify-content: center;   /* center them in the box */
+  gap: 10px;                 /* spacing between checkboxes */
+  font-size: 0.8rem;          /* smaller text */
+  flex-wrap: nowrap;          /* force single line */
+}
+
+.checkbox-inline label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;       /* prevent wrapping to new line */
+}
+
+.checkbox-inline input {
+  transform: scale(0.9);     /* slightly smaller checkboxes */
+}
+
+/* Smaller headers for compact sections */
+.section-title.small-title {
+  font-size: 0.75rem;   /* smaller font */
+  padding: 2px 10px;
+  min-width: 150px;     /* force them a bit wider */
+  text-align: center;
+}
+.lesson-details-grid {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: auto auto auto;
+  gap: 10px 15px;
+}
+.lesson-details-grid select {
+  width: 100%;
+  padding: 6px;
+  border: none;              /* remove border */
+  border-bottom: 2px solid var(--header-color); /* optional underline only */
+  border-radius: 0;          /* no rounded corners */
+  background: transparent;   /* match paper background */
+  font-size: 0.9rem;
+  outline: none;             /* remove focus border */
+}
+
+/* Make second row and third row span full width */
+.lesson-details-grid .full-width {
+  grid-column: 1 / span 2;
+}
+.meta-info {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center; /* make labels + inputs align vertically */
+}
+
+.meta-item {
+  display: flex;
+  align-items: center; /* keeps label and underline on same line */
+  gap: 5px;
+}
+
+.meta-item label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--primary-text);
+  white-space: nowrap; /* prevents breaking into 2 lines */
+}
+
+.meta-item input {
+  flex-grow: 1;
+  border: none;
+  border-bottom: 1px solid var(--header-color);
+  font-size: 0.95rem;
+  padding: 0px 0;
+  background: transparent;
+  outline: none;
+  font-weight: 500;
+  color: var(--primary-text);
+}
+
+/* Default / Doodle */
+:root {
+  --checkbox1: #8e44ad;
+  --checkbox2: #2980b9;
+  --checkbox3: #27ae60;
+  --checkbox4: #d35400;
+}
+
+/* Minimalist */
+.theme-minimalist {
+  --checkbox1: #5585b5;
+  --checkbox2: #334e68;
+  --checkbox3: #6d8093;
+  --checkbox4: #99aabb;
+}
+
+/* Vibrant */
+.theme-vibrant {
+  --checkbox1: #e74c3c; /* red */
+  --checkbox2: #f39c12; /* orange */
+  --checkbox3: #27ae60; /* green */
+  --checkbox4: #2980b9; /* blue */
+}
+
+/* Autumn */
+.theme-autumn {
+  --checkbox1: #E65100; /* deep orange */
+  --checkbox2: #FF7043; /* lighter orange */
+  --checkbox3: #5D4037; /* brown */
+  --checkbox4: #8D6E63; /* light brown */
+}
+
+/* Spring */
+.theme-spring {
+  --checkbox1: #6A1B9A; /* purple */
+  --checkbox2: #9575CD; /* lavender */
+  --checkbox3: #43A047; /* green */
+  --checkbox4: #81C784; /* light green */
+}
+
+/* Fire */
+.theme-fire {
+  --checkbox1: #BF360C; /* dark red */
+  --checkbox2: #D32F2F; /* strong red */
+  --checkbox3: #FF5722; /* orange red */
+  --checkbox4: #FFAB91; /* peach */
+}
+
+/* Ice */
+.theme-ice {
+  --checkbox1: #81D4FA;
+  --checkbox2: #4FC3F7;
+  --checkbox3: #0288D1;
+  --checkbox4: #01579B;
+}
+
+/* Grapevine */
+.theme-grapevine {
+  --checkbox1: #4A148C; /* dark purple */
+  --checkbox2: #7B1FA2; /* purple */
+  --checkbox3: #BA68C8; /* lighter purple */
+  --checkbox4: #E1BEE7; /* lavender */
+}
+
+/* Skyline */
+.theme-skyline {
+  --checkbox1: #263238; /* dark gray */
+  --checkbox2: #455A64; /* medium gray-blue */
+  --checkbox3: #607D8B; /* blue gray */
+  --checkbox4: #90A4AE; /* light gray */
+}
+
+/* Beach */
+.theme-beach {
+  --checkbox1: #FFB74D; /* orange sand */
+  --checkbox2: #4FC3F7; /* sea blue */
+  --checkbox3: #26A69A; /* aqua */
+  --checkbox4: #795548; /* brown driftwood */
+}
+
+/* Cityscape */
+.theme-cityscape {
+  --checkbox1: #455A64; /* steel gray */
+  --checkbox2: #607D8B; /* gray-blue */
+  --checkbox3: #9E9E9E; /* neutral */
+  --checkbox4: #BDBDBD; /* light concrete */
+}
+
+/* Lavender */
+.theme-lavender {
+  --checkbox1: #6A1B9A; /* deep purple */
+  --checkbox2: #8E24AA; /* medium purple */
+  --checkbox3: #BA68C8; /* soft purple */
+  --checkbox4: #E1BEE7; /* pastel lavender */
+}
+
+/* Mint */
+.theme-mint {
+  --checkbox1: #004D40; /* deep teal */
+  --checkbox2: #26A69A; /* teal */
+  --checkbox3: #4DB6AC; /* mint green */
+  --checkbox4: #B9F6CA; /* light mint */
+}
+
+/* Apply per-checkbox coloring */
+.checkbox-inline label:nth-child(1) input { accent-color: var(--checkbox1); }
+.checkbox-inline label:nth-child(2) input { accent-color: var(--checkbox2); }
+.checkbox-inline label:nth-child(3) input { accent-color: var(--checkbox3); }
+.checkbox-inline label:nth-child(4) input { accent-color: var(--checkbox4); }
+.checkbox-inline label:nth-child(5) input { accent-color: var(--checkbox2); }
+
+/* Make the paper exactly A4 with no browser margins */
+/* A4 page with a tiny margin so borders always show */
+@page { 
+  size: A4; 
+  margin: 0.1mm;   /* minimal margin so page border prints */
+}
+
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    background: transparent !important;
+  }
+
+  .controls, .no-print, .ribbon { display: none !important; }
+
+  .lesson-plan-container {
+    width: 210mm !important;
+    height: 296.5mm !important; 
+    margin: 0 auto !important;
+    padding: 8mm !important;   /* reduce padding slightly */
+    border: 2px solid var(--line-color) !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+
+    transform: scale(1);    /* shrink to fit */
+    transform-origin: top left;
+  }
+
+  /* prevent sections from forcing new page */
+  .section {
+    page-break-inside: avoid !important;
+  }
+
+  .section.install-resources,
+  .section:nth-of-type(3) {
+    min-height: 100px !important;  /* smaller for print */
+  }
+
+  /* Typography and spacing */
+  .header h1 { font-size: 2.4rem !important; }
+  .meta-info { gap: 10px !important; }
+  .meta-item label { font-size: 0.8rem !important; }
+  .meta-item input { font-size: 0.9rem !important; }
+
+  .section { margin-bottom: 10px !important; padding: 15px 10px !important; }
+  .section-title { font-size: 0.8rem !important; padding: 3px 10px !important; }
+  .section-title.small-title { font-size: 0.7rem !important; min-width: 120px !important; }
+  .two-column-layout, .three-column-layout { gap: 10px !important; }
+
+  /* Install resources box bigger */
+  .section.install-resources, .section:nth-of-type(3) { min-height: 150px !important; }
+
+  textarea, select, input, .editable-area { font-size: 0.8rem !important; min-height: 20px !important; }
+
+  /* Dropdowns: underline + hide arrow */
+  .lesson-details-grid select {
+    border: none !important;
+    border-bottom: 1px solid var(--header-color) !important;
+    background: transparent !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    box-shadow: none !important;
+    padding: 2px 0 !important;
+  }
+  select::-ms-expand { display: none !important; }
+
+  /* Ensure theme colors print */
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Resizable textarea */
+.resizable-textarea {
+  resize: vertical;
+  overflow: auto;
+  min-height: 100px;
+}
+
+/* One-line compressed textareas for Warmer & Assessment */
+.small-textarea {
+  min-height: 15px !important;
+  height: 15px !important;
+  resize: none !important;
+  overflow: hidden !important;
+  line-height: 1.2;
+  font-size: 0.65rem;
+  padding: 2px 4px;
+}
+/* Wrapper: places General Info and Lesson Details side by side */
+.top-split {
+  display: grid;
+  grid-template-columns: 44% 54%; /* 35% General Info, 65% Lesson Details */
+  gap: 10px;
+}
+
+/* Lesson details layout inside its box */
+.lesson-details-grid {
+  display: grid;
+  grid-template-columns: 20% 75%;
+  gap: 10px 15px;
+}
+
+.lesson-details-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+/* --- RIBBON & EDITABLE AREA STYLES --- */
+.ribbon {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+    background: var(--box-bg-new);
+    border: 1px solid var(--new-box-border);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 24px;
+}
+
+.group {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px;
+    border: 1px solid var(--line-color);
+    border-radius: 6px;
+    background: var(--paper-color);
+}
+
+.group .label { font-size: 12px; color: var(--secondary-text); margin-left: 4px; white-space: nowrap; }
+
+.ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+    appearance: none; border: 1px solid var(--line-color); background: var(--paper-color);
+    padding: 7px 10px; border-radius: 5px; font-size: 14px;
+    line-height: 1; cursor: pointer; color: var(--primary-text);
+    font-family: var(--body-font);
+}
+
+.ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+
+.ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: var(--box-bg-new); }
+.ribbon .btn.active, .ribbon .btn-square.active { 
+    background: var(--header-color); color: var(--paper-color); border-color: var(--header-color); 
+}
+.ribbon .sep { width: 1px; background: var(--line-color); margin: 0 6px; align-self: stretch; }
+.ribbon .grow { flex: 1 1 auto; }
+.ribbon .pill {
+    font-size: 12px; padding: 4px 8px; border-radius: 999px; 
+    border: 1px solid var(--line-color); 
+    background: var(--paper-color); color: var(--secondary-text);
+}
+
+.editable-area {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: var(--body-font);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: transparent;
+    color: var(--primary-text);
+    padding: 5px;
+    min-height: 40px;
+    cursor: text;
+}
+
+.editable-area:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--header-color);
+    border-radius: 4px;
+}
+
+.editable-area[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--secondary-text);
+    pointer-events: none;
+    font-style: italic;
+}
+
+/* --- NEW: Modal & Toast & Loader Styles --- */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
+}
+.modal-content {
+  background-color: var(--paper-color); padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; text-align: center; position: relative; font-family: 'Quicksand', sans-serif;
+  border: 2px solid var(--header-color);
+}
+.modal-close-btn {
+  position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer; color: var(--secondary-text);
+}
+.modal-content h2 { margin-top: 0; margin-bottom: 15px; color: var(--primary-text);}
+.modal-content p { margin-bottom: 20px; color: var(--secondary-text); }
+.modal-content input[type="text"] {
+  box-sizing: border-box; width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid var(--line-color); border-radius: 4px; font-size: 16px; min-height: auto;
+}
+.modal-content button {
+  background-color: var(--header-color); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%;
+}
+.modal-content button:hover { opacity: 0.8; }
+
+.loading-indicator {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: none; justify-content: center; align-items: center; z-index: 2000;
+}
+.loading-spinner {
+  border: 5px solid #f3f3f3; border-top: 5px solid var(--header-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.toast {
+  position: fixed; bottom: 20px; right: 20px; background: var(--primary-text); color: var(--paper-color); padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex; align-items: center; z-index: 1000; transform: translateY(100px); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast i { margin-right: 12px; font-size: 20px; }
+.toast.success { background-color: #27ae60; }
+.toast.error { background-color: #e74c3c; }
+.editable-area img,
+[contenteditable="true"] img {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px;
+}
