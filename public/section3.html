@@ -305,7 +305,7 @@
 
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const username = signupForm.username.value;
+      const name = signupForm.username.value;
       const email = signupForm.email.value;
       const password = signupForm.password.value;
       const confirmPassword = signupForm.confirm_password.value;
@@ -323,7 +323,7 @@
 
         // Save the user data to Firestore, including the new gender field
         await setDoc(doc(db, "users", user.uid), {
-          username: username,
+          username: name,
           email: email,
           gender: gender, // <-- The new field is added here
           createdAt: serverTimestamp()
