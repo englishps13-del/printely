@@ -1,5 +1,5 @@
 /*.html
-  Cache-Control: public, max-age=172800, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/css/*.css
   Cache-Control: public, max-age=172800, must-revalidate
