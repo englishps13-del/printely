@@ -1,3 +1,5 @@
+<script type="module">
+
 	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
@@ -273,3 +275,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+</script>
