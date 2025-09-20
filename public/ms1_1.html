@@ -5,8 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editable Lesson Plan</title>
     <link rel="stylesheet" href="ms1_1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
-<body>
+<body class="default-theme">
+
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+
+    <div id="saveModal" class="modal-overlay no-print">
+        <div class="modal-content">
+            <h3>Save Lesson Plan</h3>
+            <p>Please enter a name for your project to save it.</p>
+            <input type="text" id="projectNameInput" placeholder="E.g., MS1 Habits - Week 1">
+            <div class="modal-buttons">
+                <button id="cancelSaveBtn">Cancel</button>
+                <button id="confirmSaveBtn">Confirm Save</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <table class="header-table">
             <colgroup>
@@ -86,6 +103,33 @@
                 </td>
             </tr>
         </table>
+        
+        <div class="ribbon no-print" id="ribbon">
+            <div class="group" aria-label="Emphasis">
+              <button class="btn-square" data-cmd="bold" title="Bold"><i class="fas fa-bold"></i></button>
+              <button class="btn-square" data-cmd="italic" title="Italic"><i class="fas fa-italic"></i></button>
+              <button class="btn-square" data-cmd="underline" title="Underline"><i class="fas fa-underline"></i></button>
+              <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+            </div>
+            <div class="group" aria-label="Colors">
+              <label class="label" for="foreColor">Text</label>
+              <input type="color" id="foreColor" title="Text color" value="#000000">
+              <span class="sep"></span>
+              <label class="label" for="hiliteColor">Highlight</label>
+              <input type="color" id="hiliteColor" title="Highlight color" value="#FFFF00">
+            </div>
+            <div class="group" aria-label="Paragraph">
+              <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fas fa-align-left"></i></button>
+              <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fas fa-align-center"></i></button>
+              <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fas fa-align-right"></i></button>
+              <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fas fa-list-ul"></i></button>
+              <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fas fa-list-ol"></i></button>
+            </div>
+            <div class="group" aria-label="Actions">
+              <button class="btn" id="insertImageBtn" title="Insert Image"><i class="fas fa-image"></i> Image</button>
+              <button class="btn" data-cmd="removeFormat" title="Clear formatting"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+        </div>
 
         <table class="objectives-table">
             <tr>
@@ -190,17 +234,11 @@
 
         <div class="lesson-loader no-print">
             <h3>?? Lesson Content Actions</h3>
-            <button id="load-content-btn">Load Content</button>
-        </div>
-        
-        <div class="cloud-actions-loader no-print">
-            <h3>?? Cloud Actions</h3>
+            <button id="load-content-btn">Load Pre-made Content</button>
             <div id="auth-status">Checking login status...</div>
-            <button id="save-to-cloud-btn" disabled>Save to Cloud</button>
         </div>
 
-
-         <table class="main-table">
+        <table class="main-table">
             <colgroup>
                 <col style="width:15%">
                 <col style="width:60%">
@@ -222,7 +260,7 @@
                         <div contenteditable="true" placeholder="Write your procedure here..." id="pre-writing-procedure"></div>
                     </td>
                     <td class="interaction-cell">
-                        <div contenteditable="true" id="pre-writing-interaction">T ? L<br>L ? T<br><br>T ? L<br>L ? T</div>
+                        <div contenteditable="true" id="pre-writing-interaction">T &rarr; L<br>L &rarr; T<br><br>T &rarr; L<br>L &rarr; T</div>
                     </td>
                     <td class="time-cell">
                         <div contenteditable="true" id="pre-writing-time">10 min<br><br><br><br>20 min</div>
@@ -235,7 +273,7 @@
                         <div contenteditable="true" placeholder="Write your procedure here..." id="writing-procedure"></div>
                     </td>
                     <td class="interaction-cell">
-                        <div contenteditable="true" id="writing-interaction">T ? L<br>L ? T<br><br><br><br>L ? L</div>
+                        <div contenteditable="true" id="writing-interaction">T &rarr; L<br>L &rarr; T<br><br><br><br>L &rarr; L</div>
                     </td>
                     <td class="time-cell"><div contenteditable="true" id="writing-time">20 min</div></td>
                 </tr>
@@ -246,7 +284,7 @@
                         <div contenteditable="true" placeholder="Write your procedure here..." id="post-writing-procedure"></div>
                     </td>
                     <td class="interaction-cell">
-                        <div contenteditable="true" id="post-writing-interaction">L ? T</div>
+                        <div contenteditable="true" id="post-writing-interaction">L &rarr; T</div>
                     </td>
                     <td class="time-cell"><div contenteditable="true" id="post-writing-time">10 min</div></td>
                 </tr>
@@ -273,7 +311,24 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="bottom-buttons no-print">
+            <button onclick="window.print()">??? Print</button>
+            <button onclick="window.print()">?? Download PDF</button>
+            <button id="saveBtn" disabled>?? Save to Cloud</button>
+            <select id="themeSelect">
+                <option value="default-theme">Default</option>
+                <option value="theme-blue">Blue</option>
+                <option value="theme-green">Green</option>
+                <option value="theme-purple">Purple</option>
+                <option value="theme-gray">Gray</option>
+				<option value="theme-red">Red</option>
+                <option value="theme-pink">Pink</option>
+                <option value="theme-yellow">Yellow</option>
+
+            </select>
+        </div>
     </div>
-	<script src="ms1_1.js" type="module"></script>
+<script src="ms1_1.js" type="module"></script>
 </body>
 </html>

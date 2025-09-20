@@ -1,8 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-// --- Firebase Configuration ---
 const firebaseConfig = {
     apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
     authDomain: "printelydz.firebaseapp.com",
@@ -12,36 +11,20 @@ const firebaseConfig = {
     appId: "1:49201277305:web:df932043e4d6d986cae7a8",
 };
 
-// --- Initialize Firebase ---
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 let currentUser = null;
 
-
-// --- CHECKBOX SCRIPT (NO CHANGES) ---
 function setupPrintableCheckboxes(containerId, printId, formatAsList = true) {
     const checkboxContainer = document.getElementById(containerId);
     const printElement = document.getElementById(printId);
     if (!checkboxContainer || !printElement) return;
-
     const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
-
     function updatePrintableArea() {
-        const selectedLabels = [];
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                const label = cb.closest('label');
-                if (label) selectedLabels.push(label.innerText || label.textContent);
-            }
-        });
-        
+        const selectedLabels = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.closest('label')?.textContent || '');
         if (selectedLabels.length > 0) {
-            if (formatAsList) {
-                printElement.innerHTML = '<ul>' + selectedLabels.map(text => `<li>${text}</li>`).join('') + '</ul>';
-            } else {
-                printElement.innerHTML = selectedLabels.join(', ');
-            }
+            printElement.innerHTML = formatAsList ? `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>` : selectedLabels.join(', ');
         } else {
             printElement.innerHTML = '';
         }
@@ -50,17 +33,11 @@ function setupPrintableCheckboxes(containerId, printId, formatAsList = true) {
     updatePrintableArea();
 }
 
-// --- MAIN SCRIPT ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Setup for all checkbox sections
-    setupPrintableCheckboxes('ccc-multiselect', 'ccc-print', true);
-    setupPrintableCheckboxes('target-multiselect', 'target-print', true);
-    setupPrintableCheckboxes('values-multiselect', 'values-print', false);
-    setupPrintableCheckboxes('domains-multiselect', 'domains-print', false);
-    setupPrintableCheckboxes('materials-multiselect', 'materials-print', false);
+    ['ccc-multiselect', 'target-multiselect'].forEach(id => setupPrintableCheckboxes(id, id.replace('-multiselect', '-print'), true));
+    ['values-multiselect', 'domains-multiselect', 'materials-multiselect'].forEach(id => setupPrintableCheckboxes(id, id.replace('-multiselect', '-print'), false));
 
-    // --- Data for the Lesson Content Loader ---
-    const lessonData = {
+   const lessonData = {
         "Habits and Preferences": {
             "Get Ready": {
                 preWriting: `The teacher greets the learners and welcomes them. The teacher uses a <strong>routine bag</strong> and a <strong>book picture</strong> to introduce the <strong>habit of reading</strong>, saying, "I like reading books" and "I read every day."<br>The teacher uses <strong>flashcards</strong> for basketball and football to introduce the idea of <strong>preference</strong>.<br>The teacher makes a heart shape with their hands over a heart on the football flashcard and says, "I <strong>prefer</strong> playing football."`,
@@ -100,50 +77,147 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Get elements from the HTML for Lesson Loader ---
+    
+    // --- DOM ELEMENT SELECTORS ---
     const sequenceSelector = document.getElementById('main-sequence-selector');
     const sessionSelector = document.getElementById('main-session-selector');
     const loadBtn = document.getElementById('load-content-btn');
-    
-    const preWritingTarget = document.getElementById('pre-writing-procedure');
-    const writingTarget = document.getElementById('writing-procedure');
-    const postWritingTarget = document.getElementById('post-writing-procedure');
+    const saveBtn = document.getElementById('saveBtn');
+    const saveModal = document.getElementById('saveModal');
+    const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+    const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+    const projectNameInput = document.getElementById('projectNameInput');
+    const authStatusDiv = document.getElementById('auth-status');
+    const themeSelect = document.getElementById('themeSelect');
 
-    // --- Populate the first dropdown (Sequences) ---
+    // --- POPULATE DROPDOWNS ---
     sequenceSelector.innerHTML = '<option value="">-- Select a Sequence --</option>'; 
-    for (const sequence in lessonData) {
-        const option = document.createElement('option');
-        option.value = sequence;
-        option.textContent = sequence;
-        sequenceSelector.appendChild(option);
-    }
-    
-    // Default Sessions dropdown
+    Object.keys(lessonData).forEach(sequence => sequenceSelector.add(new Option(sequence, sequence)));
     const defaultSessions = ["Get Ready", "Listen & Interact", "Listen & Consider", "Read & Interpret", "Read & Consider", "Write Together", "Write Alone"];
     sessionSelector.innerHTML = '<option value="">-- Select a Session --</option>';
-    defaultSessions.forEach(sessionName => {
-        const option = document.createElement('option');
-        option.value = sessionName;
-        option.textContent = sessionName;
-        sessionSelector.appendChild(option);
-    });
+    defaultSessions.forEach(sessionName => sessionSelector.add(new Option(sessionName, sessionName)));
 
-    // --- Load the content into the table when the button is clicked ---
+    // --- LOAD PRE-MADE CONTENT ---
     loadBtn.addEventListener('click', () => {
-        const selectedSequence = sequenceSelector.value;
-        const selectedSession = sessionSelector.value;
-
-        if (selectedSequence && selectedSession && lessonData[selectedSequence] && lessonData[selectedSequence][selectedSession]) {
-            const content = lessonData[selectedSequence][selectedSession];
-            preWritingTarget.innerHTML = content.preWriting;
-            writingTarget.innerHTML = content.writing;
-            postWritingTarget.innerHTML = content.postWriting;
+        const seq = sequenceSelector.value;
+        const sess = sessionSelector.value;
+        if (seq && sess && lessonData[seq] && lessonData[seq][sess]) {
+            const content = lessonData[seq][sess];
+            document.getElementById('pre-writing-procedure').innerHTML = content.preWriting;
+            document.getElementById('writing-procedure').innerHTML = content.writing;
+            document.getElementById('post-writing-procedure').innerHTML = content.postWriting;
         } else {
-            alert("Please select both a valid sequence and session first.");
+            alert("Please select a valid sequence and session first.");
         }
     });
 
-    // --- NEW: FUNCTION TO LOAD SAVED PLAN DATA ---
+    // --- RIBBON BAR LOGIC ---
+    let activeEditor = null;
+    document.addEventListener('focusin', e => { if (e.target.isContentEditable) activeEditor = e.target; });
+    const exec = (cmd, val = null) => { if (activeEditor) document.execCommand(cmd, false, val); };
+    document.querySelectorAll('[data-cmd]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); exec(btn.dataset.cmd); }));
+    document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+    document.getElementById('hiliteColor').addEventListener('input', e => exec('backColor', e.target.value));
+    
+    // --- MODIFIED Image Upload Logic ---
+    const imageUpload = document.getElementById('imageUpload');
+    document.getElementById('insertImageBtn').addEventListener('click', () => imageUpload.click());
+    imageUpload.addEventListener('change', e => {
+        if (!e.target.files?.[0]) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            const writingProcedureDiv = document.getElementById('writing-procedure');
+            if (writingProcedureDiv) {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.width = 100;
+                img.height = 100;
+                img.style.float = 'left'; // Allows text to wrap
+                img.style.margin = '0 8px 4px 0'; // Adds space between image and text
+                writingProcedureDiv.appendChild(img);
+            } else {
+                // Fallback to original behavior if target div isn't found
+                exec('insertImage', reader.result);
+            }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+        e.target.value = null; // Reset file input
+    });
+
+    // --- THEME SWITCHER LOGIC ---
+    const changeTheme = theme => {
+        document.body.className = theme;
+        localStorage.setItem("ms1LessonTheme", theme);
+    };
+    themeSelect.addEventListener('change', () => changeTheme(themeSelect.value));
+    const savedTheme = localStorage.getItem("ms1LessonTheme");
+    if (savedTheme) {
+        document.body.className = savedTheme;
+        themeSelect.value = savedTheme;
+    }
+
+    // --- AUTHENTICATION & DATA HANDLING ---
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            currentUser = user;
+            saveBtn.disabled = false;
+            authStatusDiv.innerHTML = `Logged in: <strong>${user.email}</strong>`;
+            loadPlanFromSession(); 
+        } else {
+            currentUser = null;
+            saveBtn.disabled = true;
+            authStatusDiv.innerHTML = `Please <a href="/login.html" style="color: blue;">log in</a> to save your work.`;
+        }
+    });
+
+    // --- SAVE LOGIC ---
+    saveBtn.addEventListener('click', () => { saveModal.style.display = 'flex'; });
+    cancelSaveBtn.addEventListener('click', () => { saveModal.style.display = 'none'; });
+    confirmSaveBtn.addEventListener('click', async () => {
+        if (!currentUser) return alert("You must be logged in to save.");
+        const planName = projectNameInput.value.trim();
+        if (!planName) return alert("Please enter a name for your lesson plan.");
+
+        try {
+            confirmSaveBtn.disabled = true;
+            confirmSaveBtn.textContent = 'Saving...';
+            const getHTML = id => document.getElementById(id).innerHTML;
+            const getText = id => document.getElementById(id).textContent;
+            const getVal = id => document.getElementById(id).value;
+            const getChecked = id => Array.from(document.querySelectorAll(`#${id} input:checked`)).map(cb => cb.closest('label').textContent.trim());
+
+            const lessonPlanData = {
+                planName, plannerType: 'ms1_1',
+                school: getText('school-name'), teacher: getText('teacher-name'), date: getText('lesson-date'),
+                learners: getText('learner-count'), sequence: getVal('main-sequence-selector'), session: getVal('main-session-selector'),
+                classProfile: getHTML('class-profile'), materials: getChecked('materials-multiselect'),
+                ccc: getChecked('ccc-multiselect'), targetCompetencies: getChecked('target-multiselect'),
+                subsidiaryObjectives: getHTML('subsidiary-objectives'), sessionObjectives: getHTML('session-objectives'),
+                values: getChecked('values-multiselect'), domains: getChecked('domains-multiselect'),
+                anticipatedProblems: getHTML('anticipated-problems'), solutions: getHTML('solutions-plan-b'),
+                procedure: {
+                    preWriting: { content: getHTML('pre-writing-procedure'), interaction: getHTML('pre-writing-interaction'), time: getHTML('pre-writing-time') },
+                    writing: { content: getHTML('writing-procedure'), interaction: getHTML('writing-interaction'), time: getHTML('writing-time') },
+                    postWriting: { content: getHTML('post-writing-procedure'), interaction: getHTML('post-writing-interaction'), time: getHTML('post-writing-time') }
+                },
+                reflection: { worked: getHTML('reflection-worked'), hindered: getHTML('reflection-hindered'), points: getHTML('reflection-points') },
+                createdAt: serverTimestamp(), authorId: currentUser.uid
+            };
+
+            await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
+            alert(`Lesson plan "${planName}" saved successfully!`);
+            saveModal.style.display = 'none';
+            projectNameInput.value = '';
+        } catch (error) {
+            console.error("Error saving document: ", error);
+            alert("There was an error saving.");
+        } finally {
+            confirmSaveBtn.disabled = false;
+            confirmSaveBtn.textContent = 'Confirm Save';
+        }
+    });
+
+    // --- LOAD LOGIC ---
     async function loadPlanFromSession() {
         const planId = sessionStorage.getItem('planToLoadId');
         if (!planId || !currentUser) return;
@@ -154,187 +228,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                
-                // --- Helper function to set contenteditable innerHTML ---
-                const setHTML = (id, content) => {
-                    const el = document.getElementById(id);
-                    if (el) el.innerHTML = content || '';
-                };
-                
-                // --- Helper function to set select value ---
-                const setSelect = (id, value) => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = value || '';
-                };
-
-                // --- Helper function to check checkboxes from a list ---
-                const setCheckboxes = (containerId, printId, formatAsList, values) => {
-                    if (values && Array.isArray(values)) {
-                        // Uncheck all first
-                        document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => cb.checked = false);
-                        // Check the ones from the saved data
-                        values.forEach(value => {
-                            document.querySelectorAll(`#${containerId} label`).forEach(label => {
-                                if ((label.innerText || label.textContent).trim() === value) {
-                                    const cb = label.querySelector('input[type="checkbox"]');
-                                    if (cb) cb.checked = true;
-                                }
-                            });
+                const setHTML = (id, content) => { if (document.getElementById(id)) document.getElementById(id).innerHTML = content || ''; };
+                const setVal = (id, value) => { if (document.getElementById(id)) document.getElementById(id).value = value || ''; };
+                const setChecks = (containerId, values) => {
+                    if (values?.length) {
+                        document.querySelectorAll(`#${containerId} input`).forEach(cb => cb.checked = false);
+                        values.forEach(val => {
+                            const label = Array.from(document.querySelectorAll(`#${containerId} label`)).find(l => l.textContent.trim() === val);
+                            if (label) label.querySelector('input').checked = true;
                         });
                     }
-                    // Update the printable view after checking/unchecking
-                    setupPrintableCheckboxes(containerId, printId, formatAsList);
                 };
 
-                // --- Populate All Fields ---
-                setHTML('school-name', data.school);
-                setHTML('teacher-name', data.teacher);
-                setHTML('lesson-date', data.date);
-                setHTML('learner-count', data.learners);
-                setHTML('class-profile', data.classProfile);
-
-                setSelect('main-sequence-selector', data.sequence);
-                setSelect('main-session-selector', data.session);
+                setHTML('school-name', data.school); setHTML('teacher-name', data.teacher); setHTML('lesson-date', data.date);
+                setHTML('learner-count', data.learners); setHTML('class-profile', data.classProfile);
+                setVal('main-sequence-selector', data.sequence); setVal('main-session-selector', data.session);
                 
-                setHTML('subsidiary-objectives', data.subsidiaryObjectives);
-                setHTML('session-objectives', data.sessionObjectives);
-                setHTML('anticipated-problems', data.anticipatedProblems);
-                setHTML('solutions-plan-b', data.solutions);
+                setHTML('subsidiary-objectives', data.subsidiaryObjectives); setHTML('session-objectives', data.sessionObjectives);
+                setHTML('anticipated-problems', data.anticipatedProblems); setHTML('solutions-plan-b', data.solutions);
 
-                setCheckboxes('materials-multiselect', 'materials-print', false, data.materials);
-                setCheckboxes('ccc-multiselect', 'ccc-print', true, data.ccc);
-                setCheckboxes('target-multiselect', 'target-print', true, data.targetCompetencies);
-                setCheckboxes('values-multiselect', 'values-print', false, data.values);
-                setCheckboxes('domains-multiselect', 'domains-print', false, data.domains);
+                setChecks('materials-multiselect', data.materials); setChecks('ccc-multiselect', data.ccc);
+                setChecks('target-multiselect', data.targetCompetencies); setChecks('values-multiselect', data.values);
+                setChecks('domains-multiselect', data.domains);
 
                 if (data.procedure) {
-                    setHTML('pre-writing-procedure', data.procedure.preWriting?.content);
-                    setHTML('pre-writing-interaction', data.procedure.preWriting?.interaction);
-                    setHTML('pre-writing-time', data.procedure.preWriting?.time);
-                    setHTML('writing-procedure', data.procedure.writing?.content);
-                    setHTML('writing-interaction', data.procedure.writing?.interaction);
-                    setHTML('writing-time', data.procedure.writing?.time);
-                    setHTML('post-writing-procedure', data.procedure.postWriting?.content);
-                    setHTML('post-writing-interaction', data.procedure.postWriting?.interaction);
-                    setHTML('post-writing-time', data.procedure.postWriting?.time);
+                    setHTML('pre-writing-procedure', data.procedure.preWriting?.content); setHTML('pre-writing-interaction', data.procedure.preWriting?.interaction); setHTML('pre-writing-time', data.procedure.preWriting?.time);
+                    setHTML('writing-procedure', data.procedure.writing?.content); setHTML('writing-interaction', data.procedure.writing?.interaction); setHTML('writing-time', data.procedure.writing?.time);
+                    setHTML('post-writing-procedure', data.procedure.postWriting?.content); setHTML('post-writing-interaction', data.procedure.postWriting?.interaction); setHTML('post-writing-time', data.procedure.postWriting?.time);
                 }
                 
                 if (data.reflection) {
-                    setHTML('reflection-worked', data.reflection.worked);
-                    setHTML('reflection-hindered', data.reflection.hindered);
-                    setHTML('reflection-points', data.reflection.points);
+                    setHTML('reflection-worked', data.reflection.worked); setHTML('reflection-hindered', data.reflection.hindered); setHTML('reflection-points', data.reflection.points);
                 }
                 
-                console.log('Lesson plan loaded successfully!');
-
+                // Trigger updates for printable checkbox areas
+                ['ccc-multiselect', 'target-multiselect', 'values-multiselect', 'domains-multiselect', 'materials-multiselect'].forEach(id => document.querySelector(`#${id} input`)?.dispatchEvent(new Event('change')));
             } else {
-                console.log("No such document!");
                 alert("Could not find the lesson plan to load.");
             }
         } catch (error) {
-            console.error("Error loading plan from session:", error);
-            alert("There was an error loading your lesson plan.");
+            console.error("Error loading plan:", error);
         } finally {
-            // Clear the ID so it doesn't try to load again on refresh
             sessionStorage.removeItem('planToLoadId');
         }
     }
-
-    // --- FIREBASE AUTH & SAVE LOGIC ---
-    
-    const saveBtn = document.getElementById('save-to-cloud-btn');
-    const authStatusDiv = document.getElementById('auth-status');
-
-    // --- Auth Listener ---
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            currentUser = user;
-            saveBtn.disabled = false;
-            authStatusDiv.innerHTML = `Logged in: <strong>${user.email}</strong>`;
-            // ** ATTEMPT TO LOAD DATA WHEN USER IS LOGGED IN **
-            loadPlanFromSession(); 
-        } else {
-            currentUser = null;
-            saveBtn.disabled = true;
-            authStatusDiv.innerHTML = `Please log in to save your work online.`;
-        }
-    });
-    
-    // --- Helper function to get checked labels from a checkbox container ---
-    function getCheckedLabels(containerId) {
-        const container = document.getElementById(containerId);
-        if (!container) return [];
-        const checked = container.querySelectorAll('input[type="checkbox"]:checked');
-        return Array.from(checked).map(cb => {
-            const label = cb.closest('label');
-            return label ? (label.innerText || label.textContent).trim() : '';
-        });
-    }
-
-    // --- Save to Firestore ---
-    saveBtn.addEventListener('click', async () => {
-        if (!currentUser) return alert("You must be logged in to save.");
-        const planName = prompt("Please enter a name for your lesson plan:", "MS1 Lesson Plan");
-        if (!planName) return;
-
-        try {
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Saving...';
-            
-            const lessonPlanData = {
-                planName,
-                plannerType: 'ms1_1',
-                school: document.getElementById('school-name').textContent,
-                teacher: document.getElementById('teacher-name').textContent,
-                date: document.getElementById('lesson-date').textContent,
-                learners: document.getElementById('learner-count').textContent,
-                sequence: document.getElementById('main-sequence-selector').value,
-                session: document.getElementById('main-session-selector').value,
-                classProfile: document.getElementById('class-profile').innerHTML,
-                materials: getCheckedLabels('materials-multiselect'),
-                ccc: getCheckedLabels('ccc-multiselect'),
-                targetCompetencies: getCheckedLabels('target-multiselect'),
-                subsidiaryObjectives: document.getElementById('subsidiary-objectives').innerHTML,
-                sessionObjectives: document.getElementById('session-objectives').innerHTML,
-                values: getCheckedLabels('values-multiselect'),
-                domains: getCheckedLabels('domains-multiselect'),
-                anticipatedProblems: document.getElementById('anticipated-problems').innerHTML,
-                solutions: document.getElementById('solutions-plan-b').innerHTML,
-                procedure: {
-                    preWriting: {
-                        content: document.getElementById('pre-writing-procedure').innerHTML,
-                        interaction: document.getElementById('pre-writing-interaction').innerHTML,
-                        time: document.getElementById('pre-writing-time').innerHTML
-                    },
-                    writing: {
-                        content: document.getElementById('writing-procedure').innerHTML,
-                        interaction: document.getElementById('writing-interaction').innerHTML,
-                        time: document.getElementById('writing-time').innerHTML
-                    },
-                    postWriting: {
-                        content: document.getElementById('post-writing-procedure').innerHTML,
-                        interaction: document.getElementById('post-writing-interaction').innerHTML,
-                        time: document.getElementById('post-writing-time').innerHTML
-                    }
-                },
-                reflection: {
-                    worked: document.getElementById('reflection-worked').innerHTML,
-                    hindered: document.getElementById('reflection-hindered').innerHTML,
-                    points: document.getElementById('reflection-points').innerHTML
-                },
-                createdAt: serverTimestamp(),
-                authorId: currentUser.uid
-            };
-
-            await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
-            alert(`Lesson plan "${planName}" saved successfully!`);
-        } catch (error) {
-            console.error("Error saving document: ", error);
-            alert("There was an error saving your lesson plan.");
-        } finally {
-            saveBtn.disabled = false;
-            saveBtn.textContent = 'Save to Cloud';
-        }
-    });
-
 });
