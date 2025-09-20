@@ -1,0 +1,309 @@
+/* General Body and Print Styling */
+body {
+    font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; /* Font changed for a cleaner look */
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 25px auto; /* Added margin to see shadow */
+    background-color: white;
+    padding: 15px;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); /* Added shadow for depth */
+    border-radius: 3px; /* Slightly rounded corners */
+}
+
+/* Base Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+td, th {
+    border: 1.5px solid black;
+    padding: 4px 6px;
+    vertical-align: top;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+
+th {
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.05); /* Added subtle shadow to header text */
+}
+
+/* Editable fields and select styling */
+.editable-field, [contenteditable="true"] {
+    display: block;
+    width: 100%;
+    min-height: 1.2em; /* Ensures empty fields are clickable */
+    padding: 1px;
+}
+
+.inline-editable {
+    display: inline;
+    padding: 0 4px;
+    border-bottom: 1px dotted #333;
+    min-width: 50px;
+}
+
+[contenteditable="true"]:focus {
+    outline: 1px dotted #000;
+    background-color: rgba(255, 255, 0, 0.1);
+}
+
+/* Placeholder styling for contenteditable elements */
+[contenteditable="true"][placeholder]:empty::before {
+    content: attr(placeholder);
+    color: #999;
+    font-style: italic;
+    pointer-events: none;
+}
+
+.transparent-select {
+    width: auto;
+    max-width: 100%;
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 2px 0;
+    margin-left: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.transparent-select:focus {
+    outline: none;
+}
+
+/* Checkbox Multi-select Styling */
+.checkbox-multiselect {
+    border: 1px solid #999;
+    padding: 4px;
+    margin-top: 4px;
+    border-radius: 2px; /* Soften edges */
+}
+.checkbox-multiselect ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 5px 0;
+}
+.checkbox-multiselect li {
+    padding: 2px 0;
+}
+.checkbox-multiselect label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+.checkbox-multiselect input[type="checkbox"] {
+    margin-right: 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.checkbox-multiselect .group-label {
+    font-weight: bold;
+    margin-top: 5px;
+    background-color: #eee;
+    padding: 2px 4px;
+}
+
+/* New style for two-column checkboxes */
+.checkbox-grid li {
+    display: flex;
+    width: 100%;
+}
+.checkbox-grid label {
+    width: 50%; /* Each label takes half the space */
+    box-sizing: border-box;
+    padding-right: 10px;
+}
+
+
+/* Hide the container for printed selections on screen */
+.print-only-selections {
+    display: none;
+}
+
+/* Header Table Styles */
+.header-table td { 
+    border: 1.5px solid black; 
+    vertical-align: middle; 
+}
+/* Header Table Fix */
+.header-table td {
+    border: 1.5px solid black;
+    vertical-align: middle;
+    padding: 4px 6px;
+    box-sizing: border-box;
+}
+
+/* Only inside the cell, align label + field */
+.header-table .cell-content {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+/* Labels never shrink */
+.header-table td > strong,
+.header-table .cell-content > strong {
+    flex-shrink: 0;
+}
+
+/* Editable parts grow */
+.header-table .inline-editable,
+.header-table .editable-field,
+.header-table .transparent-select {
+    flex-grow: 1;
+}
+
+/* NEW: Lesson Loader Styles */
+.lesson-loader, .cloud-actions-loader {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1.5px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.lesson-loader h3, .cloud-actions-loader h3 {
+    margin: 0;
+    font-size: 12px;
+}
+.lesson-loader button, .cloud-actions-loader button {
+    font-family: inherit;
+    font-size: 10px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.cloud-actions-loader #auth-status {
+    font-size: 10px;
+}
+
+.cloud-actions-loader button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Background colors */
+.bg-header-ms { background-color: #d7cbb3; }
+.bg-header-teacher { background-color: #cbf7de; }
+.bg-header-date { background-color: #ccd1e8; }
+.bg-header-level { background-color: #f7cbe8; }
+.bg-header-nol { background-color: #cbcdf7; }
+.bg-header-sequence { background-color: #f7e7cb; }
+.bg-header-ccc { background-color: #f7cbce; }
+.bg-header-cp { background-color: #eecbf7; }
+.bg-header-tm { background-color: #92d5f2; }
+
+/* Objectives Table */
+.objectives-table td { padding: 4px 6px; vertical-align: top; }
+.bg-session-obj { background-color: #ffffcc; }
+.bg-ccc-obj { background-color: #d3ffcc; }
+.bg-target-comp { background-color: #e6f2ff; }
+.bg-subsidiary-obj { background-color: #ffe6e6; }
+.bg-values { background-color: #e6e6fa; }
+.bg-anticipated { background-color: #ffcccc; }
+.bg-solutions { background-color: #c0dbf7; }
+.bg-domains { background-color: #d4f8e8; } 
+
+
+/* Main Procedure Table */
+.main-table .stage-cell {
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.procedure-cell [contenteditable="true"] {
+    min-height: 80px;
+    padding: 4px;
+}
+
+.main-table .interaction-cell, .main-table .time-cell {
+     text-align: center;
+     vertical-align: middle;
+}
+.main-table .interaction-cell { font-weight: bold; }
+
+/* Main Table Header Colors */
+.bg-stages-header { background-color: #d9ead3; }
+.bg-procedure-header { background-color: hsl(82, 48%, 81%); }
+.bg-interaction-header { background-color: #d9d2e9; }
+.bg-time-header { background-color: #fce5cd; }
+
+/* Stage Cell Colors */
+.bg-stage1-cell { background-color: #d9ead3; }
+.bg-stage2-cell { background-color: #c9daf8; }
+.bg-stage3-cell { background-color: #d9d2e9; }
+
+/* Reflection Table */
+.reflection-table td, .reflection-table th { text-align: center; }
+.reflection-table .reflection-content { height: 30px; }
+
+.bg-reflection-header { background-color: #fff2cc; }
+
+
+/* Print Styles */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+    body { background-color: white; }
+    .container {
+        width: 100%;
+        min-height: 0;
+        padding: 10mm;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    .inline-editable {
+        border-bottom: none;
+        border: none;
+    }
+    .checkbox-multiselect {
+        display: none !important;
+    }
+    .no-print {
+        display: none !important; /* Hides the lesson loader on print */
+    }
+    .print-only-selections {
+        display: block !important;
+        text-align: left;
+    }
+    .print-only-selections.print-inline {
+        display: inline !important;
+        margin-left: 6px;
+    }
+    .print-only-selections ul {
+        margin: 4px 0 0 0;
+        padding-left: 15px;
+        list-style-type: disc;
+    }
+    .print-only-selections li {
+        margin-bottom: 2px;
+    }
+}
+
+/* Set specific heights for each stage row to control their size */
+.prewriting-row {
+    height: 120px;
+}
+.writing-row {
+    height: 250px;
+}
+.postwriting-row {
+    height: 120px;
+}

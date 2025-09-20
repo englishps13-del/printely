@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Lesson Plan</title>
+    <link rel="stylesheet" href="ms1_1.css">
+</head>
+<body>
+    <div class="container">
+        <table class="header-table">
+            <colgroup>
+                <col style="width:30%">
+                <col style="width:30%">
+                <col style="width:40%">
+            </colgroup>
+            <tr>
+                <td class="bg-header-ms">
+                    <div class="cell-content">
+                        <strong>Middle School of:</strong><span class="inline-editable" contenteditable="true" id="school-name"></span>
+                    </div>
+                </td>
+                <td class="bg-header-teacher">
+                    <div class="cell-content">
+                        <strong>Teacher:</strong><span class="inline-editable" contenteditable="true" id="teacher-name"></span>
+                    </div>
+                </td>
+                <td class="bg-header-date">
+                    <div class="cell-content">
+                        <strong>Date:</strong><span class="inline-editable" contenteditable="true" id="lesson-date"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-header-level">
+                     <div class="cell-content">
+                        <strong>Level:</strong> MS1
+                     </div>
+                </td>
+                <td class="bg-header-nol">
+                    <div class="cell-content">
+                        <strong>Number of learners:</strong><span class="inline-editable" contenteditable="true" id="learner-count"></span>
+                    </div>
+                </td>
+                <td class="bg-header-sequence">
+                    <div class="cell-content">
+                        <strong>Sequence:</strong>
+                        <select class="transparent-select" id="main-sequence-selector">
+                            <option value="">-- Select a Sequence --</option>
+                            </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-header-ccc">
+                    <div class="cell-content">
+                        <strong>Session:</strong>
+                        <select class="transparent-select" id="main-session-selector">
+                            <option value="">-- Select a Session --</option>
+                             </select>
+                    </div>
+                </td>
+                <td class="bg-header-cp">
+                    <div class="cell-content">
+                        <strong>Class profile:</strong><div class="editable-field" contenteditable="true" id="class-profile"></div>
+                    </div>
+                </td>
+                <td class="bg-header-tm">
+                     <strong>Teaching materials:</strong>
+                     <div class="checkbox-multiselect" id="materials-multiselect">
+                        <ul class="checkbox-grid">
+                           <li>
+                                <label><input type="checkbox">W.B</label>
+                                <label><input type="checkbox">Flashcards</label>
+                           </li>
+                           <li>
+                                <label><input type="checkbox">Slate</label>
+                                <label><input type="checkbox">Songs</label>
+                           </li>
+                           <li>
+                               <label><input type="checkbox">TextBook</label>
+                           </li>
+                        </ul>
+                    </div>
+                    <div class="print-only-selections print-inline" id="materials-print"></div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="objectives-table">
+            <tr>
+                <td class="bg-ccc-obj" colspan="2"><strong>Cross-Curricular Competences:</strong>
+                    <div class="checkbox-multiselect" id="ccc-multiselect">
+                        <div class="group-label">Intellectual Competence</div>
+                        <ul>
+                            <li><label><input type="checkbox">discover the relationship between prior knowledge, listening skills, and vocal paralinguistic features in context.</label></li>
+                            <li><label><input type="checkbox">connect topical words, expressions simple sentences and vocal paralinguistic features to the context.</label></li>
+                            <li><label><input type="checkbox">discover the link between text types, text features, the reading skills in context.</label></li>
+                            <li><label><input type="checkbox">demonstrate understanding of the text types, features and organization, sentence structure and content, and writing skills.</label></li>
+                        </ul>
+                        <div class="group-label">Methodological Competence</div>
+                        <ul>
+                            <li><label><input type="checkbox">use prior knowledge, listening skills and vocal paralinguistic features in context to understand short oral messages.</label></li>
+                            <li><label><input type="checkbox">select what is appropriate to the context from the linguistic repertoire and vocal paralinguistic features to interact orally and produce short oral messages.</label></li>
+                            <li><label><input type="checkbox">make use of the text types, text features, the reading skills in context to understand written messages.</label></li>
+                            <li><label><input type="checkbox">use the text types, features and organization, sentence structure and content, and writing skills to produce simple written messages.</label></li>
+                        </ul>
+                        <div class="group-label">Communicative Competence</div>
+                        <ul>
+                            <li><label><input type="checkbox">explain the usage of vocal paralinguistic features and listening skills to peers.</label></li>
+                            <li><label><input type="checkbox">share the oral message with peers.</label></li>
+                            <li><label><input type="checkbox">explain the usage of reading skills to peers.</label></li>
+                            <li><label><input type="checkbox">communicate the usage of the text type, features, organization, sentence structure and content, and writing skills to peers.</label></li>
+                        </ul>
+                        <div class="group-label">Personal and Social Competence</div>
+                        <ul>
+                            <li><label><input type="checkbox">demonstrate a genuine curiosity to learn about different cultures.</label></li>
+                            <li><label><input type="checkbox">collaborate with others to achieve mutual understanding.</label></li>
+                            <li><label><input type="checkbox">collaborate with others to benefit from what is appropriate to one's context.</label></li>
+                            <li><label><input type="checkbox">share with others one's specific identity features.</label></li>
+                        </ul>
+                    </div>
+                    <div class="print-only-selections" id="ccc-print"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-target-comp" colspan="2"><strong>Target competencies:</strong>
+                    <div class="checkbox-multiselect" id="target-multiselect">
+                        <ul>
+                            <li><label><input type="checkbox">1. Understand short oral messages of predominantly descriptive and narrative types...</label></li>
+                            <li><label><input type="checkbox">2. Interact orally and produce short oral messages of predominantly descriptive and narrative types...</label></li>
+                            <li><label><input type="checkbox">3. Understand simple messages of predominantly descriptive and narrative types of about 55 words using reading skills in context.</label></li>
+                            <li><label><input type="checkbox">4. Produce simple written messages of predominantly descriptive and narrative types of about 35 words...</label></li>
+                        </ul>
+                    </div>
+                    <div class="print-only-selections" id="target-print"></div>
+                </td>
+            </tr>
+             <tr>
+                <td class="bg-subsidiary-obj">
+                    <div contenteditable="true" id="subsidiary-objectives"><strong>Subsidiary objectives:</strong></div>
+                </td>
+                <td class="bg-session-obj">
+                    <div contenteditable="true" id="session-objectives"><strong>Session Objective(s):</strong></div>
+                </td>
+            </tr>
+            <tr>
+                 <td class="bg-values">
+                    <strong>Values:</strong>
+                     <div class="checkbox-multiselect" id="values-multiselect">
+                        <ul class="checkbox-grid">
+                           <li>
+                                <label><input type="checkbox">National Identity</label>
+                                <label><input type="checkbox">National Conscience</label>
+                           </li>
+                           <li>
+                                <label><input type="checkbox">Citizenship</label>
+                                <label><input type="checkbox">Openness to the World</label>
+                           </li>
+                        </ul>
+                    </div>
+                    <div class="print-only-selections print-inline" id="values-print"></div>
+                </td>
+                <td class="bg-domains">
+                   <strong>Domains:</strong>
+                    <div class="checkbox-multiselect" id="domains-multiselect">
+                        <ul class="checkbox-grid">
+                           <li>
+                                <label><input type="checkbox">Oral comprehension</label>
+                                <label><input type="checkbox">Oral production</label>
+                           </li>
+                           <li>
+                                <label><input type="checkbox">Written comprehension</label>
+                                <label><input type="checkbox">Written production</label>
+                           </li>
+                        </ul>
+                    </div>
+                    <div class="print-only-selections print-inline" id="domains-print"></div>
+                </td>
+            </tr>
+             <tr>
+                <td class="bg-anticipated">
+                    <div contenteditable="true" id="anticipated-problems"><strong>Anticipated problems:</strong></div>
+                </td>
+                <td class="bg-solutions">
+                    <div contenteditable="true" id="solutions-plan-b"><strong>Solutions/Plan B:</strong></div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="lesson-loader no-print">
+            <h3>?? Lesson Content Actions</h3>
+            <button id="load-content-btn">Load Content</button>
+        </div>
+        
+        <div class="cloud-actions-loader no-print">
+            <h3>?? Cloud Actions</h3>
+            <div id="auth-status">Checking login status...</div>
+            <button id="save-to-cloud-btn" disabled>Save to Cloud</button>
+        </div>
+
+
+         <table class="main-table">
+            <colgroup>
+                <col style="width:15%">
+                <col style="width:60%">
+                <col style="width:12.5%">
+                <col style="width:12.5%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="bg-stages-header">STAGES</th>
+                    <th class="bg-procedure-header">Procedure / Tasks</th>
+                    <th class="bg-interaction-header">Interaction</th>
+                    <th class="bg-time-header">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="prewriting-row">
+                    <td class="stage-cell bg-stage1-cell"><strong>STAGE 01<br>Pre-Writing</strong></td>
+                    <td class="procedure-cell">
+                        <div contenteditable="true" placeholder="Write your procedure here..." id="pre-writing-procedure"></div>
+                    </td>
+                    <td class="interaction-cell">
+                        <div contenteditable="true" id="pre-writing-interaction">T ? L<br>L ? T<br><br>T ? L<br>L ? T</div>
+                    </td>
+                    <td class="time-cell">
+                        <div contenteditable="true" id="pre-writing-time">10 min<br><br><br><br>20 min</div>
+                    </td>
+                </tr>
+
+                <tr class="writing-row">
+                    <td class="stage-cell bg-stage2-cell"><strong>STAGE 02<br>Writing</strong></td>
+                    <td class="procedure-cell">
+                        <div contenteditable="true" placeholder="Write your procedure here..." id="writing-procedure"></div>
+                    </td>
+                    <td class="interaction-cell">
+                        <div contenteditable="true" id="writing-interaction">T ? L<br>L ? T<br><br><br><br>L ? L</div>
+                    </td>
+                    <td class="time-cell"><div contenteditable="true" id="writing-time">20 min</div></td>
+                </tr>
+
+                <tr class="postwriting-row">
+                    <td class="stage-cell bg-stage3-cell"><strong>STAGE 03<br>Post Writing</strong></td>
+                    <td class="procedure-cell">
+                        <div contenteditable="true" placeholder="Write your procedure here..." id="post-writing-procedure"></div>
+                    </td>
+                    <td class="interaction-cell">
+                        <div contenteditable="true" id="post-writing-interaction">L ? T</div>
+                    </td>
+                    <td class="time-cell"><div contenteditable="true" id="post-writing-time">10 min</div></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="reflection-table">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-reflection-header">Self-Reflection</th>
+                </tr>
+            </thead>
+			<tbody>
+            <tr>
+                <td class="reflection-content">
+                    <div contenteditable="true" placeholder="Write what worked..." id="reflection-worked"></div>
+                </td>
+                <td class="reflection-content">
+                    <div contenteditable="true" placeholder="Write what hindered..." id="reflection-hindered"></div>
+                </td>
+                <td class="reflection-content">
+                    <div contenteditable="true" placeholder="Action Points..." id="reflection-points"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+	<script src="ms1_1.js" type="module"></script>
+</body>
+</html>
