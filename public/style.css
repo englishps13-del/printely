@@ -558,7 +558,6 @@ td {
     border: none !important; 
     resize: none !important; 
     outline: none !important; 
-    background-color: transparent !important;
     -webkit-print-color-adjust: exact; /* Ensure background colors print */
     color-adjust: exact;
     width: 100% !important;

@@ -3,12 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Lesson Plan</title>
-  <link rel="stylesheet" href="style.css" />
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -19,11 +15,11 @@
       font-size: 15px;
       line-height: 1.6;
       color: #222;
-      background-color: #f4f4f9; /* Added a light background to the body */
+      background-color: #f4f4f9;
       padding: 1rem;
     }
     #table-container {
-        max-width: 8.5in; /* A4 paper width approx */
+        max-width: 8.5in;
         margin: 0 auto;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
@@ -33,84 +29,127 @@
       letter-spacing: 0.3px;
     }
     select, input, textarea { font-family: 'Roboto', sans-serif; }
-    .section-title td {
-      font-family: 'Poppins', sans-serif;
-      font-size: 15px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    
+    /* Table basics */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      table-layout: fixed;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInUp 0.8s ease forwards;
     }
 
-    /* ===== Theme 1 – Soft Blues ===== */
-    .theme1 table { background-color: #f2f8ff; }
-    .theme1 .section-title td { background-color: #cce5ff; color: #003366; }
-    .theme1 textarea, .theme1 input, .theme1 select, .theme1 .editable-area { background-color: #e6f2ff; border: 1px solid #99ccff; color: #002244; }
+    td {
+      border: 1px solid #999;
+      padding: 8px;
+      vertical-align: middle;
+      text-align: left;
+      word-wrap: break-word;
+    }
 
-    /* ===== Theme 2 – Warm Sunrise ===== */
-    .theme2 table { background-color: #fff6f0; }
-    .theme2 .section-title td { background-color: #ffd9b3; color: #663300; }
-    .theme2 textarea, .theme2 input, .theme2 select, .theme2 .editable-area { background-color: #fff6f0; border: 1px solid #ffb366; color: #442200; }
+    /* --- ACTION CONTROLS BAR --- */
+    .controls { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding: 10px 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; flex-wrap: wrap; }
+    .control-group { display: flex; align-items: center; gap: 8px; }
+    .controls label { font-weight: 500; font-family: 'Poppins', sans-serif; color: #333; }
+    .action-btn { padding: 8px 15px; font-size: 14px; font-weight: 500; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease-in-out; }
+    .action-btn i { font-size: 1.1em; }
+    .save-btn { background: #28a745; color: #fff; } .save-btn:hover { background: #218838; }
+    .print-btn { background: #007bff; color: #fff; } .print-btn:hover { background: #0056b3; }
+    .back-btn { background-color: #6c757d; color: white; } .back-btn:hover { background-color: #5a6268; }
 
-    /* ===== Theme 3 – Calm Greens ===== */
-    .theme3 table { background-color: #f2fff2; }
-    .theme3 .section-title td { background-color: #c6f2c6; color: #003300; }
-    .theme3 textarea, .theme3 input, .theme3 select, .theme3 .editable-area { background-color: #e0ffe0; border: 1px solid #80d980; color: #002200; }
+    /* --- RIBBON & EDITABLE AREA STYLES --- */
+    .ribbon { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; margin-bottom: 15px; }
+    .group { display: flex; align-items: center; gap: 6px; padding: 6px; border: 1px solid #dcdcdc; border-radius: 6px; background: #ffffff; }
+    .group .label { font-size: 12px; color: #7f8c8d; margin-left: 4px; white-space: nowrap; }
+    .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square { appearance: none; border: 1px solid #dcdcdc; background: #ffffff; padding: 7px 10px; border-radius: 5px; font-size: 14px; line-height: 1; cursor: pointer; color: #2c3e50; font-family: 'Roboto', sans-serif; }
+    .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+    .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f9f9f9; }
+    .ribbon .btn.active, .ribbon .btn-square.active { background: #6699cc; color: #ffffff; border-color: #6699cc; }
+    .ribbon .sep { width: 1px; background: #dcdcdc; margin: 0 6px; align-self: stretch; }
+    .editable-area { width: 100%; border: 1px solid #ccc; outline: none; font-size: 14px; line-height: 1.6; padding: 8px; min-height: 150px; cursor: text; box-sizing: border-box; resize: vertical; }
+    .editable-area.small { min-height: 40px; height: 40px; resize: none; overflow: auto; }
+    .editable-area:focus { outline: none; border-color: #6699cc; box-shadow: 0 0 0 2px rgba(102, 153, 204, 0.4); }
+    .editable-area[data-placeholder]:empty::before { content: attr(data-placeholder); color: #999; pointer-events: none; font-style: italic; }
+    .editable-area img, [contenteditable="true"] img { max-width: 100px; max-height: 100px; object-fit: contain; display: inline-block; vertical-align: middle; margin: 4px; border: 1px solid #ddd; }
 
-    /* ===== Theme 4 – Lavender Dream ===== */
-    .theme4 table { background-color: #faf2ff; }
-    .theme4 .section-title td { background-color: #e0ccff; color: #330066; }
-    .theme4 textarea, .theme4 input, .theme4 select, .theme4 .editable-area { background-color: #FFFFFF; border: 1px solid #b366ff; color: #220044; }
+    /* Header cell colors (soft pastel palette) */
+    .c1 { background: #ffd6e6; } .c2 { background: #ffcccc; } .c3 { background: #cce5ff; } .c4 { background: #ccffcc; } .c5 { background: #fff7b3; } .c6 { background: #ffe0e0; } .c7 { background: #e6ccff; }
+    .highlight-pink { background: #ffd6e6; color: #000; } .highlight-blue { background: #cce5ff; color: #000; } .highlight-green { background: #ccffcc; color: #000; } .highlight-yellow { background: #fff7b3; color: #000; } .highlight-red { background: #ffcccc; color: #000; }
 
-    /* ===== Theme 5 – Peachy Pastel ===== */
-    .theme5 table { background-color: #fff5f7; }
-    .theme5 .section-title td { background-color: #F28A29; color: #660022; }
-    .theme5 textarea, .theme5 input, .theme5 select, .theme5 .editable-area { background-color: #FFFFFF; border: 1px solid #F5DFC6; color: #440011; }
+    /* --- NEW: Style for inline header fields --- */
+    .header-field { display: flex; align-items: center; gap: 8px; }
+    .header-field b { flex-shrink: 0; /* Prevent label from shrinking */ }
+    .header-field .input-no-border { flex-grow: 1; width: auto; /* Let the input fill remaining space */ }
+    
+    .level-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; border: none; font-family: inherit; font-size: 14px; font-weight: bold; padding: 4px 8px; outline: none; cursor: pointer; width: 100%; box-sizing: border-box; color: #000; background-color: transparent; transition: all 0.3s ease; border-radius: 4px; height: auto; min-height: 38px; line-height: 1.4; display: block; }
+    .level-select:hover { background-color: rgba(0,0,0,0.05); }
+    .input-no-border { border: none; outline: none; font-weight: bold; color: inherit; width: 100%; box-sizing: border-box; padding: 4px; background-color: transparent; transition: all 0.3s ease; }
+    .input-no-border:focus { background-color: rgba(255,255,255,0.5); box-shadow: 0 1px 0 currentColor; }
 
-    /* ===== Theme 6 – Mint Breeze ===== */
-    .theme6 table { background-color: #f0fffa; }
-    .theme6 .section-title td { background-color: #b3ffe0; color: #004d33; }
-    .theme6 textarea, .theme6 input, .theme6 select, .theme6 .editable-area { background-color: #FFFFFF; border: 1px solid #66ffcc; color: #003322; }
+    .section-title td { background: #333; color: #fff; text-align: center; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stage-col { width: 10%; } .procedure { width: 61%; } .interaction-col { width: 10%; text-align: center; } .time-col { width: 10%; text-align: center; }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* ===== Theme 7 – Golden Glow ===== */
-    .theme7 table { background-color: #fffdf2; }
-    .theme7 .section-title td { background-color: #9BF279; color: #664d00; }
-    .theme7 textarea, .theme7 input, .theme7 select, .theme7 .editable-area { background-color: #FFFFFF; border: 1px solid #CDE3C3; color: #332200; }
+    /* Competencies */
+    .competency-group { margin-top: 5px; }
+    .competency-group-inline { display: inline-flex; flex-wrap: wrap; gap: 8px; vertical-align: middle; }
+    .competency-option { background-color: #cce0f5; border-radius: 4px; padding: 4px 8px; font-size: 12px; cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; color: #000; }
+    .competency-option input { display: none; }
+    .competency-option.selected { background-color: #6699cc; font-weight: bold; color: #fff; text-decoration: underline; }
+    
+    /* Dynamic Competencies Styles */
+    #ccc-multiselect .group-label { font-weight: bold; margin-top: 8px; font-size: 13px; color: #333; }
+    .print-only { display: none; }
+    #ccc-print ul { list-style-type: disc; padding-left: 20px; margin: 5px 0 0; }
+    
+    /* Theme styles... */
+    .theme-default .c1 { background: #ffd6e6; } .theme-default .c2 { background: #ffcccc; } .theme-default .c3 { background: #cce5ff; } .theme-default .c4 { background: #ccffcc; } .theme-default .c5 { background: #fff7b3; } .theme-default .c6 { background: #ffe0e0; } .theme-default .c7 { background: #e6ccff; } .theme-default .highlight-pink { background: #ffd6e6; } .theme-default .highlight-blue { background: #cce5ff; } .theme-default .highlight-green { background: #ccffcc; } .theme-default .highlight-yellow { background: #fff7b3; } .theme-default .highlight-red { background: #ffcccc; } .theme-default .c3 .level-select { background-color: #cce5ff; color: #000; } .theme-default .c5 .level-select { background-color: #fff7b3; color: #000; } .theme-default .c6 .level-select { background-color: #ffe0e0; color: #000; }
+    .theme1 .c1 { background: #b3d9ff; } .theme1 .c2 { background: #99ccff; } .theme1 .c3 { background: #80bfff; } .theme1 .c4 { background: #66b2ff; } .theme1 .c5 { background: #4da6ff; } .theme1 .c6 { background: #3399ff; } .theme1 .c7 { background: #1a8cff; } .theme1 .highlight-pink { background: #b3d9ff; } .theme1 .highlight-blue { background: #80bfff; } .theme1 .highlight-green { background: #66b2ff; } .theme1 .highlight-yellow { background: #4da6ff; } .theme1 .highlight-red { background: #99ccff; } .theme1 .c3 .level-select { background-color: #80bfff; color: #002244; } .theme1 .c5 .level-select { background-color: #4da6ff; color: #002244; } .theme1 .c6 .level-select { background-color: #3399ff; color: #fff; } .theme1 .competency-option { background-color: #80bfff; color: #002244; } .theme1 .competency-option.selected { background-color: #4da6ff; color: #fff; }
+    .theme2 .c1 { background: #ffd1b3; } .theme2 .c2 { background: #ffbb80; } .theme2 .c3 { background: #ff9966; } .theme2 .c4 { background: #ff884d; } .theme2 .c5 { background: #ff7733; } .theme2 .c6 { background: #ff661a; } .theme2 .c7 { background: #ff551a; } .theme2 .highlight-pink { background: #ffd1b3; } .theme2 .highlight-blue { background: #ff9966; } .theme2 .highlight-green { background: #ff884d; } .theme2 .highlight-yellow { background: #ff7733; } .theme2 .highlight-red { background: #ffbb80; } .theme2 .c3 .level-select { background-color: #ff9966; color: #663300; } .theme2 .c5 .level-select { background-color: #ff7733; color: #fff; } .theme2 .c6 .level-select { background-color: #ff661a; color: #fff; } .theme2 .competency-option { background-color: #ff9966; color: #663300; } .theme2 .competency-option.selected { background-color: #ff7733; color: #fff; }
+    .theme3 .c1 { background: #d4f4dd; } .theme3 .c2 { background: #b8e6be; } .theme3 .c3 { background: #9cd998; } .theme3 .c4 { background: #81cc79; } .theme3 .c5 { background: #65bf5a; } .theme3 .c6 { background: #4db146; } .theme3 .c7 { background: #399839; } .theme3 .highlight-pink { background: #d4f4dd; } .theme3 .highlight-blue { background: #9cd998; } .theme3 .highlight-green { background: #81cc79; } .theme3 .highlight-yellow { background: #65bf5a; } .theme3 .highlight-red { background: #b8e6be; } .theme3 .c3 .level-select { background-color: #9cd998; color: #003300; } .theme3 .c5 .level-select { background-color: #65bf5a; color: #fff; } .theme3 .c6 .level-select { background-color: #4db146; color: #fff; } .theme3 .competency-option { background-color: #9cd998; color: #003300; } .theme3 .competency-option.selected { background-color: #65bf5a; color: #fff; }
+    .theme4 .c1 { background: #e6ccff; } .theme4 .c2 { background: #d9b3ff; } .theme4 .c3 { background: #cc99ff; } .theme4 .c4 { background: #bf80ff; } .theme4 .c5 { background: #b366ff; } .theme4 .c6 { background: #a64dff; } .theme4 .c7 { background: #9933ff; } .theme4 .highlight-pink { background: #e6ccff; } .theme4 .highlight-blue { background: #cc99ff; } .theme4 .highlight-green { background: #bf80ff; } .theme4 .highlight-yellow { background: #b366ff; } .theme4 .highlight-red { background: #d9b3ff; } .theme4 .c3 .level-select { background-color: #cc99ff; color: #330066; } .theme4 .c5 .level-select { background-color: #b366ff; color: #fff; } .theme4 .c6 .level-select { background-color: #a64dff; color: #fff; } .theme4 .competency-option { background-color: #cc99ff; color: #330066; } .theme4 .competency-option.selected { background-color: #b366ff; color: #fff; }
+    .theme5 .c1 { background: #ffe6cc; } .theme5 .c2 { background: #ffd9b3; } .theme5 .c3 { background: #ffcc99; } .theme5 .c4 { background: #ffbf80; } .theme5 .c5 { background: #ffb366; } .theme5 .c6 { background: #ffa64d; } .theme5 .c7 { background: #ff9933; } .theme5 .highlight-pink { background: #ffe6cc; } .theme5 .highlight-blue { background: #ffcc99; } .theme5 .highlight-green { background: #ffbf80; } .theme5 .highlight-yellow { background: #ffb366; } .theme5 .highlight-red { background: #ffd9b3; } .theme5 .c3 .level-select { background-color: #ffcc99; color: #660022; } .theme5 .c5 .level-select { background-color: #ffb366; color: #fff; } .theme5 .c6 .level-select { background-color: #ffa64d; color: #fff; } .theme5 .competency-option { background-color: #ffcc99; color: #660022; } .theme5 .competency-option.selected { background-color: #ffb366; color: #fff; }
+    .theme6 .c1 { background: #d6f5f5; } .theme6 .c2 { background: #b3ecff; } .theme6 .c3 { background: #99e6ff; } .theme6 .c4 { background: #66d9ff; } .theme6 .c5 { background: #33ccff; } .theme6 .c6 { background: #00bfff; } .theme6 .c7 { background: #0099cc; } .theme6 .highlight-pink { background: #d6f5f5; } .theme6 .highlight-blue { background: #99e6ff; } .theme6 .highlight-green { background: #66d9ff; } .theme6 .highlight-yellow { background: #33ccff; } .theme6 .highlight-red { background: #b3ecff; } .theme6 .c3 .level-select { background-color: #99e6ff; color: #660022; } .theme6 .c5 .level-select { background-color: #33ccff; color: #fff; } .theme6 .c6 .level-select { background-color: #00bfff; color: #fff; } .theme6 .competency-option { background-color: #99e6ff; color: #004466; } .theme6 .competency-option.selected { background-color: #33ccff; color: #fff; }
+    .theme7 .c1 { background: #e0fff5; } .theme7 .c2 { background: #ccffe6; } .theme7 .c3 { background: #b3ffd9; } .theme7 .c4 { background: #99ffcc; } .theme7 .c5 { background: #80ffbf; } .theme7 .c6 { background: #66ffb3; } .theme7 .c7 { background: #4dffa6; } .theme7 .highlight-pink { background: #e0fff5; } .theme7 .highlight-blue { background: #b3ffd9; } .theme7 .highlight-green { background: #99ffcc; } .theme7 .highlight-yellow { background: #80ffbf; } .theme7 .highlight-red { background: #ccffe6; } .theme7 .c3 .level-select { background-color: #b3ffd9; color: #004d33; } .theme7 .c5 .level-select { background-color: #80ffbf; color: #fff; } .theme7 .c6 .level-select { background-color: #66ffb3; color: #fff; } .theme7 .competency-option { background-color: #b3ffd9; color: #004d33; } .theme7 .competency-option.selected { background-color: #80ffbf; color: #003322; }
+    .theme8 .c1 { background: #ffe6f0; } .theme8 .c2 { background: #ffccd9; } .theme8 .c3 { background: #ffb3c9; } .theme8 .c4 { background: #ff99b8; } .theme8 .c5 { background: #ff80a8; } .theme8 .c6 { background: #ff6699; } .theme8 .c7 { background: #ff4d88; } .theme8 .highlight-pink { background: #ffe6f0; } .theme8 .highlight-blue { background: #ffb3c9; } .theme8 .highlight-green { background: #ff99b8; } .theme8 .highlight-yellow { background: #ff80a8; } .theme8 .highlight-red { background: #ffccd9; } .theme8 .c3 .level-select { background-color: #ffb3c9; color: #660022; } .theme8 .c5 .level-select { background-color: #ff80a8; color: #fff; } .theme8 .c6 .level-select { background-color: #ff6699; color: #fff; } .theme8 .competency-option { background-color: #ffb3c9; color: #660022; } .theme8 .competency-option.selected { background-color: #ff80a8; color: #fff; }
+    .theme9 .c1 { background: #fff2cc; } .theme9 .c2 { background: #ffe699; } .theme9 .c3 { background: #ffd966; } .theme9 .c4 { background: #ffcc33; } .theme9 .c5 { background: #ffbf00; } .theme9 .c6 { background: #e6ac00; } .theme9 .c7 { background: #cc9900; } .theme9 .highlight-pink { background: #fff2cc; } .theme9 .highlight-blue { background: #ffd966; } .theme9 .highlight-green { background: #ffcc33; } .theme9 .highlight-yellow { background: #ffbf00; } .theme9 .highlight-red { background: #ffe699; } .theme9 .c3 .level-select { background-color: #ffd966; color: #660022; } .theme9 .c5 .level-select { background-color: #ffbf00; color: #fff; } .theme9 .c6 .level-select { background-color: #e6ac00; color: #fff; } .theme9 .competency-option { background-color: #ffd966; color: #5c4300; } .theme9 .competency-option.selected { background-color: #ffbf00; color: #fff; }
+    .theme10 .c1 { background: #e6e6ff; } .theme10 .c2 { background: #ccccff; } .theme10 .c3 { background: #b3b3ff; } .theme10 .c4 { background: #9999ff; } .theme10 .c5 { background: #8080ff; } .theme10 .c6 { background: #6666ff; } .theme10 .c7 { background: #4d4dff; } .theme10 .highlight-pink { background: #e6e6ff; } .theme10 .highlight-blue { background: #b3b3ff; } .theme10 .highlight-green { background: #9999ff; } .theme10 .highlight-yellow { background: #8080ff; } .theme10 .highlight-red { background: #ccccff; } .theme10 .c3 .level-select { background-color: #b3b3ff; color: #660022; } .theme10 .c5 .level-select { background-color: #8080ff; color: #fff; } .theme10 .c6 .level-select { background-color: #6666ff; color: #fff; } .theme10 .competency-option { background-color: #b3b3ff; color: #330066; } .theme10 .competency-option.selected { background-color: #8080ff; color: #fff; }
 
-    /* ===== Theme 8 – Rose Mist ===== */
-    .theme8 table { background-color: #fff5f9; }
-    .theme8 .section-title td { background-color: #ffb3d9; color: #660033; }
-    .theme8 textarea, .theme8 input, .theme8 select, .theme8 .editable-area { background-color: #FFFFFF; border: 1px solid #ff80bf; color: #33001a; }
+    /* Modal styles */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background: #fff; padding: 20px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .modal-content input { width: 90%; padding: 8px; margin: 12px 0; border: 1px solid #ccc; border-radius: 6px; }
+    .modal-actions { display: flex; justify-content: space-around; margin-top: 10px; }
+    .cancel-btn, .confirm-btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .cancel-btn { background: #ccc; } .confirm-btn { background: #007bff; color: #fff; } .confirm-btn:hover { background: #0056b3; }
 
-    /* ===== Theme 9 – Ocean Wave ===== */
-    .theme9 table { background-color: #f2fbff; }
-    .theme9 .section-title td { background-color: #FAE37A; color: #003344; }
-    .theme9 textarea, .theme9 input, .theme9 select, .theme9 .editable-area { background-color: #FFFFFF; border: 1px solid #F2ECCE; color: #002233; }
-
-    /* ===== Theme 10 – Coffee Cream ===== */
-    .theme10 table { background-color: #fffaf5; }
-    .theme10 .section-title td { background-color: #928AF2; color: #332211; }
-    .theme10 textarea, .theme10 input, .theme10 select, .theme10 .editable-area { background-color: #FFFFFF; border: 1px solid #E4D8F0; color: #221100; }
+    /* Print/PDF Styles */
+    @media print {
+     @page { margin: 10mm; size: A4 portrait; }
+      body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; color-adjust: exact; }
+      .no-print { display: none !important; }
+      #table-container { width: 100%; min-height: auto; margin: 0; padding: 0; box-shadow: none; border: none; }
+      table { width: 100%; border-collapse: collapse; page-break-inside: auto; table-layout: auto !important; word-wrap: break-word; }
+      tr { page-break-inside: avoid; page-break-after: auto; }
+      td { word-wrap: break-word; }
+      textarea, input, select { border: none !important; resize: none !important; outline: none !important; width: 100% !important; padding: 0 !important; font-size: 10pt !important; white-space: normal !important; height: auto !important; word-break: break-all; }
+      .editable-area { border: none !important; padding: 0 !important; font-size: 11pt; line-height: 1.4; overflow: visible !important; resize: none !important; height: auto !important; min-height: 0 !important; max-height: none !important; }
+      .print-only { display: block !important; }
+    }
   </style>
 </head>
 <body>
-
   <div class="controls no-print">
-    <div class="control-group">
-      <a href="index.html" class="action-btn back-btn"><i class="fa-solid fa-arrow-left"></i> Go Back</a>
-    </div>
+    <div class="control-group"><a href="index.html" class="action-btn back-btn"><i class="fa-solid fa-arrow-left"></i> Go Back</a></div>
     <div class="control-group">
       <label for="themeSwitcher">Theme:</label>
       <select id="themeSwitcher">
-        <option value="default" selected>Default (Current)</option>
-        <option value="theme1">Soft Blues</option>
-        <option value="theme2">Warm Sunrise</option>
-        <option value="theme3">Calm Greens</option>
-        <option value="theme4">Lavender Dream</option>
-        <option value="theme5">Peachy Pastel</option>
-        <option value="theme6">Ocean Breeze</option>
-        <option value="theme7">Minty Fresh</option>
-        <option value="theme8">Rose Garden</option>
-        <option value="theme9">Golden Glow</option>
-        <option value="theme10">Twilight</option>
+        <option value="default" selected>Default (Current)</option><option value="theme1">Soft Blues</option><option value="theme2">Warm Sunrise</option><option value="theme3">Calm Greens</option><option value="theme4">Lavender Dream</option><option value="theme5">Peachy Pastel</option><option value="theme6">Ocean Breeze</option><option value="theme7">Minty Fresh</option><option value="theme8">Rose Garden</option><option value="theme9">Golden Glow</option><option value="theme10">Twilight</option>
       </select>
     </div>
     <div class="control-group">
@@ -131,237 +170,217 @@
     </div>
   </div>
 
-
   <div class="ribbon no-print" id="ribbon">
-      <div class="group" aria-label="Font">
-        <select id="fontFamily" title="Font family">
-          <option>Roboto</option><option>Poppins</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
-        </select>
-        <select id="fontSize" title="Font size">
-          <option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="40">40</option><option value="48">48</option>
-        </select>
-      </div>
-
-      <div class="group" aria-label="Emphasis">
-        <button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
-        <button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
-        <button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
-        <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
-        <button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button>
-        <button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button>
-      </div>
-
-      <div class="group" aria-label="Colors">
-        <label class="label" for="foreColor">Text</label>
-        <input type="color" id="foreColor" title="Text color" value="#222222">
-        <span class="sep"></span>
-        <label class="label" for="hiliteColor">Highlight</label>
-        <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
-      </div>
-
-      <div class="group" aria-label="Paragraph">
-        <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
-        <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
-        <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
-        <button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
-        <span class="sep"></span>
-        <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
-        <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
-        <button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button>
-        <button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button>
-      </div>
-
-      <div class="group" aria-label="Insert">
-          <button class="btn-square insert-image-btn" title="Insert Image"><i class="fa-solid fa-image"></i></button>
-      </div>
-
-      <div class="group" aria-label="Actions">
-        <button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button>
-      </div>
+      <div class="group" aria-label="Font"><select id="fontFamily" title="Font family"><option>Roboto</option><option>Poppins</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option></select><select id="fontSize" title="Font size"><option value="10">10</option><option value="12">12</option><option value="14" selected>14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option></select></div>
+      <div class="group" aria-label="Emphasis"><button class="btn-square" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button><button class="btn-square" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button><button class="btn-square" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button><button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button><button class="btn-square" data-cmd="superscript" title="Superscript">x<sup>2</sup></button><button class="btn-square" data-cmd="subscript" title="Subscript">x<sub>2</sub></button></div>
+      <div class="group" aria-label="Colors"><label class="label" for="foreColor">Text</label><input type="color" id="foreColor" title="Text color" value="#222222"><span class="sep"></span><label class="label" for="hiliteColor">Highlight</label><input type="color" id="hiliteColor" title="Highlight color" value="#fff59d"></div>
+      <div class="group" aria-label="Paragraph"><button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button><button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button><button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button><button class="btn-square" data-cmd="justifyFull" title="Justify"><i class="fa-solid fa-align-justify"></i></button><span class="sep"></span><button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button><button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button><button class="btn-square" data-cmd="outdent" title="Outdent"><i class="fa-solid fa-outdent"></i></button><button class="btn-square" data-cmd="indent" title="Indent"><i class="fa-solid fa-indent"></i></button></div>
+      <div class="group" aria-label="Insert"><button class="btn-square insert-image-btn" title="Insert Image"><i class="fa-solid fa-image"></i></button></div>
+      <div class="group" aria-label="Actions"><button class="btn" data-cmd="removeFormat" title="Clear formatting (selection)"><i class="fas fa-remove-format"></i> Clear</button></div>
   </div>
 
   <div id="table-container" class="theme-default">
-    <!-- MAJOR CHANGE: All header info is now in a single table for better print layout -->
     <table>
-      <!-- Row 1: School & Teacher -->
       <tr>
-        <td class="header c1" colspan="2">
-          <b>Primary School:</b>
-          <input type="text" id="schoolName" placeholder="Enter school name" class="input-no-border" />
-        </td>
-        <td class="header c2" colspan="2">
-          <b>Teacher:</b>
-          <input type="text" id="teacherName" placeholder="Enter teacher name" class="input-no-border" />
-        </td>
+        <td class="header c1" colspan="2"><div class="header-field"><b>Primary School:</b><input type="text" id="schoolName" placeholder="Enter school name" class="input-no-border" /></div></td>
+        <td class="header c2" colspan="2"><div class="header-field"><b>Teacher:</b><input type="text" id="teacherName" placeholder="Enter teacher name" class="input-no-border" /></div></td>
       </tr>
-      <!-- Row 2: Level, Learners, Sequence, Section -->
       <tr>
-        <td class="header c3">
-          Level:
-          <select id="levelSelect" class="level-select">
-            <option value="">-- Select Level --</option>
-            <option value="3PS">3PS</option>
-            <option value="4PS">4PS</option>
-            <option value="5PS">5PS</option>
-          </select>
-        </td>
-        <td class="header c4">
-          Number of learners:
-          <input type="number" id="learnerCount" min="1" class="input-no-border" placeholder="0" />
-        </td>
-        <td class="header c5">
-          Sequence:
-          <select id="sequenceSelect" class="level-select">
-            <option value="">-- Select Sequence --</option>
-          </select>
-        </td>
-        <td class="header c6">
-          Section:
-          <select id="sectionSelect" class="level-select">
-            <option value="">-- Select Section --</option>
-          </select>
-        </td>
+        <td class="header c3">Level:<select id="levelSelect" class="level-select"><option value="">-- Select Level --</option><option value="3PS">3PS</option><option value="4PS">4PS</option><option value="5PS">5PS</option></select></td>
+        <td class="header c4"><div class="header-field"><b>Number of learners:</b><input type="number" id="learnerCount" min="1" class="input-no-border" placeholder="0" /></div></td>
+        <td class="header c5">Sequence:<select id="sequenceSelect" class="level-select"><option value="">-- Select Sequence --</option></select></td>
+        <td class="header c6">Section:<select id="sectionSelect" class="level-select"><option value="">-- Select Section --</option></select></td>
       </tr>
-      <!-- Row 3: Session & Materials -->
       <tr>
-        <td class="header c6" colspan="2">
-          Session:
-          <select id="sessionSelect" class="level-select">
-            <option value="">-- Select Session --</option>
-          </select>
-        </td>
+        <td class="header c6" colspan="2">Session:<select id="sessionSelect" class="level-select"><option value="">-- Select Session --</option></select></td>
         <td class="highlight-blue" colspan="2">
           <b style="margin-right: 10px;">Teaching materials:</b>
           <div id="materials" class="competency-group-inline">
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Textbook" /> Textbook
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Workbook" /> W.B
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Flashcards" /> Flashcards
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Slate" /> Slate
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Song" /> Song
-            </label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Textbook" /> Textbook</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Workbook" /> W.B</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Flashcards" /> Flashcards</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Slate" /> Slate</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Song" /> Song</label>
           </div>
         </td>
       </tr>
-       <!-- Row 4: Objective -->
       <tr>
-        <td class="highlight-pink" colspan="4">
-          <b>Session objective(s):</b>
-          <input type="text" 
-                 id="sessionObjective"
-                 value="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." 
-                 class="input-no-border" />
-        </td>
+        <td class="highlight-pink" colspan="4"><div class="header-field"><b>Session objective(s):</b><input type="text" id="sessionObjective" value="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." class="input-no-border" /></div></td>
       </tr>
-       <!-- Row 5: Competencies & Subsidiary -->
       <tr>
         <td class="highlight-blue" colspan="2">
           <b style="margin-right: 10px;">Target competencies:</b>
           <div id="competencies" class="competency-group-inline">
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Interact" /> Interact
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Interpret" /> Interpret
-            </label>
-            <label class="competency-option">
-              <input type="checkbox" class="competency-checkbox" value="Produce" /> Produce
-            </label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Interact" /> Interact</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Interpret" /> Interpret</label>
+            <label class="competency-option"><input type="checkbox" class="competency-checkbox" value="Produce" /> Produce</label>
           </div>
         </td>
-        <td class="highlight-green" colspan="2">
-            <b>Subsidiary objectives:</b>
-            <input type="text" id="subsidiaryObjective" value="Building Confidence in Language Use." class="input-no-border" />
+        <td class="highlight-green" colspan="2"><div class="header-field"><b>Subsidiary objectives:</b><input type="text" id="subsidiaryObjective" value="Building Confidence in Language Use." class="input-no-border" /></div></td>
+      </tr>
+      <tr>
+        <td class="highlight-yellow" colspan="4">
+          <b>Cross-Curricular Competences:</b>
+          <div id="ccc-multiselect" class="competency-group no-print">
+            </div>
+          <div id="ccc-print" class="print-only">
+            </div>
         </td>
       </tr>
     </table>
-
-    <br />
-    
+    <br/>
     <table>
-      <tr class="section-title">
-        <td class="stage-col">Stages</td>
-        <td class="procedure">Procedure / Tasks</td>
-        <td class="interaction-col">Interaction</td>
-        <td class="time-col">Time ?</td>
-      </tr>
+      <tr class="section-title"><td class="stage-col">Stages</td><td class="procedure">Procedure / Tasks</td><td class="interaction-col">Interaction</td><td class="time-col">Time ?</td></tr>
       <tr>
         <td class="stage-col">Warmer</td>
-        <td class="procedure">
-            <div id="warmerProcedure" class="editable-area small" contenteditable="true" data-placeholder="Write your warmer procedure here..."></div>
-        </td>
-        <td class="interaction-col">
-            <input type="text" id="warmerInteraction" value="T -> L" class="input-no-border" style="text-align: center;"/>
-        </td>
-        <td class="time-col">
-            <input type="text" id="warmerTime" value="10 min" class="input-no-border" style="text-align: center;"/>
-        </td>
+        <td class="procedure"><div id="warmerProcedure" class="editable-area small" contenteditable="true" data-placeholder="Write your warmer procedure here..."></div></td>
+        <td class="interaction-col"><input type="text" id="warmerInteraction" value="T -> L" class="input-no-border" style="text-align: center;"/></td>
+        <td class="time-col"><input type="text" id="warmerTime" value="10 min" class="input-no-border" style="text-align: center;"/></td>
       </tr>
       <tr>
         <td class="stage-col">Install resources</td>
-        <td class="procedure">
-            <div id="installProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main lesson procedure here..."></div>
-        </td>
-        <td class="interaction-col">
-            <input type="text" id="installInteraction" value="T -> T" class="input-no-border" style="text-align: center;"/>
-        </td>
-        <td class="time-col">
-            <input type="text" id="installTime" value="20 min" class="input-no-border" style="text-align: center;"/>
-        </td>
+        <td class="procedure"><div id="installProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main lesson procedure here..."></div></td>
+        <td class="interaction-col"><input type="text" id="installInteraction" value="T -> T" class="input-no-border" style="text-align: center;"/></td>
+        <td class="time-col"><input type="text" id="installTime" value="20 min" class="input-no-border" style="text-align: center;"/></td>
       </tr>
       <tr>
         <td class="stage-col">Assessment</td>
-        <td class="procedure">
-            <div id="assessmentProcedure" class="editable-area small" contenteditable="true" data-placeholder="Write your assessment procedure here..."></div>
-        </td>
-        <td class="interaction-col">
-            <input type="text" id="assessmentInteraction" value="L -> L" class="input-no-border" style="text-align: center;"/>
-        </td>
-        <td class="time-col">
-            <input type="text" id="assessmentTime" value="15 min" class="input-no-border" style="text-align: center;"/>
-        </td>
+        <td class="procedure"><div id="assessmentProcedure" class="editable-area small" contenteditable="true" data-placeholder="Write your assessment procedure here..."></div></td>
+        <td class="interaction-col"><input type="text" id="assessmentInteraction" value="L -> L" class="input-no-border" style="text-align: center;"/></td>
+        <td class="time-col"><input type="text" id="assessmentTime" value="15 min" class="input-no-border" style="text-align: center;"/></td>
       </tr>
     </table>
-
-    <br />
+    <br/>
     <table>
+      <tr><td colspan="3" class="highlight-yellow" style="text-align: center; font-weight: bold;">Self-reflection</td></tr>
       <tr>
-        <td colspan="3" class="highlight-yellow" style="text-align: center; font-weight: bold;">
-          Self-reflection
-        </td>
-      </tr>
-      <tr>
-        <td class="highlight-pink" style="text-align: center; vertical-align: middle;">
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <label style="font-weight: bold; margin-bottom: 6px;">What Worked:</label>
-            <textarea id="whatWorked" class="input-no-border" placeholder="Enter what worked..." rows="3" style="width: 90%; text-align: center;"></textarea>
-          </div>
-        </td>
-        <td class="highlight-red" style="text-align: center; vertical-align: middle;">
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <label style="font-weight: bold; margin-bottom: 6px;">What hindered:</label>
-            <textarea id="whatHindered" class="input-no-border" placeholder="Enter what hindered..." rows="3" style="width: 90%; text-align: center;"></textarea>
-          </div>
-        </td>
-        <td class="highlight-green" style="text-align: center; vertical-align: middle;">
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <label style="font-weight: bold; margin-bottom: 6px;">Action Points:</label>
-            <textarea id="actionPoints" class="input-no-border" placeholder="Enter action points..." rows="3" style="width: 90%; text-align: center;"></textarea>
-          </div>
-        </td>
+        <td class="highlight-pink" style="text-align: center; vertical-align: middle;"><div style="display: flex; flex-direction: column; align-items: center; justify-content: center;"><label style="font-weight: bold; margin-bottom: 6px;">What Worked:</label><textarea id="whatWorked" class="input-no-border" placeholder="Enter what worked..." rows="3" style="width: 90%; text-align: center;"></textarea></div></td>
+        <td class="highlight-red" style="text-align: center; vertical-align: middle;"><div style="display: flex; flex-direction: column; align-items: center; justify-content: center;"><label style="font-weight: bold; margin-bottom: 6px;">What hindered:</label><textarea id="whatHindered" class="input-no-border" placeholder="Enter what hindered..." rows="3" style="width: 90%; text-align: center;"></textarea></div></td>
+        <td class="highlight-green" style="text-align: center; vertical-align: middle;"><div style="display: flex; flex-direction: column; align-items: center; justify-content: center;"><label style="font-weight: bold; margin-bottom: 6px;">Action Points:</label><textarea id="actionPoints" class="input-no-border" placeholder="Enter action points..." rows="3" style="width: 90%; text-align: center;"></textarea></div></td>
       </tr>
     </table>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // --- START: DYNAMIC COMPETENCIES SCRIPT ---
+    const crossCurricularCompetences = { "3PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words and expressions.","discover the importance of words and chunks used in oral interaction.","demonstrate understanding of the strategies of decoding symbols.","demonstrate understanding of the features of writing."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words and expressions.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ the strategies of decoding symbols as required.","implement the features of writing letters appropriately."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words and chunks to interact orally.","communicate the decoding strategies to peers.","achieve readability through the appropriate use of the features of writing."],"Personal and Social Competence": ["respond to oral messages.","consider speech acts when interacting.","consider the strategies of decoding symbols to achieve others’ understanding.","value others’ writings."]}, "4PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words, expressions and sentences.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading basics and the strategies of decoding symbols.","demonstrate understanding of the features of correct handwriting."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words, expressions and sentences.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading basics and the decoding strategies to understand messages.","implement the features of correct handwriting."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading basics and the decoding strategies to peers.","achieve readability through the appropriate use of the features of correct handwriting."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting.","consider reading basics and the decoding strategies to achieve others’ understanding.","value others’ writings."]}, "5PS": { "Intellectual Competence": ["demonstrate understanding of listening skills.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading skills.","demonstrate understanding of the writing mechanics and the relevant information to write a message."],"Methodological Competence": ["make use of the context, paralinguistic features, and listening skills to comprehend a short message.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading skills to understand a short simple message.","implement the writing mechanics to produce a message."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading skills to peers.","communicate the writing mechanics to peers."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting orally.","share understanding with others reading skills.","publish one’s production."]}};
+
+    function setupPillToggle(containerId) {
+        document.querySelectorAll(`#${containerId} .competency-option input`).forEach((input) => {
+            const label = input.closest(".competency-option");
+            const setState = () => label.classList.toggle("selected", input.checked);
+            input.addEventListener("change", setState);
+            setState();
+        });
+    }
+
+    function setupPrintableCheckboxes(containerId, printId) {
+        const checkboxContainer = document.getElementById(containerId);
+        const printElement = document.getElementById(printId);
+        if (!checkboxContainer || !printElement) return;
+
+        const updatePrintableArea = () => {
+            const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedLabels = Array.from(checkboxes).map(cb => cb.closest('label').textContent.trim());
+            if (selectedLabels.length > 0) {
+                printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+            } else {
+                printElement.innerHTML = '';
+            }
+        };
+        checkboxContainer.addEventListener('change', updatePrintableArea);
+        updatePrintableArea();
+    }
+
+    function populateCompetencies(level) {
+        const container = document.getElementById('ccc-multiselect');
+        const printContainer = document.getElementById('ccc-print');
+        container.innerHTML = ''; 
+        printContainer.innerHTML = '';
+        const competencies = crossCurricularCompetences[level];
+        if (!competencies) return;
+
+        let html = '';
+        for (const category in competencies) {
+            html += `<div class="group-label">${category}</div><div class="competency-group-inline">`;
+            competencies[category].forEach(item => {
+                // Use the pill-style structure
+                html += `<label class="competency-option"><input type="checkbox" class="competency-checkbox" value="${item.trim()}" /> ${item.trim()}</label>`;
+            });
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        // Re-initialize pill toggles and print functionality for the new elements
+        setupPillToggle('ccc-multiselect');
+        setupPrintableCheckboxes('ccc-multiselect', 'ccc-print');
+    }
+    // --- END: DYNAMIC COMPETENCIES SCRIPT ---
+
+
+    // ---------- Theme Switcher ----------
+    const themeSwitcher = document.getElementById("themeSwitcher");
+    const tableContainer = document.getElementById("table-container");
+    themeSwitcher.addEventListener("change", (e) => {
+      tableContainer.className = e.target.value === "default" ? "theme-default" : e.target.value;
+    });
+
+    // ---------- Initialize all pill toggles on page load ----------
+    setupPillToggle('materials');
+    setupPillToggle('competencies');
+
+    // ---------- Lesson plan data & dropdowns ----------
+    const data = { "3PS": { "FAMILY AND FRIENDS": { "FAMILY": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "FRIENDS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] }, "SCHOOL": { "SCHOOL OBJECTS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "SCHOOL SUBJECTS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] }, "HOME": { "DESCRIBING A HOUSE": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "LOCATION ROOMS IN A HOUSE": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] }, "PLAY TIME": { "TOYS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "FAVOURITE TOYS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] }, "PETS": { "PETS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "PETS BODY PARTS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] }, "BIRTHDAY": { "PARTY INVITATION": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"], "PARTY CELEBRATION": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and write", "I play roles"] } }, "4PS": { "FAMILY AND FRIENDS": { "FAMILY": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"], "FRIENDS": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"] }, "SCHOOL": { "SCHOOL FACILITIES": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"], "MAPPING": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"] }, "FUN TIME AND GAMES": { "FUN TIME": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"], "GAMES": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"] }, "FOOD AND HEALTH": { "FOOD": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"], "HEALTH": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"] }, "ANIMALS": { "FARM": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"], "ZOO": ["I sing and have fun, I listen and repeat", "I read and discover", "I read and enjoy", "I read and write", "I play roles"] } }, "5PS": { "JOBS, OCCUPATIONS, AND HOBBIES": { "JOBS AND OCCUPATIONS": ["I get ready", "I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "i learn to write", "I write"], "HOBBIES": ["I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "I learn to write", "I write", "I check my progress"] }, "HOMETOWN, CITY, VILLAGE AMENITIES": { "HOMETOWN, CITY, VILLAGE AMENITIES": ["I get ready", "I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "i learn to write", "I write"], "DIRECTIONS": ["I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "I learn to write", "I write", "I check my progress"] }, "HOLIDAYS AND TRAVELLING": { "HOLIDAYS": ["I get ready", "I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "i learn to write", "I write"], "TRAVELLING": ["I listen and interact", "I listen and discover", "I read and understand", "I read and discover", "I learn and enjoy", "I learn to write", "I write", "I check my progress"] } } };
+    const levelSelect = document.getElementById("levelSelect"); const sequenceSelect = document.getElementById("sequenceSelect"); const sectionSelect = document.getElementById("sectionSelect"); const sessionSelect = document.getElementById("sessionSelect");
+    levelSelect.addEventListener("change", function () { const level = this.value; sequenceSelect.innerHTML = '<option value="">-- Select Sequence --</option>'; sectionSelect.innerHTML = '<option value="">-- Select Section --</option>'; sessionSelect.innerHTML = '<option value="">-- Select Session --</option>'; if (data[level]) { Object.keys(data[level]).forEach(seq => { const opt = document.createElement("option"); opt.value = seq; opt.textContent = seq; sequenceSelect.appendChild(opt); }); const remediationOpt = document.createElement("option"); remediationOpt.value = "REMEDIATION & STANDARDISATION"; remediationOpt.textContent = "REMEDIATION & STANDARDISATION"; sequenceSelect.appendChild(remediationOpt); } populateCompetencies(level); });
+    sequenceSelect.addEventListener("change", function () { const level = levelSelect.value; const seq = this.value; sectionSelect.innerHTML = '<option value="">-- Select Section --</option>'; sessionSelect.innerHTML = '<option value="">-- Select Session --</option>'; if (seq === "REMEDIATION & STANDARDISATION") { const remediationOpt = document.createElement("option"); remediationOpt.value = "REMEDIATION & STANDARDISATION"; remediationOpt.textContent = "REMEDIATION & STANDARDISATION"; sectionSelect.appendChild(remediationOpt); const remediationSessionOpt = document.createElement("option"); remediationSessionOpt.value = "REMEDIATION & STANDARDISATION"; remediationSessionOpt.textContent = "REMEDIATION & STANDARDISATION"; sessionSelect.appendChild(remediationSessionOpt); } else if (data[level] && data[level][seq]) { Object.keys(data[level][seq]).forEach(section => { const opt = document.createElement("option"); opt.value = section; opt.textContent = section; sectionSelect.appendChild(opt); }); } });
+    sectionSelect.addEventListener("change", function () { const level = levelSelect.value; const seq = sequenceSelect.value; const section = this.value; sessionSelect.innerHTML = '<option value="">-- Select Session --</option>'; if (seq === "REMEDIATION & STANDARDISATION") { const remediationSessionOpt = document.createElement("option"); remediationSessionOpt.value = "REMEDIATION & STANDARDISATION"; remediationSessionOpt.textContent = "REMEDIATION & STANDARDISATION"; sessionSelect.appendChild(remediationSessionOpt); } else if (data[level] && data[level][seq] && data[level][seq][section]) { data[level][seq][section].forEach(session => { const opt = document.createElement("option"); opt.value = session; opt.textContent = session; sessionSelect.appendChild(opt); }); } });
+
+    // ---------- RIBBON EDITOR LOGIC ----------
+    (function() { let activeEditor = null; document.addEventListener('focusin', e => { if (e.target.isContentEditable) { activeEditor = e.target; } }); function exec(cmd, value = null) { if (activeEditor) { activeEditor.focus(); document.execCommand(cmd, false, value); } } document.querySelectorAll('[data-cmd]').forEach(btn => { btn.addEventListener('click', e => { e.preventDefault(); exec(btn.dataset.cmd); }); }); document.getElementById('fontFamily').addEventListener('change', e => { exec('fontName', e.target.value); }); document.getElementById('fontSize').addEventListener('change', e => { const sizeMap = { '10': 1, '12': 2, '14': 3, '16': 4, '18': 5, '20': 6, '24': 7 }; exec('fontSize', sizeMap[e.target.value] || 3); }); document.getElementById('foreColor').addEventListener('input', e => { exec('foreColor', e.target.value); }); document.getElementById('hiliteColor').addEventListener('input', e => { exec('hiliteColor', e.target.value); }); const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none'; document.body.appendChild(fileInput); document.querySelector('.insert-image-btn').addEventListener('click', e => { e.preventDefault(); if (activeEditor) { fileInput.click(); } else { alert("Please click into a text area before inserting an image."); } }); fileInput.addEventListener('change', function () { const file = this.files && this.files[0]; if (!file || !activeEditor) return; const reader = new FileReader(); reader.onload = function (ev) { const img = document.createElement('img'); img.src = ev.target.result; insertNodeAtCursor(img, activeEditor); }; reader.readAsDataURL(file); this.value = ''; }); function insertNodeAtCursor(node, editor) { editor.focus(); const sel = window.getSelection(); if (!sel || sel.rangeCount === 0) { editor.appendChild(node); return; } let range = sel.getRangeAt(0); range.deleteContents(); range.insertNode(node); range.setStartAfter(node); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); } })();
+
+    // ---------- SAVE & LOAD WITH FIREBASE ----------
+    const firebaseConfig = { apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0", authDomain: "printelydz.firebaseapp.com", projectId: "printelydz", storageBucket: "printelydz.appspot.com", messagingSenderId: "49201277305", appId: "1:49201277305:web:df932043e4d6d986cae7a8", measurementId: "G-R4VJL5SR88" };
+    const app = firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
+    let currentPlanId = null;
+    const saveButton = document.getElementById("save-button"); const planNameModal = document.getElementById("planNameModal"); const planNameInput = document.getElementById("planNameInput"); const cancelSave = document.getElementById("cancelSave"); const confirmSave = document.getElementById("confirmSave");
+    function populateForm(planData) {
+        document.getElementById("schoolName").value = planData.school || ''; document.getElementById("teacherName").value = planData.teacher || ''; document.getElementById("learnerCount").value = planData.learners || ''; document.getElementById("sessionObjective").value = planData.objective || ''; planNameInput.value = planData.planName || ''; document.getElementById("subsidiaryObjective").value = planData.subsidiaryObjective || 'Building Confidence in Language Use.';
+        document.getElementById('warmerProcedure').innerHTML = planData.warmer?.procedure || ''; document.getElementById('installProcedure').innerHTML = planData.install?.procedure || ''; document.getElementById('assessmentProcedure').innerHTML = planData.assessment?.procedure || '';
+        document.getElementById('warmerInteraction').value = planData.warmer?.interaction || ''; document.getElementById('warmerTime').value = planData.warmer?.time || ''; document.getElementById('installInteraction').value = planData.install?.interaction || ''; document.getElementById('installTime').value = planData.install?.time || ''; document.getElementById('assessmentInteraction').value = planData.assessment?.interaction || ''; document.getElementById('assessmentTime').value = planData.assessment?.time || '';
+        document.getElementById('whatWorked').value = planData.reflection?.worked || ''; document.getElementById('whatHindered').value = planData.reflection?.hindered || ''; document.getElementById('actionPoints').value = planData.reflection?.actionPoints || '';
+        const setCheckedValues = (containerId, values) => { document.querySelectorAll(`#${containerId} input[type='checkbox']`).forEach(cb => { cb.checked = (values || []).includes(cb.value); cb.dispatchEvent(new Event('change')); }); };
+        setCheckedValues('materials', planData.materials); setCheckedValues('competencies', planData.competencies);
+        levelSelect.value = planData.level || ''; levelSelect.dispatchEvent(new Event('change'));
+        setTimeout(() => {
+            sequenceSelect.value = planData.sequence || ''; sequenceSelect.dispatchEvent(new Event('change'));
+            if(planData.crossCurricularCompetences) {
+                planData.crossCurricularCompetences.forEach(val => {
+                    const cb = document.querySelector(`#ccc-multiselect input[value="${val}"]`);
+                    if(cb) { cb.checked = true; cb.dispatchEvent(new Event('change')); }
+                });
+            }
+            setTimeout(() => {
+                sectionSelect.value = planData.section || ''; sectionSelect.dispatchEvent(new Event('change'));
+                setTimeout(() => { sessionSelect.value = planData.session || ''; }, 100);
+            }, 100);
+        }, 100);
+    }
+    async function loadPlan(planId) { const user = auth.currentUser; if (!user) { alert("You must be logged in to load a plan."); return; } try { const planRef = db.collection("users").doc(user.uid).collection("lessonPlans").doc(planId); const planDoc = await planRef.get(); if (planDoc.exists) { currentPlanId = planId; populateForm(planDoc.data()); alert("Lesson plan loaded successfully!"); } else { alert("Error: Lesson plan not found."); } } catch (error) { alert("An error occurred while loading the plan."); console.error("Error getting document:", error); } }
+    auth.onAuthStateChanged(user => { if (user) { saveButton.disabled = false; saveButton.innerHTML = "<i class='fa-solid fa-save'></i> Save Plan"; const planToLoadId = sessionStorage.getItem('planToLoadId'); if (planToLoadId) { loadPlan(planToLoadId); sessionStorage.removeItem('planToLoadId'); } } else { saveButton.disabled = true; saveButton.innerHTML = "Log In to Save"; currentPlanId = null; } });
+    saveButton.addEventListener("click", () => { if (!auth.currentUser) { alert("Please log in to save."); return; } if (!currentPlanId) { planNameInput.value = ""; } planNameModal.style.display = "flex"; planNameInput.focus(); });
+    cancelSave.addEventListener("click", () => { planNameModal.style.display = "none"; });
+    confirmSave.addEventListener("click", async () => { const planName = planNameInput.value.trim(); const user = auth.currentUser; if (!planName) { alert("Please enter a name!"); return; } if (!user) { alert("Authentication error."); return; } confirmSave.disabled = true; confirmSave.textContent = "Saving...";
+      const lessonData = {
+        uid: user.uid, planName: planName, plannerType: "interface", school: document.getElementById("schoolName").value, teacher: document.getElementById("teacherName").value, level: document.getElementById("levelSelect").value, learners: document.getElementById("learnerCount").value, sequence: document.getElementById("sequenceSelect").value, section: document.getElementById("sectionSelect").value, session: document.getElementById("sessionSelect").value, objective: document.getElementById("sessionObjective").value, subsidiaryObjective: document.getElementById("subsidiaryObjective").value,
+        materials: Array.from(document.querySelectorAll("#materials input:checked")).map(cb => cb.value),
+        competencies: Array.from(document.querySelectorAll("#competencies input:checked")).map(cb => cb.value),
+        crossCurricularCompetences: Array.from(document.querySelectorAll("#ccc-multiselect input:checked")).map(cb => cb.value),
+        warmer: { procedure: document.getElementById('warmerProcedure').innerHTML, interaction: document.getElementById('warmerInteraction').value, time: document.getElementById('warmerTime').value }, install: { procedure: document.getElementById('installProcedure').innerHTML, interaction: document.getElementById('installInteraction').value, time: document.getElementById('installTime').value }, assessment: { procedure: document.getElementById('assessmentProcedure').innerHTML, interaction: document.getElementById('assessmentInteraction').value, time: document.getElementById('assessmentTime').value },
+        reflection: { worked: document.getElementById('whatWorked').value, hindered: document.getElementById('whatHindered').value, actionPoints: document.getElementById('actionPoints').value },
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      try { if (currentPlanId) { const planRef = db.collection("users").doc(user.uid).collection("lessonPlans").doc(currentPlanId); await planRef.update(lessonData); alert(`Plan "${planName}" updated!`); } else { lessonData.createdAt = firebase.firestore.FieldValue.serverTimestamp(); const docRef = await db.collection("users").doc(user.uid).collection("lessonPlans").add(lessonData); currentPlanId = docRef.id; alert(`Plan "${planName}" saved!`); } planNameModal.style.display = "none"; } catch (error) { console.error("Error saving:", error); alert("Error saving plan."); } finally { confirmSave.disabled = false; confirmSave.textContent = "Save"; }
+    });
+  </script>
 </body>
 </html>
-

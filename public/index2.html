@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Lesson Planner</title>
+  <link rel="icon" type="image/x-icon" href="icon.webp">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class' // Enable class-based dark mode
+    };
+  </script>
+
+	<style>
+    :root {
+      --brand-color: #7c3aed;
+      --background-light: #f3e8ff;
+      --background-dark: #1e1b4b;
+    }
+  
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-light);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
+      overflow-x: hidden;
+      /* Add padding-bottom to prevent content from being hidden by the bottom nav */
+      padding-bottom: 80px; 
+    }
+  
+    body.dark {
+      background-color: var(--background-dark);
+      color: #e0e7ff;
+    }
+    
+    /* Keyframe Animations */
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(18deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    @keyframes fade-in-up {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up { animation: fade-in-up 0.7s ease-out forwards; }
+  
+    /* BOTTOM NAVIGATION (Mobile) */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    body.dark .mobile-bottom-nav {
+      background: rgba(30, 27, 75, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mobile-nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      color: #4a5568;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .mobile-nav-link .nav-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 2px;
+    }
+    .mobile-nav-link .nav-text {
+      font-size: 0.7rem; /* 11.2px */
+      font-weight: 500;
+    }
+    .mobile-nav-link.active {
+      color: var(--brand-color);
+      transform: translateY(-3px);
+    }
+    body.dark .mobile-nav-link {
+        color: #a0aec0;
+    }
+    body.dark .mobile-nav-link.active {
+        color: #c4b5fd;
+    }
+
+    /* THEME TOGGLE */
+    .theme-switcher { position: relative; }
+    .switch { display: flex; align-items: center; width: 50px; height: 28px; background: #a78bfa; border-radius: 28px; cursor: pointer; position: relative; }
+    body.dark .switch { background: #4c1d95; }
+    .slider { position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 3px; left: 4px; transition: transform 0.3s ease-in-out; }
+    #dm-toggle { opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { transform: translateX(21px); }
+    .slider-icon { width: 14px; height: 14px; transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    #dm-toggle:not(:checked) + .switch .sun-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    #dm-toggle:checked + .switch .moon-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    
+    /* General Component Styling */
+    .card {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 1.5rem; /* 24px */
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+    body.dark .card {
+      background: rgba(45, 34, 101, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  
+    /* Slideshow */
+    .slideshow-container { border-radius: 1.5rem; overflow: hidden; }
+    .slides-wrapper { display: flex; transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .slide { min-width: 100%; box-sizing: border-box; }
+    .slide img { width: 100%; display: block; object-fit: cover; aspect-ratio: 16 / 9; }
+    .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(255, 255, 255, 0.6); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; z-index: 10; transition: background-color 0.3s ease, transform 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    body.dark .slide-btn { background-color: rgba(30, 30, 46, 0.7); color: #fff; }
+    .slide-btn:hover { transform: translateY(-50%) scale(1.1); }
+    .slide-btn.prev { left: 1rem; } .slide-btn.next { right: 1rem; }
+    .dots-container { text-align: center; position: absolute; bottom: 1rem; width: 100%; z-index: 10; }
+    .dot { cursor: pointer; height: 10px; width: 10px; margin: 0 5px; background-color: rgba(255, 255, 255, 0.5); border-radius: 50%; display: inline-block; transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.1); }
+    .dot.active, .dot:hover { background-color: var(--brand-color); transform: scale(1.3); }
+
+    /* Accordion */
+    .accordion-header {
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;
+      border-radius: 12px; transition: background 0.3s ease;
+      background: linear-gradient(135deg, #e9d5ff, #d8b4fe); color: #2e1065; margin-top: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    }
+    .accordion-header.active { background: linear-gradient(135deg, #d8b4fe, #c084fc); color: white; }
+    body.dark .accordion-header { background: linear-gradient(135deg, #6d28d9, #7c3aed); color: #f3e8ff; }
+    body.dark .accordion-header.active { background: linear-gradient(135deg, #7c3aed, #9333ea); }
+    .accordion-icon { transition: transform 0.3s ease; width: 24px; height: 24px; }
+    .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+    .accordion-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; background: #f8fafc; border-radius: 0 0 12px 12px; }
+    body.dark .accordion-panel { background: #1e1b29; }
+    
+    /* Syllabus Table */
+    .syllabus-table-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+    .syllabus-table { border-collapse: collapse; width: 100%; background: white; }
+    body.dark .syllabus-table { background: #2a2a3d; color: #e5e5e5; }
+    .syllabus-table th, .syllabus-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    body.dark .syllabus-table th, body.dark .syllabus-table td { border-bottom: 1px solid #374151; }
+    .syllabus-table th { font-weight: 600; color: #4a5568; background-color: #f8fafc; }
+    body.dark .syllabus-table th { color: #d1d5db; background-color: #374151; }
+    .syllabus-table tbody tr:hover { background: #f1f5f9; }
+    body.dark .syllabus-table tbody tr:hover { background: #3b3055; }
+	</style>
+
+</head>
+<body class="min-h-screen">
+  
+  <!-- Animated Background Shapes -->
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+    <svg style="animation: float 15s ease-in-out infinite; animation-delay: 0s;" class="absolute top-[15%] left-[10%] w-20 h-20 text-purple-300/50" fill="currentColor" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
+    <svg style="animation: float 12s ease-in-out infinite; animation-delay: 3s;" class="absolute top-[75%] left-[5%] w-10 h-10 text-pink-300/50" fill="currentColor" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
+    <svg style="animation: float 15s ease-in-out infinite; animation-delay: 5s;" class="absolute top-[20%] right-[8%] w-16 h-16 text-pink-400/50" fill="currentColor" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
+    <svg style="animation: float 18s ease-in-out infinite; animation-delay: 2s;" class="absolute bottom-[10%] right-[12%] w-24 h-24 text-blue-300/50" fill="currentColor" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
+  </div>
+  
+  <!-- TOP BAR -->
+  <header class="max-w-6xl mx-auto px-4 pt-4">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo or Site Title -->
+      <a href="index.html" class="text-2xl font-bold text-gray-800 dark:text-white">
+        Lesson<span class="text-purple-600">Planner</span>
+      </a>
+  
+      <!-- Right Side Controls (User Info, Theme Toggle) -->
+      <div class="flex items-center gap-4">
+        <div id="user-info-container"></div>
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <div class="slider">
+                <svg class="slider-icon sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 4.343a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.192 9.192a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM17.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM14.596 15.657a.75.75 0 011.06 0l1.061 1.06a.75.75 0 11-1.06 1.06l-1.06-1.061a.75.75 0 010-1.06zM5.404 4.343a.75.75 0 011.06 0l1.06 1.061a.75.75 0 11-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                <svg class="slider-icon moon-icon text-purple-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M7.165 3.142A.75.75 0 017.5 2.5a.75.75 0 01.75.75v.01a.75.75 0 01-1.5 0V3.25a.75.75 0 01-.335-.108zM5.25 5.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V5.5zM3.25 8.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V8.5zM5.5 11.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM11.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM13.75 11.5a.75.75 0 000 1.5h.01a.75.75 0 000-1.5h-.01zM11.75 8.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 5.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01A.75.75 0 018.5 5.5zM10 6.5A3.5 3.5 0 006.5 10a3.5 3.5 0 003.5 3.5a3.5 3.5 0 003.5-3.5A3.5 3.5 0 0010 6.5z" /></svg>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-link active">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.026.026.05.054.07.084v6.101A2.25 2.25 0 0117.75 22h-1.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3.5a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75h-1.5A2.25 2.25 0 013.75 19.75v-6.101a2.25 2.25 0 01.071-.495l8.159-8.159z" /></svg>
+      <span class="nav-text">Home</span>
+    </a>
+    <a href="section22.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a.375.375 0 01-.375-.375V6.75A3.75 3.75 0 0010.5 3h-4.875c0-1.036.84-1.875 1.875-1.875H5.625z" /><path d="M12.971 3.429l3.1 3.1c.14.14.14.368 0 .508l-3.099 3.099a.375.375 0 01-.53 0l-3.1-3.1a.375.375 0 010-.508l3.1-3.1a.375.375 0 01.53 0z" /></svg>
+      <span class="nav-text">Templates</span>
+    </a>
+    <a href="flashcards2.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.75 2.25a.75.75 0 00-1.5 0v1.5h-1.5a.75.75 0 000 1.5h1.5v1.5a.75.75 0 001.5 0v-1.5h1.5a.75.75 0 000-1.5h-1.5v-1.5z" /><path fill-rule="evenodd" d="M6 4.5a3 3 0 013-3h6a3 3 0 013 3v15a3 3 0 01-3 3H9a3 3 0 01-3-3V4.5zm6 4.5a.75.75 0 00-1.5 0v3a.75.75 0 001.5 0v-3z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Flashcards</span>
+    </a>
+    <a href="dashboard2.html" id="account-nav-link-mobile" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Account</span>
+    </a>
+  </nav>
+
+  <div class="relative text-center py-20 my-8 overflow-hidden">
+    <div id="header-text-container" class="relative z-10 text-white px-4">
+        <!-- Content will be injected by JavaScript -->
+    </div>
+  </div>
+
+<section class="grid grid-cols-1 gap-6 p-4 max-w-6xl mx-auto relative z-10">
+  <a href="#orientation" class="p-6 text-black dark:text-white transition-all card">
+    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Features Coming Soon</h3>
+    <p>See what new and exciting tools are on the horizon.</p>
+  </a>
+
+  <a href="#guidelines" class="p-6 text-black dark:text-white transition-all card">
+    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Feature Showcase</h3>
+    <p>Explore the powerful features of our planner.</p>
+  </a>
+
+  <a href="#syllabus" class="p-6 text-black dark:text-white transition-all card">
+    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Year 3, 4, 5 PS Syllabus</h3>
+    <p>Detailed syllabus for Primary School Years 3, 4, and 5.</p>
+  </a>
+
+  <a href="#topics" class="p-6 text-black dark:text-white transition-all card">
+    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Download Didactic Guides</h3>
+    <p>Get the official didactic guides for each level.</p>
+  </a>
+
+  <a href="#planning" class="p-6 text-black dark:text-white transition-all card">
+    <h3 class="text-xl font-bold mb-2 text-blue-600 dark:text-purple-300">Feedback</h3>
+    <p>Leave your comments and suggestions.</p>
+  </a>
+</section>
+
+<main class="max-w-5xl mx-auto px-4 space-y-24 pb-20 relative z-10">
+
+  <section id="orientation">
+    <h2 class="text-3xl font-bold mb-8 text-purple-600 dark:text-purple-300 text-center">Exciting Features Coming Soon!</h2>
+    <div class="grid grid-cols-1 gap-8 text-center">
+        <div class="p-6 rounded-2xl card">
+            <h3 class="text-xl font-bold mb-2 text-purple-700 dark:text-purple-300">More Themes</h3>
+            <p class="leading-relaxed">A wider variety of aesthetically pleasing and customizable themes.</p>
+        </div>
+        <div class="p-6 rounded-2xl card">
+            <h3 class="text-xl font-bold mb-2 text-purple-700 dark:text-purple-300">All Subjects, All Levels</h3>
+            <p class="leading-relaxed">Expanding beyond English to support all subjects and educational stages.</p>
+        </div>
+        <div class="p-6 rounded-2xl card">
+            <h3 class="text-xl font-bold mb-2 text-purple-700 dark:text-purple-300">Teacher Collaboration Hub</h3>
+            <p class="leading-relaxed">An integrated chat platform for educators to connect and share ideas.</p>
+        </div>
+    </div>
+  </section>
+
+  <section id="guidelines">
+    <h2 class="text-3xl font-bold mb-8 text-purple-600 dark:text-purple-300 text-center">Feature Showcase</h2>
+    <div class="slideshow-container card p-0">
+        <div class="slides-wrapper">
+            <div class="slide"><img src="https://placehold.co/800x450/c084fc/ffffff?text=Ready+Templates" alt="Instantly Ready Templates"></div>
+            <div class="slide"><img src="https://placehold.co/800x450/a78bfa/ffffff?text=Printable+Plans" alt="Fully Printable Plans"></div>
+            <div class="slide"><img src="https://placehold.co/800x450/818cf8/ffffff?text=Multi-Theme" alt="Multi-Theme Options"></div>
+            <div class="slide"><img src="https://placehold.co/800x450/60a5fa/ffffff?text=Easy+Editing" alt="Easy Customization"></div>
+        </div>
+        <button class="slide-btn prev" aria-label="Previous Slide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg></button>
+        <button class="slide-btn next" aria-label="Next Slide"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg></button>
+        <div class="dots-container"></div>
+    </div>
+    </section>
+
+  <section id="syllabus">
+      <h2 class="text-3xl font-bold mb-8 text-purple-600 dark:text-purple-300 text-center">Year 3, 4 and 5 PS Syllabus</h2>
+      <div class="space-y-2">
+        <!-- Accordion items will be generated here by JS -->
+      </div>
+  </section>
+  
+  <section id="topics">
+    <h2 class="text-3xl font-bold mb-8 text-purple-600 dark:text-purple-300 text-center">Download Didactic Guides</h2>
+    <div class="space-y-4">
+        <a href="https://drive.google.com/uc?export=download&id=1-AYuZdlCW702Hk8X00FRoNRM2ERLKEfY" class="flex items-center p-6 card group">
+            <div class="p-3 bg-violet-200 dark:bg-violet-900/50 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-600 dark:text-violet-400" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg></div>
+            <div>
+                <h3 class="text-lg font-bold text-violet-800 dark:text-violet-200">Guide for Year 3 & 4</h3>
+                <p class="text-sm text-violet-600 dark:text-violet-400">Click to download the official didactic guide.</p>
+            </div>
+        </a>
+        <a href="https://drive.google.com/uc?export=download&id=1--xytiEzXJDio9QdrH6ehTSwCho84WN3" class="flex items-center p-6 card group">
+            <div class="p-3 bg-violet-200 dark:bg-violet-900/50 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-600 dark:text-violet-400" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg></div>
+            <div>
+                <h3 class="text-lg font-bold text-violet-800 dark:text-violet-200">Guide for Year 5</h3>
+                <p class="text-sm text-violet-600 dark:text-violet-400">Click to download the official didactic guide.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="planning">
+    <h2 class="text-3xl font-bold mb-8 text-purple-600 dark:text-purple-300 text-center">Feedback Corner</h2>
+    <div class="card p-6">
+        <form id="feedback-form" class="space-y-6">
+            <div>
+                <label for="comment-text" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Your Feedback</label>
+                <textarea id="comment-text" name="comment-text" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 dark:border-gray-600 bg-gray-50/80 dark:bg-gray-700/50 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="Share your thoughts..."></textarea>
+            </div>
+            <button type="submit" id="submit-feedback-btn" class="w-full text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Submit Feedback
+            </button>
+        </form>
+        <div id="login-prompt" class="hidden text-center mt-6 p-4 bg-yellow-100/50 dark:bg-yellow-900/30 rounded-lg">
+            <p class="text-yellow-800 dark:text-yellow-200">
+                You must be logged in to comment. 
+                <a href="section3.html" class="text-purple-600 dark:text-purple-300 hover:underline font-bold">Sign up here</a>.
+            </p>
+        </div>
+        <div id="comments-container" class="mt-12 space-y-6"></div>
+    </div>
+</section>
+</main>
+
+<footer class="max-w-5xl mx-auto px-4 text-center mt-16">
+  <div class="text-center text-sm py-4 text-gray-500 dark:text-gray-400">
+    Designed by <a href="https://facebook.com/bahloulidjaafar" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline">@Bahlouli djaafar</a>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- Dark Mode ---
+    const toggleCheckbox = document.getElementById('dm-toggle');
+    const body = document.body;
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      body.classList.add('dark');
+      toggleCheckbox.checked = true;
+    }
+    toggleCheckbox.addEventListener('change', () => {
+      if (toggleCheckbox.checked) {
+        body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // --- Dynamic Syllabus Accordion Generation ---
+    const syllabusData = {
+        "Year 3": {
+            "Time Allocation": `...`, // Add table HTML or data here
+            "Exit Profile & Competences": `...`,
+            "Topics": `...`
+        },
+        "Year 4": {
+            "Exit Profile & Competences": `...`,
+            "Domains and Competences": `...`,
+            "Sequences (1-6)": `...`
+        },
+        "Year 5": {
+            "Exit Profile & Competences": `...`,
+            "Domains and Competences": `...`
+        }
+    };
+    // NOTE: For brevity in this example, the detailed tables are omitted. 
+    // You would place the full HTML table structure inside each section.
+    const syllabusContainer = document.querySelector('#syllabus .space-y-2');
+    if (syllabusContainer) {
+        // Simplified generation - you'd replace this with your actual table data
+        Object.keys(syllabusData).forEach(year => {
+            const item = document.createElement('div');
+            item.className = 'accordion-item';
+            item.innerHTML = `
+                <div class="accordion-header">
+                    <h3 class="text-xl font-bold">Key Stage 1 - ${year} Syllabus</h3>
+                    <svg class="accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-panel">
+                    <div class="p-4">Content for ${year} goes here.</div>
+                </div>
+            `;
+            syllabusContainer.appendChild(item);
+        });
+    }
+
+    // --- Accordion Script ---
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', function () {
+        const panel = this.nextElementSibling;
+        this.classList.toggle('active');
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    });
+    
+    // --- SLIDESHOW SCRIPT ---
+    const slidesWrapper = document.querySelector('.slides-wrapper');
+    const dotsContainer = document.querySelector('.dots-container');
+
+    if (slidesWrapper && dotsContainer) {
+        const slides = Array.from(slidesWrapper.children);
+        const prevBtn = document.querySelector('.slide-btn.prev');
+        const nextBtn = document.querySelector('.slide-btn.next');
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+        let slideInterval;
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dot.addEventListener('click', () => {
+                goToSlide(i);
+                restartInterval();
+            });
+            dotsContainer.appendChild(dot);
+        }
+        const dots = Array.from(dotsContainer.children);
+        
+        const goToSlide = (index) => {
+            currentIndex = (index + totalSlides) % totalSlides;
+            slidesWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+        };
+
+        const restartInterval = () => {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
+        };
+
+        nextBtn.addEventListener('click', () => { goToSlide(currentIndex + 1); restartInterval(); });
+        prevBtn.addEventListener('click', () => { goToSlide(currentIndex - 1); restartInterval(); });
+        
+        goToSlide(0); // Initial setup
+        restartInterval();
+    }
+
+    // --- Smooth Scrolling for Anchor Links ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+  });
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+  authDomain: "printelydz.firebaseapp.com",
+  projectId: "printelydz",
+  storageBucket: "printelydz.appspot.com",
+  messagingSenderId: "49201277305",
+  appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+  measurementId: "G-R4VJL5SR88"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- Element References ---
+const userInfoContainer = document.getElementById('user-info-container');
+const feedbackForm = document.getElementById('feedback-form');
+const commentTextarea = document.getElementById('comment-text');
+const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
+const loginPrompt = document.getElementById('login-prompt');
+const commentsContainer = document.getElementById('comments-container');
+const headerTextContainer = document.getElementById('header-text-container');
+const signupNavLink = document.getElementById('signup-nav-link');
+const accountMobileLink = document.getElementById('account-nav-link-mobile');
+
+
+// --- Function to fetch and display comments in real-time ---
+const displayComments = () => {
+  const commentsRef = collection(db, 'comments');
+  const q = query(commentsRef, orderBy('timestamp', 'desc'));
+
+  onSnapshot(q, (snapshot) => {
+    commentsContainer.innerHTML = '';
+    snapshot.forEach((doc) => {
+      const comment = doc.data();
+      const commentElement = document.createElement('div');
+      commentElement.className = 'p-4 rounded-xl bg-gray-100 dark:bg-gray-700/50 animate-fade-in-up';
+      const date = comment.timestamp ? comment.timestamp.toDate().toLocaleString() : 'Just now';
+      commentElement.innerHTML = `
+        <div class="flex justify-between items-center mb-1">
+            <h4 class="font-bold text-purple-600 dark:text-purple-300 text-md">${comment.username}</h4>
+            <span class="text-xs text-gray-500 dark:text-gray-400">${date}</span>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">${comment.commentText}</p>
+      `;
+      commentsContainer.appendChild(commentElement);
+    });
+  });
+};
+
+// --- Update UI based on Auth State ---
+const updateUIForUser = async (user) => {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const username = userDoc.exists() ? userDoc.data().username : user.email.split('@')[0];
+
+    // Update Header
+    headerTextContainer.innerHTML = `
+        <h1 class="text-3xl font-bold mb-4">Welcome back, ${username}!</h1>
+        <h2 class="text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200">Lesson Plan Builder</h2>
+    `;
+
+    // Update Top Right UI
+    userInfoContainer.innerHTML = `
+        <div class="flex items-center gap-3">
+            <a href="dashboard2.html" title="Account Dashboard" class="hidden items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors p-1 rounded-lg">
+                <span class="font-medium text-sm">Dashboard</span>
+            </a>
+            <button id="logout-btn" title="Sign Out" class="px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-semibold">Sign Out</button>
+        </div>
+    `;
+    document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+
+    // Update Nav Links
+    if (signupNavLink) signupNavLink.style.display = 'none';
+    if(accountMobileLink) accountMobileLink.href = 'dashboard2.html';
+    
+    // Update Feedback Form
+    feedbackForm.style.display = 'block';
+    loginPrompt.classList.add('hidden');
+    commentTextarea.disabled = false;
+    submitFeedbackBtn.disabled = false;
+
+    // Add form submission logic
+    feedbackForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const commentText = commentTextarea.value.trim();
+        if (commentText === '') return;
+        try {
+            await addDoc(collection(db, "comments"), { userId: user.uid, username, commentText, timestamp: serverTimestamp() });
+            feedbackForm.reset();
+        } catch (error) {
+            console.error("Error adding document: ", error);
+        }
+    };
+};
+
+const updateUIForGuest = () => {
+    // Update Header
+    headerTextContainer.innerHTML = `
+        <h2 class="text-4xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200">Welcome to the Lesson Plan Builder</h2>
+        <p class="text-lg max-w-3xl mx-auto">Customize your lesson plan in a few easy steps</p>
+    `;
+
+    // Update Top Right UI
+    userInfoContainer.innerHTML = `
+        <a href="login2.html" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-semibold shadow-md">Login</a>
+    `;
+
+    // Update Nav Links
+    if (signupNavLink) signupNavLink.style.display = 'block';
+    if(accountMobileLink) accountMobileLink.href = 'section3.html';
+
+    // Update Feedback Form
+    feedbackForm.style.display = 'none';
+    loginPrompt.classList.remove('hidden');
+};
+
+// --- Auth State Listener ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    updateUIForUser(user);
+  } else {
+    updateUIForGuest();
+  }
+});
+
+// --- Initial call to display comments ---
+displayComments();
+
+</script>
+
+</body>
+</html>
+

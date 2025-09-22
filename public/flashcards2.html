@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Flashcards</title>
+  <link rel="icon" type="image/x-icon" href="icon.webp">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <style>
+    :root {
+      --brand-color: #7c3aed;
+      --background-light: #f3e8ff;
+      --background-dark: #1e1b4b;
+    }
+  
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-light);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
+      overflow-x: hidden;
+      padding-bottom: 80px; 
+    }
+  
+    body.dark {
+      background-color: var(--background-dark);
+      color: #e0e7ff;
+    }
+    
+    /* BOTTOM NAVIGATION */
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      z-index: 1000; display: flex; justify-content: space-around; align-items: center;
+    }
+    body.dark .mobile-bottom-nav {
+      background: rgba(30, 27, 75, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mobile-nav-link {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex-grow: 1; color: #4a5568; transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .mobile-nav-link .nav-icon { width: 24px; height: 24px; margin-bottom: 2px; }
+    .mobile-nav-link .nav-text { font-size: 0.7rem; font-weight: 500; }
+    .mobile-nav-link.active { color: var(--brand-color); transform: translateY(-3px); }
+    body.dark .mobile-nav-link { color: #a0aec0; }
+    body.dark .mobile-nav-link.active { color: #c4b5fd; }
+
+    /* THEME TOGGLE */
+    .theme-switcher { position: relative; }
+    .switch { display: flex; align-items: center; width: 50px; height: 28px; background: #a78bfa; border-radius: 28px; cursor: pointer; position: relative; }
+    body.dark .switch { background: #4c1d95; }
+    .slider { position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 3px; left: 4px; transition: transform 0.3s ease-in-out; }
+    #dm-toggle { opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { transform: translateX(21px); }
+    .slider-icon { width: 14px; height: 14px; transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    #dm-toggle:not(:checked) + .switch .sun-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    #dm-toggle:checked + .switch .moon-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    
+    /* ACCORDION */
+    .syllabus-item-header {
+      display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;
+      background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
+      border-radius: 1rem; cursor: pointer; user-select: none; transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .syllabus-item-header:hover { background-color: rgba(255, 255, 255, 0.8); transform: translateY(-2px); }
+    .syllabus-item-header.active { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .syllabus-item-content {
+      max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out;
+      background-color: rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px);
+      border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem;
+    }
+    .syllabus-item-content.active { max-height: 3000px; }
+    body.dark .syllabus-item-header { background-color: rgba(63, 17, 105, 0.5); color: #e0e7ff; }
+    body.dark .syllabus-item-header:hover { background-color: rgba(63, 17, 105, 0.8); }
+    body.dark .syllabus-item-content { background-color: rgba(63, 17, 105, 0.3); }
+
+  </style>
+</head>
+<body class="transition-colors duration-500">
+  <!-- TOP BAR -->
+  <header class="max-w-6xl mx-auto px-4 pt-4">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="text-2xl font-bold text-gray-800 dark:text-white">
+        Lesson<span class="text-purple-600">Planner</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <div class="slider">
+                <svg class="slider-icon sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 4.343a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.192 9.192a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM17.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM14.596 15.657a.75.75 0 011.06 0l1.061 1.06a.75.75 0 11-1.06 1.06l-1.06-1.061a.75.75 0 010-1.06zM5.404 4.343a.75.75 0 011.06 0l1.06 1.061a.75.75 0 11-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                <svg class="slider-icon moon-icon text-purple-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M7.165 3.142A.75.75 0 017.5 2.5a.75.75 0 01.75.75v.01a.75.75 0 01-1.5 0V3.25a.75.75 0 01-.335-.108zM5.25 5.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V5.5zM3.25 8.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V8.5zM5.5 11.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM11.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM13.75 11.5a.75.75 0 000 1.5h.01a.75.75 0 000-1.5h-.01zM11.75 8.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 5.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01A.75.75 0 018.5 5.5zM10 6.5A3.5 3.5 0 006.5 10a3.5 3.5 0 003.5 3.5a3.5 3.5 0 003.5-3.5A3.5 3.5 0 0010 6.5z" /></svg>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.026.026.05.054.07.084v6.101A2.25 2.25 0 0117.75 22h-1.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3.5a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75h-1.5A2.25 2.25 0 013.75 19.75v-6.101a2.25 2.25 0 01.071-.495l8.159-8.159z" /></svg>
+      <span class="nav-text">Home</span>
+    </a>
+    <a href="section22.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a.375.375 0 01-.375-.375V6.75A3.75 3.75 0 0010.5 3h-4.875c0-1.036.84-1.875 1.875-1.875H5.625z" /><path d="M12.971 3.429l3.1 3.1c.14.14.14.368 0 .508l-3.099 3.099a.375.375 0 01-.53 0l-3.1-3.1a.375.375 0 010-.508l3.1-3.1a.375.375 0 01.53 0z" /></svg>
+      <span class="nav-text">Templates</span>
+    </a>
+    <a href="flashcards2.html" class="mobile-nav-link active">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.75 2.25a.75.75 0 00-1.5 0v1.5h-1.5a.75.75 0 000 1.5h1.5v1.5a.75.75 0 001.5 0v-1.5h1.5a.75.75 0 000-1.5h-1.5v-1.5z" /><path fill-rule="evenodd" d="M6 4.5a3 3 0 013-3h6a3 3 0 013 3v15a3 3 0 01-3 3H9a3 3 0 01-3-3V4.5zm6 4.5a.75.75 0 00-1.5 0v3a.75.75 0 001.5 0v-3z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Flashcards</span>
+    </a>
+    <a href="dashboard2.html" id="account-nav-link-mobile" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Account</span>
+    </a>
+  </nav>
+
+  <main class="container mx-auto mt-8 p-4 relative z-10">
+    <h1 class="text-3xl font-extrabold text-purple-800 dark:text-purple-200 mb-6 text-center">Flashcard Downloads</h1>
+    <div class="space-y-4">
+      <!-- Accordions will be populated by JS -->
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // --- Dark Mode ---
+      const toggleCheckbox = document.getElementById('dm-toggle');
+      const body = document.body;
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark') {
+        body.classList.add('dark');
+        toggleCheckbox.checked = true;
+      }
+      toggleCheckbox.addEventListener('change', () => {
+        if (toggleCheckbox.checked) {
+          body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+
+      // --- Accordion Data ---
+      const flashcardData = {
+        "3PS": [
+          { name: "UNIT 6 FLASHCARDS", id: "17BuSMEk1Xh5OioFMpgQfG6H-61_iUTaJ" },
+          { name: "UNIT 05 FLASHCARDS", id: "1BmNrbHEdhBiV-ca-BCdwOoxr19leMI1i" },
+          { name: "UNIT 04 FLASHCARDS", id: "1q2Bkc-7YmJz5Qdy2hFRjVhI9jfmAHvU-" },
+          { name: "FAMILY MEMBERS FLASHCARDS", id: "1ZwyKCvR-CDn1VNwG7SUrZ56vtWA8bAGo" },
+        ],
+        "4PS": [
+          { name: "SCHOOL MAPPING FLASHCARDS", id: "1zWoCn-yzcABngm9ErL2_05p6lO5CVz9L" },
+          { name: "NATIONALITIES FLASHCARDS", id: "1UYsi-EaCzLcxZl7e118zroNdbKyAI8ge" },
+          { name: "JOBS FLASHCARDS", id: "17IgoarSQ7spY4bYCdJTWaLSmm506epgt" },
+        ]
+      };
+
+      const mainContainer = document.querySelector('main .space-y-4');
+      
+      Object.entries(flashcardData).forEach(([level, files]) => {
+        const container = document.createElement('div');
+        container.className = 'syllabus-item-container';
+
+        let fileLinksHTML = files.map(file => `
+          <a href="https://drive.google.com/uc?export=download&id=${file.id}" class="flex items-center p-3 rounded-xl shadow-md hover:shadow-lg bg-violet-100 dark:bg-violet-900/50 hover:bg-violet-200 dark:hover:bg-violet-900/80 transition-all transform hover:-translate-y-1 group">
+            <svg class="h-6 w-6 text-violet-600 dark:text-violet-400 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 11.586V3a1 1 0 112 0v8.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            <div>
+              <h4 class="text-sm font-bold text-violet-800 dark:text-violet-200">${file.name}</h4>
+            </div>
+          </a>
+        `).join('');
+
+        container.innerHTML = `
+          <div class="syllabus-item-header">
+            <h3 class="text-lg font-semibold">${level}</h3>
+            <svg class="w-6 h-6 transform transition-transform duration-300" viewBox="0 0 24 24" fill="currentColor"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" /></svg>
+          </div>
+          <div class="syllabus-item-content">
+            <div class="p-4 space-y-3">${fileLinksHTML}</div>
+          </div>
+        `;
+        mainContainer.appendChild(container);
+      });
+
+      // --- Accordion Script ---
+      const syllabusItems = document.querySelectorAll('.syllabus-item-container');
+      syllabusItems.forEach(item => {
+        const header = item.querySelector('.syllabus-item-header');
+        const content = item.querySelector('.syllabus-item-content');
+        const icon = header.querySelector('svg');
+
+        header.addEventListener('click', () => {
+          const isActive = content.classList.contains('active');
+          
+          // Close others
+          syllabusItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.querySelector('.syllabus-item-content').classList.remove('active');
+              otherItem.querySelector('.syllabus-item-header').classList.remove('active');
+              otherItem.querySelector('svg').style.transform = 'rotate(0deg)';
+            }
+          });
+          
+          // Toggle current
+          content.classList.toggle('active');
+          header.classList.toggle('active');
+          icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="icon.webp">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <style>
+    :root {
+      --brand-color: #7c3aed;
+      --background-light: #f3e8ff;
+      --background-dark: #1e1b4b;
+    }
+  
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-light);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
+      overflow-x: hidden;
+      padding-bottom: 80px; 
+    }
+  
+    body.dark {
+      background-color: var(--background-dark);
+      color: #e0e7ff;
+    }
+    
+    /* BOTTOM NAVIGATION */
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      z-index: 1000; display: flex; justify-content: space-around; align-items: center;
+    }
+    body.dark .mobile-bottom-nav {
+      background: rgba(30, 27, 75, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mobile-nav-link {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex-grow: 1; color: #4a5568; transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .mobile-nav-link .nav-icon { width: 24px; height: 24px; margin-bottom: 2px; }
+    .mobile-nav-link .nav-text { font-size: 0.7rem; font-weight: 500; }
+    .mobile-nav-link.active { color: var(--brand-color); transform: translateY(-3px); }
+    body.dark .mobile-nav-link { color: #a0aec0; }
+    body.dark .mobile-nav-link.active { color: #c4b5fd; }
+
+    /* THEME TOGGLE */
+    .theme-switcher { position: relative; }
+    .switch { display: flex; align-items: center; width: 50px; height: 28px; background: #a78bfa; border-radius: 28px; cursor: pointer; position: relative; }
+    body.dark .switch { background: #4c1d95; }
+    .slider { position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 3px; left: 4px; transition: transform 0.3s ease-in-out; }
+    #dm-toggle { opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { transform: translateX(21px); }
+    .slider-icon { width: 14px; height: 14px; transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    #dm-toggle:not(:checked) + .switch .sun-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    #dm-toggle:checked + .switch .moon-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    
+    /* General Component Styling */
+    .card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+    body.dark .card {
+      background: rgba(45, 34, 101, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Accordion */
+    .accordion-header { cursor: pointer; }
+    .accordion-icon { transition: transform 0.3s ease; }
+    .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+    .accordion-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+    
+    #userIdValue { overflow-wrap: break-word; word-break: break-all; }
+
+    /* History item styles */
+    .history-item {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    body.dark .history-item { background: rgba(255,255,255,0.05); }
+    .history-item:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); }
+
+    /* Notification Toast */
+    .toast {
+      position: fixed; bottom: 90px; /* Above nav bar */ left: 50%; transform: translateX(-50%);
+      background: white; color: #333; padding: 12px 20px; border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; align-items: center;
+      z-index: 1000; opacity: 0; transition: all 0.4s ease;
+    }
+    body.dark .toast { background: #2d2d3d; color: #f0f0f0; }
+    .toast.show { transform: translate(-50%, -10px); opacity: 1; }
+    .toast i { margin-right: 10px; font-size: 18px; }
+    .toast.success { border-top: 3px solid #10b981; } .toast.success i { color: #10b981; }
+    .toast.error { border-top: 3px solid #ef4444; } .toast.error i { color: #ef4444; }
+
+    /* Loading indicator */
+    .loading-indicator {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex; justify-content: center; align-items: center; z-index: 2000;
+    }
+    body.dark .loading-indicator { background-color: rgba(30, 30, 46, 0.8); }
+    .loading-spinner {
+      border: 5px solid #f3f3f3; border-top: 5px solid var(--brand-color);
+      border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+
+</head>
+<body class="transition-colors duration-500">
+
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" class="loading-indicator" style="display: none;"><div class="loading-spinner"></div></div>
+  <!-- Toast notification -->
+  <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toast-message">Success!</span></div>
+
+  <!-- TOP BAR -->
+  <header class="max-w-6xl mx-auto px-4 pt-4">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="text-2xl font-bold text-gray-800 dark:text-white">
+        Lesson<span class="text-purple-600">Planner</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <div class="slider">
+                <svg class="slider-icon sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 4.343a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.192 9.192a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM17.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM14.596 15.657a.75.75 0 011.06 0l1.061 1.06a.75.75 0 11-1.06 1.06l-1.06-1.061a.75.75 0 010-1.06zM5.404 4.343a.75.75 0 011.06 0l1.06 1.061a.75.75 0 11-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                <svg class="slider-icon moon-icon text-purple-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M7.165 3.142A.75.75 0 017.5 2.5a.75.75 0 01.75.75v.01a.75.75 0 01-1.5 0V3.25a.75.75 0 01-.335-.108zM5.25 5.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V5.5zM3.25 8.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V8.5zM5.5 11.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM11.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM13.75 11.5a.75.75 0 000 1.5h.01a.75.75 0 000-1.5h-.01zM11.75 8.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 5.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01A.75.75 0 018.5 5.5zM10 6.5A3.5 3.5 0 006.5 10a3.5 3.5 0 003.5 3.5a3.5 3.5 0 003.5-3.5A3.5 3.5 0 0010 6.5z" /></svg>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.026.026.05.054.07.084v6.101A2.25 2.25 0 0117.75 22h-1.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3.5a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75h-1.5A2.25 2.25 0 013.75 19.75v-6.101a2.25 2.25 0 01.071-.495l8.159-8.159z" /></svg>
+      <span class="nav-text">Home</span>
+    </a>
+    <a href="section22.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a.375.375 0 01-.375-.375V6.75A3.75 3.75 0 0010.5 3h-4.875c0-1.036.84-1.875 1.875-1.875H5.625z" /><path d="M12.971 3.429l3.1 3.1c.14.14.14.368 0 .508l-3.099 3.099a.375.375 0 01-.53 0l-3.1-3.1a.375.375 0 010-.508l3.1-3.1a.375.375 0 01.53 0z" /></svg>
+      <span class="nav-text">Templates</span>
+    </a>
+    <a href="flashcards2.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.75 2.25a.75.75 0 00-1.5 0v1.5h-1.5a.75.75 0 000 1.5h1.5v1.5a.75.75 0 001.5 0v-1.5h1.5a.75.75 0 000-1.5h-1.5v-1.5z" /><path fill-rule="evenodd" d="M6 4.5a3 3 0 013-3h6a3 3 0 013 3v15a3 3 0 01-3 3H9a3 3 0 01-3-3V4.5zm6 4.5a.75.75 0 00-1.5 0v3a.75.75 0 001.5 0v-3z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Flashcards</span>
+    </a>
+    <a href="dashboard2.html" class="mobile-nav-link active">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Account</span>
+    </a>
+  </nav>
+
+  <main class="relative z-10 p-4">
+    <div class="card w-full max-w-2xl mx-auto p-6 space-y-6">
+      
+      <section class="text-center">
+        <div class="w-24 h-24 mx-auto rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 mb-4" id="profileIcon">
+          <i class="fas fa-user fa-3x text-purple-500"></i>
+        </div>
+        <h2 class="text-3xl font-bold min-h-[40px]" id="userName">Welcome</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Member since: <span id="joinDate">...</span></p>
+      </section>
+      
+      <section class="bg-black/5 dark:bg-white/5 rounded-lg p-4 space-y-3">
+        <h3 class="text-lg font-semibold">Account Details</h3>
+        <div>Email: <span id="userEmail" class="font-semibold">...</span></div>
+        <div>
+           User ID: <button id="toggleUserIdBtn" class="ml-2 text-gray-500"><i class="fas fa-eye"></i></button>
+           <p id="userIdValue" class="font-mono text-sm tracking-tighter">••••••••••••••</p>
+        </div>
+      </section>
+
+      <section class="bg-black/5 dark:bg-white/5 rounded-lg">
+        <div id="accordion-header" class="accordion-header p-4 flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Change Password</h3>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+        </div>
+        <div id="accordion-panel" class="accordion-panel">
+            <form id="change-password-form" class="p-4 border-t border-black/10 dark:border-white/10 space-y-3">
+                <input type="password" id="current-password" required placeholder="Current Password" class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <input type="password" id="new-password" required placeholder="New Password" class="w-full px-4 py-2 bg-white/50 dark:bg-black/20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Update</button>
+                <div id="password-message" class="text-sm text-center"></div>
+            </form>
+        </div>
+      </section>
+      
+      <section id="history-section" class="space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-bold">Lesson Plan History</h3>
+          <button id="deleteAllBtn" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm">Delete All</button>
+        </div>
+        <div id="history-container" class="space-y-3 min-h-[60px]">
+          <p id="loading-history" class="text-gray-500 dark:text-gray-400">Loading history...</p>
+        </div>
+      </section>
+
+      <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg">Log Out</button>
+
+    </div>
+  </main>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- DOM Elements ---
+    const userNameEl = document.getElementById('userName');
+    const joinDateEl = document.getElementById('joinDate');
+    const userEmailEl = document.getElementById('userEmail');
+    const userIdValueEl = document.getElementById('userIdValue');
+    const toggleUserIdBtn = document.getElementById('toggleUserIdBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const darkModeToggle = document.getElementById('dm-toggle');
+    const body = document.body;
+    const accordionHeader = document.getElementById('accordion-header');
+    const accordionPanel = document.getElementById('accordion-panel');
+    const passwordForm = document.getElementById('change-password-form');
+    const passwordMessageEl = document.getElementById('password-message');
+    const historyContainer = document.getElementById('history-container');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const deleteAllBtn = document.getElementById('deleteAllBtn');
+
+
+    // --- Toast & Loading Functions ---
+    function showToast(message, type = 'success') {
+      toastMessage.textContent = message;
+      toast.className = 'toast ' + type;
+      toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+      setTimeout(() => toast.classList.add('show'), 100);
+      setTimeout(() => toast.classList.remove('show'), 3100);
+    }
+    function showLoading() { loadingIndicator.style.display = 'flex'; }
+    function hideLoading() { loadingIndicator.style.display = 'none'; }
+    
+    // --- Dark Mode ---
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+        body.classList.add('dark');
+        darkModeToggle.checked = true;
+    }
+    darkModeToggle.addEventListener('change', () => {
+        body.classList.toggle('dark');
+        localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    });
+    
+    // --- Accordion ---
+    accordionHeader.addEventListener('click', () => {
+        accordionHeader.classList.toggle('active');
+        if (accordionPanel.style.maxHeight) {
+            accordionPanel.style.maxHeight = null;
+        } else {
+            accordionPanel.style.maxHeight = accordionPanel.scrollHeight + "px";
+        }
+    });
+
+    // --- History Loading ---
+    const loadHistory = (uid) => {
+      const historyRef = collection(db, "users", uid, "lessonPlans");
+      const q = query(historyRef, orderBy("createdAt", "desc"));
+      onSnapshot(q, (snapshot) => {
+        historyContainer.innerHTML = '';
+        if (snapshot.empty) {
+          historyContainer.innerHTML = `<p class="text-gray-500 dark:text-gray-400 text-center">No saved lesson plans.</p>`;
+          return;
+        }
+        snapshot.forEach(doc => {
+          const plan = doc.data();
+          const planId = doc.id;
+          const date = plan.createdAt ? plan.createdAt.toDate().toLocaleDateString() : 'N/A';
+          const plannerType = plan.plannerType || 'classic';
+          const planElement = document.createElement('div');
+          planElement.className = "history-item p-3";
+          planElement.innerHTML = `
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="font-semibold dark:text-white">${plan.planName || 'Untitled Plan'}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Created: ${date}</div>
+              </div>
+              <div class="flex gap-2">
+                <button data-id="${planId}" data-type="${plannerType}" class="load-btn text-white bg-blue-600 px-3 py-1 rounded-md text-sm">Load</button>
+                <button data-id="${planId}" class="delete-btn text-red-500 border border-red-500 px-3 py-1 rounded-md text-sm">Delete</button>
+              </div>
+            </div>
+          `;
+          historyContainer.appendChild(planElement);
+        });
+      });
+    };
+
+    // --- Auth State ---
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const uid = user.uid;
+            userEmailEl.textContent = user.email;
+
+            let isUserIdVisible = false;
+            toggleUserIdBtn.addEventListener('click', () => {
+                isUserIdVisible = !isUserIdVisible;
+                userIdValueEl.textContent = isUserIdVisible ? uid : '•'.repeat(uid.length);
+                toggleUserIdBtn.innerHTML = `<i class="fas ${isUserIdVisible ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+            });
+
+            const userDocRef = doc(db, "users", uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                userNameEl.textContent = userData.username || user.email.split('@')[0];
+                joinDateEl.textContent = userData.createdAt?.toDate() ? userData.createdAt.toDate().toLocaleDateString() : 'N/A';
+            }
+            loadHistory(uid);
+        } else {
+            window.location.href = 'login2.html';
+        }
+    });
+
+    // --- Event Delegation for History Buttons ---
+    historyContainer.addEventListener('click', async (e) => {
+      const target = e.target;
+      const planId = target.dataset.id;
+      const user = auth.currentUser;
+      if (!planId || !user) return;
+
+      if (target.classList.contains('load-btn')) {
+        sessionStorage.setItem('planToLoadId', planId);
+        const plannerType = target.dataset.type;
+        const urlMap = {
+            artisan: 'design999.html', google: 'googledesign.html',
+            newest: 'newest.html', interface: 'interface.html',
+            kids: 'lesson_plan_stage_boxes_colored.html', final1: 'final.html',
+            check: 'finalest.html', best: 'best.html',
+            designed: 'designed.html', classic: 'lesson_plan.html'
+        };
+        window.location.href = urlMap[plannerType] || 'lesson_plan.html';
+      }
+
+      if (target.classList.contains('delete-btn')) {
+        if (confirm("Delete this plan forever?")) {
+          showLoading();
+          try {
+            await deleteDoc(doc(db, "users", user.uid, "lessonPlans", planId));
+            showToast("Plan deleted!", "success");
+          } catch (error) { showToast("Error deleting plan.", "error"); }
+          finally { hideLoading(); }
+        }
+      }
+    });
+
+    // --- Delete All Plans ---
+    deleteAllBtn.addEventListener('click', async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        if (confirm("Are you sure you want to delete ALL lesson plans? This cannot be undone.")) {
+            showLoading();
+            try {
+                const historyRef = collection(db, "users", user.uid, "lessonPlans");
+                const snapshot = await getDocs(historyRef);
+                const deletePromises = snapshot.docs.map(d => deleteDoc(d.ref));
+                await Promise.all(deletePromises);
+                showToast("All plans deleted.", "success");
+            } catch (error) {
+                showToast("Error deleting plans.", "error");
+            } finally {
+                hideLoading();
+            }
+        }
+    });
+
+    // --- Password Change ---
+    passwordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      passwordMessageEl.textContent = '';
+      if (newPassword.length < 6) {
+          passwordMessageEl.textContent = 'Password must be at least 6 characters.';
+          return;
+      }
+      showLoading();
+      try {
+          const credential = EmailAuthProvider.credential(user.email, currentPassword);
+          await reauthenticateWithCredential(user, credential);
+          await updatePassword(user, newPassword);
+          showToast("Password updated successfully!", "success");
+          passwordForm.reset();
+      } catch (error) {
+          showToast(error.code === 'auth/wrong-password' ? 'Incorrect current password.' : 'An error occurred.', "error");
+      } finally {
+          hideLoading();
+      }
+    });
+    
+    // --- Logout ---
+    logoutBtn.addEventListener('click', () => { signOut(auth); });
+  </script>
+</body>
+</html>

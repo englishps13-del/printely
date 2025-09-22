@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <style>
+    :root {
+      --brand-color: #7c3aed;
+      --background-light: #f3e8ff;
+      --background-dark: #1e1b4b;
+    }
+  
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-light);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      color: #1e1e2e;
+      overflow-x: hidden;
+      padding-bottom: 80px; 
+    }
+  
+    body.dark {
+      background-color: var(--background-dark);
+      color: #e0e7ff;
+    }
+
+    /* Background Shapes & Animations */
+    .shape { position: absolute; opacity: 0.1; z-index: 0; animation: float-rotate 20s linear infinite; }
+    .s1 { top: 10%; left: 10%; width: 40px; height: 40px; background: #a78bfa; border-radius: 50%; }
+    .s2 { top: 20%; right: 15%; width: 50px; height: 50px; background: #8b5cf6; transform: rotate(45deg); animation-delay: 4s; }
+    .s3 { bottom: 15%; left: 20%; width: 30px; height: 30px; background: #c4b5fd; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); animation-delay: 2s; }
+    .s4 { bottom: 25%; right: 10%; width: 60px; height: 60px; background: #6d28d9; border-radius: 50%; animation-delay: 6s; }
+    @keyframes float-rotate {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(10px, 20px) rotate(180deg) scale(1.1); }
+      100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+    }
+    
+    /* BOTTOM NAVIGATION */
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      z-index: 1000; display: flex; justify-content: space-around; align-items: center;
+    }
+    body.dark .mobile-bottom-nav {
+      background: rgba(30, 27, 75, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mobile-nav-link {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex-grow: 1; color: #4a5568; transition: color 0.3s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .mobile-nav-link .nav-icon { width: 24px; height: 24px; margin-bottom: 2px; }
+    .mobile-nav-link .nav-text { font-size: 0.7rem; font-weight: 500; }
+    .mobile-nav-link.active { color: var(--brand-color); transform: translateY(-3px); }
+    body.dark .mobile-nav-link { color: #a0aec0; }
+    body.dark .mobile-nav-link.active { color: #c4b5fd; }
+
+    /* THEME TOGGLE */
+    .theme-switcher { position: relative; }
+    .switch { display: flex; align-items: center; width: 50px; height: 28px; background: #a78bfa; border-radius: 28px; cursor: pointer; position: relative; }
+    body.dark .switch { background: #4c1d95; }
+    .slider { position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 3px; left: 4px; transition: transform 0.3s ease-in-out; }
+    #dm-toggle { opacity: 0; width: 0; height: 0; }
+    #dm-toggle:checked + .switch .slider { transform: translateX(21px); }
+    .slider-icon { width: 14px; height: 14px; transition: opacity 0.3s ease, transform 0.3s ease; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    #dm-toggle:not(:checked) + .switch .sun-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    #dm-toggle:checked + .switch .moon-icon { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    
+    /* General Component Styling */
+    .card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      z-index: 10;
+      position: relative;
+    }
+    body.dark .card {
+      background: rgba(45, 34, 101, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Message box styles */
+    .message-box {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.875rem;
+        display: none; /* Hidden by default */
+    }
+    .message-box.error {
+        background-color: #fecaca; /* Red-200 */
+        color: #991b1b; /* Red-800 */
+        display: block;
+    }
+    .message-box.success {
+        background-color: #d1fae5; /* Green-200 */
+        color: #065f46; /* Green-800 */
+        display: block;
+    }
+  </style>
+</head>
+<body class="transition-colors duration-500">
+
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="shape s4"></div>
+
+  <header class="max-w-6xl mx-auto px-4 pt-4 relative z-20">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="text-2xl font-bold text-gray-800 dark:text-white">
+        Printely
+      </a>
+      <div class="flex items-center gap-4">
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <div class="slider">
+                <svg class="slider-icon sun-icon text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 4.343a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.192 9.192a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM17.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM14.596 15.657a.75.75 0 011.06 0l1.061 1.06a.75.75 0 11-1.06 1.06l-1.06-1.061a.75.75 0 010-1.06zM5.404 4.343a.75.75 0 011.06 0l1.06 1.061a.75.75 0 11-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                <svg class="slider-icon moon-icon text-purple-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M7.165 3.142A.75.75 0 017.5 2.5a.75.75 0 01.75.75v.01a.75.75 0 01-1.5 0V3.25a.75.75 0 01-.335-.108zM5.25 5.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V5.5zM3.25 8.5a.75.75 0 00-1.5 0v.01a.75.75 0 001.5 0V8.5zM5.5 11.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM11.5 13.75a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM13.75 11.5a.75.75 0 000 1.5h.01a.75.75 0 000-1.5h-.01zM11.75 8.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01a.75.75 0 01-.75-.75zM8.5 5.5a.75.75 0 01.75-.75h.01a.75.75 0 010 1.5h-.01A.75.75 0 018.5 5.5zM10 6.5A3.5 3.5 0 006.5 10a3.5 3.5 0 003.5 3.5a3.5 3.5 0 003.5-3.5A3.5 3.5 0 0010 6.5z" /></svg>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.026.026.05.054.07.084v6.101A2.25 2.25 0 0117.75 22h-1.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3.5a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75h-1.5A2.25 2.25 0 013.75 19.75v-6.101a2.25 2.25 0 01.071-.495l8.159-8.159z" /></svg>
+      <span class="nav-text">Home</span>
+    </a>
+    <a href="section22.html" class="mobile-nav-link">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a.375.375 0 01-.375-.375V6.75A3.75 3.75 0 0010.5 3h-4.875c0-1.036.84-1.875 1.875-1.875H5.625z" /><path d="M12.971 3.429l3.1 3.1c.14.14.14.368 0 .508l-3.099 3.099a.375.375 0 01-.53 0l-3.1-3.1a.375.375 0 010-.508l3.1-3.1a.375.375 0 01.53 0z" /></svg>
+      <span class="nav-text">Templates</span>
+    </a>
+    <a href="section32.html" class="mobile-nav-link">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 6a.75.75 0 00-1.5 0v2.25H6.75a.75.75 0 000 1.5h2.25V12a.75.75 0 001.5 0v-2.25h2.25a.75.75 0 000-1.5H10.5V6z" /><path fill-rule="evenodd" d="M3 18.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V5.25A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25v13.5zM5.25 4.5h13.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V5.25a.75.75 0 01.75-.75z" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Sign Up</span>
+    </a>
+    <a href="login2.html" class="mobile-nav-link active">
+      <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" clip-rule="evenodd" /></svg>
+      <span class="nav-text">Log In</span>
+    </a>
+  </nav>
+
+  <main class="relative z-10 p-4 flex items-center justify-center min-h-[calc(100vh-150px)]">
+    <div class="card w-full max-w-sm p-6 space-y-4">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-purple-600 dark:text-purple-400">Login</h2>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Welcome back!</p>
+        </div>
+        
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label for="email" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Email</label>
+                <input type="email" id="email" required class="mt-1 w-full px-4 py-2 border border-gray-300/50 rounded-lg dark:bg-black/20 dark:border-gray-600/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="your@email.com" />
+            </div>
+            
+            <div>
+                <label for="password" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Password</label>
+                <input type="password" id="password" required class="mt-1 w-full px-4 py-2 border border-gray-300/50 rounded-lg dark:bg-black/20 dark:border-gray-600/50 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="••••••••" />
+            </div>
+            
+            <div class="flex items-center justify-between text-xs">
+                <a href="reset.html" class="font-medium text-purple-600 dark:text-purple-400 hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
+            
+            <div id="message-box" class="message-box"></div>
+            
+            <button type="submit" id="login-button" class="w-full px-4 py-3 text-lg font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-transform hover:scale-105">
+              Login
+            </button>
+        </form>
+        
+        <p class="mt-4 text-xs text-center text-gray-600 dark:text-gray-400">
+            Don't have an account? <a href="section32.html" class="font-medium text-purple-600 dark:text-purple-400 hover:underline">Sign Up</a>
+        </p>
+    </div>
+</main>
+
+  <script>
+    // --- Dark Mode Script ---
+    const darkModeToggle = document.getElementById('dm-toggle');
+    const body = document.body;
+    
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+        body.classList.add('dark');
+        darkModeToggle.checked = true;
+    }
+    
+    darkModeToggle.addEventListener('change', () => {
+        body.classList.toggle('dark');
+        localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+  
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.getElementById('login-button');
+    const messageBox = document.getElementById('message-box');
+  
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+  
+      loginButton.disabled = true;
+      loginButton.textContent = 'Logging in...';
+      messageBox.className = 'message-box';
+      
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        messageBox.textContent = 'Success! Redirecting...';
+        messageBox.className = 'message-box success';
+
+        setTimeout(() => {
+          window.location.href = 'index.html'; // Redirect to the main dashboard
+        }, 1500);
+
+      } catch (error) {
+        let errorMessage = 'An unknown error occurred. Please try again.';
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMessage = 'Incorrect email or password.';
+        } else if (error.code === 'auth/invalid-email') {
+          errorMessage = 'Please enter a valid email address.';
+        }
+        
+        messageBox.textContent = errorMessage;
+        messageBox.className = 'message-box error';
+
+        loginButton.disabled = false;
+        loginButton.textContent = 'Login';
+      }
+    });
+	
+  </script>
+
+</body>
+</html>

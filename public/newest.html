@@ -57,7 +57,6 @@
     letter-spacing: 0.3px;
   }
   
-  /* NEW: Styles for the main procedure table */
   .procedure-table {
       table-layout: fixed;
   }
@@ -123,7 +122,7 @@
     font-size: 12px; color: #666;
   }
 
-  /* --- RIBBON & EDITABLE AREA STYLES --- */
+  /* Ribbon & Editable Area Styles */
   .ribbon {
       display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
       background: var(--box-bg-new); border: 1px solid var(--new-box-border);
@@ -162,29 +161,38 @@
       content: attr(data-placeholder); color: #999; pointer-events: none; font-style: italic;
   }
 
-  /* NEW: Styles for Image Resizing */
-.editable-area img {
-  width: 100px !important;
-  height: 100px !important;
-  object-fit: contain;   /* keeps proportions inside the box */
-  display: inline-block; /* only takes 100x100, not the full line */
-  vertical-align: middle; /* optional: aligns nicely with text */
-}
-
-
-  .editable-area img.resizable {
-      outline: 3px solid var(--accent-color);
-      outline-offset: 2px;
+  .editable-area img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
   }
-  #image-resize-handle {
-      position: absolute; width: 12px; height: 12px;
-      background: var(--accent-color); border: 2px solid white;
-      border-radius: 2px; cursor: se-resize;
-      display: none; z-index: 10;
+  
+  /* Styles for Cross-Curricular Competencies */
+  .print-only { display: none; }
+  #ccc-multiselect .group-label {
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #eee;
+  }
+  #ccc-multiselect ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+  }
+  #ccc-multiselect li {
+      margin-bottom: 5px;
+  }
+   #ccc-print ul {
+      margin: 5px 0 0 0;
+      padding-left: 20px;
+      list-style-type: disc;
   }
 
-
-  /* ---------- PRINT STYLES ---------- */
+  /* Print Styles */
   @page { size: A4; margin: 0; }
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -203,6 +211,9 @@
     .editable-area {
         min-height: auto !important; resize: none !important; overflow: visible !important;
     }
+    .bottom-buttons, .ribbon, .no-print, #image-resize-handle { display: none !important; }
+    .print-only { display: block !important; }
+    
     body.default-theme table, body.default-theme th, body.default-theme td { border: 1px solid #000 !important; }
     body.default-theme table th { background-color: #f3f3f3 !important; color: #000 !important; }
     body.theme-blue table, body.theme-blue th, body.theme-blue td { border: 1px solid #2c3e99 !important; }
@@ -217,7 +228,6 @@
     body.theme-purple table th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
     body.theme-gray table, body.theme-gray th, body.theme-gray td { border: 1px solid #444 !important; }
     body.theme-gray table th { background-color: #dddddd !important; color: #333 !important; }
-    .bottom-buttons, .ribbon, .no-print, #image-resize-handle { display: none !important; }
   }
 
   /* Buttons */
@@ -229,7 +239,6 @@
   }
   .bottom-buttons button:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; }
 
-  /* Match table theme colors for buttons */
   body.default-theme .bottom-buttons { color: #000; }
   body.theme-blue .bottom-buttons { color: #2c3e99; }
   body.theme-green .bottom-buttons { color: #2d7a33; }
@@ -240,14 +249,14 @@
 
   /* Checkboxes */
   .custom-checkbox {
-    position: relative; cursor: pointer; font-size: 13px; font-weight: 500;
-    display: inline-flex; align-items: center;
+    position: relative; cursor: pointer; font-size: 13px;
+    display: inline-flex; align-items: flex-start;
   }
   .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
   .custom-checkbox span {
     display: inline-block; height: 14px; width: 14px; border: 1.5px solid #000;
-    border-radius: 3px; background-color: #fff; margin-right: 6px;
-    flex-shrink: 0; position: relative;
+    border-radius: 3px; background-color: #fff; margin-right: 8px;
+    flex-shrink: 0; position: relative; top: 2px;
   }
   .custom-checkbox span::after {
     content: ""; position: absolute; display: none; left: 3px; top: 0px;
@@ -258,7 +267,6 @@
   .custom-checkbox input:checked ~ span::after { display: block; }
   .checkbox-inline { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; margin-top: 6px; }
 
-  /* Checkbox Theme overrides */
   body.theme-blue .custom-checkbox input:checked ~ span { background-color: #4a6cff; border-color: #4a6cff; }
   body.theme-green .custom-checkbox input:checked ~ span { background-color: #4caf50; border-color: #4caf50; }
   body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #e6c200; border-color: #e6c200; }
@@ -402,6 +410,18 @@
     </table>
 
     <table>
+        <tr>
+            <td>
+                <strong>Cross-Curricular Competences:</strong>
+                <div id="ccc-multiselect" class="no-print">
+                    </div>
+                <div id="ccc-print" class="print-only">
+                    </div>
+            </td>
+        </tr>
+    </table>
+
+    <table>
       <tr>
         <td style="width:40%">
           <strong>Target competencies:</strong>
@@ -429,26 +449,26 @@
         <th style="width:15%">STAGES</th>
         <th style="width:55%">PROCEDURE / TASKS</th>
         <th style="width:15%">INTERACTION</th>
-        <th style="width:15%">TIME ?</th>
+        <th style="width:15%">TIME &#128336;</th>
       </tr>
       <tr>
         <td>Warmer</td>
         <td><textarea id="warmerProcedure" rows="1" placeholder="Write your Warmer procedure here..."></textarea></td>
-        <td><input type="text" id="warmerInteraction" placeholder="T -> T"></td>
-        <td><input type="text" id="warmerTime" placeholder="20 min"></td>
+        <td><input type="text" id="warmerInteraction" placeholder="T -> Ls"></td>
+        <td><input type="text" id="warmerTime" placeholder="5 min"></td>
       </tr>
       <tr>
         <td>Install resources</td>
         <td>
           <div id="installResourcesProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your install resources procedure here..."></div>
         </td>
-        <td><input type="text" id="installInteraction" placeholder="T -> T"></td>
-        <td><input type="text" id="installTime" placeholder="20 min"></td>
+        <td><input type="text" id="installInteraction" placeholder="T -> Ls"></td>
+        <td><input type="text" id="installTime" placeholder="25 min"></td>
       </tr>
       <tr>
         <td>Assessment</td>
         <td><textarea id="assessmentProcedure" rows="1" placeholder="Write your assessment procedure here..."></textarea></td>
-        <td><input type="text" id="assessmentInteraction" placeholder="L -> L"></td>
+        <td><input type="text" id="assessmentInteraction" placeholder="Ls -> T"></td>
         <td><input type="text" id="assessmentTime" placeholder="15 min"></td>
       </tr>
     </table>
@@ -556,6 +576,7 @@
         session: document.getElementById('sessionSelect').value,
         objective: document.getElementById('sessionObjective').value,
         competencies: Array.from(document.querySelectorAll('#targetCompetencies input:checked')).map(cb => cb.value),
+        crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         materials: Array.from(document.querySelectorAll('#teachingMaterials input:checked')).map(cb => cb.value),
         warmer: {
           procedure: document.getElementById('warmerProcedure').value,
@@ -607,10 +628,22 @@
         document.getElementById('teacherName').value = data.teacher || '';
         document.getElementById('levelSelect').value = data.level || '';
         document.getElementById('learnerCount').value = data.learners || '';
+        
         levelSelect.dispatchEvent(new Event('change'));
+        
         setTimeout(() => {
           document.getElementById('sequenceSelect').value = data.sequence || '';
           sequenceSelect.dispatchEvent(new Event('change'));
+
+          if (data.crossCurricularCompetences?.length) {
+              document.querySelectorAll('#ccc-multiselect input').forEach(cb => cb.checked = false);
+              data.crossCurricularCompetences.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#ccc-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#ccc-multiselect input')?.dispatchEvent(new Event('change'));
+          }
+
           setTimeout(() => {
             document.getElementById('sectionSelect').value = data.section || '';
             sectionSelect.dispatchEvent(new Event('change'));
@@ -618,7 +651,8 @@
               document.getElementById('sessionSelect').value = data.session || '';
             }, 50);
           }, 50);
-        }, 50);
+        }, 100);
+
         document.getElementById('sessionObjective').value = data.objective || '';
         if (data.competencies) data.competencies.forEach(val => {
           const cb = document.querySelector(`#targetCompetencies input[value="${val}"]`);
@@ -628,6 +662,7 @@
           const cb = document.querySelector(`#teachingMaterials input[value="${val}"]`);
           if (cb) cb.checked = true;
         });
+
         document.getElementById('warmerProcedure').value = data.warmer?.procedure || '';
         document.getElementById('warmerInteraction').value = data.warmer?.interaction || '';
         document.getElementById('warmerTime').value = data.warmer?.time || '';
@@ -651,13 +686,55 @@
     }
   }
 
-  // --- Curriculum Data ---
-  const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
-  "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
-"Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
- "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] },
+  // --- Curriculum & Competency Data ---
+  const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
+  const crossCurricularCompetences = { "3PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words and expressions.","discover the importance of words and chunks used in oral interaction.","demonstrate understanding of the strategies of decoding symbols.","demonstrate understanding of the features of writing."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words and expressions.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ the strategies of decoding symbols as required.","implement the features of writing letters appropriately."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words and chunks to interact orally.","communicate the decoding strategies to peers.","achieve readability through the appropriate use of the features of writing."],"Personal and Social Competence": ["respond to oral messages.","consider speech acts when interacting.","consider the strategies of decoding symbols to achieve others' understanding.","value others' writings."]}, "4PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words, expressions and sentences.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading basics and the strategies of decoding symbols.","demonstrate understanding of the features of correct handwriting."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words, expressions and sentences.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading basics and the decoding strategies to understand messages.","implement the features of correct handwriting."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading basics and the decoding strategies to peers.","achieve readability through the appropriate use of the features of correct handwriting."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting.","consider reading basics and the decoding strategies to achieve others' understanding.","value others' writings."]}, "5PS": { "Intellectual Competence": ["demonstrate understanding of listening skills.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading skills.","demonstrate understanding of the writing mechanics and the relevant information to write a message."],"Methodological Competence": ["make use of the context, paralinguistic features, and listening skills to comprehend a short message.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading skills to understand a short simple message.","implement the writing mechanics to produce a message."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading skills to peers.","communicate the writing mechanics to peers."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting orally.","share understanding with others reading skills.","publish one's production."]}};
 
- }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
+  // --- Dynamic Checkbox Functions ---
+  function setupPrintableCheckboxes(containerId, printId) {
+    const checkboxContainer = document.getElementById(containerId);
+    const printElement = document.getElementById(printId);
+    if (!checkboxContainer || !printElement) return;
+
+    const updatePrintableArea = () => {
+        const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+        const selectedLabels = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.closest('label').textContent.trim() || '');
+
+        if (selectedLabels.length > 0) {
+            printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+        } else {
+            printElement.innerHTML = '';
+        }
+    };
+    checkboxContainer.addEventListener('change', (event) => {
+        if (event.target.type === 'checkbox') {
+            updatePrintableArea();
+        }
+    });
+    updatePrintableArea();
+  }
+
+  function populateCompetencies(level) {
+    const container = document.getElementById('ccc-multiselect');
+    const printContainer = document.getElementById('ccc-print');
+    container.innerHTML = ''; 
+    printContainer.innerHTML = ''; 
+    const competencies = crossCurricularCompetences[level];
+    if (!competencies) return;
+
+    let html = '';
+    for (const category in competencies) {
+        html += `<div class="group-label">${category}</div><ul>`;
+        competencies[category].forEach(item => {
+            html += `<li><label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label></li>`;
+        });
+        html += `</ul>`;
+    }
+    container.innerHTML = html;
+    setupPrintableCheckboxes('ccc-multiselect', 'ccc-print');
+  }
 
   // --- Dropdown Handlers ---
   const [levelSelect, sequenceSelect, sectionSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sectionSelect", "sessionSelect"].map(id => document.getElementById(id));
@@ -667,6 +744,7 @@
       Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
       sequenceSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
     }
+    populateCompetencies(levelSelect.value);
   });
   sequenceSelect.addEventListener("change", () => {
     sectionSelect.innerHTML = "<option value=''>Select Section</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
@@ -713,7 +791,6 @@
   document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
   document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
 
-  // Image Upload
   const imageUpload = document.getElementById('imageUpload');
   document.getElementById('insertImageBtn').addEventListener('click', () => imageUpload.click());
   imageUpload.addEventListener('change', e => {
@@ -721,48 +798,8 @@
     const reader = new FileReader();
     reader.onload = () => exec('insertImage', reader.result);
     reader.readAsDataURL(e.target.files[0]);
-    e.target.value = null; // Reset input
+    e.target.value = null;
   });
-  
-  // Image Resize
- const editorArea = document.getElementById('installResourcesProcedure');
-const resizeHandle = document.getElementById('image-resize-handle');
-let targetImage = null;
-
-function showResizeHandle(img) {
-    if (targetImage) targetImage.classList.remove('resizable');
-    targetImage = img;
-    targetImage.classList.add('resizable');
-    const rect = targetImage.getBoundingClientRect();
-    const editorRect = editorArea.getBoundingClientRect();
-    resizeHandle.style.display = 'block';
-    resizeHandle.style.left = `${rect.right - editorRect.left - 8}px`;
-    resizeHandle.style.top = `${rect.bottom - editorRect.top - 8}px`;
-}
-
-function hideResizeHandle() {
-    if (targetImage) targetImage.classList.remove('resizable');
-    targetImage = null;
-    resizeHandle.style.display = 'none';
-}
-
-editorArea.addEventListener('click', e => {
-    if (e.target.tagName === 'IMG') {
-        showResizeHandle(e.target);
-    } else if (!e.target.matches('#image-resize-handle')) {
-        hideResizeHandle();
-    }
-});
-
-// Force image to 100x100 when handle is clicked
-resizeHandle.addEventListener('mousedown', e => {
-    e.preventDefault();
-    if (targetImage) {
-        targetImage.style.width = "10px";
-        targetImage.style.height = "10px";
-        showResizeHandle(targetImage); // update handle position
-    }
-});
 
 </script>
 </body>
