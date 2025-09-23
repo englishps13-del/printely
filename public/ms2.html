@@ -353,6 +353,10 @@
         body { margin: 0 !important; padding: 0 !important; background: #fff !important; font-size: 10pt; line-height: 1.2; }
         .lesson-plan-container { width: 100% !important; height: 100% !important; margin: 0 auto !important; border: none !important; position: static !important; transform: none !important; transform-origin: unset !important; box-sizing: border-box; padding: 8mm !important; }
         .no-print, .ribbon, .bottom-buttons, input, textarea, select, .custom-checkbox { display: none !important; }
+        /* This new rule hides the original checkbox containers during print */
+        #targetCompetenceCheckboxes, #crossCurricularCheckboxes, #teachingMaterials, #valuesCheckboxes, #domainsCheckboxes {
+            display: none !important;
+        }
         .print-only-text, .dropdown-print-text { display: block !important; width: 100%; min-height: 1em; padding: 1px; box-sizing: border-box; white-space: pre-wrap; word-wrap: break-word; line-height: 1.3; color: inherit !important; background: transparent !important; }
         .print-only-text ul { margin: 0; padding-left: 20px; }
         .editable-area { display: block !important; height: auto !important; min-height: 0 !important; overflow: visible !important; resize: none !important; }
@@ -784,7 +788,7 @@
             saveBtn.textContent = 'Saving...';
             const lessonPlanData = {
                 planName,
-                plannerType: 'best_ms',
+                plannerType: 'ms2',
                 school: document.getElementById('schoolName').value,
                 teacher: document.getElementById('teacherName').value,
                 date: document.getElementById('lessonDate').value,
@@ -831,7 +835,6 @@
                 document.getElementById('schoolName').value = data.school || '';
                 document.getElementById('teacherName').value = data.teacher || '';
                 document.getElementById('lessonDate').value = data.date || '';
-                document.getElementById('levelSelect').value = data.level || '';
                 document.getElementById('learnerCount').value = data.learners || '';
                 document.getElementById('classProfile').value = data.classProfile || '';
                 document.getElementById('sessionObjective').value = data.objective || '';
@@ -839,6 +842,11 @@
                 document.getElementById('anticipatedProblems').value = data.anticipatedProblems || '';
                 document.getElementById('solutions').value = data.solutions || '';
                 
+                // Set level and trigger change to load correct templates before checking boxes
+                const levelSelect = document.getElementById('levelSelect');
+                levelSelect.value = data.level || '';
+                levelSelect.dispatchEvent(new Event('change'));
+
                 const checkCheckboxesByText = (containerId, textValues) => {
                     if (!textValues || !Array.isArray(textValues)) return;
                     textValues.forEach(text => {
@@ -872,7 +880,6 @@
                 
                 autoResizeAllTextareas();
                 
-                levelSelect.dispatchEvent(new Event('change'));
                 setTimeout(() => {
                   document.getElementById('sequenceSelect').value = data.sequence || '';
                   sequenceSelect.dispatchEvent(new Event('change'));
@@ -892,28 +899,13 @@
     // --- Middle School Curriculum Data ---
     const curriculum = {
         "MS1": { "Habits and Preferences": ["Get Ready", "Listen & Interact", "Listen & Consider", "Read & Interpret", "Read & Consider", "Write Together", "Write Alone"] },
-        "MS2": { /* Add MS2 sequences and sessions here */ },
+        "MS2": { "Me and My Travels": ["Planning a Trip", "Asking for Directions", "Describing a Place", "Writing an Email about a Trip"] },
         "MS3": { /* Add MS3 sequences and sessions here */ },
         "MS4": { /* Add MS4 sequences and sessions here */ }
     };
     
     const [levelSelect, sequenceSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sessionSelect"].map(id => document.getElementById(id));
     
-    levelSelect.addEventListener("change", () => {
-        sequenceSelect.innerHTML = "<option value=''>-- Select Sequence --</option>";
-        sessionSelect.innerHTML = "<option value=''>-- Select Session --</option>";
-        if (curriculum[levelSelect.value]) {
-            Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
-        }
-    });
-
-    sequenceSelect.addEventListener("change", () => {
-        sessionSelect.innerHTML = "<option value=''>-- Select Session --</option>";
-        if (sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value]) {
-            curriculum[levelSelect.value][sequenceSelect.value].forEach(sess => sessionSelect.add(new Option(sess, sess)));
-        }
-    });
-
     // --- Auto-resize Textareas ---
     function autoResize(textarea) {
         textarea.style.height = 'auto';
@@ -929,6 +921,99 @@
     });
     window.addEventListener('load', autoResizeAllTextareas);
 
+    // --- Dynamic Template Logic ---
+    const teachingMaterialsDiv = document.getElementById('teachingMaterials');
+    const valuesCheckboxesDiv = document.getElementById('valuesCheckboxes');
+    const crossCurricularCheckboxesDiv = document.getElementById('crossCurricularCheckboxes');
+    const targetCompetenceCheckboxesDiv = document.getElementById('targetCompetenceCheckboxes');
+    const domainsCheckboxesDiv = document.getElementById('domainsCheckboxes');
+
+    const defaultMaterialsHTML = teachingMaterialsDiv.innerHTML;
+    const defaultValuesHTML = valuesCheckboxesDiv.innerHTML;
+    const defaultCrossCurricularHTML = crossCurricularCheckboxesDiv.innerHTML;
+
+    const ms2MaterialsHTML = `
+        <label class="custom-checkbox"><input type="checkbox" value="Sheets of paper" checked><span></span> Sheets of paper with icons and amenities</label>
+        <label class="custom-checkbox"><input type="checkbox" value="Books" checked><span></span> Books</label>
+        <label class="custom-checkbox"><input type="checkbox" value="Whiteboard" checked><span></span> Whiteboard</label>
+    `;
+
+    const ms2ValuesHTML = `
+        <label class="custom-checkbox"><input type="checkbox" value="Travel as knowledge" checked><span></span> Valuing travel as a source of knowledge and learning</label>
+        <label class="custom-checkbox"><input type="checkbox" value="Politeness" checked><span></span> Politeness when asking for information</label>
+        <label class="custom-checkbox"><input type="checkbox" value="Pride in heritage" checked><span></span> Pride in famous sites and places in Algiers</label>
+        <label class="custom-checkbox"><input type="checkbox" value="Protecting history" checked><span></span> Protecting historical places</label>
+    `;
+
+    const ms2CrossCurricularHTML = `
+        <div class="group-label">Intellectual Competence</div>
+        <ul>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Using critical thinking to match icons with amenities, deduce rules, and locate places on a map.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Understanding and interpreting a conversation.</label></li>
+        </ul>
+        <div class="group-label">Methodological Competence</div>
+        <ul>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Working in pairs or within the whole class.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Mobilizing resources, such as knowledge of Algerian towns and their locations/amenities.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Taking notes and exchanging information with peers.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Evaluating oneself and one's partner.</label></li>
+        </ul>
+        <div class="group-label">Communicative Competence</div>
+        <ul>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Interviewing partners to gather information.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Reinvesting language in real-life situations.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Writing an email and describing past events orally.</label></li>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Interpreting and reading maps through listening and transcoding information from one form to another (e.g., from sound to a visual map).</label></li>
+        </ul>
+        <div class="group-label">Personal and Social Competence</div>
+        <ul>
+            <li><label class="custom-checkbox"><input type="checkbox" checked><span></span>Socializing and exchanging experiences through oral exchanges.</label></li>
+        </ul>
+    `;
+
+    levelSelect.addEventListener("change", () => {
+        sequenceSelect.innerHTML = "<option value=''>-- Select Sequence --</option>";
+        sessionSelect.innerHTML = "<option value=''>-- Select Session --</option>";
+        if (curriculum[levelSelect.value]) {
+            Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+        }
+        
+        if (levelSelect.value === "MS2") {
+            teachingMaterialsDiv.innerHTML = ms2MaterialsHTML;
+            valuesCheckboxesDiv.innerHTML = ms2ValuesHTML;
+            crossCurricularCheckboxesDiv.innerHTML = ms2CrossCurricularHTML;
+            
+            targetCompetenceCheckboxesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+            domainsCheckboxesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+            
+            const subsidiaryObjectives = document.getElementById('subsidiaryObjectives');
+            subsidiaryObjectives.value = 'Target Structures: Simple future tense and "Be going to" (all three forms: affirmative, negative, interrogative).';
+            autoResize(subsidiaryObjectives);
+
+        } else {
+            teachingMaterialsDiv.innerHTML = defaultMaterialsHTML;
+            valuesCheckboxesDiv.innerHTML = defaultValuesHTML;
+            crossCurricularCheckboxesDiv.innerHTML = defaultCrossCurricularHTML;
+            
+            targetCompetenceCheckboxesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            domainsCheckboxesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            const subsidiaryObjectives = document.getElementById('subsidiaryObjectives');
+            if (subsidiaryObjectives.value.startsWith('Target Structures:')) {
+                subsidiaryObjectives.value = '';
+                autoResize(subsidiaryObjectives);
+            }
+        }
+        syncAllPrintViews();
+    });
+
+    sequenceSelect.addEventListener("change", () => {
+        sessionSelect.innerHTML = "<option value=''>-- Select Session --</option>";
+        if (sequenceSelect.value && curriculum[levelSelect.value] && curriculum[levelSelect.value][sequenceSelect.value]) {
+            curriculum[levelSelect.value][sequenceSelect.value].forEach(sess => sessionSelect.add(new Option(sess, sess)));
+        }
+    });
+    
     // --- Rich Text Editor ---
     document.querySelectorAll('.btn-square').forEach(button => {
         button.addEventListener('click', () => {
@@ -1052,4 +1137,4 @@
 
 </script>
 </body>
-</html>	
+</html>		

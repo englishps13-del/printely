@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson Plan Editor</title>
+  <link rel="icon" type="image/x-icon" href="icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+<style>
+  :root {
+      --paper-color: #ffffff;
+      --background-color: #ffffff;
+      --primary-text: #2c3e50;
+      --secondary-text: #7f8c8d;
+      --header-color: #8e44ad;
+      --line-color: #dcdcdc;
+      --box-bg-new: #f9f9f9;
+      --new-box-border: #e0e0e0;
+      --accent-color: #2c3e99;
+  }
+
+  body {
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    margin: 15px;
+    background: #f0f2f5;
+    font-size: 13px;
+    transition: background 0.3s, color 0.3s;
+    display: flex;
+    justify-content: center;
+  }
+
+  .lesson-plan {
+    margin-top: 10px;
+    background: #fff;
+    width: 8.5in;
+    min-height: 11in;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  th, td {
+    border: 2px solid #000;
+    padding: 6px 8px;
+    vertical-align: middle;
+  }
+  th {
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  
+  .procedure-table {
+      table-layout: fixed;
+  }
+  .procedure-table td {
+      word-wrap: break-word;
+  }
+
+  /* Inputs & selects clean */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 3px;
+    resize: none; 
+    overflow: hidden;
+    appearance: none;
+  }
+
+  select {
+    padding-right: 18px;
+    background: transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><polyline points='1,1 6,6 11,1' stroke='%23000' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") no-repeat right center;
+    background-size: 12px 8px;
+  }
+
+  textarea::placeholder,
+  input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); display: none; align-items: center;
+    justify-content: center; z-index: 1000;
+  }
+  .modal-content {
+    background: #fff; padding: 25px 30px; border-radius: 5px;
+    width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .modal-content h3 { margin-top: 0; font-size: 18px; font-weight: 600; }
+  .modal-content p { margin-bottom: 15px; font-size: 14px; color: #555; }
+  .modal-content input {
+    width: 100%; padding: 10px; margin-bottom: 20px;
+    border: 1.5px solid #ccc; border-radius: 4px; font-size: 14px;
+  }
+  .modal-buttons button {
+    padding: 10px 20px; margin: 0 8px; border: none; border-radius: 4px;
+    cursor: pointer; font-weight: 500;
+  }
+  #confirmSaveBtn { background-color: var(--accent-color); color: white; }
+  #cancelSaveBtn { background-color: #eee; color: #333; }
+  
+  /* Auth Status */
+  .auth-status {
+    text-align: center; margin: -5px 0 15px 0;
+    font-size: 12px; color: #666;
+  }
+
+  /* Ribbon & Editable Area Styles */
+  .ribbon {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+      background: var(--box-bg-new); border: 1px solid var(--new-box-border);
+      border-radius: 8px; padding: 10px; margin-bottom: 24px;
+  }
+  .group {
+      display: flex; align-items: center; gap: 6px; padding: 6px;
+      border: 1px solid var(--line-color); border-radius: 6px; background: var(--paper-color);
+  }
+  .group .label { font-size: 12px; color: var(--secondary-text); margin-left: 4px; white-space: nowrap; }
+  .ribbon select, .ribbon input[type="color"], .ribbon .btn, .ribbon .btn-square {
+      appearance: none; border: 1px solid var(--line-color); background: var(--paper-color);
+      padding: 7px 10px; border-radius: 5px; font-size: 14px; line-height: 1; cursor: pointer;
+      color: var(--primary-text); font-family: inherit;
+  }
+  .ribbon .btn, .ribbon .btn-square { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .ribbon .btn-square { width: 36px; height: 36px; padding: 0; }
+  .ribbon .btn:hover, .ribbon .btn-square:hover, .ribbon select:hover { background-color: #f0f0f0; }
+  .ribbon .btn.active, .ribbon .btn-square.active { 
+      background: var(--accent-color); color: var(--paper-color); border-color: var(--accent-color); 
+  }
+  .ribbon .sep { width: 1px; background: var(--line-color); margin: 0 6px; align-self: stretch; }
+  .ribbon .grow { flex: 1 1 auto; }
+  .ribbon .pill {
+      font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line-color); 
+      background: var(--paper-color); color: var(--secondary-text);
+  }
+  .editable-area {
+      width: 100%; border: none; outline: none; font-family: inherit;
+      font-size: 13px; line-height: 1.6; background: transparent;
+      color: #000; padding: 5px; min-height: 120px; cursor: text;
+      resize: vertical; overflow: auto; position: relative;
+  }
+  .editable-area:focus { outline: none; box-shadow: 0 0 0 2px var(--accent-color); border-radius: 4px; }
+  .editable-area[data-placeholder]:empty::before {
+      content: attr(data-placeholder); color: #999; pointer-events: none; font-style: italic;
+  }
+
+  .editable-area img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Styles for Cross-Curricular Competencies */
+  .print-only { display: none; }
+  #ccc-multiselect .group-label {
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #eee;
+  }
+  #ccc-multiselect ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+  }
+  #ccc-multiselect li {
+      margin-bottom: 5px;
+  }
+   #ccc-print ul {
+      margin: 5px 0 0 0;
+      padding-left: 20px;
+      list-style-type: disc;
+  }
+
+  /* Print Styles */
+  @page { size: A4; margin: 0; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .lesson-plan {
+      width: 210mm !important; height: 297mm !important; margin: 0 !important;
+      padding: 10mm !important; box-shadow: none !important; border: none !important;
+      box-sizing: border-box !important;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      border: none !important; background: transparent !important; box-shadow: none !important;
+      appearance: none !important; -webkit-appearance: none !important;
+      font-size: 12px !important; padding: 0 !important; width: 100% !important;
+    }
+    select { background: transparent !important; }
+    .editable-area {
+        min-height: auto !important; resize: none !important; overflow: visible !important;
+    }
+    .bottom-buttons, .ribbon, .no-print, #image-resize-handle { display: none !important; }
+    .print-only { display: block !important; }
+    
+    body.default-theme table, body.default-theme th, body.default-theme td { border: 1px solid #000 !important; }
+    body.default-theme table th { background-color: #f3f3f3 !important; color: #000 !important; }
+    body.theme-blue table, body.theme-blue th, body.theme-blue td { border: 1px solid #2c3e99 !important; }
+    body.theme-blue table th { background-color: #d6e3ff !important; color: #2c3e99 !important; }
+    body.theme-green table, body.theme-green th, body.theme-green td { border: 1px solid #2d7a33 !important; }
+    body.theme-green table th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
+    body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border: 1px solid #b39700 !important; }
+    body.theme-yellow table th { background-color: #fff2cc !important; color: #b39700 !important; }
+    body.theme-pink table, body.theme-pink th, body.theme-pink td { border: 1px solid #cc3366 !important; }
+    body.theme-pink table th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
+    body.theme-purple table, body.theme-purple th, body.theme-purple td { border: 1px solid #5e2d91 !important; }
+    body.theme-purple table th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
+    body.theme-gray table, body.theme-gray th, body.theme-gray td { border: 1px solid #444 !important; }
+    body.theme-gray table th { background-color: #dddddd !important; color: #333 !important; }
+  }
+
+  /* Buttons */
+  .bottom-buttons { margin-top: 15px; text-align: center; }
+  .bottom-buttons button, .bottom-buttons select {
+    background: transparent; color: inherit; border: 2px solid currentColor;
+    padding: 8px 14px; margin: 6px; border-radius: 0px; cursor: pointer;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.2px; transition: all 0.3s ease;
+  }
+  .bottom-buttons button:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; }
+
+  body.default-theme .bottom-buttons { color: #000; }
+  body.theme-blue .bottom-buttons { color: #2c3e99; }
+  body.theme-green .bottom-buttons { color: #2d7a33; }
+  body.theme-yellow .bottom-buttons { color: #b39700; }
+  body.theme-pink .bottom-buttons { color: #cc3366; }
+  body.theme-purple .bottom-buttons { color: #5e2d91; }
+  body.theme-gray .bottom-buttons { color: #333; }
+
+  /* Checkboxes */
+  .custom-checkbox {
+    position: relative; cursor: pointer; font-size: 13px;
+    display: flex; align-items: flex-start;
+  }
+  .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
+  .custom-checkbox span {
+    display: inline-block; height: 14px; width: 14px; border: 1.5px solid #000;
+    border-radius: 3px; background-color: #fff; margin-right: 8px;
+    flex-shrink: 0; position: relative; top: 2px;
+  }
+  .custom-checkbox span::after {
+    content: ""; position: absolute; display: none; left: 3px; top: 0px;
+    width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .custom-checkbox input:checked ~ span { background-color: #000; border-color: #000; }
+  .custom-checkbox input:checked ~ span::after { display: block; }
+  .checkbox-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-top: 6px; }
+
+  body.theme-blue .custom-checkbox input:checked ~ span { background-color: #4a6cff; border-color: #4a6cff; }
+  body.theme-green .custom-checkbox input:checked ~ span { background-color: #4caf50; border-color: #4caf50; }
+  body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #e6c200; border-color: #e6c200; }
+  body.theme-pink .custom-checkbox input:checked ~ span { background-color: #ff4d88; border-color: #ff4d88; }
+  body.theme-purple .custom-checkbox input:checked ~ span { background-color: #8e44ad; border-color: #8e44ad; }
+  body.theme-gray .custom-checkbox input:checked ~ span { background-color: #555; border-color: #555; }
+  
+  /* Table Themes */
+  body.default-theme table, body.default-theme th, body.default-theme td { border-color: #000; }
+  body.default-theme table th { background: #f3f3f3; color: #000; }
+  body.default-theme table td { background: #fff; }
+  body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99; }
+  body.theme-blue table th { background: #d6e3ff; color: #2c3e99; }
+  body.theme-blue table td { background: #f9fbff; }
+  body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33; }
+  body.theme-green table th { background: #d9f5d9; color: #2d7a33; }
+  body.theme-green table td { background: #fafffa; }
+  body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700; }
+  body.theme-yellow table th { background: #fff2cc; color: #b39700; }
+  body.theme-yellow table td { background: #fffdf5; }
+  body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366; }
+  body.theme-pink table th { background: #ffd6e6; color: #cc3366; }
+  body.theme-pink table td { background: #fff5fa; }
+  body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91; }
+  body.theme-purple table th { background: #e6d6ff; color: #5e2d91; }
+  body.theme-purple table td { background: #faf5ff; }
+  body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444; }
+  body.theme-gray table th { background: #dddddd; color: #333; }
+  body.theme-gray table td { background: #fafafa; }
+</style>
+</head>
+<body class="default-theme">
+  
+  <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+  <div id="image-resize-handle"></div>
+
+  <div id="saveModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Save Lesson Plan</h3>
+      <p>Please enter a name for your project to save it.</p>
+      <input type="text" id="projectNameInput" placeholder="E.g., 4MS Sequence 1 Lesson">
+      <div class="modal-buttons">
+        <button id="cancelSaveBtn">Cancel</button>
+        <button id="confirmSaveBtn">Confirm Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-plan">
+    <div id="authStatus" class="auth-status no-print">Checking login status...</div>
+    
+    <div class="ribbon no-print" id="ribbon">
+        <div class="group" aria-label="Font">
+          <select id="fontFamily" title="Font family">
+            <option>Poppins</option><option>Roboto</option><option>Arial</option><option>Helvetica</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option>
+          </select>
+          <select id="fontSize" title="Font size">
+            <option value="1">10px</option><option value="2">12px</option><option value="3" selected>14px</option><option value="4">16px</option><option value="5">18px</option><option value="6">20px</option><option value="7">24px</option>
+          </select>
+        </div>
+
+        <div class="group" aria-label="Emphasis">
+          <button class="btn-square" data-cmd="bold" title="Bold"><b>B</b></button>
+          <button class="btn-square" data-cmd="italic" title="Italic"><i>I</i></button>
+          <button class="btn-square" data-cmd="underline" title="Underline"><u>U</u></button>
+          <button class="btn-square" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+        </div>
+
+        <div class="group" aria-label="Colors">
+          <label class="label" for="foreColor">Text</label>
+          <input type="color" id="foreColor" title="Text color" value="#2c3e50">
+          <span class="sep"></span>
+          <label class="label" for="hiliteColor">Highlight</label>
+          <input type="color" id="hiliteColor" title="Highlight color" value="#fff59d">
+        </div>
+
+        <div class="group" aria-label="Paragraph">
+          <button class="btn-square" data-cmd="justifyLeft" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+          <button class="btn-square" data-cmd="justifyCenter" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+          <button class="btn-square" data-cmd="justifyRight" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+          <button class="btn-square" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+          <button class="btn-square" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+        </div>
+
+        <div class="group" aria-label="Actions">
+          <button class="btn" id="insertImageBtn" title="Insert Image"><i class="fas fa-image"></i> Image</button>
+          <button class="btn" data-cmd="removeFormat" title="Clear formatting"><i class="fas fa-eraser"></i> Clear</button>
+        </div>
+    </div>
+
+    <table>
+      <tr>
+        <td style="width:50%"><strong>Middle School:</strong> <input type="text" id="schoolName" placeholder="Enter school name"></td>
+        <td style="width:50%"><strong>Teacher:</strong> <input type="text" id="teacherName" placeholder="Enter teacher name"></td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td style="width:25%"><strong>Level:</strong> 
+          <select id="levelSelect">
+            <option value="">-- Select Level --</option>
+            <option value="MS1">MS1</option>
+            <option value="MS2">MS2</option>
+            <option value="MS3">MS3</option>
+            <option value="MS4">MS4</option>
+          </select>
+        </td>
+        <td style="width:25%"><strong>Number of learners:</strong> 
+          <input type="number" id="learnerCount" placeholder="0">
+        </td>
+        <td style="width:50%"><strong>Class Profile:</strong> 
+          <input type="text" id="classProfile" placeholder="e.g., Mixed ability">
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td style="width:50%"><strong>Sequence:</strong> 
+          <select id="sequenceSelect">
+            <option value="">-- Select Sequence --</option>
+          </select>
+        </td>
+        <td style="width:50%"><strong>Session:</strong> 
+          <select id="sessionSelect">
+            <option value="">-- Select Session --</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+          <strong>Session objective(s):</strong> 
+          <textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea>
+        </td>
+      </tr>
+    </table>
+    
+    <table>
+      <tr>
+        <td>
+          <strong>Subsidiary objective(s):</strong> 
+          <textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td>
+                <strong>Cross-Curricular Competences:</strong>
+                <div id="ccc-multiselect" class="no-print"></div>
+                <div id="ccc-print" class="print-only"></div>
+            </td>
+        </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+          <strong>Target Competence:</strong>
+          <div id="targetCompetencies" class="checkbox-inline">
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand short oral messages...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Interact orally and produce short oral messages...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand simple messages... using reading skills...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Produce simple written messages...</label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table class="procedure-table">
+      <tr>
+        <th style="width:15%">STAGES</th>
+        <th style="width:55%">PROCEDURE / TASKS</th>
+        <th style="width:15%">INTERACTION</th>
+        <th style="width:15%">TIME &#128336;</th>
+      </tr>
+      <tr>
+        <td><input type="text" id="preWritingStage" value="Pre-Writing" style="font-weight: bold;"></td>
+        <td><div id="preWritingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your pre-writing procedure here..."></div></td>
+        <td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td>
+        <td><input type="text" id="preWritingTime" placeholder="10 min"></td>
+      </tr>
+      <tr>
+        <td><input type="text" id="writingStage" value="Writing" style="font-weight: bold;"></td>
+        <td><div id="writingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main writing procedure here..."></div></td>
+        <td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td>
+        <td><input type="text" id="writingTime" placeholder="25 min"></td>
+      </tr>
+      <tr>
+        <td><input type="text" id="postWritingStage" value="Post-Writing" style="font-weight: bold;"></td>
+        <td><textarea id="postWritingProcedure" rows="1" placeholder="Write your post-writing procedure here..."></textarea></td>
+        <td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td>
+        <td><input type="text" id="postWritingTime" placeholder="10 min"></td>
+      </tr>
+    </table>
+
+    <table class="reflection">
+      <tr>
+        <th>What Worked</th>
+        <th>What Hindered</th>
+        <th>Action Points</th>
+      </tr>
+      <tr>
+        <td><textarea id="whatWorked" placeholder="Write here..."></textarea></td>
+        <td><textarea id="whatHindered" placeholder="Write here..."></textarea></td>
+        <td><textarea id="actionPoints" placeholder="Write here..."></textarea></td>
+      </tr>
+    </table>
+    
+    <div class="bottom-buttons no-print">
+      <button onclick="window.print()">Print</button>
+      <button id="saveBtn" disabled>Save</button>
+      <button onclick="downloadPage()">Download</button>
+      <button onclick="goToMain()">Go to Main Page</button>
+      
+      <select id="themeSelect" onchange="changeTheme(this.value)">
+        <option value="default-theme">Default</option>
+        <option value="theme-blue">Blue</option>
+        <option value="theme-green">Green</option>
+        <option value="theme-yellow">Yellow</option>
+        <option value="theme-pink">Pink</option>
+        <option value="theme-purple">Purple</option>
+        <option value="theme-gray">Gray</option>
+      </select>
+    </div>
+  </div>
+
+<script type="module">
+  // --- Import Firebase Modules ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+  // --- Firebase Configuration ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+    authDomain: "printelydz.firebaseapp.com",
+    projectId: "printelydz",
+    storageBucket: "printelydz.appspot.com",
+    messagingSenderId: "49201277305",
+    appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+    measurementId: "G-R4VJL5SR88"
+  };
+
+  // --- Initialize Firebase ---
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  let currentUser = null;
+
+  // --- DOM Elements ---
+  const saveBtn = document.getElementById('saveBtn');
+  const saveModal = document.getElementById('saveModal');
+  const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+  const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+  const projectNameInput = document.getElementById('projectNameInput');
+  const authStatusDiv = document.getElementById('authStatus');
+
+  // --- Auth Listener ---
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      currentUser = user;
+      saveBtn.disabled = false;
+      authStatusDiv.innerHTML = `Logged in as: <strong>${user.email}</strong>`;
+      loadPlanFromSession();
+    } else {
+      currentUser = null;
+      saveBtn.disabled = true;
+      authStatusDiv.innerHTML = `Please <a href="/login.html">log in</a> to save your work.`;
+    }
+  });
+
+  // --- Save Functionality ---
+  saveBtn.addEventListener('click', () => { saveModal.style.display = 'flex'; });
+  cancelSaveBtn.addEventListener('click', () => { 
+    saveModal.style.display = 'none';
+    projectNameInput.value = '';
+  });
+
+  // --- Auto-resize Textareas ---
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', () => autoResize(textarea));
+        autoResize(textarea);
+    });
+
+  // --- Save to Firestore ---
+  confirmSaveBtn.addEventListener('click', async () => {
+    if (!currentUser) return alert("Error: You are not logged in.");
+    const planName = projectNameInput.value.trim();
+    if (!planName) return alert("Please enter a name for your project.");
+
+    try {
+      confirmSaveBtn.disabled = true;
+      confirmSaveBtn.textContent = 'Saving...';
+      const lessonPlanData = {
+        planName, plannerType: 'newestms',
+        school: document.getElementById('schoolName').value,
+        teacher: document.getElementById('teacherName').value,
+        level: document.getElementById('levelSelect').value,
+        learners: document.getElementById('learnerCount').value,
+        classProfile: document.getElementById('classProfile').value,
+        sequence: document.getElementById('sequenceSelect').value,
+        session: document.getElementById('sessionSelect').value,
+        objective: document.getElementById('sessionObjective').value,
+        subsidiaryObjectives: document.getElementById('subsidiaryObjectives').value,
+        targetCompetence: Array.from(document.querySelectorAll('#targetCompetencies input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        preWriting: {
+          stage: document.getElementById('preWritingStage').value,
+          procedure: document.getElementById('preWritingProcedure').innerHTML,
+          interaction: document.getElementById('preWritingInteraction').value,
+          time: document.getElementById('preWritingTime').value,
+        },
+        writing: {
+          stage: document.getElementById('writingStage').value,
+          procedure: document.getElementById('writingProcedure').innerHTML,
+          interaction: document.getElementById('writingInteraction').value,
+          time: document.getElementById('writingTime').value,
+        },
+        postWriting: {
+          stage: document.getElementById('postWritingStage').value,
+          procedure: document.getElementById('postWritingProcedure').value,
+          interaction: document.getElementById('postWritingInteraction').value,
+          time: document.getElementById('postWritingTime').value,
+        },
+        reflection: {
+          worked: document.getElementById('whatWorked').value,
+          hindered: document.getElementById('whatHindered').value,
+          actionPoints: document.getElementById('actionPoints').value,
+        },
+        createdAt: serverTimestamp(), authorId: currentUser.uid
+      };
+      await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
+      alert(`Lesson plan "${planName}" saved successfully!`);
+      saveModal.style.display = 'none';
+      projectNameInput.value = '';
+    } catch (error) {
+      console.error("Error saving document: ", error);
+      alert("There was an error saving your lesson plan.");
+    } finally {
+      confirmSaveBtn.disabled = false;
+      confirmSaveBtn.textContent = 'Confirm Save';
+    }
+  });
+
+  // --- Load from Session Storage ---
+  async function loadPlanFromSession() {
+    const planId = sessionStorage.getItem('planToLoadId');
+    const user = auth.currentUser;
+    if (!planId || !user) return;
+
+    try {
+      const docRef = doc(db, 'users', user.uid, 'lessonPlans', planId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('schoolName').value = data.school || '';
+        document.getElementById('teacherName').value = data.teacher || '';
+        document.getElementById('levelSelect').value = data.level || '';
+        document.getElementById('learnerCount').value = data.learners || '';
+        document.getElementById('classProfile').value = data.classProfile || '';
+        
+        levelSelect.dispatchEvent(new Event('change'));
+        
+        setTimeout(() => {
+          document.getElementById('sequenceSelect').value = data.sequence || '';
+          sequenceSelect.dispatchEvent(new Event('change'));
+
+          if (data.crossCurricularCompetences?.length) {
+              document.querySelectorAll('#ccc-multiselect input').forEach(cb => cb.checked = false);
+              data.crossCurricularCompetences.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#ccc-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#ccc-multiselect input')?.dispatchEvent(new Event('change'));
+          }
+
+          setTimeout(() => {
+            document.getElementById('sessionSelect').value = data.session || '';
+          }, 50);
+        }, 100);
+
+        document.getElementById('sessionObjective').value = data.objective || '';
+        document.getElementById('subsidiaryObjectives').value = data.subsidiaryObjectives || '';
+        
+        if (data.targetCompetence) data.targetCompetence.forEach(val => {
+          const label = Array.from(document.querySelectorAll('#targetCompetencies label')).find(l => l.textContent.trim() === val);
+          if (label) label.querySelector('input').checked = true;
+        });
+
+        document.getElementById('preWritingStage').value = data.preWriting?.stage || 'Pre-Writing';
+        document.getElementById('preWritingProcedure').innerHTML = data.preWriting?.procedure || '';
+        document.getElementById('preWritingInteraction').value = data.preWriting?.interaction || '';
+        document.getElementById('preWritingTime').value = data.preWriting?.time || '';
+
+        document.getElementById('writingStage').value = data.writing?.stage || 'Writing';
+        document.getElementById('writingProcedure').innerHTML = data.writing?.procedure || '';
+        document.getElementById('writingInteraction').value = data.writing?.interaction || '';
+        document.getElementById('writingTime').value = data.writing?.time || '';
+        
+        document.getElementById('postWritingStage').value = data.postWriting?.stage || 'Post-Writing';
+        document.getElementById('postWritingProcedure').value = data.postWriting?.procedure || '';
+        document.getElementById('postWritingInteraction').value = data.postWriting?.interaction || '';
+        document.getElementById('postWritingTime').value = data.postWriting?.time || '';
+
+        document.getElementById('whatWorked').value = data.reflection?.worked || '';
+        document.getElementById('whatHindered').value = data.reflection?.hindered || '';
+        document.getElementById('actionPoints').value = data.reflection?.actionPoints || '';
+        
+        document.querySelectorAll('textarea').forEach(autoResize);
+        sessionStorage.removeItem('planToLoadId');
+      } else {
+        alert("Could not find the lesson plan to load.");
+        sessionStorage.removeItem('planToLoadId');
+      }
+    } catch (error) {
+      console.error("Error loading lesson plan:", error);
+      alert("An error occurred while loading the plan.");
+    }
+  }
+
+  // --- Curriculum & Competency Data ---
+  const curriculum = {
+    "MS1": { "Habits and Preferences": ["Get Ready", "Listen & Interact", "Listen & Consider", "Read & Interpret", "Read & Consider", "Write Together", "Write Alone"] },
+    "MS2": { "Me and My Travels": ["Planning a Trip", "Asking for Directions", "Describing a Place", "Writing an Email about a Trip"] },
+    "MS3": { /* Add MS3 sequences and sessions here */ },
+    "MS4": { /* Add MS4 sequences and sessions here */ }
+  };
+  
+  const crossCurricularCompetences = { 
+    "MS1": {
+        "Intellectual Competence": ["discover the relationship between prior knowledge, listening skills, and vocal paralinguistic features in context.","connect topical words, expressions simple sentences and vocal paralinguistic features to the context.","discover the link between text types, text features, the reading skills in context.","demonstrate understanding of the text types, features and organization, sentence structure and content, and writing skills."],
+        "Methodological Competence": ["use prior knowledge, listening skills and vocal paralinguistic features in context to understand short oral messages.","select what is appropriate to the context from the linguistic repertoire and vocal paralinguistic features to interact orally and produce short oral messages.","make use of the text types, text features, the reading skills in context to understand written messages.","use the text types, features and organization, sentence structure and content, and writing skills to produce simple written messages."],
+        "Communicative Competence": ["explain the usage of vocal paralinguistic features and listening skills to peers.","share the oral message with peers.","explain the usage of reading skills to peers.","communicate the usage of the text type, features, organization, sentence structure and content, and writing skills to peers."],
+        "Personal and Social Competence": ["demonstrate a genuine curiosity to learn about different cultures.","collaborate with others to achieve mutual understanding.","collaborate with others to benefit from what is appropriate to one's context.","share with others one's specific identity features."]
+    },
+    "MS2": {
+        "Intellectual Competence": ["Using critical thinking to match icons with amenities, deduce rules, and locate places on a map.","Understanding and interpreting a conversation."],
+        "Methodological Competence": ["Working in pairs or within the whole class.","Mobilizing resources, such as knowledge of Algerian towns and their locations/amenities.","Taking notes and exchanging information with peers.","Evaluating oneself and one's partner."],
+        "Communicative Competence": ["Interviewing partners to gather information.","Reinvesting language in real-life situations.","Writing an email and describing past events orally.","Interpreting and reading maps through listening and transcoding information from one form to another (e.g., from sound to a visual map)."],
+        "Personal and Social Competence": ["Socializing and exchanging experiences through oral exchanges."]
+    }
+    // Add MS3 and MS4 data here if available
+  };
+
+  // --- Dynamic Checkbox Functions ---
+  function setupPrintableCheckboxes(containerId, printId) {
+    const checkboxContainer = document.getElementById(containerId);
+    const printElement = document.getElementById(printId);
+    if (!checkboxContainer || !printElement) return;
+
+    const updatePrintableArea = () => {
+        const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+        const selectedLabels = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.closest('label').textContent.trim() || '');
+
+        if (selectedLabels.length > 0) {
+            printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+        } else {
+            printElement.innerHTML = '';
+        }
+    };
+    checkboxContainer.addEventListener('change', (event) => {
+        if (event.target.type === 'checkbox') {
+            updatePrintableArea();
+        }
+    });
+    updatePrintableArea();
+  }
+
+  function populateCompetencies(level) {
+    const container = document.getElementById('ccc-multiselect');
+    const printContainer = document.getElementById('ccc-print');
+    container.innerHTML = ''; 
+    printContainer.innerHTML = ''; 
+    const competencies = crossCurricularCompetences[level];
+    if (!competencies) return;
+
+    let html = '';
+    for (const category in competencies) {
+        html += `<div class="group-label">${category}</div><ul>`;
+        competencies[category].forEach(item => {
+            html += `<li><label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label></li>`;
+        });
+        html += `</ul>`;
+    }
+    container.innerHTML = html;
+    setupPrintableCheckboxes('ccc-multiselect', 'ccc-print');
+  }
+
+  // --- Dropdown Handlers ---
+  const [levelSelect, sequenceSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sessionSelect"].map(id => document.getElementById(id));
+  levelSelect.addEventListener("change", () => {
+    sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>"; 
+    sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    if (curriculum[levelSelect.value]) {
+      Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+    }
+    populateCompetencies(levelSelect.value);
+  });
+  sequenceSelect.addEventListener("change", () => {
+    sessionSelect.innerHTML = "<option value=''>Select Session</option>";
+    const sessData = curriculum[levelSelect.value]?.[sequenceSelect.value];
+    if (sessData) sessData.forEach(ses => sessionSelect.add(new Option(ses, ses)));
+  });
+
+  // --- Global Functions ---
+  window.downloadPage = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([document.documentElement.outerHTML], {type: "text/html"}));
+    a.download = "lesson-plan.html";
+    a.click();
+  };
+  window.goToMain = () => window.location.href = "index.html";
+  window.changeTheme = theme => {
+    document.body.className = theme;
+    localStorage.setItem("lessonTheme", theme);
+  };
+
+  // --- Page Load Logic ---
+  window.onload = () => {
+    const saved = localStorage.getItem("lessonTheme");
+    if (saved) {
+      document.body.className = saved;
+      document.getElementById("themeSelect").value = saved;
+    }
+  };
+
+  // --- Ribbon Editor & Image Logic ---
+  let activeEditor = null;
+  document.addEventListener('focusin', e => { if (e.target.isContentEditable) activeEditor = e.target; });
+  function exec(cmd, val = null) { if (activeEditor) document.execCommand(cmd, false, val); }
+  document.querySelectorAll('[data-cmd]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); exec(btn.dataset.cmd); }));
+  document.getElementById('fontFamily').addEventListener('change', e => exec('fontName', e.target.value));
+  document.getElementById('fontSize').addEventListener('change', e => exec('fontSize', e.target.value));
+  document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
+  document.getElementById('hiliteColor').addEventListener('input', e => exec('hiliteColor', e.target.value));
+
+  const imageUpload = document.getElementById('imageUpload');
+  document.getElementById('insertImageBtn').addEventListener('click', () => imageUpload.click());
+  imageUpload.addEventListener('change', e => {
+    if (!e.target.files || !e.target.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = () => exec('insertImage', reader.result);
+    reader.readAsDataURL(e.target.files[0]);
+    e.target.value = null;
+  });
+
+</script>
+</body>
+</html>
