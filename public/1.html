@@ -54,7 +54,7 @@
             .decoration {
                  display: block; /* Ensure decorations are printed */
             }
-            .theme-switcher {
+            .theme-switcher, .print-button {
                 display: none !important;
             }
             [contenteditable]:hover {
@@ -184,6 +184,32 @@
             font-size: 14px;
             cursor: pointer;
             outline: none;
+        }
+        
+        /* Print Button Style */
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 20;
+            padding: 10px 20px;
+            font-family: 'Kalam', cursive;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background-color: var(--header-color);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .print-button:hover {
+            background-color: #6A8B85;
+            transform: translateY(-2px);
+        }
+        .print-button:active {
+            transform: translateY(0);
         }
 
         /* Decorations */
@@ -452,6 +478,8 @@
         </div>
     </div>
     
+    <button id="printButton" class="print-button">Print Timetable</button>
+
     <script>
         const themes = {
             pastel: {
@@ -630,6 +658,10 @@
             for (const [key, value] of Object.entries(selectedTheme)) {
                 document.documentElement.style.setProperty(key, value);
             }
+        });
+
+        document.getElementById('printButton').addEventListener('click', () => {
+            window.print();
         });
     </script>
 </body>
