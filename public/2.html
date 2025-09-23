@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My School Timetable</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --pink-bg: #f7e9e9;
+            --pink-primary: #a05252;
+            --pink-secondary: #e0c9c9;
+            --pink-light: #fcebeb;
+
+            --white-bg: #f0f0f0;
+            --white-primary: #555;
+            --white-secondary: #ddd;
+            --white-light: #f9f9f9;
+
+            --blue-bg: #e9f0f7;
+            --blue-primary: #3f51b5;
+            --blue-secondary: #c9dbe0;
+            --blue-light: #eef3f8;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: var(--pink-bg);
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* --- Global Background SVGs --- */
+        .global-svg-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .global-svg-background path,
+        .global-svg-background polygon,
+        .global-svg-background circle,
+        .global-svg-background rect,
+        .global-svg-background ellipse {
+            fill: #e9d9d9;
+            stroke: #d8c3c3;
+            fill-opacity: 0.5;
+            stroke-opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        /* --- Theme Styling --- */
+        .pink-theme { background-color: var(--pink-bg); }
+        .pink-theme .timetable-container { background-color: rgba(255, 255, 255, 0.85); border: 2px solid var(--pink-secondary); }
+        .pink-theme .header h1 { color: var(--pink-primary); }
+        .pink-theme thead th, .pink-theme .info-box label { color: #8c7272; background-color: var(--pink-light); }
+        .pink-theme .info-box input { background-color: var(--pink-light); border-bottom: 2px solid var(--pink-secondary); }
+        .pink-theme th, .pink-theme td { border: 1px solid var(--pink-secondary); }
+
+        .white-theme { background-color: var(--white-bg); }
+        .white-theme .timetable-container { background-color: rgba(255, 255, 255, 0.85); border: 2px solid var(--white-secondary); }
+        .white-theme .header h1, .white-theme thead th, .white-theme .info-box label { color: var(--white-primary); }
+        .white-theme .info-box input, .white-theme thead th { background-color: var(--white-light); border-bottom: 2px solid var(--white-secondary);}
+        .white-theme th, .white-theme td { border: 1px solid var(--white-secondary); }
+
+        .blue-theme { background-color: var(--blue-bg); }
+        .blue-theme .timetable-container { background-color: rgba(255, 255, 255, 0.85); border: 2px solid var(--blue-secondary); }
+        .blue-theme .header h1 { color: var(--blue-primary); }
+        .blue-theme thead th, .blue-theme .info-box label { color: #5d7494; background-color: var(--blue-light); }
+        .blue-theme .info-box input { background-color: var(--blue-light); border-bottom: 2px solid var(--blue-secondary); }
+        .blue-theme th, .blue-theme td { border: 1px solid var(--blue-secondary); }
+
+        /* --- General Styling --- */
+        .timetable-container {
+            width: 95%;
+            max-width: 800px;
+            border-radius: 0px;
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Gochi Hand', cursive;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px; /* Increased gap */
+            margin-bottom: 20px;
+            font-size: 1em;
+            width: 100%;
+        }
+        
+        .info-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-box label {
+            font-weight: 700;
+        }
+        
+        .info-box input {
+            border: none;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 0.9em;
+            outline: none;
+            text-align: center;
+            width: 120px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9em;
+            background-color: #ffffff;
+        }
+        
+        th, td {
+            padding: 10px 5px;
+            text-align: center;
+            height: 40px;
+        }
+        
+        thead th {
+            font-family: 'Gochi Hand', cursive;
+            font-size: 1.1em;
+        }
+        
+        thead th:first-child {
+            width: 15%;
+        }
+
+        tbody td {
+            font-weight: 400;
+            cursor: text;
+        }
+        tbody td:focus {
+            background-color: #f0f8ff;
+            outline: 2px solid var(--blue-primary);
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls label {
+            font-weight: 700;
+            color: #5d4037;
+        }
+
+        .controls select,
+        .controls button {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+        }
+
+        .controls select:hover,
+        .controls button:hover {
+            background-color: #e0e0e0;
+            border-color: #bbb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .controls .print-btn {
+            background-color: #3f51b5;
+            color: white;
+            border-color: #3f51b5;
+        }
+        .controls .clear-btn {
+             background-color: #a05252;
+            color: white;
+            border-color: #a05252;
+        }
+        
+        /* --- Print Styling --- */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+
+            body {
+                /* This line is crucial for printing background colors and images */
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+                
+                /* Removed background: #fff to allow the theme colors to show */
+                padding: 0;
+                margin: 0;
+            }
+            
+            /* Only the controls should be hidden, not the background SVG */
+            .controls {
+                display: none;
+            }
+            
+            .timetable-container {
+                position: relative;
+                width: 100%;
+                max-width: none;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 15mm;
+                border-radius: 0;
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* --- FIXED: Maintain theme colors in print --- */
+            .pink-theme .timetable-container {
+                /* Restored semi-transparent background to match webpage */
+                background-color: rgba(255, 255, 255, 0.85);
+                border: 2px solid var(--pink-secondary);
+            }
+            .pink-theme .header h1 { color: var(--pink-primary); }
+            .pink-theme thead th, .pink-theme .info-box label { 
+                color: #8c7272; 
+                background-color: var(--pink-light); 
+            }
+            .pink-theme .info-box input { 
+                background-color: var(--pink-light); 
+                border-bottom: 2px solid var(--pink-secondary); 
+            }
+            .pink-theme th, .pink-theme td { 
+                border: 1px solid var(--pink-secondary); 
+            }
+
+            .white-theme .timetable-container {
+                background-color: rgba(255, 255, 255, 0.85);
+                border: 2px solid var(--white-secondary);
+            }
+            .white-theme .header h1, .white-theme thead th, .white-theme .info-box label { 
+                color: var(--white-primary); 
+            }
+            .white-theme .info-box input, .white-theme thead th { 
+                background-color: var(--white-light); 
+                border-bottom: 2px solid var(--white-secondary);
+            }
+            .white-theme th, .white-theme td { 
+                border: 1px solid var(--white-secondary); 
+            }
+
+            .blue-theme .timetable-container {
+                background-color: rgba(255, 255, 255, 0.85);
+                border: 2px solid var(--blue-secondary);
+            }
+            .blue-theme .header h1 { 
+                color: var(--blue-primary); 
+            }
+            .blue-theme thead th, .blue-theme .info-box label { 
+                color: #5d7494; 
+                background-color: var(--blue-light); 
+            }
+            .blue-theme .info-box input { 
+                background-color: var(--blue-light); 
+                border-bottom: 2px solid var(--blue-secondary); 
+            }
+            .blue-theme th, .blue-theme td { 
+                border: 1px solid var(--blue-secondary); 
+            }
+            /* --- END OF FIX --- */
+
+            .header {
+                margin-bottom: 10mm;
+            }
+
+            .header h1 {
+                font-size: 26pt;
+            }
+
+            .info-row {
+                margin-bottom: 10mm;
+                gap: 50px;
+            }
+
+            .info-box label, .info-box input {
+                font-size: 14pt;
+                font-family: 'Roboto', sans-serif;
+            }
+            .info-box input {
+                padding-bottom: 2px;
+                width: 250px;
+            }
+            
+            .info-box input::placeholder {
+                color: transparent;
+            }
+
+            table {
+                font-size: 12pt;
+                width: 100%;
+                flex-grow: 1;
+            }
+
+            th, td {
+                padding: 8px 5px;
+            }
+
+            thead th {
+                 font-family: 'Gochi Hand', cursive;
+                 font-size: 16pt;
+            }
+        }
+    </style>
+</head>
+<body class="pink-theme" id="timetableBody">
+
+    <svg class="global-svg-background" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice">
+        <path d="M-100,500 C100,600 300,550 500,650 C700,750 900,600 1100,600 L1100,700 L-100,700 Z" stroke-width="2" transform="rotate(-10 500 500)"/>
+        <path d="M-50,0 C150,100 350,50 550,150 C750,250 950,100 1150,100 L1150,-100 L-50,-100 Z" stroke-width="2" transform="rotate(5 500 0)"/>
+    </svg>
+
+    <div class="timetable-container">
+        <div class="header">
+            <h1>My School Timetable</h1>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-box">
+                <label for="name">NAME:</label>
+                <input type="text" id="name" placeholder="Your Name">
+            </div>
+            <div class="info-box">
+                <label for="class">CLASS:</label>
+                <input type="text" id="class" placeholder="Your Class">
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>08:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>09:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>10:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>11:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>12:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>13:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <th>14:00</th><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="controls">
+        <label for="theme-select">Theme:</label>
+        <select id="theme-select" onchange="changeTheme(this.value)">
+            <option value="pink-theme">Pink</option>
+            <option value="white-theme">White</option>
+            <option value="blue-theme">Blue</option>
+        </select>
+        <button class="print-btn" onclick="window.print()">Print Timetable</button>
+        <button class="clear-btn" onclick="clearTimetable()">Clear Timetable</button>
+    </div>
+
+    <script>
+        function changeTheme(themeClass) {
+            const body = document.getElementById('timetableBody');
+            body.className = themeClass;
+        }
+
+        function clearTimetable() {
+            // This function clears all the editable cells in the timetable
+            const cells = document.querySelectorAll('tbody td[contenteditable="true"]');
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+             // Also clear the name and class fields
+            document.getElementById('name').value = '';
+            document.getElementById('class').value = '';
+        }
+    </script>
+</body>
+</html>

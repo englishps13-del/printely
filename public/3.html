@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My School Timetable</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #fff5f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+            position: relative; /* Needed for positioning new SVGs */
+            overflow: hidden; /* Hide overflow from decorative SVGs */
+        }
+        
+        .controls {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 10; /* Ensure controls are on top */
+        }
+        
+        select, button {
+            padding: 10px 20px;
+            border-radius: 0px;
+            border: 2px solid #ff9eb5;
+            background-color: white;
+            color: #ff6b95;
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 107, 149, 0.2);
+        }
+        
+        button:hover, select:hover {
+            background-color: #ff9eb5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 107, 149, 0.3);
+        }
+        
+        .timetable-container {
+            background-color: #ffecf1;
+            border-radius: 0px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(255, 107, 149, 0.3), 0 5px 15px rgba(255, 107, 149, 0.2);
+            position: relative;
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            border: 3px solid #ff9eb5;
+            z-index: 1;
+        }
+        
+        /* Decorative elements */
+        .timetable-container::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            height: 40px;
+            background: linear-gradient(90deg, #ff9eb5, #ff6b95, #ff9eb5);
+            border-radius: 0px;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #ffeb3b;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 0;
+        }
+        
+        .star:nth-child(1) { width: 30px; height: 30px; top: 60px; right: 40px; }
+        .star:nth-child(2) { width: 20px; height: 20px; top: 100px; right: 80px; }
+        .star:nth-child(3) { width: 25px; height: 25px; top: 40px; right: 120px; }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path fill="%23ff9eb5" d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1440,0 1440,0 L1440,120 L0,120 Z" /></svg>');
+            background-size: cover;
+            z-index: 0;
+        }
+
+        /* --- NEW: Added decorative SVGs --- */
+        .decorative-svg {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.7;
+        }
+     
+      
+        .header { text-align: center; margin-bottom: 25px; position: relative; z-index: 1; }
+        .header h1 { color: #ff6b95; font-size: 2.8rem; margin-bottom: 15px; text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8); }
+        .info { display: flex; justify-content: space-around; margin-bottom: 25px; position: relative; z-index: 1; }
+        .info div { display: flex; align-items: center; gap: 10px; }
+        .info label { color: #ff6b95; font-weight: 700; font-size: 1.3rem; }
+        .info input { border: 2px solid #ff9eb5; border-radius: 0px; padding: 8px 15px; font-family: 'Comic Neue', cursive; font-size: 1.1rem; background-color: white; color: #ff6b95; box-shadow: 0 2px 5px rgba(255, 107, 149, 0.1); }
+        
+        .timetable { width: 100%; border-collapse: collapse; position: relative; z-index: 1; border: 3px solid #ff9eb5; border-radius: 0px; overflow: hidden; box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2); }
+        .timetable th, .timetable td { border: 2px solid #ff9eb5; padding: 15px; text-align: center; position: relative; }
+        .timetable th { background-color: #ff9eb5; color: white; font-size: 1.2rem; font-weight: 700; border-bottom: 3px solid #ff6b95; }
+        .timetable td { background-color: white; color: #ff6b95; height: 60px; vertical-align: middle; }
+        .timetable td:first-child { background-color: #ffecf1; font-weight: 700; }
+        .timetable td input { width: 100%; border: none; background-color: transparent; text-align: center; font-family: 'Comic Neue', cursive; font-size: 1rem; color: #ff6b95; }
+        .timetable td input:focus { outline: none; background-color: rgba(255, 236, 241, 0.5); border-radius: 10px; }
+        
+        /* --- Theme variations --- */
+        .theme-blue { background-color: #f0faff !important; }
+        .theme-blue .timetable-container { background-color: #e6f7ff; border-color: #91d5ff; }
+        .theme-blue .timetable-container::before { background: linear-gradient(90deg, #91d5ff, #40a9ff, #91d5ff); }
+        .theme-blue h1, .theme-blue label, .theme-blue td, .theme-blue td input { color: #1890ff; }
+        .theme-blue input, .theme-blue th, .theme-blue td, .theme-blue select, .theme-blue button { border-color: #91d5ff; }
+        .theme-blue .timetable th { background-color: #40a9ff; border-bottom-color: #1890ff; }
+        .theme-blue .timetable td:first-child { background-color: #e6f7ff; }
+        .theme-blue .timetable { border-color: #91d5ff; }
+        .theme-blue .star { background-color: #ffc53d; }
+        .theme-blue .wave { background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path fill="%2391d5ff" d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1440,0 1440,0 L1440,120 L0,120 Z" /></svg>'); }
+
+        .theme-green { background-color: #f6ffed !important; }
+        .theme-green .timetable-container { background-color: #f6ffed; border-color: #b7eb8f; }
+        .theme-green .timetable-container::before { background: linear-gradient(90deg, #b7eb8f, #52c41a, #b7eb8f); }
+        .theme-green h1, .theme-green label, .theme-green td, .theme-green td input { color: #389e0d; }
+        .theme-green input, .theme-green th, .theme-green td, .theme-green select, .theme-green button { border-color: #b7eb8f; }
+        .theme-green .timetable th { background-color: #52c41a; border-bottom-color: #389e0d; }
+        .theme-green .timetable td:first-child { background-color: #f6ffed; }
+        .theme-green .timetable { border-color: #b7eb8f; }
+        .theme-green .star { background-color: #faad14; }
+        .theme-green .wave { background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path fill="%23b7eb8f" d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1440,0 1440,0 L1440,120 L0,120 Z" /></svg>'); }
+
+        .theme-purple { background-color: #f9f0ff !important; }
+        .theme-purple .timetable-container { background-color: #f9f0ff; border-color: #d3adf7; }
+        .theme-purple .timetable-container::before { background: linear-gradient(90deg, #d3adf7, #722ed1, #d3adf7); }
+        .theme-purple h1, .theme-purple label, .theme-purple td, .theme-purple td input { color: #531dab; }
+        .theme-purple input, .theme-purple th, .theme-purple td, .theme-purple select, .theme-purple button { border-color: #d3adf7; }
+        .theme-purple .timetable th { background-color: #722ed1; border-bottom-color: #531dab; }
+        .theme-purple .timetable td:first-child { background-color: #f9f0ff; }
+        .theme-purple .timetable { border-color: #d3adf7; }
+        .theme-purple .star { background-color: #fadb14; }
+        .theme-purple .wave { background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path fill="%23d3adf7" d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1440,0 1440,0 L1440,120 L0,120 Z" /></svg>'); }
+
+        
+        /* --- FIXED: Print styles to show colors and decorations --- */
+        @media print {
+            @page {
+                size: landscape;
+                margin: 1cm;
+            }
+            body {
+                /* IMPORTANT: This forces the browser to print background colors and images */
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+                /* Removed white background override to show theme colors */
+                padding: 0;
+                margin: 0;
+            }
+            
+            .controls { display: none; }
+            .timetable-container { box-shadow: none; padding: 20px; max-width: 100%; }
+
+            /* Remove overrides that force white backgrounds */
+            .timetable-container,
+            .timetable td {
+                 background-color: transparent !important; /* Allow theme colors to show through */
+            }
+
+            /* --- Theme-specific print styles (Kept to ensure colors are correct) --- */
+            /* Default/Pink Theme */
+            .timetable-container { border: 2px solid #ff9eb5; }
+            .timetable, .timetable th, .timetable td, .timetable tr, .timetable tr td, .timetable tr th { border: 2px solid #ff9eb5 !important; }
+            .timetable th { background-color: #ff9eb5 !important; color: white !important; border-bottom: 3px solid #ff6b95 !important; }
+            .timetable td { color: #ff6b95 !important; }
+            .timetable td:first-child { background-color: #ffecf1 !important; }
+
+            /* Blue Theme */
+            .theme-blue .timetable-container { border-color: #91d5ff; }
+            .theme-blue .timetable, .theme-blue .timetable th, .theme-blue .timetable td, .theme-blue .timetable tr td, .theme-blue .timetable tr th { border-color: #91d5ff !important; }
+            .theme-blue .timetable th { background-color: #40a9ff !important; border-bottom-color: #1890ff !important; }
+            .theme-blue .timetable td:first-child { background-color: #e6f7ff !important; }
+            
+            /* Green Theme */
+            .theme-green .timetable-container { border-color: #b7eb8f; }
+            .theme-green .timetable, .theme-green .timetable th, .theme-green .timetable td, .theme-green .timetable tr td, .theme-green .timetable tr th { border-color: #b7eb8f !important; }
+            .theme-green .timetable th { background-color: #52c41a !important; border-bottom-color: #389e0d !important; }
+            .theme-green .timetable td:first-child { background-color: #f6ffed !important; }
+            
+            /* Purple Theme */
+            .theme-purple .timetable-container { border-color: #d3adf7; }
+            .theme-purple .timetable, .theme-purple .timetable th, .theme-purple .timetable td, .theme-purple .timetable tr td, .theme-purple .timetable tr th { border-color: #d3adf7 !important; }
+            .theme-purple .timetable th { background-color: #722ed1 !important; border-bottom-color: #531dab !important; }
+            .theme-purple .timetable td:first-child { background-color: #f9f0ff !important; }
+        }
+    </style>
+</head>
+<body>
+
+        <circle cx="50" cy="50" r="25"/>
+        <line x1="50" y1="10" x2="50" y2="20" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="50" y1="80" x2="50" y2="90" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="10" y1="50" x2="20" y2="50" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="80" y1="50" x2="90" y2="50" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="21.7" y1="21.7" x2="28.8" y2="28.8" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="71.2" y1="71.2" x2="78.3" y2="78.3" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="21.7" y1="78.3" x2="28.8" y2="71.2" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+        <line x1="71.2" y1="28.8" x2="78.3" y2="21.7" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+    </svg>
+        <circle cx="40" cy="45" r="25"/>
+        <circle cx="65" cy="35" r="30"/>
+        <circle cx="90" cy="45" r="25"/>
+        <rect x="40" y="45" width="50" height="25" />
+    </svg>
+
+    <div class="controls">
+        <select id="theme-selector">
+            <option value="pink">Pink Theme</option>
+            <option value="blue">Blue Theme</option>
+            <option value="green">Green Theme</option>
+            <option value="purple">Purple Theme</option>
+        </select>
+        <button id="print-button">Print Timetable</button>
+    </div>
+    
+    <div class="timetable-container">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="wave"></div>
+        
+        <div class="header">
+            <h1>My School Timetable</h1>
+        </div>
+        
+        <div class="info">
+            <div>
+                <label for="name">NAME:</label>
+                <input type="text" id="name" placeholder="Your Name">
+            </div>
+            <div>
+                <label for="class">CLASS:</label>
+                <input type="text" id="class" placeholder="Your Class">
+            </div>
+        </div>
+        
+        <table class="timetable">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>08:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>09:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>10:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>11:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>12:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>13:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <tr><td>14:00</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        document.getElementById('theme-selector').addEventListener('change', function() {
+            const body = document.body;
+            body.className = ''; // Reset classes
+            
+            if (this.value !== 'pink') {
+                body.classList.add('theme-' + this.value);
+            }
+        });
+        
+        document.getElementById('print-button').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>
