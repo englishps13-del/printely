@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lesson planners</title>
+  <title>Downloads</title>
   <link rel="icon" type="image/x-icon" href="icon.webp">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
@@ -41,19 +41,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem; /* Adjusted for mobile */
+      padding: 1rem;
       max-width: 1000px;
       margin: 0 auto;
       position: relative;
     }
     @media (min-width: 768px) {
       nav .container {
-        padding: 1rem 2rem; /* Restore padding for larger screens */
+        padding: 1rem 2rem;
       }
     }
     
     #nav-links {
-      /* Mobile styles for dropdown */
       position: absolute;
       top: 100%;
       left: 0;
@@ -96,7 +95,6 @@
     body.dark #nav-links a { color: #cdd6f4; }
     #nav-links a.active, #nav-links a:hover { color: #7c3aed; font-weight: 700; }
 
-    /* Desktop styles for nav links */
     @media (min-width: 768px) {
       #nav-links {
         position: static;
@@ -126,15 +124,14 @@
       z-index: 5;
       left: 0;
       width: 0;
-      display: none; /* Hide by default on mobile */
+      display: none;
     }
     @media (min-width: 768px) {
       .underline {
-        display: block; /* Show on desktop */
+        display: block;
       }
     }
     
-    /* Hamburger Menu Button */
     #menu-toggle {
       display: block;
       z-index: 30;
@@ -156,13 +153,10 @@
     }
     body.dark #menu-toggle .hamburger-line { background-color: #cdd6f4; }
 
-    /* Animate hamburger to X */
     #menu-toggle.active .hamburger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
     #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-
-    /* Background shapes & Animations */
     .shape {
       position: absolute;
       opacity: 0.15;
@@ -184,34 +178,71 @@
       50% { transform: translateY(-10px) rotate(10deg); }
       100% { transform: translateY(0) rotate(0deg); }
     }
+    
+    .template-card {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    body.dark .template-card {
+      background-color: #1e1e2e;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .template-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(124, 58, 237, 0.4);
+    }
+    
+    /* New style for the big title above each card */
+    .template-card h3 {
+        font-size: 1.75rem; /* Large text size */
+        font-weight: 700; /* Bold */
+        color: #4c1d95; /* Deep purple text */
+        margin-bottom: 0.75rem; /* Space before image container */
+        margin-top: -0.5rem; /* Pull up a bit into the padding */
+    }
+    body.dark .template-card h3 {
+        color: #d8b4fe; /* Lighter purple for dark mode */
+    }
 
-    /* Card and Link Effects */
+    /* --- PORTRAIT DIMENSION CHANGES START --- */
     .zoom-container {
       overflow: hidden;
       border-radius: 1rem;
       cursor: pointer;
       position: relative;
       transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .zoom-container:hover {
-      box-shadow: 0 15px 30px rgba(131, 71, 255, 0.4);
-      transform: translateY(-5px);
+      max-width: 100%;
+      
+      /* Enforce 3:4 Portrait Aspect Ratio */
+      width: 100%;
+      padding-top: 133.33%; /* 4 / 3 = 1.3333... so 133.33% for height */
+      height: 0; 
     }
     .zoom-container img {
       border-radius: 1rem;
       display: block;
       width: 100%;
-      aspect-ratio: 2 / 3;
-      object-fit: cover;
+      height: 100%; 
       transition: filter 0.5s ease;
+      
+      /* Position and Scaling for Aspect Ratio */
+      position: absolute; 
+      top: 0;
+      left: 0;
+      object-fit: cover; /* Ensures image covers container, cropping as needed */
     }
+    /* --- PORTRAIT DIMENSION CHANGES END --- */
+    
     .zoom-container:hover img {
       filter: brightness(1.1);
-    }
-
-    .link-container {
-      margin-top: 1.5rem;
-      text-align: center;
     }
 
     .template-link {
@@ -230,8 +261,24 @@
       background-color: #5b21b6;
       box-shadow: 0 5px 15px rgba(91, 33, 182, 0.7);
     }
+
+    .template-link-alt {
+      background-color: #7c3aed;
+      padding: 0.5rem 1.75rem;
+      border-radius: 9999px;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 8px rgba(124, 58, 237, 0.5);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .template-link-alt:hover {
+      background-color: #5b21b6;
+      box-shadow: 0 5px 15px rgba(91, 33, 182, 0.7);
+    }
     
-    /* Theme Switcher */
     .theme-switcher { display: inline-block; position: relative; user-select: none; }
     .switch {
       display: flex; align-items: center;
@@ -259,18 +306,7 @@
 </head>
 
 <body class="min-h-screen">
-
-  <svg class="shape circle-purple-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape rect-purple-300" viewBox="0 0 100 100"><rect width="100" height="100" rx="20"/></svg>
-  <svg class="shape triangle-violet-500" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape circle-indigo-400" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape circle-pink" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
-  <svg class="shape rect-blue" viewBox="0 0 100 100"><rect width="100" height="100" rx="12"/></svg>
-  <svg class="shape triangle-teal" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>
-  <svg class="shape diamond-yellow" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
-  <svg class="shape circle-gray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" /></svg>
   
-  <!-- NAVBAR UPDATED TO MATCH INDEX.HTML -->
   <nav class="sticky top-4 max-w-5xl mx-auto z-50">
     <div class="container">
        <button id="menu-toggle" class="md:hidden order-last" aria-label="Open Menu">
@@ -281,147 +317,161 @@
       
       <ul id="nav-links" class="hidden md:flex">
         <li><a href="index.html">Main page</a></li>
-        <li><a href="section2.html" class="active">Lesson planners</a></li>
-        <li><a href="section3.html">Sign up</a></li>
-        <li><a href="timetables.html">Timetables</a></li>
+        <li><a href="downloads.html" class="active">Downloads</a></li>
+        <li id="signup-nav-link"><a href="section3.html">Sign up</a></li>
+        <li><a href="section4.html">Soon</a></li>
       </ul>
       
-      <div class="theme-switcher">
-        <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
-        <label for="dm-toggle" class="switch">
-          <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
-          <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
-          <div class="slider">
-            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
-          </div>
-        </label>
+      <div class="flex items-center gap-4">
+        <div id="user-info" class="hidden md:flex items-center gap-2 text-gray-700 dark:text-gray-300"></div>
+        <div class="theme-switcher">
+          <input type="checkbox" id="dm-toggle" aria-label="Toggle Dark Mode" />
+          <label for="dm-toggle" class="switch">
+            <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Light Mode Icon" class="icon sun" />
+            <img src="https://cdn-icons-png.flaticon.com/512/4445/4445942.png" alt="Dark Mode Icon" class="icon moon" />
+            <div class="slider">
+              <img src="https://cdn-icons-png.flaticon.com/512/3258/3258157.png" alt="Current Theme Icon" id="slider-icon" />
+            </div>
+          </label>
+        </div>
       </div>
       <div class="underline"></div>
     </div>
   </nav>
 
-  <!-- CONTENT STYLES IMPROVED FOR MOBILE -->
   <div class="text-center py-8 px-4 md:py-12 md:px-6 relative z-10">
-    <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4"> Explore Stunning Lesson planners</h1>
-    <p class="text-lg text-gray-800 dark:text-gray-300">Choose a template to get started with your lesson plan.</p>
+    <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4"> Download Free Stunning "PDF" Printables for FREE</h1>
+    <p class="text-lg text-gray-800 dark:text-gray-300">Choose the "PDF" you like and click on the image to Download </p>
+  </div>
+  
+  <div class="max-w-7xl mx-auto relative px-4 md:px-12 pb-12">
+    <div class="grid gap-6 md:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center mt-8" id="download-grid">
+      <div class="template-card">
+        <h3>Black and White Letters of the Alphabet Worksheet</h3>
+        <a href="https://www.mediafire.com/file/q8f1t0d00d3bow9/Black_and_White_Letters_of_the_Alphabet_Worksheet.pdf/file" class="zoom-container">
+          <img src="Pink Tosca and Yellow Playful Alphabet Tracing Book Cover.webp" alt="Pink Tosca and Yellow Playful Alphabet Tracing Book Cover" />
+        </a>
+        <a href="https://www.mediafire.com/file/q8f1t0d00d3bow9/Black_and_White_Letters_of_the_Alphabet_Worksheet.pdf/file" class="template-link-alt">Download table 1</a>
+      </div>
+      <div class="template-card">
+        <h3>Writing Numbers Worksheet in Purple White Simple Style</h3>
+        <a href="https://www.mediafire.com/file/ri7ajh7l6j7nx7r/Writing_Numbers_Worksheet_in_Purple_White_Simple_Style.pdf/file" class="zoom-container">
+          <img src="Pink Tosca and Yellow Playful Numbers Tracing Book Cover.webp" alt="Pink Tosca and Yellow Playful Numbers Tracing Book Cover" />
+        </a>
+        <a href="https://www.mediafire.com/file/ri7ajh7l6j7nx7r/Writing_Numbers_Worksheet_in_Purple_White_Simple_Style.pdf/file" class="template-link-alt">Download table 2</a>
+      </div>
+      <div class="template-card">
+        <h3>Colorful Education Alphabet Flashcards Insects</h3>
+        <a href="https://www.mediafire.com/file/kx16e7kf0sdytsi/Colorful_Education_Alphabet_Flashcards_Insects.pdf/file" class="zoom-container">
+          <img src="Pink Daycare Drawing Book Cover A4 Document.webp" alt="Pink Daycare Drawing Book Cover A4 Document" />
+        </a>
+        <a href="https://www.mediafire.com/file/kx16e7kf0sdytsi/Colorful_Education_Alphabet_Flashcards_Insects.pdf/file" class="template-link-alt">Download table 3</a>
+      </div>
+      <div class="template-card">
+        <h3>Numbers 0-10 Big Flashcards in Pastel and Printable Style</h3>
+        <a href="https://www.mediafire.com/file/vr58mk51vb49prd/Numbers_0-10_Big_Flashcards_in_Pastel_and_Printable_Style.pdf/file" class="zoom-container">
+          <img src="Pink Daycare Drawing Numbers Book Cover A4 Document.webp" alt="Pink Daycare Drawing Numbers Book Cover A4 Document.webp" />
+        </a>
+        <a href="https://www.mediafire.com/file/vr58mk51vb49prd/Numbers_0-10_Big_Flashcards_in_Pastel_and_Printable_Style.pdf/file" class="template-link-alt">Download table 4</a>
+      </div>
+      <div class="template-card">
+        <h3>Tracing Alphabets with Dimensions</h3>
+        <a href="https://www.mediafire.com/file/cambuvwcb4bo2y4/Tracing_letters_dimensions.pdf/file" class="zoom-container">
+          <img src="Pink Tosca and Yellow Playful Alphabet with dimensions Tracing Book Cover.webp" alt="Pink Tosca and Yellow Playful Alphabet with dimensions Tracing Book Cover" />
+        </a>
+        <a href="https://www.mediafire.com/file/cambuvwcb4bo2y4/Tracing_letters_dimensions.pdf/file" class="template-link-alt">Download table 5</a>
+      </div>
+      <div class="template-card">
+        <h3>Teacher Planner 2025 in pastel colours lines pattern style.pdf</h3>
+        <a href="https://www.mediafire.com/file/ssc2p39dbh2f7h2/Teacher_Planner_2025_in_pastel_colours_lines_pattern_style.pdf/file" class="zoom-container">
+          <img src="Bright Color Funny Cute Kids Illustration School Notebook.webp" alt="Bright Color Funny Cute Kids Illustration School Notebook" />
+        </a>
+        <a href="https://www.mediafire.com/file/ssc2p39dbh2f7h2/Teacher_Planner_2025_in_pastel_colours_lines_pattern_style.pdf/file" class="template-link-alt">Download table 6</a>
+      </div>
+    </div>
+    
+    <div id="login-overlay" class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm flex items-center justify-center p-4 z-20 hidden">
+      <div class="text-center p-8 bg-purple-100 dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-purple-500">
+        <h3 class="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-4">Oops,We are Sorry..</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-6">Please **Sign Up** or **Log in** to download the free printables.</p>
+        <a href="section3.html" class="py-3 px-8 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Go to Sign Up</a>
+              <a href="login.html" class="py-3 px-8 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Login</a>
+
+	  </div>
+    </div>
   </div>
 
-  <div class="bg-white/50 dark:bg-white/10 backdrop-blur-md mx-4 md:mx-12 p-6 md:p-12 rounded-3xl shadow-xl relative z-10 mb-12">
-    <div class="grid gap-6 md:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-
-      <div class="zoom-container">
-        <img src="firstmodule.webp" alt="Minimalist Planner" />
-        <div class="link-container">
-          <a href="interface.html" class="template-link">The Minimalist Planner</a>
-        </div>
-      </div>
-
-      <div class="zoom-container">
-        <img src="secondmodule.webp" alt="Interactive Digital Board" />
-        <div class="link-container">
-          <a href="newest.html" class="template-link">Interactive Digital Board</a>
-        </div>
-      </div>
-	  
-      <div class="zoom-container">
-        <img src="The Artisan Planner.webp" alt="The Artisan Planner" />
-        <div class="link-container">
-          <a href="design999.html" class="template-link">The Artisan Planner</a>
-        </div>
-      </div>
-
-      <div class="zoom-container">
-        <img src="4thmodule.webp" alt="Project-Based Learning Map" />
-        <div class="link-container">
-          <a href="googledesign.html" class="template-link">Project-Based Learning Map</a>
-        </div>
-      </div>
-
-      <div class="zoom-container">
-        <img src="5thmodule.webp" alt="Weekly Goals & Overview" />
-        <div class="link-container">
-          <a href="lesson_plan.html" class="template-link">Weekly Goals & Overview</a>
-        </div>
-      </div>
-
-      <div class="zoom-container">
-        <img src="Lesson Plan_00001.webp" alt="Colorful Gradebook" />
-        <div class="link-container">
-          <a href="lesson_plan_stage_boxes_colored.html" class="template-link">The Colorful Gradebook</a>
-        </div>
-      </div>
-	     <div class="zoom-container">
-        <img src="Lesson Plan Editor_page-0001.webp" alt="Colorful Gradebook" />
-        <div class="link-container">
-          <a href="final.html" class="template-link">New lesson planner V01 </a>
-        </div>
-      
-	  </div>
-	  	     <div class="zoom-container">
-        <img src="Lesson Plan Editor_page-0003.webp" alt="Colorful Gradebook" />
-        <div class="link-container">
-          <a href="best.html" class="template-link">New lesson planner V02</a>
-	  
-
-        </div>
-      </div>
-	  
-  <div class="zoom-container">
-        <img src="Lesson Plan Editor_page-0002.webp" alt="Colorful Gradebook" />
-        <div class="link-container">
-          <a href="finalest.html" class="template-link">New lesson planner V03</a>
-    </div> 
-  </div> 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 
-<!-- Template Card 1 -->
-<div class="zoom-container">
-  <img src="Lesson Plan Editor_page-0004.webp" alt="Colorful Gradebook" />
-  <div class="link-container">
-    <a href="Designed.html" class="template-link">New lesson planner V04</a>
-  </div> 
-</div> 
+    // Your Firebase Configuration from section3.html
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
+      authDomain: "printelydz.firebaseapp.com",
+      projectId: "printelydz",
+      storageBucket: "printelydz.appspot.com",
+      messagingSenderId: "49201277305",
+      appId: "1:49201277305:web:df932043e4d6d986cae7a8",
+      measurementId: "G-R4VJL5SR88"
+    };
 
-<!-- Explore Section -->
-<div class="w-full mt-12 text-center py-8 px-4 md:py-12 md:px-6 relative z-10">
-  <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4">
-Middle School Lesson Plans   </h1>
-  <p class="text-lg text-gray-800 dark:text-gray-300">
- ------>  </p>
-</div>
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-<!-- Template Card 2 -->
-<div class="zoom-container">
-  <img src="Editable Lesson Plan_page-00001.jpg" alt="Colorful Gradebook" />
-  <div class="link-container">
-    <a href="ms1_1.html" class="template-link">New lesson planner For middle school </a>
-  </div> 
-</div> 
-<div class="zoom-container">
-  <img src="Middle School Lesson Plan Editor_page-0001.jpg" alt="Colorful Gradebook" />
-  <div class="link-container">
-    <a href="ms2.html" class="template-link">New lesson planner For middle school v1</a>
-  </div> 
-</div> 
-<div class="zoom-container">
-  <img src="ms22.jpg" alt="Colorful Gradebook" />
-  <div class="link-container">
-    <a href="ms22.html" class="template-link">New lesson planner For middle school v2</a>
-  </div> 
-</div> 
-<div class="zoom-container">
-  <img src="Lesson-Plan-MS-Edition-_Dashboard-Integrated_.webp" alt="Colorful Gradebook" />
-  <div class="link-container">
-    <a href="lpms.html" class="template-link">New lesson planner For middle school v2</a>
-  </div> 
-</div> 
+    const loginOverlay = document.getElementById('login-overlay');
+    const userInfoDiv = document.getElementById('user-info');
+    const signupNavLink = document.getElementById('signup-nav-link');
 
 
+    // Authentication State Listener
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is logged in
+        loginOverlay.classList.add('hidden');
+        
+        if (signupNavLink) {
+            signupNavLink.style.display = 'none';
+        }
+        
+        userInfoDiv.classList.remove('hidden');
+        
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        const username = userDoc.exists() ? userDoc.data().username : user.email;
 
-  <!-- SCRIPT UPDATED TO MATCH INDEX.HTML -->
+        userInfoDiv.innerHTML = `
+          <a href="dashboard.html" title="Go to your account dashboard" class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 p-1 bg-gray-200 dark:bg-gray-600 rounded-full" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+              </svg>
+              <span class="font-medium text-sm md:text-base pr-2">Account</span>
+          </a>
+        `;
+
+      } else {
+        // User is logged out
+        loginOverlay.classList.remove('hidden');
+        
+        userInfoDiv.classList.remove('hidden');
+
+        if (signupNavLink) {
+            signupNavLink.style.display = 'block';
+        }
+
+        userInfoDiv.innerHTML = `<a href="login.html" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Login</a>`;
+      }
+    });
+
+  </script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // --- Nav, Theme, & Hamburger Script ---
       const menuContainer = document.querySelector('nav .container');
       const underline = document.querySelector('.underline');
       const allLinks = document.querySelectorAll('#nav-links a');
@@ -431,7 +481,6 @@ Middle School Lesson Plans   </h1>
       const lightIcon = "https://cdn-icons-png.flaticon.com/512/3258/3258157.png";
       const darkIcon = "https://cdn-icons-png.flaticon.com/512/4445/4445942.png";
 
-      // Hamburger Menu
       const menuToggle = document.getElementById('menu-toggle');
       const navLinks = document.getElementById('nav-links');
 
@@ -442,7 +491,7 @@ Middle School Lesson Plans   </h1>
       });
 
       function moveUnderline(element) {
-        if (!element || window.innerWidth < 768) return; // Don't run on mobile
+        if (!element || window.innerWidth < 768) return;
         const rect = element.getBoundingClientRect();
         const parentRect = menuContainer.getBoundingClientRect();
         const left = rect.left - parentRect.left + menuContainer.scrollLeft;
@@ -472,7 +521,6 @@ Middle School Lesson Plans   </h1>
         updateSliderIcon();
       }
       
-      // Initialize theme from localStorage
       const storedTheme = localStorage.getItem('theme');
       if (storedTheme === 'dark') {
         setDarkMode(true);
@@ -480,20 +528,17 @@ Middle School Lesson Plans   </h1>
         setDarkMode(false);
       }
 
-      // Initialize underline position on load
       setTimeout(() => {
           const activeLink = document.querySelector('a.active') || allLinks[0];
           moveUnderline(activeLink);
       }, 50);
 
-      // Event Listeners
       allLinks.forEach(link => {
         link.addEventListener('mouseenter', () => moveUnderline(link));
         link.addEventListener('click', () => {
           allLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
           
-          // Close mobile menu on link click
           if (window.innerWidth < 768) {
             menuToggle.classList.remove('active');
             navLinks.classList.add('hidden');
@@ -510,7 +555,6 @@ Middle School Lesson Plans   </h1>
       window.addEventListener('resize', () => {
         const activeLink = document.querySelector('a.active') || allLinks[0];
         moveUnderline(activeLink);
-        // Hide mobile menu if screen is resized to be larger
         if (window.innerWidth >= 768) {
           menuToggle.classList.remove('active');
           navLinks.classList.remove('active');
