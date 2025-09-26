@@ -26,13 +26,13 @@
     }
     body.dark { background: linear-gradient(to bottom right, #1e1b4b, #4c1d95); }
 
-    /* NAVBAR STYLES (ADAPTED FROM INDEX.HTML) */
+    /* NAVBAR STYLES */
     nav {
       background: white;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       border-radius: 12px;
       position: relative;
-      z-index: 20;
+      z-index: 50; /* Navbar is z-50 */
       transition: background 0.3s ease;
     }
     body.dark nav { background: #1e1e2e; }
@@ -157,28 +157,7 @@
     #menu-toggle.active .hamburger-line:nth-child(2) { opacity: 0; }
     #menu-toggle.active .hamburger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    .shape {
-      position: absolute;
-      opacity: 0.15;
-      z-index: 0;
-      width: 2rem;
-      height: 2rem;
-      animation: float 10s ease-in-out infinite;
-    }
-    .shape.small { width: 1.25rem; height: 1.25rem; }
-    .shape.rect-purple-300 { top: 20%; right: 3rem; fill: #c084fc; border-radius: 0.5rem; animation-delay: 2s; }
-    .shape.circle-pink { top: 6rem; right: 2rem; fill: #f472b6; animation-duration: 12s; }
-    .shape.rect-blue { bottom: 12%; left: 8%; fill: #60a5fa; border-radius: 0.25rem; animation-duration: 9s; animation-delay: 3s; }
-    .shape.triangle-teal { top: 50%; left: 4%; fill: #2dd4bf; animation-duration: 11s; }
-    .shape.diamond-yellow { top: 68%; right: 5rem; fill: #fde047; transform: rotate(45deg); animation-delay: 4s; }
-    .shape.circle-gray { top: 80%; left: 20%; fill: #9ca3af; animation-duration: 13s; }
-
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(10deg); }
-      100% { transform: translateY(0) rotate(0deg); }
-    }
-    
+    /* CARD & DOWNLOAD STYLES */
     .template-card {
       background-color: white;
       border-radius: 1rem;
@@ -200,30 +179,25 @@
       box-shadow: 0 15px 30px rgba(124, 58, 237, 0.4);
     }
     
-    /* New style for the big title above each card */
     .template-card h3 {
-        font-size: 1.75rem; /* Large text size */
-        font-weight: 700; /* Bold */
-        color: #4c1d95; /* Deep purple text */
-        margin-bottom: 0.75rem; /* Space before image container */
-        margin-top: -0.5rem; /* Pull up a bit into the padding */
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #4c1d95;
+        margin-bottom: 0.75rem;
+        margin-top: -0.5rem;
     }
     body.dark .template-card h3 {
-        color: #d8b4fe; /* Lighter purple for dark mode */
+        color: #d8b4fe;
     }
 
-    /* --- PORTRAIT DIMENSION CHANGES START --- */
     .zoom-container {
       overflow: hidden;
       border-radius: 1rem;
       cursor: pointer;
       position: relative;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-      max-width: 100%;
-      
-      /* Enforce 3:4 Portrait Aspect Ratio */
+      transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
       width: 100%;
-      padding-top: 133.33%; /* 4 / 3 = 1.3333... so 133.33% for height */
+      padding-top: 133.33%;
       height: 0; 
     }
     .zoom-container img {
@@ -232,34 +206,14 @@
       width: 100%;
       height: 100%; 
       transition: filter 0.5s ease;
-      
-      /* Position and Scaling for Aspect Ratio */
       position: absolute; 
       top: 0;
       left: 0;
-      object-fit: cover; /* Ensures image covers container, cropping as needed */
+      object-fit: cover;
     }
-    /* --- PORTRAIT DIMENSION CHANGES END --- */
     
     .zoom-container:hover img {
       filter: brightness(1.1);
-    }
-
-    .template-link {
-      background-color: #7c3aed;
-      padding: 0.5rem 1.75rem;
-      border-radius: 9999px;
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 3px 8px rgba(124, 58, 237, 0.5);
-      user-select: none;
-      display: inline-block;
-    }
-    .template-link:hover {
-      background-color: #5b21b6;
-      box-shadow: 0 5px 15px rgba(91, 33, 182, 0.7);
     }
 
     .template-link-alt {
@@ -269,7 +223,7 @@
       color: white;
       font-weight: 600;
       text-decoration: none;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
       box-shadow: 0 3px 8px rgba(124, 58, 237, 0.5);
       user-select: none;
       white-space: nowrap;
@@ -279,6 +233,7 @@
       box-shadow: 0 5px 15px rgba(91, 33, 182, 0.7);
     }
     
+    /* THEME SWITCHER */
     .theme-switcher { display: inline-block; position: relative; user-select: none; }
     .switch {
       display: flex; align-items: center;
@@ -340,11 +295,11 @@
   </nav>
 
   <div class="text-center py-8 px-4 md:py-12 md:px-6 relative z-10">
-    <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4"> Download Free Stunning "PDF" Printables for FREE</h1>
-    <p class="text-lg text-gray-800 dark:text-gray-300">Choose the "PDF" you like and click on the image to Download </p>
+    <h1 class="text-4xl font-extrabold text-purple-800 dark:text-purple-200 mb-4">Download Free Stunning "PDF" Printables for FREE</h1>
+    <p class="text-lg text-gray-800 dark:text-gray-300">Choose the "PDF" you like and click on the image to Download</p>
   </div>
   
-  <div class="max-w-7xl mx-auto relative px-4 md:px-12 pb-12">
+  <main class="max-w-7xl mx-auto relative px-4 md:px-12 pb-12">
     <div class="grid gap-6 md:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center mt-8" id="download-grid">
       <div class="template-card">
         <h3>Black and White Letters of the Alphabet Worksheet</h3>
@@ -389,25 +344,13 @@
         <a href="https://www.mediafire.com/file/ssc2p39dbh2f7h2/Teacher_Planner_2025_in_pastel_colours_lines_pattern_style.pdf/file" class="template-link-alt">Download table 6</a>
       </div>
     </div>
-    
-    <div id="login-overlay" class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm flex items-center justify-center p-4 z-20 hidden">
-      <div class="text-center p-8 bg-purple-100 dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-purple-500">
-        <h3 class="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-4">Oops,We are Sorry..</h3>
-        <p class="text-gray-700 dark:text-gray-300 mb-6">Please **Sign Up** or **Log in** to download the free printables.</p>
-        <a href="section3.html" class="py-3 px-8 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Go to Sign Up</a>
-              <a href="login.html" class="py-3 px-8 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Login</a>
-
-	  </div>
-    </div>
-  </div>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-
-    // Your Firebase Configuration from section3.html
     const firebaseConfig = {
       apiKey: "AIzaSyCVtWA2FqatlTRR1gSzCTNUSFYUAbAwLW0",
       authDomain: "printelydz.firebaseapp.com",
@@ -418,7 +361,6 @@
       measurementId: "G-R4VJL5SR88"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -427,23 +369,50 @@
     const userInfoDiv = document.getElementById('user-info');
     const signupNavLink = document.getElementById('signup-nav-link');
 
+    // --- NEW: Function to lock/unlock download links as a fallback ---
+    const toggleDownloadLinks = (lock) => {
+      // Select all links inside template cards that point to mediafire
+      const downloadLinks = document.querySelectorAll('.template-card a[href*="mediafire.com"]');
+      
+      downloadLinks.forEach(link => {
+        if (lock) {
+          // --- LOCK THE LINKS ---
+          // Store the real URL in a data attribute if it's not already stored
+          if (!link.dataset.originalHref) {
+            link.dataset.originalHref = link.href;
+          }
+          // Disable the link and apply visual styles
+          link.href = '#'; 
+          link.classList.add('opacity-50', 'pointer-events-none');
+          link.setAttribute('aria-disabled', 'true');
+        } else {
+          // --- UNLOCK THE LINKS ---
+          // Restore the real URL from the data attribute
+          if (link.dataset.originalHref) {
+            link.href = link.dataset.originalHref;
+          }
+          // Remove disabled styles
+          link.classList.remove('opacity-50', 'pointer-events-none');
+          link.removeAttribute('aria-disabled');
+        }
+      });
+    };
 
-    // Authentication State Listener
+    // --- Listen for Authentication State Changes ---
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User is logged in
-        loginOverlay.classList.add('hidden');
+        // --- USER IS LOGGED IN ---
+        loginOverlay.classList.add('hidden'); // Hide visual overlay
+        toggleDownloadLinks(false);           // Unlock download buttons
         
         if (signupNavLink) {
             signupNavLink.style.display = 'none';
         }
-        
         userInfoDiv.classList.remove('hidden');
         
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
-        const username = userDoc.exists() ? userDoc.data().username : user.email;
-
+        
         userInfoDiv.innerHTML = `
           <a href="dashboard.html" title="Go to your account dashboard" class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 p-1 bg-gray-200 dark:bg-gray-600 rounded-full" viewBox="0 0 16 16">
@@ -453,21 +422,21 @@
               <span class="font-medium text-sm md:text-base pr-2">Account</span>
           </a>
         `;
-
       } else {
-        // User is logged out
-        loginOverlay.classList.remove('hidden');
+        // --- USER IS LOGGED OUT ---
+        loginOverlay.classList.remove('hidden'); // Show visual overlay
+        toggleDownloadLinks(true);             // Lock download buttons
         
         userInfoDiv.classList.remove('hidden');
-
         if (signupNavLink) {
             signupNavLink.style.display = 'block';
         }
-
         userInfoDiv.innerHTML = `<a href="login.html" class="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">Login</a>`;
       }
     });
 
+    // --- Initial State: Lock links by default until auth status is known ---
+    toggleDownloadLinks(true);
   </script>
 
   <script>
@@ -567,6 +536,17 @@
       });
     });
   </script>
+
+  <div id="login-overlay" class="fixed inset-0 bg-white/70 dark:bg-gray-900/80 backdrop-blur-md flex items-center justify-center p-4 z-[60] hidden">
+    <div class="text-center p-8 bg-purple-100 dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-purple-500 max-w-md w-full">
+      <h3 class="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-4">Access Restricted</h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-6">Please sign up or log in to download the free printables.</p>
+      <div class="flex flex-col sm:flex-row sm:justify-center gap-4">
+        <a href="section3.html" class="py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Go to Sign Up</a>
+        <a href="login.html" class="py-3 px-6 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-full shadow-lg transition duration-200 inline-block">Login</a>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
