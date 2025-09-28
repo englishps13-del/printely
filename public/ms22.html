@@ -170,7 +170,7 @@
     vertical-align: middle;
   }
   
-  /* Styles for Cross-Curricular Competencies */
+  /* Styles for Competencies (CCCs, Targets, Values) */
   .print-only { display: none; }
   #ccc-multiselect .group-label {
       font-weight: bold;
@@ -179,7 +179,14 @@
       padding-bottom: 3px;
       border-bottom: 1px solid #eee;
   }
-  #ccc-multiselect ul {
+  #ccc-print .group-label { /* Style for print view headers */
+      font-weight: bold; 
+      margin-top: 10px; 
+      margin-bottom: 5px; 
+      padding-bottom: 3px; 
+      border-bottom: 1px solid #000;
+  }
+  #ccc-multiselect ul, #ccc-print ul, #target-print ul, #values-print ul, #domains-print ul, #materials-print ul {
       list-style-type: none;
       padding: 0;
       margin: 0;
@@ -187,11 +194,14 @@
   #ccc-multiselect li {
       margin-bottom: 5px;
   }
-   #ccc-print ul {
+  /* List style for printing (CCCs, Targets, Values, Domains, Materials) */
+   #ccc-print ul, #target-print ul, #values-print ul, #domains-print ul, #materials-print ul {
       margin: 5px 0 0 0;
       padding-left: 20px;
       list-style-type: disc;
   }
+  .checkbox-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-start; margin-top: 6px; }
+
 
   /* Print Styles */
   @page { size: A4; margin: 0; }
@@ -266,7 +276,6 @@
   }
   .custom-checkbox input:checked ~ span { background-color: #000; border-color: #000; }
   .custom-checkbox input:checked ~ span::after { display: block; }
-  .checkbox-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-top: 6px; }
 
   body.theme-blue .custom-checkbox input:checked ~ span { background-color: #4a6cff; border-color: #4a6cff; }
   body.theme-green .custom-checkbox input:checked ~ span { background-color: #4caf50; border-color: #4caf50; }
@@ -399,21 +408,31 @@
         </td>
       </tr>
     </table>
-
-    <table>
-      <tr>
-        <td>
-          <strong>Session objective(s):</strong> 
-          <textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea>
-        </td>
-      </tr>
-    </table>
     
     <table>
       <tr>
-        <td>
+        <td style="width:75%">
+          <strong>Session objective(s):</strong> 
+          <textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea>
+        </td>
+        <td style="width:25%">
+          <strong>Core Values:</strong>
+          <div id="values-multiselect" class="no-print checkbox-inline"></div>
+          <div id="values-print" class="print-only"></div>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td style="width:75%">
           <strong>Subsidiary objective(s):</strong> 
           <textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea>
+        </td>
+        <td style="width:25%">
+          <strong>Domains:</strong>
+          <div id="domains-multiselect" class="no-print checkbox-inline"></div>
+          <div id="domains-print" class="print-only"></div>
         </td>
       </tr>
     </table>
@@ -430,14 +449,15 @@
 
     <table>
       <tr>
-        <td>
+        <td style="width:75%">
           <strong>Target Competence:</strong>
-          <div id="targetCompetencies" class="checkbox-inline">
-             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand short oral messages...</label>
-             <label class="custom-checkbox"><input type="checkbox"><span></span>Interact orally and produce short oral messages...</label>
-             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand simple messages... using reading skills...</label>
-             <label class="custom-checkbox"><input type="checkbox"><span></span>Produce simple written messages...</label>
-          </div>
+          <div id="target-multiselect" class="no-print checkbox-inline"></div> 
+          <div id="target-print" class="print-only"></div>
+        </td>
+        <td style="width:25%">
+          <strong>Teaching materials:</strong>
+          <div id="materials-multiselect" class="no-print checkbox-inline"></div> 
+          <div id="materials-print" class="print-only"></div>
         </td>
       </tr>
     </table>
@@ -582,8 +602,15 @@
         session: document.getElementById('sessionSelect').value,
         objective: document.getElementById('sessionObjective').value,
         subsidiaryObjectives: document.getElementById('subsidiaryObjectives').value,
-        targetCompetence: Array.from(document.querySelectorAll('#targetCompetencies input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        
+        // --- UPDATED PROPERTIES FOR SAVE ---
+        domains: Array.from(document.querySelectorAll('#domains-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        targetCompetence: Array.from(document.querySelectorAll('#target-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        teachingMaterials: Array.from(document.querySelectorAll('#materials-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        coreValues: Array.from(document.querySelectorAll('#values-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
+        // ------------------------------------
+
         preWriting: {
           stage: document.getElementById('preWritingStage').value,
           procedure: document.getElementById('preWritingProcedure').innerHTML,
@@ -639,19 +666,63 @@
         document.getElementById('learnerCount').value = data.learners || '';
         document.getElementById('classProfile').value = data.classProfile || '';
         
+        // Trigger change to populate sequences/sessions/competencies
         levelSelect.dispatchEvent(new Event('change'));
         
         setTimeout(() => {
           document.getElementById('sequenceSelect').value = data.sequence || '';
           sequenceSelect.dispatchEvent(new Event('change'));
 
+          // Load CCCs - REPLACED WITH updateCCCPrintArea() call
           if (data.crossCurricularCompetences?.length) {
               document.querySelectorAll('#ccc-multiselect input').forEach(cb => cb.checked = false);
               data.crossCurricularCompetences.forEach(val => {
                   const label = Array.from(document.querySelectorAll('#ccc-multiselect label')).find(l => l.textContent.trim() === val);
                   if (label) label.querySelector('input').checked = true;
               });
-              document.querySelector('#ccc-multiselect input')?.dispatchEvent(new Event('change'));
+              updateCCCPrintArea(); // Call the custom function
+          }
+          
+          // Load Core Values
+          if (data.coreValues?.length) {
+              document.querySelectorAll('#values-multiselect input').forEach(cb => cb.checked = false);
+              data.coreValues.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#values-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#values-multiselect input')?.dispatchEvent(new Event('change'));
+          }
+          
+          // --- NEW LOAD LOGIC ---
+          // Load Domains
+          if (data.domains?.length) {
+              document.querySelectorAll('#domains-multiselect input').forEach(cb => cb.checked = false);
+              data.domains.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#domains-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#domains-multiselect input')?.dispatchEvent(new Event('change'));
+          }
+          
+          // Load Teaching Materials
+          if (data.teachingMaterials?.length) {
+              document.querySelectorAll('#materials-multiselect input').forEach(cb => cb.checked = false);
+              data.teachingMaterials.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#materials-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#materials-multiselect input')?.dispatchEvent(new Event('change'));
+          }
+          // ------------------------
+
+          // Load Target Competence
+          if (data.targetCompetence?.length) {
+              document.querySelectorAll('#target-multiselect input').forEach(cb => cb.checked = false);
+              data.targetCompetence.forEach(val => {
+                  const label = Array.from(document.querySelectorAll('#target-multiselect label')).find(l => l.textContent.trim() === val);
+                  if (label) label.querySelector('input').checked = true;
+              });
+              document.querySelector('#target-multiselect input')?.dispatchEvent(new Event('change'));
           }
 
           setTimeout(() => {
@@ -662,11 +733,6 @@
         document.getElementById('sessionObjective').value = data.objective || '';
         document.getElementById('subsidiaryObjectives').value = data.subsidiaryObjectives || '';
         
-        if (data.targetCompetence) data.targetCompetence.forEach(val => {
-          const label = Array.from(document.querySelectorAll('#targetCompetencies label')).find(l => l.textContent.trim() === val);
-          if (label) label.querySelector('input').checked = true;
-        });
-
         document.getElementById('preWritingStage').value = data.preWriting?.stage || 'Pre-Writing';
         document.getElementById('preWritingProcedure').innerHTML = data.preWriting?.procedure || '';
         document.getElementById('preWritingInteraction').value = data.preWriting?.interaction || '';
@@ -699,13 +765,64 @@
   }
 
   // --- Curriculum & Competency Data ---
+  const STANDARD_SESSIONS = ["Situation 1 : Initial - PDP lesson(s) (listening & speaking)", "Situation 2 : Learning - PPU/PDP lessons (language & reading and writing)", "Situation 3 : Learning to Integrate – PPU - group work", "Situation 4 : Integration (assessment) – PDP - Solo work"];
+  const MS1_CORE_SESSIONS = ["Get Ready", " Listen & Interact", "Learning situations", " Listen & Consider", " Read & Interpret", " Read & Consider", " Write Together", " Write Alone",  "Check your Progress"];
+
   const curriculum = {
-    "MS1": { "Habits and Preferences": ["Get Ready", "Listen & Interact", "Listen & Consider", "Read & Interpret", "Read & Consider", "Write Together", "Write Alone"] },
-    "MS2": { "Me and My Travels": ["Planning a Trip", "Asking for Directions", "Describing a Place", "Writing an Email about a Trip"] },
-    "MS3": { /* Add MS3 sequences and sessions here */ },
-    "MS4": { /* Add MS4 sequences and sessions here */ }
+    "MS1": { 
+      "Habits and Preferences": MS1_CORE_SESSIONS,
+      "School Life": MS1_CORE_SESSIONS,
+      "Past Holidays and Trips": MS1_CORE_SESSIONS,
+      "Pause": ["Evaluation & Remediation"]
+    },
+    "MS2": { 
+        "1. Me, my Friends and my Family": ["PDP (Listening & Speaking)", "PPU/PDP (Language, Reading, & Writing)", "PPU (Learning to Integrate)", "PDP (Integration: Think and Write)"],
+        "2. Me and my Shopping": ["PDP (Listening & Speaking)", "PPU/PDP (Language, Reading, & Writing)", "PPU (Learning to Integrate)", "PDP (Integration: Think and Write)"],
+        "3. Me and my Health": ["PDP (Listening & Speaking)", "PPU/PDP (Language, Reading, & Writing)", "PPU (Learning to Integrate)", "PDP (Integration: Think and Write)"],
+        "4. Me and my Travels": ["PDP (Listening & Speaking)", "PPU/PDP (Language, Reading, & Writing)", "PPU (Learning to Integrate)", "PDP (Integration: Think and Write)"],
+        "Pause": ["Evaluation & Remediation"]
+    },
+    "MS3": { 
+        "1. Me, My Personality and Life Experiences": STANDARD_SESSIONS,
+        "2. Me: Universal Landmarks and Outstanding Figures in history, Literature and Arts": STANDARD_SESSIONS,
+        "3. Me, My Community and Citizenship": STANDARD_SESSIONS,
+        "Pause": ["Evaluation & Remediation"]
+    },
+    "MS4": { 
+        "1. Me and My Identity": STANDARD_SESSIONS,
+        "2. Me and My Achievements": STANDARD_SESSIONS,
+        "3. Me and My Aspirations": STANDARD_SESSIONS,
+        "Pause": ["Evaluation & Remediation"]
+    }
   };
   
+  // Data for Core Values
+  const valuesData = {
+    "MS1": ["National identity", "National conscience", "Citizenship", "Openness to the world"],
+    "MS2": ["National identity", "National conscience", "Citizenship", "Openness to the world"],
+    "MS3": ["National identity", "National conscience", "Citizenship", "Openness to the world"],
+    "MS4": ["National identity", "National conscience", "Citizenship", "Openness to the world"]
+  };
+  
+  // --- NEW DATA STRUCTURES ---
+  // Data for Domains
+  const domainsData = {
+    "MS1": ["Oral comprehension", "Oral production", "Written comprehension", "Written production"],
+    "MS2": ["Oral comprehension", "Oral production", "Written comprehension", "Written production"],
+    "MS3": ["Oral comprehension", "Oral production", "Written comprehension", "Written production"],
+    "MS4": ["Oral comprehension", "Oral production", "Written comprehension", "Written production"]
+  };
+  
+  // Data for Teaching Materials
+  const materialsData = {
+    "MS1": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"],
+    "MS2": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"],
+    "MS3": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"],
+    "MS4": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"]
+  };
+  // -----------------------------
+
+  // Cross-Curricular Competences
   const crossCurricularCompetences = { 
     "MS1": {
         "Intellectual Competence": ["discover the relationship between prior knowledge, listening skills, and vocal paralinguistic features in context.","connect topical words, expressions simple sentences and vocal paralinguistic features to the context.","discover the link between text types, text features, the reading skills in context.","demonstrate understanding of the text types, features and organization, sentence structure and content, and writing skills."],
@@ -714,12 +831,117 @@
         "Personal and Social Competence": ["demonstrate a genuine curiosity to learn about different cultures.","collaborate with others to achieve mutual understanding.","collaborate with others to benefit from what is appropriate to one's context.","share with others one's specific identity features."]
     },
     "MS2": {
-        "Intellectual Competence": ["Using critical thinking to match icons with amenities, deduce rules, and locate places on a map.","Understanding and interpreting a conversation."],
-        "Methodological Competence": ["Working in pairs or within the whole class.","Mobilizing resources, such as knowledge of Algerian towns and their locations/amenities.","Taking notes and exchanging information with peers.","Evaluating oneself and one's partner."],
-        "Communicative Competence": ["Interviewing partners to gather information.","Reinvesting language in real-life situations.","Writing an email and describing past events orally.","Interpreting and reading maps through listening and transcoding information from one form to another (e.g., from sound to a visual map)."],
-        "Personal and Social Competence": ["Socializing and exchanging experiences through oral exchanges."]
+        "Intellectual Competence": [
+            "Using critical thinking skills when gathering information for use for learning and project work.",
+            "Understanding and interpreting verbal and non-verbal messages.",
+            "Solving problem situations using a variety of communication means.",
+            "Showing creativity when producing oral and written messages.",
+            "Showing some degree of autonomy in all areas of learning."
+        ],
+        "Methodological Competence": [
+            "Working in pairs or in groups.",
+            "Using strategies for listening and interpreting oral discourse.",
+            "Developing effective study methods.",
+            "Mobilizing his resources efficiently and managing his time rationally.",
+            "Using Information and Communication Technology (ICT) whenever he needs it for learning and research.",
+            "Evaluating himself and evaluating his peers."
+        ],
+        "Communicative Competence": [
+            "Using drama and role play to communicate appropriately.",
+            "Using ICT such as blogs, websites, discussion forums, and platforms to interact with learners of other cultures.",
+            "Processing digital data."
+        ],
+        "Personal and Social Competence": [
+            "Aware of his role and others' role in the development of projects.",
+            "Keen in promoting the work of his peers.",
+            "Respecting our national values and behaving consistently.",
+            "Being honest and accountable for his work and respecting others' work.",
+            "Asserting his personal identity and behaving with self-confidence.",
+            "Socializing through oral or written exchanges.",
+            "Developing attitudes of solidarity."
+        ]
+    },
+    "MS3": {
+        "Intellectual Competency": [
+            "use his critical thinking skills when gathering information for learning and project work",
+            "understand and interpret verbal and non-verbal messages",
+            "solve problem situations using a variety of communication means",
+            "show creativity when producing oral and written messages",
+            "show some degree of autonomy in all areas of learning"
+        ],
+        "Methodological Competency": [
+            "work in pairs or in groups",
+            "use strategies for listening and interpreting oral discourse",
+            "develop effective study methods, mobilize his resources efficiently and manage his time rationally",
+            "use information and communication technology whenever he needs it for learning and research",
+            "evaluate himself",
+            "evaluate his peers"
+        ],
+        "Communicative Competency": [
+            "use drama and role-play to communicate appropriately",
+            "use information and communication technology such as blogs, websites page, discussion forums, and platforms to interact with learners of other cultures",
+            "process digital data"
+        ],
+        "Personal and social competencies": [
+            "aware of his role and others' role in the development of projects",
+            "keen on promoting the work of his peers",
+            "respects our national values and behaves consistently",
+            "honest and accountable for his work and respects others work",
+            "asserts his personal identity and behaves with self-confidence",
+            "socializes through oral or written exchanges",
+            "develops attitudes of solidarity"
+        ]
+    },
+    "MS4": {
+        "Intellectual Competence": [
+            "use his critical thinking skills when gathering information for learning and project work",
+            "understand and interpret verbal and non-verbal messages",
+            "solve problem situations using a variety of communication means",
+            "show creativity when producing oral and written messages",
+            "show some degree of autonomy in all areas of learning"
+        ],
+        "Methodological Competence": [
+            "work in pairs or in groups",
+            "use strategies for listening and interpreting oral discourse",
+            "develop effective study methods, mobilize his resources efficiently and manage his time rationally",
+            "use information and communication technology whenever he needs it for learning and research",
+            "evaluate himself",
+            "evaluate his peers"
+        ],
+        "Communicative Competence": [
+            "use drama and role-play to communicate appropriately",
+            "use information and communication technology such as blogs, websites page, discussion forums, and platforms to interact with learners of other cultures",
+            "process digital data"
+        ],
+        "Personal and Social Competences": [
+            "aware of his role and others' roles in the development of projects",
+            "keen on promoting the work of his peers",
+            "respects our national values and behaves consistently",
+            "honest and accountable for his work and respects others work",
+            "asserts his personal identity and behaves with self-confidence",
+            "socializes through oral or written exchanges",
+            "develops attitudes of solidarity"
+        ]
     }
-    // Add MS3 and MS4 data here if available
+  };
+  
+  // Data for Target Competencies
+  const targetCompetenciesData = {
+    "MS2": [
+        "Interact & Produce (Oral): Short, simple descriptive/prescriptive messages/texts (based on supports).",
+        "Interpret (Oral & Written): Short, simple descriptive/prescriptive messages/texts (based on supports).",
+        "Produce (Written): Short, simple written descriptive/prescriptive messages/texts (based on supports)."
+    ],
+    "MS3": [
+        " the learner will be able to interact and produce oral messages.",
+        " the learner will be able to interpret oral or written messages.",
+        " the learner will be able to produce oral or written messages."
+    ],
+    "MS4": [
+        "the learner will be able to interact and produce oral messages.",
+        "the learner will be able to interpret oral or written messages.",
+        "the learner will be able to produce oral or written messages."
+    ]
   };
 
   // --- Dynamic Checkbox Functions ---
@@ -732,8 +954,13 @@
         const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
         const selectedLabels = Array.from(checkboxes)
             .filter(cb => cb.checked)
-            .map(cb => cb.closest('label').textContent.trim() || '');
-
+            .map(cb => {
+              // Get the text content of the label, removing the visual span
+              const label = cb.closest('label');
+              // Use textContent to get the text of the entire label element
+              return label.textContent.trim() || '';
+            });
+            
         if (selectedLabels.length > 0) {
             printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
         } else {
@@ -745,27 +972,155 @@
             updatePrintableArea();
         }
     });
-    updatePrintableArea();
+    // Call it once to initialize the print area
+    updatePrintableArea(); 
   }
 
+  // --- CUSTOM FUNCTION: Update CCC Print Area (Handles Group Labels) ---
+  function updateCCCPrintArea() {
+    const container = document.getElementById('ccc-multiselect');
+    const printElement = document.getElementById('ccc-print');
+    if (!container || !printElement) return;
+
+    let printHtml = '';
+    // Find all group labels
+    const categories = container.querySelectorAll('.group-label');
+
+    categories.forEach(categoryDiv => {
+        const categoryName = categoryDiv.textContent.trim();
+        // The list of competencies is the next sibling
+        const ul = categoryDiv.nextElementSibling; 
+        
+        let selectedItems = [];
+        if (ul) {
+            // Find checked checkboxes within this category's list
+            ul.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                const label = cb.closest('label');
+                selectedItems.push(label.textContent.trim());
+            });
+        }
+        
+        if (selectedItems.length > 0) {
+            // Re-create the category label with an inline style for printing
+            printHtml += `<div class="group-label">${categoryName}</div>`;
+            // Add the list of selected items
+            printHtml += `<ul>${selectedItems.map(text => `<li>${text}</li>`).join('')}</ul>`;
+        }
+    });
+
+    printElement.innerHTML = printHtml;
+}
+
+
+  // Function to populate Core Values
+  function populateValues(level) {
+    const container = document.getElementById('values-multiselect');
+    const printContainer = document.getElementById('values-print');
+    container.innerHTML = '';
+    printContainer.innerHTML = '';
+    const values = valuesData[level];
+    
+    if (values) {
+        let html = '';
+        values.forEach(item => {
+            html += `<label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label>`;
+        });
+        container.innerHTML = html;
+        setupPrintableCheckboxes('values-multiselect', 'values-print');
+    }
+  }
+
+  // --- NEW FUNCTION: Populate Domains ---
+  function populateDomains(level) {
+    const container = document.getElementById('domains-multiselect');
+    const printContainer = document.getElementById('domains-print');
+    container.innerHTML = '';
+    printContainer.innerHTML = '';
+    const domains = domainsData[level];
+    
+    if (domains) {
+        let html = '';
+        domains.forEach(item => {
+            html += `<label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label>`;
+        });
+        container.innerHTML = html;
+        setupPrintableCheckboxes('domains-multiselect', 'domains-print');
+    }
+  }
+  
+  // --- NEW FUNCTION: Populate Teaching Materials ---
+  function populateMaterials(level) {
+    const container = document.getElementById('materials-multiselect');
+    const printContainer = document.getElementById('materials-print');
+    container.innerHTML = '';
+    printContainer.innerHTML = '';
+    const materials = materialsData[level];
+    
+    if (materials) {
+        let html = '';
+        materials.forEach(item => {
+            html += `<label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label>`;
+        });
+        container.innerHTML = html;
+        setupPrintableCheckboxes('materials-multiselect', 'materials-print');
+    }
+  }
+  // -------------------------------------------------
+
+  // Function to populate Competencies (now uses custom updateCCCPrintArea)
   function populateCompetencies(level) {
     const container = document.getElementById('ccc-multiselect');
     const printContainer = document.getElementById('ccc-print');
     container.innerHTML = ''; 
     printContainer.innerHTML = ''; 
     const competencies = crossCurricularCompetences[level];
-    if (!competencies) return;
+    
+    let html = ''; 
 
-    let html = '';
-    for (const category in competencies) {
-        html += `<div class="group-label">${category}</div><ul>`;
-        competencies[category].forEach(item => {
-            html += `<li><label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label></li>`;
-        });
-        html += `</ul>`;
+    if (competencies) {
+        for (const category in competencies) {
+            html += `<div class="group-label">${category}</div><ul>`;
+            competencies[category].forEach(item => {
+                html += `<li><label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label></li>`;
+            });
+            html += `</ul>`;
+        }
     }
+    
     container.innerHTML = html;
-    setupPrintableCheckboxes('ccc-multiselect', 'ccc-print');
+    
+    // Attach the custom update function to the change event
+    container.removeEventListener('change', updateCCCPrintArea);
+    container.addEventListener('change', updateCCCPrintArea);
+    
+    // Initial call to set up the print area
+    updateCCCPrintArea(); 
+  }
+  
+  // Function to Populate Target Competencies
+  function populateTargetCompetencies(level) {
+    const container = document.getElementById('target-multiselect'); 
+    const printContainer = document.getElementById('target-print'); 
+    container.innerHTML = ''; 
+    printContainer.innerHTML = '';
+    const targetData = targetCompetenciesData[level];
+    
+    if (targetData) {
+        let html = '';
+        targetData.forEach(item => {
+            html += `<label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label>`;
+        });
+        container.innerHTML = html;
+    } else {
+        // Default for MS1 and non-defined levels
+        container.innerHTML = `
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand short oral messages...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Interact orally and produce messages...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Understand simple messages... using reading skills...</label>
+             <label class="custom-checkbox"><input type="checkbox"><span></span>Produce simple written messages...</label>
+        `;
+    }
+    setupPrintableCheckboxes('target-multiselect', 'target-print');
   }
 
   // --- Dropdown Handlers ---
@@ -776,7 +1131,12 @@
     if (curriculum[levelSelect.value]) {
       Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
     }
-    populateCompetencies(levelSelect.value);
+    // Update all dynamic sections
+    populateCompetencies(levelSelect.value); 
+    populateTargetCompetencies(levelSelect.value); 
+    populateValues(levelSelect.value); 
+    populateDomains(levelSelect.value); // NEW
+    populateMaterials(levelSelect.value); // NEW
   });
   sequenceSelect.addEventListener("change", () => {
     sessionSelect.innerHTML = "<option value=''>Select Session</option>";
@@ -804,6 +1164,13 @@
       document.body.className = saved;
       document.getElementById("themeSelect").value = saved;
     }
+    // Initialize all dynamic sections on load
+    const initialLevel = levelSelect.value || 'MS1';
+    populateTargetCompetencies(initialLevel);
+    populateValues(initialLevel);
+    populateCompetencies(initialLevel);
+    populateDomains(initialLevel); // NEW
+    populateMaterials(initialLevel); // NEW
   };
 
   // --- Ribbon Editor & Image Logic ---
