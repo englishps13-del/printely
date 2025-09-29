@@ -171,6 +171,8 @@
   
   /* Styles for Cross-Curricular Competencies */
   .print-only { display: none; }
+  .print-only p { margin: 0; padding-top: 6px; line-height: 1.5; }
+
   #ccc-multiselect .group-label {
       font-weight: bold;
       margin-top: 10px;
@@ -413,33 +415,33 @@
         <tr>
             <td>
                 <strong>Cross-Curricular Competences:</strong>
-                <div id="ccc-multiselect" class="no-print">
-                    </div>
-                <div id="ccc-print" class="print-only">
-                    </div>
+                <div id="ccc-multiselect" class="no-print"></div>
+                <div id="ccc-print" class="print-only"></div>
             </td>
         </tr>
     </table>
 
     <table>
       <tr>
-        <td style="width:40%">
+        <td style="width:35%">
           <strong>Target competencies:</strong>
-          <div class="checkbox-inline" id="targetCompetencies">
+          <div class="checkbox-inline no-print" id="targetCompetencies">
             <label class="custom-checkbox"><input type="checkbox" value="Interact"><span></span> Interact</label>
             <label class="custom-checkbox"><input type="checkbox" value="Interpret"><span></span> Interpret</label>
             <label class="custom-checkbox"><input type="checkbox" value="Produce"><span></span> Produce</label>
           </div>
+          <div id="tc-print" class="print-only"></div>
         </td>
-        <td style="width:60%">
+        <td style="width:65%">
           <strong>Teaching materials:</strong>
-          <div class="checkbox-inline" id="teachingMaterials">
+          <div class="checkbox-inline no-print" id="teachingMaterials">
             <label class="custom-checkbox"><input type="checkbox" value="Textbook"><span></span> Textbook</label>
             <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
             <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
             <label class="custom-checkbox"><input type="checkbox" value="Slate"><span></span> Slate</label>
             <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
           </div>
+          <div id="tm-print" class="print-only"></div>
         </td>
       </tr>
     </table>
@@ -703,7 +705,13 @@
             .map(cb => cb.closest('label').textContent.trim() || '');
 
         if (selectedLabels.length > 0) {
-            printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+            if (printId === 'tc-print' || printId === 'tm-print') {
+                // For Target Competence and Teaching Materials, join with a comma on one line
+                printElement.innerHTML = `<p>${selectedLabels.join(', ')}</p>`;
+            } else {
+                // For Cross-Curricular, use a list for better readability
+                printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+            }
         } else {
             printElement.innerHTML = '';
         }
@@ -713,7 +721,7 @@
             updatePrintableArea();
         }
     });
-    updatePrintableArea();
+    updatePrintableArea(); // Initial call
   }
 
   function populateCompetencies(level) {
@@ -773,13 +781,18 @@
   };
 
   // --- Page Load Logic ---
-  window.onload = () => {
+  window.addEventListener('load', () => {
     const saved = localStorage.getItem("lessonTheme");
     if (saved) {
       document.body.className = saved;
       document.getElementById("themeSelect").value = saved;
     }
-  };
+    
+    // Setup print views for checkbox sections
+    setupPrintableCheckboxes('targetCompetencies', 'tc-print');
+    setupPrintableCheckboxes('teachingMaterials', 'tm-print');
+  });
+
 
   // --- Ribbon Editor & Image Logic ---
   let activeEditor = null;

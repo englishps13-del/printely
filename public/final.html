@@ -45,7 +45,7 @@
     .box {
         border: 1.5px solid #ccc;
         border-radius: 8px;
-        padding: 10px 12px 8px 12px; /* Reduced padding */
+        padding: 10px 12px 8px 12px;
         margin-bottom: 15px;
         position: relative;
         background-color: #fff;
@@ -67,11 +67,10 @@
     /* Grid layout */
     .content-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(20, 1fr); /* Changed to 20 for 35/65 split */
         gap: 15px;
         margin-bottom: 15px;
     }
-    /* Specific override for the compact top grid to use 12 columns */
     .content-grid.compact-grid {
         grid-template-columns: repeat(12, 1fr);
     }
@@ -79,8 +78,11 @@
     .grid-col-span-2 { grid-column: span 2; }
     .grid-col-span-3 { grid-column: span 3; }
     .grid-col-span-4 { grid-column: span 4; }
-    .grid-col-span-5 { grid-column: span 5; } /* New */
-    .grid-col-span-12 { grid-column: span 12; } /* New */
+    .grid-col-span-5 { grid-column: span 5; }
+    .grid-col-span-7 { grid-column: span 7; } /* New for 35% */
+    .grid-col-span-12 { grid-column: span 12; }
+    .grid-col-span-13 { grid-column: span 13; } /* New for 65% */
+    .grid-col-span-20 { grid-column: span 20; } /* New for full width */
     .content-grid .box { margin-bottom: 0; }
     
     /* Compact grid for top section */
@@ -90,7 +92,7 @@
         align-items: center;
     }
     .compact-grid .box-label {
-        font-size: 11px; /* Smaller label */
+        font-size: 11px;
     }
     
     /* Inputs & selects */
@@ -101,7 +103,7 @@
         background: transparent;
         font-family: inherit;
         font-size: 13px;
-        padding: 2px; /* Reduced padding */
+        padding: 2px;
         box-sizing: border-box;
     }
     textarea {
@@ -191,7 +193,7 @@
         outline: none; 
         font-size: 13px; 
         line-height: 1.6; 
-        min-height: 250px; /* Increased from 120px for more lines */
+        min-height: 250px;
         cursor: text; 
         resize: vertical; 
         padding: 5px; 
@@ -277,6 +279,31 @@
     .image-preview button:hover {
         background: #1a2550;
     }
+    
+    /* Styles for Cross-Curricular Competencies */
+    .print-only { display: none; }
+    .print-only p { margin: 0; padding-top: 5px; line-height: 1.5; }
+    
+    #ccc-multiselect .group-label {
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid #eee;
+    }
+    #ccc-multiselect ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    #ccc-multiselect li {
+        margin-bottom: 5px;
+    }
+    #ccc-print ul {
+        margin: 5px 0 0 0;
+        padding-left: 20px;
+        list-style-type: disc;
+    }
 
     /* ---------- THEMES ---------- */
     .box, th, td { transition: border-color: 0.3s; }
@@ -330,13 +357,13 @@
             margin: 0 !important; 
             padding: 0 !important; 
             background: #fff !important; 
-            font-size: 10px !important; /* Smaller font for print */
+            font-size: 10px !important;
         }
         .lesson-plan-container {
             width: 210mm !important; 
             height: 297mm !important; 
             margin: 0 !important;
-            padding: 6mm !important; /* Further reduced padding */
+            padding: 6mm !important;
             box-shadow: none !important; 
             border: none !important;
             box-sizing: border-box !important; 
@@ -360,35 +387,30 @@
             overflow: visible !important; 
             height: auto !important; 
         }
-        .no-print, .ribbon, .custom-select-print-view { 
+        .no-print, .ribbon { 
             display: none !important; 
         }
+        .print-only { display: block !important; }
+
         /* Hide dropdowns in the header for print */
         .dropdown-text-container select {
             display: none !important;
         }
-        select.print-hidden { 
-            display: none !important; 
-        }
-        .print-only-text { 
-            display: block !important; /* Changed to block */
+        .dropdown-print-text {
+            display: block !important;
             font-size: 10px !important;
-            color: #000 !important; /* Force black text in print */
-            white-space: pre-wrap !important; /* Preserve line breaks and wrap text */
+            color: #000 !important;
+            white-space: pre-wrap !important;
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;
-            margin-top: 3px;
-            line-height: 1.3;
-            width: 100% !important;
-            max-width: 100% !important;
+            margin-top: 2px;
+            line-height: 1.2;
         }
         
-        /* More space for install resources in print */
         #installResourcesProcedure {
-            min-height: 350px !important; /* Increased height for more lines */
+            min-height: 350px !important;
         }
         
-        /* Smaller compact grid in print */
         .compact-grid .box {
             padding: 4px 8px 2px 8px !important;
         }
@@ -414,36 +436,7 @@
         
         body.theme-gray .box, body.theme-gray th, body.theme-gray td { border-color: #444 !important; }
         body.theme-gray th { background-color: #dddddd !important; color: #444 !important; }
-        
-        /* Hide selects and show only text for target and cross-curricular */
-        .target-competence-container select, .cross-curricular-container select {
-            display: none !important;
-        }
-        /* Hide textareas in these containers for print to avoid duplication */
-        .target-competence-container textarea, .cross-curricular-container textarea {
-            display: none !important;
-        }
-        .target-competence-container .print-only-text, .cross-curricular-container .print-only-text {
-            display: block !important;
-            margin-top: 0;
-            white-space: pre-wrap !important; /* Preserve line breaks */
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-        }
-        
-        /* Special handling for dropdowns in print */
-        .dropdown-print-text {
-            display: block !important;
-            font-size: 10px !important;
-            color: #000 !important;
-            white-space: pre-wrap !important;
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-            margin-top: 2px;
-            line-height: 1.2;
-        }
     }
-    .print-only-text { display: none; }
     
     /* Custom table headers design */
     .custom-table-header {
@@ -518,16 +511,6 @@
         border-radius: 4px;
     }
     
-    /* Target and Cross-curricular containers */
-    .target-competence-container, .cross-curricular-container {
-        position: relative;
-    }
-    /* Removed margin-bottom from select to make it fit perfectly */
-    .target-competence-container select, .cross-curricular-container select {
-        /* margin-bottom: 8px; */
-    }
-
-    
     /* Dropdown text container */
     .dropdown-text-container {
         position: relative;
@@ -541,7 +524,6 @@
     <div class="lesson-plan-container">
         <div id="authStatus" class="auth-status no-print">Checking login status...</div>
 
-<!-- Ribbon Toolbar -->
 <div id="ribbon-toolbar" class="ribbon no-print">
   <div class="group">
     <button type="button" class="btn-square" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
@@ -593,14 +575,11 @@
   </div>
 </div>
 
-        <!-- This grid has been restructured based on your request -->
         <div class="content-grid compact-grid">
-            <!-- Row 1: Primary, Teacher, Learners -->
             <div class="box grid-col-span-5"><div class="box-label">PRIMARY SCHOOL</div><input type="text" id="schoolName" placeholder="Enter school name" class="focusable"></div>
             <div class="box grid-col-span-5"><div class="box-label">TEACHER</div><input type="text" id="teacherName" placeholder="Enter teacher name" class="focusable"></div>
             <div class="box grid-col-span-2"><div class="box-label"># OF LEARNERS</div><input type="number" id="learnerCount" placeholder="0" class="focusable"></div>
 
-            <!-- Row 2: Level, Sequence, Section, Session -->
             <div class="box grid-col-span-2 dropdown-text-container">
                 <div class="box-label">LEVEL</div>
                 <select id="levelSelect" class="dropdown-select">
@@ -609,77 +588,56 @@
                     <option value="4PS">4PS</option>
                     <option value="5PS">5PS</option>
                 </select>
-                <span class="print-only-text dropdown-print-text"></span>
+                <span class="dropdown-print-text"></span>
             </div>
             <div class="box grid-col-span-4 dropdown-text-container">
                 <div class="box-label">SEQUENCE</div>
                 <select id="sequenceSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
                 </select>
-                <span class="print-only-text dropdown-print-text"></span>
+                <span class="dropdown-print-text"></span>
             </div>
             <div class="box grid-col-span-3 dropdown-text-container">
                 <div class="box-label">SECTION</div>
                 <select id="sectionSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
                 </select>
-                <span class="print-only-text dropdown-print-text"></span>
+                <span class="dropdown-print-text"></span>
             </div>
             <div class="box grid-col-span-3 dropdown-text-container">
                 <div class="box-label">SESSION</div>
                 <select id="sessionSelect" class="dropdown-select">
                     <option value="">-- Select --</option>
                 </select>
-                <span class="print-only-text dropdown-print-text"></span>
+                <span class="dropdown-print-text"></span>
             </div>
             
-            <!-- Row 3: Session Objective -->
             <div class="box grid-col-span-12"><div class="box-label">SESSION OBJECTIVE(S)</div><input type="text" id="sessionObjective" placeholder="By the end of the lesson, learners will be able to..." class="focusable"></div>
         </div>
 
 
         <div class="content-grid">
-            <div class="box grid-col-span-3 target-competence-container"> <!-- 75% width -->
-                <div class="box-label">TARGET COMPETENCE</div>
-                <select id="targetCompetenceSelect">
-                    <option value="" selected disabled>-- Select an option --</option>
-                    <option value="Comprehend oral messages and identify the meaning of words, expressions and sentences in a familiar context using paralinguistic features.">Comprehend oral messages and identify the meaning...</option>
-                    <option value="Decode symbols, read simple messages of about 30–40 words and understand the meaning of words and structures using graphemic/phonemic knowledge, reading basics, and decoding strategies.">Decode symbols, read simple messages...</option>
-                    <option value="Write letters, words, and simple sentences using correct handwriting and punctuation / Produce words using correct handwriting to fill in a form with specific details related to the learners' immediate environment, daily concern and interests.">Write letters, words, and simple sentences...</option>
-                    <option value="Interact orally in communicative situations related to the learner's immediate environment, daily concern and interests using simple words, expressions and sentences.">Interact orally in communicative situations...</option>
-                    <option value="Transfer notes into a message of about 10–20 words related to the learner's immediate environment using writing mechanics / Decode a short simple message of about 20–40 words and understand its meaning using reading skills.">Transfer notes into a message...</option>
-                    <option value="Written Comprehension: Learners can decode a short, simple message of about 20 words and understand its meaning using reading skills.">Written Comprehension: Decode a short message...</option>
-                    <option value="Oral Production: Learners can interact orally in communicative situations related to their immediate environment.">Oral Production: Interact orally...</option>
-                    <option value="Oral Comprehension: Learners can interpret oral messages in communicative situations related to their immediate environment using paralinguistic features.">Oral Comprehension: Interpret oral messages...</option>
-                    <option value="Written Production: Learners can transfer notes into a message of about 10 words related to their immediate environment using writing mechanics.">Written Production: Transfer notes into a message...</option>
-                </select>
-                <textarea id="targetCompetenceText" placeholder="Selected competence will appear here..." class="focusable" rows="1"></textarea>
-                <span class="print-only-text"></span>
+            <div class="box grid-col-span-7"> <div class="box-label">TARGET COMPETENCE</div>
+                <div class="checkbox-inline no-print" id="targetCompetencies">
+                    <label class="custom-checkbox"><input type="checkbox" value="Interact"><span></span> Interact</label>
+                    <label class="custom-checkbox"><input type="checkbox" value="Interpret"><span></span> Interpret</label>
+                    <label class="custom-checkbox"><input type="checkbox" value="Produce"><span></span> Produce</label>
+                </div>
+                <div id="tc-print" class="print-only"></div>
             </div>
-            <div class="box grid-col-span-1"> <!-- 25% width -->
-                <div class="box-label">TEACHING MATERIALS</div>
-                <div class="checkbox-inline" id="teachingMaterials">
+            <div class="box grid-col-span-13"> <div class="box-label">TEACHING MATERIALS</div>
+                <div class="checkbox-inline no-print" id="teachingMaterials">
                     <label class="custom-checkbox"><input type="checkbox" value="Textbook"><span></span> Textbook</label>
                     <label class="custom-checkbox"><input type="checkbox" value="W.B"><span></span> W.B</label>
                     <label class="custom-checkbox"><input type="checkbox" value="Flashcards"><span></span> Flashcards</label>
                     <label class="custom-checkbox"><input type="checkbox" value="Song"><span></span> Song</label>
-					<label class="custom-checkbox"><input type="checkbox" value="Slate"><span></span> Slate</label>
-
+                    <label class="custom-checkbox"><input type="checkbox" value="Slate"><span></span> Slate</label>
                 </div>
+                <div id="tm-print" class="print-only"></div>
             </div>
-            <div class="box grid-col-span-4 cross-curricular-container"> <!-- Full width -->
-                <div class="box-label">CROSS-CURRICULAR COMPETENCES</div>
-                <select id="crossCurricularSelect">
-                    <option value="" selected disabled>-- Select an option --</option>
-                    <option value="Intellectual competency: The learner discovers the relationship between the context, paralinguistic features, and the meaning of words, expressions and sentences.&#10;Methodological competency: The learner makes use of the context and paralinguistic features to identify the meaning of words, expressions and sentences.&#10;Communicative competency: The learner reacts to verbal and non-verbal messages to show understanding.&#10;Personal and social competency: The learner considers the context and paralinguistic features when interacting orally.">Intellectual: Discovers relationship between context...</option>
-                    <option value="Intellectual competency: The learner demonstrates understanding of reading basics and the decoding strategies.&#10;Methodological competency: The learner employs reading basics and the decoding strategies to understand messages.&#10;Communicative competency: The learner communicates reading basics and the decoding strategies to peers.&#10;Personal and social competency: The learner considers reading basics and the decoding strategies to achieve others' understanding.">Intellectual: Demonstrates understanding of reading basics...</option>
-                    <option value="Intellectual competency: The learner demonstrates understanding of the features of correct handwriting.&#10;Methodological competency: The learner implements the features of correct handwriting.&#10;Communicative competency: The learner achieves readability through the appropriate use of the features of correct handwriting.&#10;Personal and social competency: The learner values others' writings.">Intellectual: Demonstrates understanding of handwriting...</option>
-                    <option value="Intellectual competency: The learner discovers the importance of words, chunks, and paralinguistic features used in oral interaction.&#10;Methodological competency: The learner exploits the linguistic repertoire and paralinguistic features to interact orally.&#10;Communicative competency: The learner selects the appropriate words, expressions, and paralinguistic features to interact orally.&#10;Personal and social competency: The learner considers speech acts and context when interacting.">Intellectual: Discovers importance of words/chunks...</option>
-                    <option value="Intellectual competency: The learner demonstrates understanding of the writing mechanics and the relevant information to write a message.&#10;Methodological competency: The learner implements the writing mechanics and reading skills to produce or understand a message.&#10;Communicative competency: The learner communicates the writing mechanics and reading comprehension to peers.&#10;Personal and social competency: The learner publishes one's production and collaborates with peers.">Intellectual: Demonstrates understanding of writing mechanics...</option>
-                    <option value="Intellectual: The learner demonstrates an understanding of reading skills, writing mechanics, and the relevant information needed to write or interpret a message.&#10;Methodological: The learner employs reading skills, context, paralinguistic features, listening skills, and writing mechanics to comprehend or produce a short message.&#10;Communicative: The learner selects and communicates appropriate words, expressions, sentences, writing mechanics, and paralinguistic features to peers.&#10;Personal and Social: The learner publishes their own production, collaborates with peers verbally and non-verbally, and considers the context and paralinguistic features when interacting orally.">Intellectual: Demonstrates understanding of reading/writing skills...</option>
-                </select>
-                <textarea id="crossCurricularText" placeholder="Selected competences will appear here..." class="focusable" rows="1"></textarea>
-                <span class="print-only-text"></span>
+            <div class="box grid-col-span-20"> <div class="box-label">CROSS-CURRICULAR COMPETENCES</div>
+                <div id="ccc-multiselect" class="no-print"></div>
+                <div id="ccc-print" class="print-only"></div>
             </div>
         </div>
 
@@ -793,7 +751,7 @@
             saveBtn.textContent = 'Saving...';
             const lessonPlanData = {
                 planName,
-                plannerType: 'final1',
+                plannerType: 'final1_modified',
                 school: document.getElementById('schoolName').value,
                 teacher: document.getElementById('teacherName').value,
                 level: document.getElementById('levelSelect').value,
@@ -802,8 +760,8 @@
                 section: document.getElementById('sectionSelect').value,
                 session: document.getElementById('sessionSelect').value,
                 objective: document.getElementById('sessionObjective').value,
-                targetCompetence: document.getElementById('targetCompetenceText').value,
-                crossCurricular: document.getElementById('crossCurricularText').value,
+                competencies: Array.from(document.querySelectorAll('#targetCompetencies input:checked')).map(cb => cb.value),
+                crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
                 materials: Array.from(document.querySelectorAll('#teachingMaterials input:checked')).map(cb => cb.value),
                 warmer: { procedure: document.getElementById('warmerProcedure').value, interaction: document.getElementById('warmerInteraction').value, time: document.getElementById('warmerTime').value },
                 install: { procedure: document.getElementById('installResourcesProcedure').innerHTML, interaction: document.getElementById('installInteraction').value, time: document.getElementById('installTime').value },
@@ -836,8 +794,11 @@
                 document.getElementById('levelSelect').value = data.level || '';
                 document.getElementById('learnerCount').value = data.learners || '';
                 document.getElementById('sessionObjective').value = data.objective || '';
-                document.getElementById('targetCompetenceText').value = data.targetCompetence || '';
-                document.getElementById('crossCurricularText').value = data.crossCurricular || '';
+
+                if (data.competencies) data.competencies.forEach(val => {
+                    const cb = document.querySelector(`#targetCompetencies input[value="${val}"]`);
+                    if (cb) cb.checked = true;
+                });
                 
                 if (data.materials) data.materials.forEach(val => {
                   const cb = document.querySelector(`#teachingMaterials input[value="${val}"]`);
@@ -859,16 +820,22 @@
                 
                 autoResizeAllTextareas();
                 
-                // Update dropdown print text
                 updateDropdownPrintText('levelSelect');
-                updateDropdownPrintText('sequenceSelect');
-                updateDropdownPrintText('sectionSelect');
-                updateDropdownPrintText('sessionSelect');
                 
                 levelSelect.dispatchEvent(new Event('change'));
                 setTimeout(() => {
                   document.getElementById('sequenceSelect').value = data.sequence || '';
                   updateDropdownPrintText('sequenceSelect');
+
+                  if (data.crossCurricularCompetences?.length) {
+                      document.querySelectorAll('#ccc-multiselect input').forEach(cb => cb.checked = false);
+                      data.crossCurricularCompetences.forEach(val => {
+                          const label = Array.from(document.querySelectorAll('#ccc-multiselect label')).find(l => l.textContent.trim() === val);
+                          if (label) label.querySelector('input').checked = true;
+                      });
+                      document.querySelector('#ccc-multiselect input')?.dispatchEvent(new Event('change'));
+                  }
+
                   sequenceSelect.dispatchEvent(new Event('change'));
                   setTimeout(() => {
                     document.getElementById('sectionSelect').value = data.section || '';
@@ -879,15 +846,68 @@
                       updateDropdownPrintText('sessionSelect');
                     }, 50);
                   }, 50);
-                }, 50);
+                }, 100);
             }
         } catch (error) { console.error("Error loading plan:", error); }
         finally { sessionStorage.removeItem('planToLoadId'); }
     }
 
     // --- Curriculum Data ---
-    const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] } }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] } } };
-    
+    const curriculum = { "3PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "School": { "School Objects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "School Subjects": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Home": { "Describing a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Location Rooms in a House": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Play Time": { "Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Favourite Toys": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Pets": { "Pets": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Pets Body Parts": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] }, "Birthday": { "Party Invitation": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"], "Party Celebration": ["I sing and have fun, I listen and repeat","I read and discover","I read and write","I play roles"] } }, "4PS": { "Family and Friends": { "Family": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Friends": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "School": { "School Facilities": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Mapping": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Fun Time and Games": { "Fun Time": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Games": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Food and Health": { "Food": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Health": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] }, "Animals": { "Farm": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"], "Zoo": ["I sing and have fun, I listen and repeat","I read and discover","I read and enjoy","I read and write","I play roles"] } }, "5PS": { "Jobs, Occupations, and Hobbies": { "Jobs and Occupations": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Hobbies": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Hometown, City, Village Amenities": { "Amenities": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Directions": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","I learn to write","I write","I check my progress"] }, "Holidays and Travelling": { "Holidays": ["I get ready","I listen and interact","I listen and discover","I read and understand","I read and discover","I learn and enjoy","i learn to write","I write"], "Travelling": ["I listen and interact","I listen and discover","I read and understand","I read and discover","I learn to write","I write","I check my progress"] } } };
+    const crossCurricularCompetences = { "3PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words and expressions.","discover the importance of words and chunks used in oral interaction.","demonstrate understanding of the strategies of decoding symbols.","demonstrate understanding of the features of writing."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words and expressions.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ the strategies of decoding symbols as required.","implement the features of writing letters appropriately."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words and chunks to interact orally.","communicate the decoding strategies to peers.","achieve readability through the appropriate use of the features of writing."],"Personal and Social Competence": ["respond to oral messages.","consider speech acts when interacting.","consider the strategies of decoding symbols to achieve others' understanding.","value others' writings."]}, "4PS": { "Intellectual Competence": ["discover the relationship between the context, paralinguistic features and the meaning of words, expressions and sentences.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading basics and the strategies of decoding symbols.","demonstrate understanding of the features of correct handwriting."],"Methodological Competence": ["make use of the context and paralinguistic features to identify the meaning of words, expressions and sentences.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading basics and the decoding strategies to understand messages.","implement the features of correct handwriting."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading basics and the decoding strategies to peers.","achieve readability through the appropriate use of the features of correct handwriting."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting.","consider reading basics and the decoding strategies to achieve others' understanding.","value others' writings."]}, "5PS": { "Intellectual Competence": ["demonstrate understanding of listening skills.","discover the usage of words, expressions and sentences in oral interaction.","demonstrate understanding of reading skills.","demonstrate understanding of the writing mechanics and the relevant information to write a message."],"Methodological Competence": ["make use of the context, paralinguistic features, and listening skills to comprehend a short message.","exploit the linguistic repertoire and paralinguistic features to interact orally.","employ reading skills to understand a short simple message.","implement the writing mechanics to produce a message."],"Communicative Competence": ["react to verbal and non-verbal messages to show understanding.","select the appropriate words, expressions, sentences and paralinguistic features to interact orally.","communicate reading skills to peers.","communicate the writing mechanics to peers."],"Personal and Social Competence": ["collaborate with peers verbally and non-verbally to comprehend oral messages.","consider the context and paralinguistic features when interacting orally.","share understanding with others reading skills.","publish one's production."]}};
+
+    // --- Dynamic Checkbox Functions ---
+    function setupPrintableCheckboxes(containerId, printId) {
+        const checkboxContainer = document.getElementById(containerId);
+        const printElement = document.getElementById(printId);
+        if (!checkboxContainer || !printElement) return;
+
+        const updatePrintableArea = () => {
+            const checkboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+            const selectedLabels = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.closest('label').textContent.trim() || '');
+
+            if (selectedLabels.length > 0) {
+                if (printId === 'tc-print' || printId === 'tm-print') {
+                    // For Target Competence and Teaching Materials, join with a comma on one line
+                    printElement.innerHTML = `<p>${selectedLabels.join(', ')}</p>`;
+                } else {
+                    // For Cross-Curricular, use a list for better readability
+                    printElement.innerHTML = `<ul>${selectedLabels.map(text => `<li>${text}</li>`).join('')}</ul>`;
+                }
+            } else {
+                printElement.innerHTML = '';
+            }
+        };
+        checkboxContainer.addEventListener('change', (event) => {
+            if (event.target.type === 'checkbox') {
+                updatePrintableArea();
+            }
+        });
+        updatePrintableArea(); // Initial call
+    }
+
+    function populateCompetencies(level) {
+        const container = document.getElementById('ccc-multiselect');
+        const printContainer = document.getElementById('ccc-print');
+        container.innerHTML = ''; 
+        printContainer.innerHTML = ''; 
+        const competencies = crossCurricularCompetences[level];
+        if (!competencies) return;
+
+        let html = '';
+        for (const category in competencies) {
+            html += `<div class="group-label">${category}</div><ul>`;
+            competencies[category].forEach(item => {
+                html += `<li><label class="custom-checkbox"><input type="checkbox"><span></span>${item}</label></li>`;
+            });
+            html += `</ul>`;
+        }
+        container.innerHTML = html;
+        setupPrintableCheckboxes('ccc-multiselect', 'ccc-print');
+    }
+
     const [levelSelect, sequenceSelect, sectionSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sectionSelect", "sessionSelect"].map(id => document.getElementById(id));
     levelSelect.addEventListener("change", () => {
         sequenceSelect.innerHTML = "<option value=''>-- Select --</option>"; sectionSelect.innerHTML = "<option value=''>-- Select --</option>"; sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
@@ -896,6 +916,7 @@
             sequenceSelect.add(new Option("Remediation & Standardisation", "Remediation & Standardisation"));
         }
         updateDropdownPrintText('levelSelect');
+        populateCompetencies(levelSelect.value);
     });
     sequenceSelect.addEventListener("change", () => {
         sectionSelect.innerHTML = "<option value=''>-- Select --</option>"; sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
@@ -915,38 +936,13 @@
         updateDropdownPrintText('sessionSelect');
     });
 
-    // --- Auto-resize and Competence Logic ---
+    // --- Auto-resize ---
     function autoResize(el) { el.style.height = 'auto'; el.style.height = (el.scrollHeight) + 'px'; }
     function autoResizeAllTextareas() { document.querySelectorAll('textarea').forEach(autoResize); }
     document.querySelectorAll('textarea').forEach(el => el.addEventListener('input', () => autoResize(el)));
     
-    document.getElementById('targetCompetenceSelect').addEventListener('change', (e) => { 
-        const targetText = document.getElementById('targetCompetenceText');
-        targetText.value = e.target.value; 
-        autoResize(targetText);
-        
-        // Update print-only text with FULL value
-        const printText = document.querySelector('.target-competence-container .print-only-text');
-        if (printText) {
-            printText.textContent = e.target.value.replace(/&#10;/g, '\n');
-        }
-    });
-    document.getElementById('crossCurricularSelect').addEventListener('change', (e) => { 
-        const crossText = document.getElementById('crossCurricularText');
-        crossText.value = e.target.value.replace(/&#10;/g, '\n'); 
-        autoResize(crossText);
-        
-        // Update print-only text with FULL value
-        const printText = document.querySelector('.cross-curricular-container .print-only-text');
-        if (printText) {
-            printText.textContent = e.target.value.replace(/&#10;/g, '\n');
-        }
-    });
-
     // --- Page Functions ---
-window.downloadPage = () => {
-  window.print();
-};
+    window.downloadPage = () => { window.print(); };
     window.changeTheme = theme => { document.body.className = theme; localStorage.setItem("lessonTheme", theme); };
 
     // --- Image Upload Functionality ---
@@ -992,7 +988,6 @@ window.downloadPage = () => {
                     range.deleteContents();
                     range.insertNode(img);
                     
-                    // Move cursor after the image
                     range.setStartAfter(img);
                     range.setEndAfter(img);
                     selection.removeAllRanges();
@@ -1001,7 +996,6 @@ window.downloadPage = () => {
                     editableArea.appendChild(img);
                 }
                 
-                // Hide preview
                 document.getElementById('imagePreview').style.display = 'none';
                 currentImageFile = null;
             };
@@ -1014,14 +1008,14 @@ window.downloadPage = () => {
         currentImageFile = null;
     });
     
-    // Close preview when clicking outside
     document.addEventListener('click', (e) => {
         const preview = document.getElementById('imagePreview');
         const uploadBtn = document.getElementById('insertImageBtn');
+        const container = uploadBtn.closest('.image-upload-container');
         
         if (preview.style.display === 'block' && 
             !preview.contains(e.target) && 
-            e.target !== uploadBtn) {
+            !container.contains(e.target)) {
             preview.style.display = 'none';
             currentImageFile = null;
         }
@@ -1043,19 +1037,21 @@ window.downloadPage = () => {
         const saved = localStorage.getItem("lessonTheme");
         if (saved) { document.body.className = saved; document.getElementById("themeSelect").value = saved; }
         autoResizeAllTextareas();
-        setupPrinting();
         setupRibbonControls();
         
-        // Initialize dropdown print text
         updateDropdownPrintText('levelSelect');
         updateDropdownPrintText('sequenceSelect');
         updateDropdownPrintText('sectionSelect');
         updateDropdownPrintText('sessionSelect');
+
+        populateCompetencies(levelSelect.value);
+        
+        setupPrintableCheckboxes('targetCompetencies', 'tc-print');
+        setupPrintableCheckboxes('teachingMaterials', 'tm-print');
     });
 
     // --- Setup Ribbon Controls ---
     function setupRibbonControls() {
-        // Command buttons
         document.querySelectorAll('#ribbon-toolbar button[data-command]').forEach(button => {
             button.addEventListener('click', () => {
                 const command = button.getAttribute('data-command');
@@ -1065,22 +1061,18 @@ window.downloadPage = () => {
                 } else {
                     document.execCommand(command, false, null);
                 }
-                // Update active state for formatting buttons
                 updateActiveState();
             });
         });
 
-        // Font size
         document.getElementById('fontSize').addEventListener('change', function() {
             document.execCommand('fontSize', false, this.value);
         });
 
-        // Font color
         document.getElementById('fontColor').addEventListener('change', function() {
             document.execCommand('foreColor', false, this.value);
         });
 
-        // Update active state for buttons
         function updateActiveState() {
             const commands = ['bold', 'italic', 'underline', 'strikeThrough', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'insertUnorderedList', 'insertOrderedList'];
             commands.forEach(command => {
@@ -1094,20 +1086,13 @@ window.downloadPage = () => {
                 }
             });
         }
-
-        // Initial update
-        updateActiveState();
-
-        // Update on selection change
+        
         document.addEventListener('selectionchange', updateActiveState);
-    }
-
-    // --- Setup Printing ---
-    function setupPrinting() {
-        // This function is called on load to handle any print-specific setup
-        // The ribbon is already hidden during print via the .no-print class
+        document.querySelectorAll('.editable-area').forEach(editor => {
+            editor.addEventListener('keyup', updateActiveState);
+            editor.addEventListener('mouseup', updateActiveState);
+        });
     }
 </script>
 </body>
 </html>
-
