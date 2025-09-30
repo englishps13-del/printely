@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compact Retro Lesson Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #FEFDE8;
+    --window-header-bg: #FFB830;
+    --border-color: #3A3430;
+    --grid-line-color: rgba(211, 161, 40, 0.4);
+    --shadow-color: #3A3430;
+    --font-pixel: 'VT323', monospace;
+    --font-sans: 'Poppins', 'Roboto', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: #e0e0e0;
+    font-family: var(--font-sans);
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+    font-size: 12px; /* Reduced base font size */
+    color: var(--border-color);
+  }
+
+  .main-container {
+    width: 210mm;
+    min-height: 297mm;
+    background: var(--bg-color);
+    padding: 10mm;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Tighter gap between sections */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  .window-wrapper { position: relative; }
+  .window-shadow {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--shadow-color);
+    border-radius: 10px;
+    z-index: 1;
+  }
+  
+  .window {
+    position: relative;
+    z-index: 2;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    overflow: hidden;
+  }
+
+  .window-header {
+    background-color: var(--window-header-bg);
+    border-bottom: 2px solid var(--border-color);
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-pixel);
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .window-content { padding: 0.6rem; }
+
+  /* --- MODIFIED: Main Header Section --- */
+  .main-header-wrapper { position: relative; }
+  .main-header .window-header {
+    border-radius: 20px;
+    border: 2px solid var(--border-color);
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  .teacher-name-input {
+    font-family: var(--font-pixel);
+    font-size: 22px;
+    color: var(--border-color);
+    border: none;
+    border-bottom: 2px dotted var(--border-color);
+    outline: none;
+    background: transparent;
+    text-align: center;
+    width: 60%;
+    margin-bottom: 0.5rem;
+    padding: 2px;
+  }
+  .teacher-name-input::placeholder { color: var(--border-color); opacity: 0.7; }
+  .header-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem 1rem;
+    width: 100%;
+    align-items: center;
+  }
+  .header-grid .field-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .header-grid label {
+    font-family: var(--font-sans);
+    font-size: 0.9em;
+    font-weight: 600;
+  }
+  .header-grid input, .header-grid select {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px dotted var(--border-color);
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 0.9em;
+    color: var(--border-color);
+    padding: 2px;
+  }
+  .header-grid select {
+    appearance: none;
+    background: transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><polyline points='1,1 6,6 11,1' stroke='%233A3430' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>") no-repeat right center;
+    background-size: 10px 7px;
+    padding-right: 15px;
+  }
+  /* --- END MODIFICATION --- */
+
+
+  .grid-textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 50px;
+    border: none;
+    outline: none;
+    resize: vertical;
+    background-color: transparent;
+    padding: 0.3rem;
+    font-size: 1em;
+    color: var(--border-color);
+    font-family: var(--font-sans);
+    background-image:
+      linear-gradient(var(--grid-line-color) 1px, transparent 1px);
+    background-size: 16px 16px;
+    line-height: 16px;
+  }
+  
+  .window-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .field-row-top { display: flex; flex-direction: column; gap: 4px; height: 100%; }
+  .field-row-top label { font-weight: 600; font-size: 0.9em; }
+  .field-row-top textarea { flex-grow: 1; width: 100%; }
+
+  input[type="text"], input[type="number"], select, textarea:not(.grid-textarea) { 
+    border: none; border-bottom: 1.5px dotted var(--border-color); 
+    outline: none; background: transparent; font-family: inherit; font-size: 0.9em; 
+    padding: 3px; color: var(--border-color);
+  }
+  input:focus, textarea:focus, select:focus { border-bottom-style: solid; }
+  textarea::placeholder, input::placeholder { color: var(--border-color); opacity: 0.6; font-style: italic; }
+
+  .checkbox-group { display: flex; flex-direction: column; gap: 4px; margin-top: 4px;}
+  .custom-checkbox { position: relative; cursor: pointer; display: flex; align-items: flex-start; }
+  .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
+  .custom-checkbox .label-text { margin-left: 20px; line-height: 1.3; }
+  .custom-checkbox .checkmark { position: absolute; top: 2px; left: 0; height: 12px; width: 12px; border: 2px solid var(--border-color); border-radius: 3px; }
+  .custom-checkbox input:checked ~ .checkmark { background-color: var(--border-color); }
+  .custom-checkbox .checkmark::after { content: ""; position: absolute; display: none; left: 3px; top: 0px; width: 2px; height: 5px; border: solid var(--bg-color); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .custom-checkbox input:checked ~ .checkmark::after { display: block; }
+
+  .procedure-table { width: 100%; border-collapse: collapse; }
+  .procedure-table th, .procedure-table td { border: 2px solid var(--border-color); padding: 4px; text-align: left; vertical-align: top;}
+  .procedure-table th { background-color: var(--window-header-bg); text-align: center; font-family: var(--font-pixel); font-size: 14px; }
+
+  .editable-area {
+    min-height: 60px; padding: 4px;
+    background: repeating-linear-gradient(var(--bg-color) 0, var(--bg-color) 15px, var(--grid-line-color) 16px, var(--grid-line-color) 16px);
+    outline: none; line-height: 16px;
+  }
+  .editable-area:focus { box-shadow: 0 0 0 1px var(--border-color); }
+
+  .print-only { display: none; }
+
+  @media print {
+    @page { size: A4; margin: 0; } /* Set to A4, the container will control the content size */
+    
+    body {
+      background-color: #fff !important;
+      padding: 0;
+      font-size: 10pt; /* Adjust base print font size if needed */
+    }
+
+    /* Use a transform to scale the entire container down to fit half a page (A5) */
+    .main-container {
+      width: 210mm; /* A4 width */
+      height: 297mm; /* A4 height */
+      margin: 0;
+      padding: 10mm;
+      box-shadow: none;
+      transform: scale(0.7); /* Scale down to ~A5 size */
+      transform-origin: top left;
+      border: 1px solid #ccc; /* Optional: adds a border to define the page area */
+    }
+
+    .window-shadow { display: none !important; }
+
+    /* Make textareas and inputs non-editable for print */
+    textarea, [contenteditable="true"], input, select {
+        -webkit-user-modify: read-only !important;
+        user-modify: read-only !important;
+        border-bottom: 1.5px dotted var(--border-color) !important;
+    }
+    
+    /* Ensure the print-only checkbox text is visible */
+    .checkbox-group { display: none; }
+    .print-only { display: block; font-size: 0.9em; }
+    .print-group { margin-bottom: 4px; }
+    .print-group-label { font-weight: bold; }
+  }
+</style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="main-header-wrapper">
+        <div class="window-shadow" style="border-radius: 20px;"></div>
+        <div class="window main-header" style="background: transparent; border: none;">
+            <div class="window-header">
+                <input type="text" id="teacherName" class="teacher-name-input" placeholder="Enter Teacher's Name">
+                <div class="header-grid">
+                    <div class="field-row"><label for="schoolName">School:</label><input type="text" id="schoolName" placeholder="School name"></div>
+                    <div class="field-row"><label for="levelSelect">Level:</label><select id="levelSelect"><option value="">--</option><option value="MS1">MS1</option><option value="MS2">MS2</option><option value="MS3">MS3</option><option value="MS4">MS4</option></select></div>
+                    <div class="field-row"><label for="learnerCount">Learners:</label><input type="number" id="learnerCount" placeholder="0"></div>
+                    <div class="field-row"><label for="sequenceSelect">Sequence:</label><select id="sequenceSelect"><option value="">--</option></select></div>
+                    <div class="field-row"><label for="sessionSelect">Session:</label><select id="sessionSelect"><option value="">--</option></select></div>
+                    <div class="field-row"><label for="classProfile">Profile:</label><input type="text" id="classProfile" placeholder="e.g., Mixed ability"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="window-wrapper">
+        <div class="window-shadow"></div>
+        <div class="window">
+            <div class="window-header">OBJECTIVES</div>
+            <div class="window-content">
+                <div class="window-grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="field-row-top"><label for="sessionObjective">Objective(s):</label><textarea id="sessionObjective" class="grid-textarea" rows="2" placeholder="By the end of the lesson..."></textarea></div>
+                    <div class="field-row-top"><label for="subsidiaryObjectives">Subsidiary:</label><textarea id="subsidiaryObjectives" class="grid-textarea" rows="2" placeholder="Target structures, functions..."></textarea></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window-wrapper">
+        <div class="window-shadow"></div>
+        <div class="window">
+            <div class="window-header">COMPETENCES</div>
+            <div class="window-content">
+                <strong>Cross-Curricular:</strong>
+                <div id="ccc-multiselect" class="checkbox-group"></div>
+                <div id="ccc-print" class="print-only"></div>
+                <strong style="margin-top: 0.5rem; display: block;">Target Competence:</strong>
+                <div id="target-multiselect" class="checkbox-group"></div> 
+                <div id="target-print" class="print-only"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="window-grid">
+        <div class="window-wrapper">
+            <div class="window-shadow"></div>
+            <div class="window">
+                <div class="window-header">VALUES & DOMAINS</div>
+                <div class="window-content">
+                    <strong>Core Values:</strong>
+                    <div id="values-multiselect" class="checkbox-group"></div>
+                    <div id="values-print" class="print-only"></div>
+                    <strong style="margin-top: 0.5rem; display: block;">Domains:</strong>
+                    <div id="domains-multiselect" class="checkbox-group"></div>
+                    <div id="domains-print" class="print-only"></div>
+                </div>
+            </div>
+        </div>
+        <div class="window-wrapper">
+            <div class="window-shadow"></div>
+            <div class="window">
+                <div class="window-header">MATERIALS</div>
+                <div class="window-content">
+                     <div id="materials-multiselect" class="checkbox-group"></div> 
+                     <div id="materials-print" class="print-only"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="window-wrapper wide-window">
+        <div class="window-shadow"></div>
+        <div class="window">
+            <div class="window-header">PROCEDURE</div>
+            <div class="window-content" style="padding: 0.4rem;">
+                <table class="procedure-table">
+                  <thead>
+                      <tr><th style="width:15%">STAGES</th><th style="width:55%">PROCEDURE / TASKS</th><th style="width:15%">INTERACTION</th><th style="width:15%">TIME &#128336;</th></tr>
+                  </thead>
+                  <tbody>
+                      <tr><td style="font-weight: bold;">Pre-Writing</td><td><div id="preWritingProcedure" class="editable-area" contenteditable="true"></div></td><td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="preWritingTime" placeholder="10 min"></td></tr>
+                      <tr><td style="font-weight: bold;">Writing</td><td><div id="writingProcedure" class="editable-area" contenteditable="true"></div></td><td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="writingTime" placeholder="25 min"></td></tr>
+                      <tr><td style="font-weight: bold;">Post-Writing</td><td><div id="postWritingProcedure" class="editable-area" contenteditable="true"></div></td><td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td><td><input type="text" id="postWritingTime" placeholder="10 min"></td></tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+     <div class="window-wrapper wide-window">
+        <div class="window-shadow"></div>
+        <div class="window">
+            <div class="window-header">REFLECTION</div>
+            <div class="window-content window-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div>
+                    <strong>What Worked</strong>
+                    <textarea id="whatWorked" class="grid-textarea" placeholder="Write here..." rows="3"></textarea>
+                </div>
+                <div>
+                    <strong>What Hindered</strong>
+                    <textarea id="whatHindered" class="grid-textarea" placeholder="Write here..." rows="3"></textarea>
+                </div>
+                <div>
+                    <strong>Action Points</strong>
+                    <textarea id="actionPoints" class="grid-textarea" placeholder="Write here..." rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const curriculum = { "MS1": { "Habits and Preferences": ["Get Ready", " Listen & Interact"], "School Life": ["Get Ready", " Listen & Interact"]}, "MS2": { "1. Me, my Friends and my Family": ["Situation 1"], "2. Me and my Shopping": ["Situation 1"]}, "MS3": { "1. Me, My Personality and Life Experiences": ["Situation 1"], "2. Me: Universal Landmarks": ["Situation 1"]}, "MS4": { "1. Me and My Identity": ["Situation 1"], "2. Me and My Achievements": ["Situation 1"] } };
+    const valuesData = { "MS1": ["National identity", "Citizenship", "Openness to the world"], "MS2": ["National identity", "Citizenship", "Openness to the world"], "MS3": ["National identity", "Citizenship", "Openness to the world"], "MS4": ["National identity", "Citizenship", "Openness to the world"] };
+    const domainsData = { "MS1": ["Oral", "Written"], "MS2": ["Oral", "Written"], "MS3": ["Oral", "Written"], "MS4": ["Oral", "Written"] };
+    const materialsData = { "MS1": ["W.B", "Flashcards", "Slate", "Text Book"], "MS2": ["W.B", "Flashcards", "Slate", "Text Book"], "MS3": ["W.B", "Flashcards", "Slate", "Text Book"], "MS4": ["W.B", "Flashcards", "Slate", "Text Book"] };
+    const crossCurricularCompetences = { "MS1": { "Intellectual": ["Discover relationship between prior knowledge..."], "Methodological": ["Use prior knowledge..."], "Communicative": ["Explain usage of vocal features..."], "Personal/Social": ["Demonstrate curiosity..."] }, "MS2": { "Intellectual": ["Using critical thinking..."], "Methodological": ["Working in pairs..."], "Communicative": ["Using drama and role play..."], "Personal/Social": ["Aware of his role..."] }, "MS3": { "Intellectual": ["Use his critical thinking skills..."], "Methodological": ["Work in pairs or in groups..."], "Communicative": ["Use drama and role-play..."], "Personal/Social": ["Aware of his role..."] }, "MS4": { "Intellectual": ["Use critical thinking..."], "Methodological": ["Work in pairs..."], "Communicative": ["Use drama and role-play..."], "Personal/Social": ["Aware of his role..."] } };
+    const targetCompetenciesData = { "MS1": ["Interact", "Interpret", "Produce"], "MS2": [ "Interact & Produce", "Interpret", "Produce" ], "MS3": [ "Interact & Produce", "Interpret", "Produce" ], "MS4": [ "Interact & Produce", "Interpret", "Produce" ] };
+
+    function createCheckbox(item) {
+        return `<label class="custom-checkbox"><input type="checkbox"><span class="checkmark"></span><span class="label-text">${item}</span></label>`;
+    }
+
+    function setupPrintableCheckboxes(containerId, printId) {
+        const container = document.getElementById(containerId); const printElement = document.getElementById(printId); if (!container || !printElement) return;
+        const update = () => {
+            const labels = Array.from(container.querySelectorAll('input:checked')).map(cb => cb.closest('label').querySelector('.label-text').textContent.trim());
+            printElement.innerHTML = labels.join(', ');
+        };
+        container.addEventListener('change', update); update(); 
+    }
+
+    function updateCCCPrintArea() {
+        const container = document.getElementById('ccc-multiselect'); const printElement = document.getElementById('ccc-print'); if (!container || !printElement) return;
+        let html = '';
+        container.querySelectorAll('.group-label').forEach(label => {
+            const category = label.textContent.trim(); const ul = label.nextElementSibling;
+            const items = ul ? Array.from(ul.querySelectorAll('input:checked')).map(cb => cb.closest('label').querySelector('.label-text').textContent.trim()) : [];
+            if (items.length > 0) { html += `<div class="print-group"><strong class="print-group-label">${category}:</strong> ${items.join('; ')}</div>`; }
+        });
+        printElement.innerHTML = html;
+    }
+
+    function populateCheckboxes(containerId, printId, data) {
+        const container = document.getElementById(containerId);
+        if (container && data) {
+            container.innerHTML = data.map(createCheckbox).join('');
+            setupPrintableCheckboxes(containerId, printId);
+        }
+    }
+
+    function populateGroupedCheckboxes(containerId, printId, data) {
+        const container = document.getElementById(containerId); let html = '';
+        if (container && data) {
+            for (const category in data) {
+                html += `<strong class="group-label">${category}</strong><ul>${data[category].map(createCheckbox).join('')}</ul>`;
+            }
+            container.innerHTML = html.replace(/<ul>/g, '<div class="checkbox-group">').replace(/<\/ul>/g, '</div>');
+            container.addEventListener('change', updateCCCPrintArea);
+            updateCCCPrintArea();
+        }
+    }
+
+    const [levelSelect, sequenceSelect, sessionSelect] = ["levelSelect", "sequenceSelect", "sessionSelect"].map(id => document.getElementById(id));
+    
+    levelSelect.addEventListener("change", () => {
+        const level = levelSelect.value || "MS1";
+        sequenceSelect.innerHTML = "<option value=''>-- Select --</option>";
+        sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
+        if (curriculum[level]) {
+            Object.keys(curriculum[level]).forEach(seq => sequenceSelect.add(new Option(seq, seq)));
+        }
+        populateGroupedCheckboxes('ccc-multiselect', 'ccc-print', crossCurricularCompetences[level]);
+        populateCheckboxes('target-multiselect', 'target-print', targetCompetenciesData[level]);
+        populateCheckboxes('values-multiselect', 'values-print', valuesData[level]);
+        populateCheckboxes('domains-multiselect', 'domains-print', domainsData[level]);
+        populateCheckboxes('materials-multiselect', 'materials-print', materialsData[level]);
+    });
+
+    sequenceSelect.addEventListener("change", () => {
+        sessionSelect.innerHTML = "<option value=''>-- Select --</option>";
+        const data = curriculum[levelSelect.value]?.[sequenceSelect.value];
+        if (data) data.forEach(s => sessionSelect.add(new Option(s, s)));
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        levelSelect.dispatchEvent(new Event('change'));
+    });
+</script>
+</body>
+</html>

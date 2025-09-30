@@ -44,13 +44,15 @@
     transition: background-image 0.3s ease-in-out;
   }
 
-  /* --- DASHBOARD STYLES (Thin Borders) --- */
-  .dashboard-header {
-    border: 1px solid #000;
+  /* --- NEW TABLE-BASED DASHBOARD STYLES --- */
+  .dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-bottom: 10px;
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #000;
   }
-  .dashboard-title {
+  .dashboard-table .dashboard-title {
     text-align: center;
     font-weight: 600;
     font-size: 14px;
@@ -60,29 +62,22 @@
     border-bottom: 1px solid #000;
     transition: background-color 0.3s, color 0.3s;
   }
-  .dashboard-row {
-    display: flex;
-    width: 100%;
-    border-bottom: 1px solid #000;
-  }
-  .dashboard-row:last-child { border-bottom: none; }
-  .dashboard-col {
-    flex: 1;
+  .dashboard-table td {
+    border: 1px solid #000;
     padding: 6px 8px;
-    border-right: 1px solid #000;
+    vertical-align: top;
   }
-  .dashboard-col:last-child { border-right: none; }
-  .dashboard-header, .dashboard-row, .dashboard-col, table, th, td {
+  .dashboard-table, .dashboard-table th, .dashboard-table td {
       transition: border-color 0.3s;
   }
-  
+
   /* Form Field Styles */
   .field-row { display: flex; align-items: center; margin-bottom: 4px; gap: 6px; }
   .field-row-top { display: flex; align-items: flex-start; gap: 6px; }
   .field-row label, .field-row-top label { font-weight: 600; white-space: nowrap; flex-shrink: 0; }
   .field-row input, .field-row select, .field-row-top textarea { flex-grow: 1; width: 100%; }
 
-  /* Table Styles (Thin Borders) */
+  /* Table Styles (For Procedure and Reflection tables) */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -155,37 +150,37 @@
   body.default-theme .bottom-buttons { color: #000; }
   
   body.theme-blue .lesson-plan { background-image: url('https://i.imgur.com/BX8fkDC.jpeg'); }
-  body.theme-blue .dashboard-header, body.theme-blue .dashboard-row, body.theme-blue .dashboard-col, body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99; }
+  body.theme-blue .dashboard-table, body.theme-blue .dashboard-table th, body.theme-blue .dashboard-table td, body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99; }
   body.theme-blue .dashboard-title, body.theme-blue th { background-color: #d6e3ff; color: #2c3e99; }
   body.theme-blue .custom-checkbox input:checked ~ span { background-color: #2c3e99; border-color: #2c3e99; }
   body.theme-blue .bottom-buttons { color: #2c3e99; }
 
   body.theme-green .lesson-plan { background-image: url('https://i.imgur.com/KBIhVOd.jpeg'); }
-  body.theme-green .dashboard-header, body.theme-green .dashboard-row, body.theme-green .dashboard-col, body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33; }
+  body.theme-green .dashboard-table, body.theme-green .dashboard-table th, body.theme-green .dashboard-table td, body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33; }
   body.theme-green .dashboard-title, body.theme-green th { background-color: #d9f5d9; color: #2d7a33; }
   body.theme-green .custom-checkbox input:checked ~ span { background-color: #2d7a33; border-color: #2d7a33; }
   body.theme-green .bottom-buttons { color: #2d7a33; }
 
   body.theme-yellow .lesson-plan { background-image: url('https://i.imgur.com/tfDyZW5.jpeg'); }
-  body.theme-yellow .dashboard-header, body.theme-yellow .dashboard-row, body.theme-yellow .dashboard-col, body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700; }
+  body.theme-yellow .dashboard-table, body.theme-yellow .dashboard-table th, body.theme-yellow .dashboard-table td, body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700; }
   body.theme-yellow .dashboard-title, body.theme-yellow th { background-color: #fff2cc; color: #b39700; }
   body.theme-yellow .custom-checkbox input:checked ~ span { background-color: #e6c200; border-color: #e6c200; }
   body.theme-yellow .bottom-buttons { color: #b39700; }
 
   body.theme-pink .lesson-plan { background-image: url('https://i.imgur.com/eXbEvWa.jpeg'); }
-  body.theme-pink .dashboard-header, body.theme-pink .dashboard-row, body.theme-pink .dashboard-col, body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366; }
+  body.theme-pink .dashboard-table, body.theme-pink .dashboard-table th, body.theme-pink .dashboard-table td, body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366; }
   body.theme-pink .dashboard-title, body.theme-pink th { background-color: #ffd6e6; color: #cc3366; }
   body.theme-pink .custom-checkbox input:checked ~ span { background-color: #ff4d88; border-color: #ff4d88; }
   body.theme-pink .bottom-buttons { color: #cc3366; }
 
   body.theme-purple .lesson-plan { background-image: url('https://i.imgur.com/R4G9IqK.jpeg'); }
-  body.theme-purple .dashboard-header, body.theme-purple .dashboard-row, body.theme-purple .dashboard-col, body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91; }
+  body.theme-purple .dashboard-table, body.theme-purple .dashboard-table th, body.theme-purple .dashboard-table td, body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91; }
   body.theme-purple .dashboard-title, body.theme-purple th { background-color: #e6d6ff; color: #5e2d91; }
   body.theme-purple .custom-checkbox input:checked ~ span { background-color: #8e44ad; border-color: #8e44ad; }
   body.theme-purple .bottom-buttons { color: #5e2d91; }
   
   body.theme-gray .lesson-plan { background-image: url('https://i.imgur.com/lr6wRZV.jpeg'); }
-  body.theme-gray .dashboard-header, body.theme-gray .dashboard-row, body.theme-gray .dashboard-col, body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444; }
+  body.theme-gray .dashboard-table, body.theme-gray .dashboard-table th, body.theme-gray .dashboard-table td, body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444; }
   body.theme-gray .dashboard-title, body.theme-gray th { background-color: #dddddd; color: #333; }
   body.theme-gray .custom-checkbox input:checked ~ span { background-color: #555; border-color: #555; }
   body.theme-gray .bottom-buttons { color: #333; }
@@ -197,33 +192,33 @@
     body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
     .lesson-plan { 
         width: 210mm !important; 
-        min-height: 297mm !important; /* Use min-height to allow content to grow */
+        min-height: 297mm !important;
         height: auto !important;
         margin: 0 !important; 
         padding: 10mm !important; 
         box-shadow: none !important; 
         border: none !important; 
-        background-size: 100% 100% !important; /* Stretch background to fit page */
+        background-size: 100% 100% !important;
     }
     .bottom-buttons, .ribbon, .no-print { display: none !important; }
     .print-only { display: block !important; }
     input, textarea, select { border-bottom-color: transparent !important; }
-    .dashboard-header, table { background-color: rgba(255, 255, 255, 0.8) !important; page-break-inside: avoid !important; }
-    .dashboard-header, .dashboard-row, .dashboard-col, table, th, td { border-width: 1px !important; }
+    .dashboard-table, table { background-color: rgba(255, 255, 255, 0.8) !important; page-break-inside: avoid !important; }
+    .dashboard-table, .dashboard-table th, .dashboard-table td, table, th, td { border-width: 1px !important; }
     
-    body.default-theme .dashboard-header, body.default-theme .dashboard-row, body.default-theme .dashboard-col, body.default-theme table, body.default-theme th, body.default-theme td { border-color: #000 !important; }
+    body.default-theme .dashboard-table, body.default-theme .dashboard-table th, body.default-theme .dashboard-table td, body.default-theme table, body.default-theme th, body.default-theme td { border-color: #000 !important; }
     body.default-theme .dashboard-title, body.default-theme th { background-color: #f3f3f3 !important; color: #000 !important; }
-    body.theme-blue .dashboard-header, body.theme-blue .dashboard-row, body.theme-blue .dashboard-col, body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99 !important; }
+    body.theme-blue .dashboard-table, body.theme-blue .dashboard-table th, body.theme-blue .dashboard-table td, body.theme-blue table, body.theme-blue th, body.theme-blue td { border-color: #2c3e99 !important; }
     body.theme-blue .dashboard-title, body.theme-blue th { background-color: #d6e3ff !important; color: #2c3e99 !important; }
-    body.theme-green .dashboard-header, body.theme-green .dashboard-row, body.theme-green .dashboard-col, body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33 !important; }
+    body.theme-green .dashboard-table, body.theme-green .dashboard-table th, body.theme-green .dashboard-table td, body.theme-green table, body.theme-green th, body.theme-green td { border-color: #2d7a33 !important; }
     body.theme-green .dashboard-title, body.theme-green th { background-color: #d9f5d9 !important; color: #2d7a33 !important; }
-    body.theme-yellow .dashboard-header, body.theme-yellow .dashboard-row, body.theme-yellow .dashboard-col, body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700 !important; }
+    body.theme-yellow .dashboard-table, body.theme-yellow .dashboard-table th, body.theme-yellow .dashboard-table td, body.theme-yellow table, body.theme-yellow th, body.theme-yellow td { border-color: #b39700 !important; }
     body.theme-yellow .dashboard-title, body.theme-yellow th { background-color: #fff2cc !important; color: #b39700 !important; }
-    body.theme-pink .dashboard-header, body.theme-pink .dashboard-row, body.theme-pink .dashboard-col, body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366 !important; }
+    body.theme-pink .dashboard-table, body.theme-pink .dashboard-table th, body.theme-pink .dashboard-table td, body.theme-pink table, body.theme-pink th, body.theme-pink td { border-color: #cc3366 !important; }
     body.theme-pink .dashboard-title, body.theme-pink th { background-color: #ffd6e6 !important; color: #cc3366 !important; }
-    body.theme-purple .dashboard-header, body.theme-purple .dashboard-row, body.theme-purple .dashboard-col, body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91 !important; }
+    body.theme-purple .dashboard-table, body.theme-purple .dashboard-table th, body.theme-purple .dashboard-table td, body.theme-purple table, body.theme-purple th, body.theme-purple td { border-color: #5e2d91 !important; }
     body.theme-purple .dashboard-title, body.theme-purple th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
-    body.theme-gray .dashboard-header, body.theme-gray .dashboard-row, body.theme-gray .dashboard-col, body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444 !important; }
+    body.theme-gray .dashboard-table, body.theme-gray .dashboard-table th, body.theme-gray .dashboard-table td, body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444 !important; }
     body.theme-gray .dashboard-title, body.theme-gray th { background-color: #dddddd !important; color: #333 !important; }
   }
 </style>
@@ -255,42 +250,99 @@
         <div class="group" aria-label="Actions"><button class="btn" id="insertImageBtn" title="Insert Image"><i class="fas fa-image"></i> Image</button><button class="btn" data-cmd="removeFormat" title="Clear formatting"><i class="fas fa-eraser"></i> Clear</button></div>
     </div>
 
-    <div class="dashboard-header">
-        <div class="dashboard-title">LESSON PLAN DASHBOARD</div>
-        <div class="dashboard-row">
-            <div class="dashboard-col"><div class="field-row"><label for="schoolName">School:</label><input type="text" id="schoolName" placeholder="Enter school name"></div><div class="field-row"><label for="teacherName">Teacher:</label><input type="text" id="teacherName" placeholder="Enter teacher name"></div></div>
-            <div class="dashboard-col"><div class="field-row"><label for="levelSelect">Level:</label><select id="levelSelect"><option value="">-- Select --</option><option value="MS1">MS1</option><option value="MS2">MS2</option><option value="MS3">MS3</option><option value="MS4">MS4</option></select></div><div class="field-row"><label for="sequenceSelect">Sequence:</label><select id="sequenceSelect"><option value="">-- Select --</option></select></div></div>
-            <div class="dashboard-col"><div class="field-row"><label for="learnerCount">Learners:</label><input type="number" id="learnerCount" placeholder="0"></div><div class="field-row"><label for="sessionSelect">Session:</label><select id="sessionSelect"><option value="">-- Select --</option></select></div></div>
-        </div>
-        <div class="dashboard-row">
-            <div class="dashboard-col" style="flex: 2;"><div class="field-row-top"><label for="sessionObjective">Objective(s):</label><textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea></div></div>
-            <div class="dashboard-col" style="flex: 1;"><div class="field-row"><label for="classProfile">Class Profile:</label><input type="text" id="classProfile" placeholder="e.g., Mixed ability"></div></div>
-        </div>
-        <div class="dashboard-row"><div class="dashboard-col"><div class="field-row-top"><label for="subsidiaryObjectives">Subsidiary:</label><textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea></div></div></div>
-        <div class="dashboard-row"><div class="dashboard-col"><strong>Cross-Curricular Competences:</strong><div id="ccc-multiselect" class="no-print"></div><div id="ccc-print" class="print-only"></div></div></div>
-        <div class="dashboard-row"><div class="dashboard-col"><strong>Target Competence:</strong><div id="target-multiselect" class="no-print checkbox-inline"></div> <div id="target-print" class="print-only"></div></div></div>
-         <div class="dashboard-row">
-            <div class="dashboard-col"><strong>Core Values:</strong><div id="values-multiselect" class="no-print checkbox-inline"></div><div id="values-print" class="print-only"></div></div>
-            <div class="dashboard-col"><strong>Domains:</strong><div id="domains-multiselect" class="no-print checkbox-inline"></div><div id="domains-print" class="print-only"></div></div>
-            <div class="dashboard-col"><strong>Teaching materials:</strong><div id="materials-multiselect" class="no-print checkbox-inline"></div> <div id="materials-print" class="print-only"></div></div>
-        </div>
-    </div>
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="3" class="dashboard-title">LESSON PLAN DASHBOARD</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 33.33%;">
+                    <div class="field-row"><label for="schoolName">School:</label><input type="text" id="schoolName" placeholder="Enter school name"></div>
+                    <div class="field-row"><label for="teacherName">Teacher:</label><input type="text" id="teacherName" placeholder="Enter teacher name"></div>
+                </td>
+                <td style="width: 33.33%;">
+                    <div class="field-row"><label for="levelSelect">Level:</label><select id="levelSelect"><option value="">-- Select --</option><option value="MS1">MS1</option><option value="MS2">MS2</option><option value="MS3">MS3</option><option value="MS4">MS4</option></select></div>
+                    <div class="field-row"><label for="sequenceSelect">Sequence:</label><select id="sequenceSelect"><option value="">-- Select --</option></select></div>
+                </td>
+                <td style="width: 33.33%;">
+                    <div class="field-row"><label for="learnerCount">Learners:</label><input type="number" id="learnerCount" placeholder="0"></div>
+                    <div class="field-row"><label for="sessionSelect">Session:</label><select id="sessionSelect"><option value="">-- Select --</option></select></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="field-row-top"><label for="sessionObjective">Objective(s):</label><textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea></div>
+                </td>
+                <td>
+                    <div class="field-row"><label for="classProfile">Class Profile:</label><input type="text" id="classProfile" placeholder="e.g., Mixed ability"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="field-row-top"><label for="subsidiaryObjectives">Subsidiary:</label><textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <strong>Cross-Curricular Competences:</strong>
+                    <div id="ccc-multiselect" class="no-print"></div>
+                    <div id="ccc-print" class="print-only"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <strong>Target Competence:</strong>
+                    <div id="target-multiselect" class="no-print checkbox-inline"></div> 
+                    <div id="target-print" class="print-only"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Core Values:</strong>
+                    <div id="values-multiselect" class="no-print checkbox-inline"></div>
+                    <div id="values-print" class="print-only"></div>
+                </td>
+                <td>
+                    <strong>Domains:</strong>
+                    <div id="domains-multiselect" class="no-print checkbox-inline"></div>
+                    <div id="domains-print" class="print-only"></div>
+                </td>
+                <td>
+                    <strong>Teaching materials:</strong>
+                    <div id="materials-multiselect" class="no-print checkbox-inline"></div> 
+                    <div id="materials-print" class="print-only"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
     <table class="procedure-table">
-      <tr><th style="width:15%">STAGES</th><th style="width:55%">PROCEDURE / TASKS</th><th style="width:15%">INTERACTION</th><th style="width:15%">TIME &#128336;</th></tr>
-      <tr><td><input type="text" id="preWritingStage" value="Pre-Writing" style="font-weight: bold;"></td><td><div id="preWritingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your pre-writing procedure here..."></div></td><td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="preWritingTime" placeholder="10 min"></td></tr>
-      <tr><td><input type="text" id="writingStage" value="Writing" style="font-weight: bold;"></td><td><div id="writingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main writing procedure here..."></div></td><td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="writingTime" placeholder="25 min"></td></tr>
-      <tr><td><input type="text" id="postWritingStage" value="Post-Writing" style="font-weight: bold;"></td><td><textarea id="postWritingProcedure" rows="1" placeholder="Write your post-writing procedure here..."></textarea></td><td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td><td><input type="text" id="postWritingTime" placeholder="10 min"></td></tr>
+      <thead>
+          <tr><th style="width:15%">STAGES</th><th style="width:55%">PROCEDURE / TASKS</th><th style="width:15%">INTERACTION</th><th style="width:15%">TIME &#128336;</th></tr>
+      </thead>
+      <tbody>
+          <tr><td><input type="text" id="preWritingStage" value="Pre-Writing" style="font-weight: bold;"></td><td><div id="preWritingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your pre-writing procedure here..."></div></td><td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="preWritingTime" placeholder="10 min"></td></tr>
+          <tr><td><input type="text" id="writingStage" value="Writing" style="font-weight: bold;"></td><td><div id="writingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main writing procedure here..."></div></td><td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="writingTime" placeholder="25 min"></td></tr>
+          <tr><td><input type="text" id="postWritingStage" value="Post-Writing" style="font-weight: bold;"></td><td><textarea id="postWritingProcedure" rows="1" placeholder="Write your post-writing procedure here..."></textarea></td><td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td><td><input type="text" id="postWritingTime" placeholder="10 min"></td></tr>
+      </tbody>
     </table>
 
     <table class="reflection">
-      <tr><th>What Worked</th><th>What Hindered</th><th>Action Points</th></tr>
-      <tr><td><textarea id="whatWorked" placeholder="Write here..."></textarea></td><td><textarea id="whatHindered" placeholder="Write here..."></textarea></td><td><textarea id="actionPoints" placeholder="Write here..."></textarea></td></tr>
+      <thead>
+        <tr><th>What Worked</th><th>What Hindered</th><th>Action Points</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><textarea id="whatWorked" placeholder="Write here..."></textarea></td><td><textarea id="whatHindered" placeholder="Write here..."></textarea></td><td><textarea id="actionPoints" placeholder="Write here..."></textarea></td></tr>
+      </tbody>
     </table>
     
     <div class="bottom-buttons no-print">
       <button onclick="window.print()">Print</button>
       <button id="saveBtn" disabled>Save</button>
-      <button onclick="downloadPage()">Download</button>
+      <button onclick="saveAsWord()">Save as Word</button>
+      <button onclick="window.print()">Download as PDF</button>
       <button onclick="goToMain()">Go to Main Page</button>
       <select id="themeSelect" onchange="changeTheme(this.value)"><option value="default-theme">Default</option><option value="theme-blue">Blue</option><option value="theme-green">Green</option><option value="theme-yellow">Yellow</option><option value="theme-pink">Pink</option><option value="theme-purple">Purple</option><option value="theme-gray">Gray</option></select>
     </div>
@@ -380,6 +432,15 @@
   const materialsData = { "MS1": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"], "MS2": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"], "MS3": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"], "MS4": ["W.B", "Flashcards", "Slate", "Songs", "Text Book"] };
   const crossCurricularCompetences = { "MS1": { "Intellectual Competence": ["discover the relationship between prior knowledge, listening skills, and vocal paralinguistic features in context.","connect topical words, expressions simple sentences and vocal paralinguistic features to the context.","discover the link between text types, text features, the reading skills in context.","demonstrate understanding of the text types, features and organization, sentence structure and content, and writing skills."], "Methodological Competence": ["use prior knowledge, listening skills and vocal paralinguistic features in context to understand short oral messages.","select what is appropriate to the context from the linguistic repertoire and vocal paralinguistic features to interact orally and produce short oral messages.","make use of the text types, text features, the reading skills in context to understand written messages.","use the text types, features and organization, sentence structure and content, and writing skills to produce simple written messages."], "Communicative Competence": ["explain the usage of vocal paralinguistic features and listening skills to peers.","share the oral message with peers.","explain the usage of reading skills to peers.","communicate the usage of the text type, features, organization, sentence structure and content, and writing skills to peers."], "Personal and Social Competence": ["demonstrate a genuine curiosity to learn about different cultures.","collaborate with others to achieve mutual understanding.","collaborate with others to benefit from what is appropriate to one's context.","share with others one's specific identity features."] }, "MS2": { "Intellectual Competence": [ "Using critical thinking skills when gathering information for use for learning and project work.", "Understanding and interpreting verbal and non-verbal messages.", "Solving problem situations using a variety of communication means.", "Showing creativity when producing oral and written messages.", "Showing some degree of autonomy in all areas of learning." ], "Methodological Competence": [ "Working in pairs or in groups.", "Using strategies for listening and interpreting oral discourse.", "Developing effective study methods.", "Mobilizing his resources efficiently and managing his time rationally.", "Using Information and Communication Technology (ICT) whenever he needs it for learning and research.", "Evaluating himself and evaluating his peers." ], "Communicative Competence": [ "Using drama and role play to communicate appropriately.", "Using ICT such as blogs, websites, discussion forums, and platforms to interact with learners of other cultures.", "Processing digital data." ], "Personal and Social Competence": [ "Aware of his role and others' role in the development of projects.", "Keen in promoting the work of his peers.", "Respecting our national values and behaving consistently.", "Being honest and accountable for his work and respecting others' work.", "Asserting his personal identity and behaving with self-confidence.", "Socializing through oral or written exchanges.", "Developing attitudes of solidarity." ] }, "MS3": { "Intellectual Competency": [ "use his critical thinking skills when gathering information for learning and project work", "understand and interpret verbal and non-verbal messages", "solve problem situations using a variety of communication means", "show creativity when producing oral and written messages", "show some degree of autonomy in all areas of learning" ], "Methodological Competency": [ "work in pairs or in groups", "use strategies for listening and interpreting oral discourse", "develop effective study methods, mobilize his resources efficiently and manage his time rationally", "use information and communication technology whenever he needs it for learning and research", "evaluate himself", "evaluate his peers" ], "Communicative Competency": [ "use drama and role-play to communicate appropriately", "use information and communication technology such as blogs, websites page, discussion forums, and platforms to interact with learners of other cultures", "process digital data" ], "Personal and social competencies": [ "aware of his role and others' role in the development of projects", "keen on promoting the work of his peers", "respects our national values and behaves consistently", "honest and accountable for his work and respects others work", "asserts his personal identity and behaves with self-confidence", "socializes through oral or written exchanges", "develops attitudes of solidarity" ] }, "MS4": { "Intellectual Competence": [ "use his critical thinking skills when gathering information for learning and project work", "understand and interpret verbal and non-verbal messages", "solve problem situations using a variety of communication means", "show creativity when producing oral and written messages", "show some degree of autonomy in all areas of learning" ], "Methodological Competence": [ "work in pairs or in groups", "use strategies for listening and interpreting oral discourse", "develop effective study methods, mobilize his resources efficiently and manage his time rationally", "use information and communication technology whenever he needs it for learning and research", "evaluate himself", "evaluate his peers" ], "Communicative Competence": [ "use drama and role-play to communicate appropriately", "use information and communication technology such as blogs, websites page, discussion forums, and platforms to interact with learners of other cultures", "process digital data" ], "Personal and Social Competences": [ "aware of his role and others' roles in the development of projects", "keen on promoting the work of his peers", "respects our national values and behaves consistently", "honest and accountable for his work and respects others work", "asserts his personal identity and behaves with self-confidence", "socializes through oral or written exchanges", "develops attitudes of solidarity" ] } };
   const targetCompetenciesData = { "MS2": [ "Interact & Produce (Oral): Short, simple descriptive/prescriptive messages/texts (based on supports).", "Interpret (Oral & Written): Short, simple descriptive/prescriptive messages/texts (based on supports).", "Produce (Written): Short, simple written descriptive/prescriptive messages/texts (based on supports)." ], "MS3": [ " the learner will be able to interact and produce oral messages.", " the learner will be able to interpret oral or written messages.", " the learner will be able to produce oral or written messages." ], "MS4": [ "the learner will be able to interact and produce oral messages.", "the learner will be able to interpret oral or written messages.", "the learner will be able to produce oral or written messages." ] };
+  const themeBackgrounds = {
+    'default-theme': 'https://i.imgur.com/hUepQCg.jpeg',
+    'theme-blue': 'https://i.imgur.com/BX8fkDC.jpeg',
+    'theme-green': 'https://i.imgur.com/KBIhVOd.jpeg',
+    'theme-yellow': 'https://i.imgur.com/tfDyZW5.jpeg',
+    'theme-pink': 'https://i.imgur.com/eXbEvWa.jpeg',
+    'theme-purple': 'https://i.imgur.com/R4G9IqK.jpeg',
+    'theme-gray': 'https://i.imgur.com/lr6wRZV.jpeg'
+  };
 
   function setupPrintableCheckboxes(containerId, printId) {
     const container = document.getElementById(containerId); const printElement = document.getElementById(printId); if (!container || !printElement) return;
@@ -422,9 +483,109 @@
   });
   sequenceSelect.addEventListener("change", () => { sessionSelect.innerHTML = "<option value=''>Select Session</option>"; const data = curriculum[levelSelect.value]?.[sequenceSelect.value]; if (data) data.forEach(s => sessionSelect.add(new Option(s, s))); });
 
-  window.downloadPage = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([document.documentElement.outerHTML], {type: "text/html"})); a.download = "lesson-plan.html"; a.click(); };
   window.goToMain = () => window.location.href = "index.html";
   window.changeTheme = theme => { document.body.className = theme; localStorage.setItem("lessonTheme", theme); };
+  
+  // ******** FIXED and IMPROVED saveAsWord Function Starts Here ********
+  window.saveAsWord = () => {
+      // 1. Get current theme and corresponding background image URL.
+      const currentTheme = document.body.className || 'default-theme';
+      const backgroundUrl = themeBackgrounds[currentTheme];
+
+      // 2. Get all CSS styles from the document for better accuracy.
+      const styles = Array.from(document.styleSheets)
+          .map(styleSheet => {
+              try {
+                  return Array.from(styleSheet.cssRules)
+                      .map(rule => rule.cssText)
+                      .join('');
+              } catch (e) {
+                  console.warn("Could not read stylesheet. Some styles may not be applied.", e);
+                  return '';
+              }
+          }).join('');
+
+      // 3. Deep clone the main lesson plan element to work with a copy.
+      const lessonPlanClone = document.querySelector('.lesson-plan').cloneNode(true);
+      
+      // 4. Clean the clone for saving: remove non-print elements and show print-only ones.
+      lessonPlanClone.querySelectorAll('.no-print').forEach(el => el.remove());
+      lessonPlanClone.querySelectorAll('.print-only').forEach(el => {
+          el.style.display = 'block';
+          el.classList.remove('print-only');
+      });
+
+      // 5. Replace interactive form elements with static text values.
+      lessonPlanClone.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
+          const staticEl = document.createElement('div');
+          staticEl.innerHTML = (input.value || '').replace(/\n/g, '<br>');
+          if (input.style.fontWeight) {
+              staticEl.style.fontWeight = input.style.fontWeight;
+          }
+          input.parentNode.replaceChild(staticEl, input);
+      });
+
+      lessonPlanClone.querySelectorAll('select').forEach(select => {
+          const staticEl = document.createElement('span');
+          staticEl.textContent = select.options[select.selectedIndex]?.text || '';
+          select.parentNode.replaceChild(staticEl, select);
+      });
+
+      // 6. Construct the final HTML for the Word document.
+      const htmlContent = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>Lesson Plan</title>
+              <style>
+                  @page {
+                      size: A4;
+                      margin: 0.75in;
+                  }
+                  /* Apply background to body for better Word compatibility */
+                  body {
+                      font-family: 'Poppins', 'Roboto', sans-serif;
+                      background-image: url('${backgroundUrl}');
+                      background-repeat: no-repeat;
+                      background-position: center;
+                      background-size: 100% 100%;
+                  }
+                  /* Center the main container using margins */
+                  .lesson-plan {
+                      margin: 0 auto !important;
+                      width: 100% !important;
+                      padding: 0 !important;
+                      box-shadow: none !important;
+                      border: none !important;
+                      background-color: transparent !important;
+                      background-image: none !important; /* Remove background from inner div */
+                  }
+                  
+                  /* Embed all original styles */
+                  ${styles}
+
+                  /* Override styles for better Word output */
+                  .dashboard-table, .procedure-table, .reflection {
+                      background-color: rgba(255, 255, 255, 0.85) !important; /* FIXED TYPO HERE */
+                  }
+              </style>
+          </head>
+          <body class="${currentTheme}">
+              ${lessonPlanClone.outerHTML}
+          </body>
+          </html>`;
+          
+      // 7. Create a Blob and trigger the download.
+      const blob = new Blob([htmlContent], { type: 'application/msword;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'lesson-plan.doc';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  };
+  // ******** FIXED and IMPROVED saveAsWord Function Ends Here ********
 
   window.onload = () => {
     const saved = localStorage.getItem("lessonTheme"); if (saved) { document.body.className = saved; document.getElementById("themeSelect").value = saved; }
