@@ -145,6 +145,17 @@
   .custom-checkbox input:checked ~ span { background-color: #000; border-color: #000; }
   .custom-checkbox input:checked ~ span::after { display: block; }
   
+  /* --- STYLES FOR EDITABLE TITLES & CUSTOM FIELDS --- */
+  .header-input { width: 100%; border: none; background: transparent; font-weight: 600; font-size: inherit; letter-spacing: 0.3px; text-align: center; font-family: inherit; color: inherit; padding: 0; margin: 0; outline: none; }
+  .header-input:focus { background-color: rgba(255, 255, 255, 0.5); }
+  [contenteditable="true"]:focus { outline: 1px dotted #000; background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+  strong[contenteditable="true"] { display: block; margin-bottom: 4px; }
+  .stage-textarea {
+      font-weight: bold;
+      text-align: center;
+      padding-top: 5px;
+  }
+
   /* --- THEME DEFINITIONS --- */
   body.default-theme .lesson-plan { background-image: url('https://i.imgur.com/hUepQCg.jpeg'); }
   body.default-theme .bottom-buttons { color: #000; }
@@ -190,15 +201,17 @@
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-    .lesson-plan { 
-        width: 210mm !important; 
+    .lesson-plan {
+        width: 210mm !important;
         min-height: 297mm !important;
-        height: auto !important;
-        margin: 0 !important; 
-        padding: 10mm !important; 
-        box-shadow: none !important; 
-        border: none !important; 
+        height: 297mm !important; /* FIXED: Force height to A4 */
+        box-sizing: border-box !important; /* FIXED: Include padding in height */
+        margin: 0 !important;
+        padding: 10mm !important;
+        box-shadow: none !important;
+        border: none !important;
         background-size: 100% 100% !important;
+        overflow: hidden !important; /* FIXED: Prevent content spill */
     }
     .bottom-buttons, .ribbon, .no-print { display: none !important; }
     .print-only { display: block !important; }
@@ -253,66 +266,80 @@
     <table class="dashboard-table">
         <thead>
             <tr>
-                <th colspan="3" class="dashboard-title">LESSON PLAN DASHBOARD</th>
+                <th colspan="3" class="dashboard-title"><input type="text" id="dashboardTitle" class="header-input" value="LESSON PLAN DASHBOARD"></th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td style="width: 33.33%;">
-                    <div class="field-row"><label for="schoolName">School:</label><input type="text" id="schoolName" placeholder="Enter school name"></div>
-                    <div class="field-row"><label for="teacherName">Teacher:</label><input type="text" id="teacherName" placeholder="Enter teacher name"></div>
+                    <div class="field-row"><label for="schoolName" id="labelSchool" contenteditable="true">School:</label><input type="text" id="schoolName" placeholder="Enter school name"></div>
+                    <div class="field-row"><label for="teacherName" id="labelTeacher" contenteditable="true">Teacher:</label><input type="text" id="teacherName" placeholder="Enter teacher name"></div>
                 </td>
                 <td style="width: 33.33%;">
-                    <div class="field-row"><label for="levelSelect">Level:</label><select id="levelSelect"><option value="">-- Select --</option><option value="MS1">MS1</option><option value="MS2">MS2</option><option value="MS3">MS3</option><option value="MS4">MS4</option></select></div>
-                    <div class="field-row"><label for="sequenceSelect">Sequence:</label><select id="sequenceSelect"><option value="">-- Select --</option></select></div>
+                    <div class="field-row"><label for="levelSelect" id="labelLevel" contenteditable="true">Level:</label><select id="levelSelect"><option value="">-- Select --</option><option value="MS1">MS1</option><option value="MS2">MS2</option><option value="MS3">MS3</option><option value="MS4">MS4</option></select></div>
+                    <div class="field-row"><label for="sequenceSelect" id="labelSequence" contenteditable="true">Sequence:</label><select id="sequenceSelect"><option value="">-- Select --</option></select></div>
                 </td>
                 <td style="width: 33.33%;">
-                    <div class="field-row"><label for="learnerCount">Learners:</label><input type="number" id="learnerCount" placeholder="0"></div>
-                    <div class="field-row"><label for="sessionSelect">Session:</label><select id="sessionSelect"><option value="">-- Select --</option></select></div>
+                    <div class="field-row"><label for="learnerCount" id="labelLearners" contenteditable="true">Learners:</label><input type="number" id="learnerCount" placeholder="0"></div>
+                    <div class="field-row"><label for="sessionSelect" id="labelSession" contenteditable="true">Session:</label><select id="sessionSelect"><option value="">-- Select --</option></select></div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <div class="field-row-top"><label for="sessionObjective">Objective(s):</label><textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea></div>
+                    <div class="field-row-top"><label for="sessionObjective" id="labelObjective" contenteditable="true">Objective(s):</label><textarea id="sessionObjective" rows="1" placeholder="By the end of the lesson, learners will be able to..."></textarea></div>
                 </td>
                 <td>
-                    <div class="field-row"><label for="classProfile">Class Profile:</label><input type="text" id="classProfile" placeholder="e.g., Mixed ability"></div>
+                    <div class="field-row"><label for="classProfile" id="labelClassProfile" contenteditable="true">Class Profile:</label><input type="text" id="classProfile" placeholder="e.g., Mixed ability"></div>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <div class="field-row-top"><label for="subsidiaryObjectives">Subsidiary:</label><textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea></div>
+                    <div class="field-row-top"><label for="subsidiaryObjectives" id="labelSubsidiary" contenteditable="true">Subsidiary:</label><textarea id="subsidiaryObjectives" rows="1" placeholder="e.g., Target structures, functions, vocabulary..."></textarea></div>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <strong>Cross-Curricular Competences:</strong>
+                    <strong id="labelCCC" contenteditable="true">Cross-Curricular Competences:</strong>
                     <div id="ccc-multiselect" class="no-print"></div>
                     <div id="ccc-print" class="print-only"></div>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <strong>Target Competence:</strong>
+                    <strong id="labelTargetComp" contenteditable="true">Target Competence:</strong>
                     <div id="target-multiselect" class="no-print checkbox-inline"></div> 
                     <div id="target-print" class="print-only"></div>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <strong>Core Values:</strong>
+                    <strong id="labelCoreValues" contenteditable="true">Core Values:</strong>
                     <div id="values-multiselect" class="no-print checkbox-inline"></div>
                     <div id="values-print" class="print-only"></div>
                 </td>
                 <td>
-                    <strong>Domains:</strong>
+                    <strong id="labelDomains" contenteditable="true">Domains:</strong>
                     <div id="domains-multiselect" class="no-print checkbox-inline"></div>
                     <div id="domains-print" class="print-only"></div>
                 </td>
                 <td>
-                    <strong>Teaching materials:</strong>
+                    <strong id="labelMaterials" contenteditable="true">Teaching materials:</strong>
                     <div id="materials-multiselect" class="no-print checkbox-inline"></div> 
                     <div id="materials-print" class="print-only"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <div style="width: 50%;" class="field-row-top">
+                            <label for="anticipatedProblems" id="labelAnticipated" contenteditable="true">Anticipated Problems:</label>
+                            <textarea id="anticipatedProblems" rows="1" placeholder="e.g., Ls might struggle with..."></textarea>
+                        </div>
+                        <div style="width: 50%;" class="field-row-top">
+                            <label for="solutions" id="labelSolutions" contenteditable="true">Solutions:</label>
+                            <textarea id="solutions" rows="1" placeholder="e.g., Provide extra examples, use visuals..."></textarea>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -320,21 +347,57 @@
 
     <table class="procedure-table">
       <thead>
-          <tr><th style="width:15%">STAGES</th><th style="width:55%">PROCEDURE / TASKS</th><th style="width:15%">INTERACTION</th><th style="width:15%">TIME &#128336;</th></tr>
+          <tr>
+              <th style="width:9%"><input type="text" id="headerStages" class="header-input" value="STAGES"></th>
+              <th style="width:12%"><input type="text" id="headerFramework" class="header-input" value="Framework"></th>
+              <th style="width:48%"><input type="text" id="headerProcedure" class="header-input" value="PROCEDURE / TASKS"></th>
+              <th style="width:13%"><input type="text" id="headerObjectives" class="header-input" value="Objectives"></th>
+              <th style="width:11%"><input type="text" id="headerInteraction" class="header-input" value="Interaction"></th>
+              <th style="width:7%"><input type="text" id="headerTime" class="header-input" value="Time "></th>
+          </tr>
       </thead>
       <tbody>
-          <tr><td><input type="text" id="preWritingStage" value="Pre-Writing" style="font-weight: bold;"></td><td><div id="preWritingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your pre-writing procedure here..."></div></td><td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="preWritingTime" placeholder="10 min"></td></tr>
-          <tr><td><input type="text" id="writingStage" value="Writing" style="font-weight: bold;"></td><td><div id="writingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main writing procedure here..."></div></td><td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td><td><input type="text" id="writingTime" placeholder="25 min"></td></tr>
-          <tr><td><input type="text" id="postWritingStage" value="Post-Writing" style="font-weight: bold;"></td><td><textarea id="postWritingProcedure" rows="1" placeholder="Write your post-writing procedure here..."></textarea></td><td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td><td><input type="text" id="postWritingTime" placeholder="10 min"></td></tr>
+          <tr>
+              <td><textarea id="preWritingStage" rows="1" class="stage-textarea">Pre-Writing</textarea></td>
+              <td><input type="text" id="preWritingFramework" placeholder="e.g., PDP, PPU..."></td>
+              <td><div id="preWritingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your pre-writing procedure here..."></div></td>
+              <td><textarea id="preWritingObjectives" rows="1" placeholder="Objective for this stage..."></textarea></td>
+              <td><input type="text" id="preWritingInteraction" placeholder="T -> Ls"></td>
+              <td><input type="text" id="preWritingTime" placeholder="10 min"></td>
+          </tr>
+          <tr>
+              <td><textarea id="writingStage" rows="1" class="stage-textarea">Writing</textarea></td>
+              <td><input type="text" id="writingFramework" placeholder="e.g., PDP, PPU..."></td>
+              <td><div id="writingProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your main writing procedure here..."></div></td>
+              <td><textarea id="writingObjectives" rows="1" placeholder="Objective for this stage..."></textarea></td>
+              <td><input type="text" id="writingInteraction" placeholder="T -> Ls"></td>
+              <td><input type="text" id="writingTime" placeholder="25 min"></td>
+          </tr>
+          <tr>
+              <td><textarea id="postWritingStage" rows="1" class="stage-textarea">Post&#10;writing</textarea></td>
+              <td><input type="text" id="postWritingFramework" placeholder="e.g., PDP, PPU..."></td>
+              <td><textarea id="postWritingProcedure" rows="1" placeholder="Write your post-writing procedure here..."></textarea></td>
+              <td><textarea id="postWritingObjectives" rows="1" placeholder="Objective for this stage..."></textarea></td>
+              <td><input type="text" id="postWritingInteraction" placeholder="L -> L"></td>
+              <td><input type="text" id="postWritingTime" placeholder="10 min"></td>
+          </tr>
       </tbody>
     </table>
 
     <table class="reflection">
       <thead>
-        <tr><th>What Worked</th><th>What Hindered</th><th>Action Points</th></tr>
+        <tr>
+            <th><input type="text" id="headerWorked" class="header-input" value="What Worked"></th>
+            <th><input type="text" id="headerHindered" class="header-input" value="What Hindered"></th>
+            <th><input type="text" id="headerActionPoints" class="header-input" value="Action Points"></th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td><textarea id="whatWorked" placeholder="Write here..."></textarea></td><td><textarea id="whatHindered" placeholder="Write here..."></textarea></td><td><textarea id="actionPoints" placeholder="Write here..."></textarea></td></tr>
+        <tr>
+            <td><textarea id="whatWorked" placeholder="Write here..."></textarea></td>
+            <td><textarea id="whatHindered" placeholder="Write here..."></textarea></td>
+            <td><textarea id="actionPoints" placeholder="Write here..."></textarea></td>
+        </tr>
       </tbody>
     </table>
     
@@ -379,16 +442,23 @@
     try {
       confirmSaveBtn.disabled = true; confirmSaveBtn.textContent = 'Saving...';
       const lessonPlanData = {
-        planName, plannerType: 'msnew', school: document.getElementById('schoolName').value, teacher: document.getElementById('teacherName').value, level: document.getElementById('levelSelect').value, learners: document.getElementById('learnerCount').value, classProfile: document.getElementById('classProfile').value, sequence: document.getElementById('sequenceSelect').value, session: document.getElementById('sessionSelect').value, objective: document.getElementById('sessionObjective').value, subsidiaryObjectives: document.getElementById('subsidiaryObjectives').value,
+        planName, plannerType: 'msnew',
+        school: document.getElementById('schoolName').value, teacher: document.getElementById('teacherName').value, level: document.getElementById('levelSelect').value, learners: document.getElementById('learnerCount').value, classProfile: document.getElementById('classProfile').value, sequence: document.getElementById('sequenceSelect').value, session: document.getElementById('sessionSelect').value, objective: document.getElementById('sessionObjective').value, subsidiaryObjectives: document.getElementById('subsidiaryObjectives').value,
+        anticipatedProblems: document.getElementById('anticipatedProblems').value, solutions: document.getElementById('solutions').value,
         domains: Array.from(document.querySelectorAll('#domains-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         targetCompetence: Array.from(document.querySelectorAll('#target-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         teachingMaterials: Array.from(document.querySelectorAll('#materials-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         coreValues: Array.from(document.querySelectorAll('#values-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
-        preWriting: { stage: document.getElementById('preWritingStage').value, procedure: document.getElementById('preWritingProcedure').innerHTML, interaction: document.getElementById('preWritingInteraction').value, time: document.getElementById('preWritingTime').value, },
-        writing: { stage: document.getElementById('writingStage').value, procedure: document.getElementById('writingProcedure').innerHTML, interaction: document.getElementById('writingInteraction').value, time: document.getElementById('writingTime').value, },
-        postWriting: { stage: document.getElementById('postWritingStage').value, procedure: document.getElementById('postWritingProcedure').value, interaction: document.getElementById('postWritingInteraction').value, time: document.getElementById('postWritingTime').value, },
+        preWriting: { stage: document.getElementById('preWritingStage').value, framework: document.getElementById('preWritingFramework').value, procedure: document.getElementById('preWritingProcedure').innerHTML, objectives: document.getElementById('preWritingObjectives').value, interaction: document.getElementById('preWritingInteraction').value, time: document.getElementById('preWritingTime').value, },
+        writing: { stage: document.getElementById('writingStage').value, framework: document.getElementById('writingFramework').value, procedure: document.getElementById('writingProcedure').innerHTML, objectives: document.getElementById('writingObjectives').value, interaction: document.getElementById('writingInteraction').value, time: document.getElementById('writingTime').value, },
+        postWriting: { stage: document.getElementById('postWritingStage').value, framework: document.getElementById('postWritingFramework').value, procedure: document.getElementById('postWritingProcedure').value, objectives: document.getElementById('postWritingObjectives').value, interaction: document.getElementById('postWritingInteraction').value, time: document.getElementById('postWritingTime').value, },
         reflection: { worked: document.getElementById('whatWorked').value, hindered: document.getElementById('whatHindered').value, actionPoints: document.getElementById('actionPoints').value, },
+        labels: {
+            dashboardTitle: document.getElementById('dashboardTitle').value, labelSchool: document.getElementById('labelSchool').textContent, labelTeacher: document.getElementById('labelTeacher').textContent, labelLevel: document.getElementById('labelLevel').textContent, labelSequence: document.getElementById('labelSequence').textContent, labelLearners: document.getElementById('labelLearners').textContent, labelSession: document.getElementById('labelSession').textContent, labelObjective: document.getElementById('labelObjective').textContent, labelClassProfile: document.getElementById('labelClassProfile').textContent, labelSubsidiary: document.getElementById('labelSubsidiary').textContent, labelCCC: document.getElementById('labelCCC').textContent, labelTargetComp: document.getElementById('labelTargetComp').textContent, labelCoreValues: document.getElementById('labelCoreValues').textContent, labelDomains: document.getElementById('labelDomains').textContent, labelMaterials: document.getElementById('labelMaterials').textContent, labelAnticipated: document.getElementById('labelAnticipated').textContent, labelSolutions: document.getElementById('labelSolutions').textContent,
+            headerStages: document.getElementById('headerStages').value, headerFramework: document.getElementById('headerFramework').value, headerProcedure: document.getElementById('headerProcedure').value, headerObjectives: document.getElementById('headerObjectives').value, headerInteraction: document.getElementById('headerInteraction').value, headerTime: document.getElementById('headerTime').value,
+            headerWorked: document.getElementById('headerWorked').value, headerHindered: document.getElementById('headerHindered').value, headerActionPoints: document.getElementById('headerActionPoints').value
+        },
         createdAt: serverTimestamp(), authorId: currentUser.uid
       };
       await addDoc(collection(db, 'users', currentUser.uid, 'lessonPlans'), lessonPlanData);
@@ -404,6 +474,15 @@
       if (docSnap.exists()) {
         const data = docSnap.data();
         document.getElementById('schoolName').value = data.school || ''; document.getElementById('teacherName').value = data.teacher || ''; document.getElementById('levelSelect').value = data.level || ''; document.getElementById('learnerCount').value = data.learners || ''; document.getElementById('classProfile').value = data.classProfile || '';
+        document.getElementById('anticipatedProblems').value = data.anticipatedProblems || ''; document.getElementById('solutions').value = data.solutions || '';
+        
+        if(data.labels) {
+            document.getElementById('dashboardTitle').value = data.labels.dashboardTitle || 'LESSON PLAN DASHBOARD';
+            document.getElementById('labelSchool').textContent = data.labels.labelSchool || 'School:'; document.getElementById('labelTeacher').textContent = data.labels.labelTeacher || 'Teacher:'; document.getElementById('labelLevel').textContent = data.labels.labelLevel || 'Level:'; document.getElementById('labelSequence').textContent = data.labels.labelSequence || 'Sequence:'; document.getElementById('labelLearners').textContent = data.labels.labelLearners || 'Learners:'; document.getElementById('labelSession').textContent = data.labels.labelSession || 'Session:'; document.getElementById('labelObjective').textContent = data.labels.labelObjective || 'Objective(s):'; document.getElementById('labelClassProfile').textContent = data.labels.labelClassProfile || 'Class Profile:'; document.getElementById('labelSubsidiary').textContent = data.labels.labelSubsidiary || 'Subsidiary:'; document.getElementById('labelCCC').textContent = data.labels.labelCCC || 'Cross-Curricular Competences:'; document.getElementById('labelTargetComp').textContent = data.labels.labelTargetComp || 'Target Competence:'; document.getElementById('labelCoreValues').textContent = data.labels.labelCoreValues || 'Core Values:'; document.getElementById('labelDomains').textContent = data.labels.labelDomains || 'Domains:'; document.getElementById('labelMaterials').textContent = data.labels.labelMaterials || 'Teaching materials:'; document.getElementById('labelAnticipated').textContent = data.labels.labelAnticipated || 'Anticipated Problems:'; document.getElementById('labelSolutions').textContent = data.labels.labelSolutions || 'Solutions:';
+            document.getElementById('headerStages').value = data.labels.headerStages || 'STAGES'; document.getElementById('headerFramework').value = data.labels.headerFramework || data.labels.headerVAK || 'Framework'; document.getElementById('headerProcedure').value = data.labels.headerProcedure || 'PROCEDURE / TASKS'; document.getElementById('headerObjectives').value = data.labels.headerObjectives || 'OBJECTIVES'; document.getElementById('headerInteraction').value = data.labels.headerInteraction || 'INTERACTION'; document.getElementById('headerTime').value = data.labels.headerTime || 'TIME &#128336;';
+            document.getElementById('headerWorked').value = data.labels.headerWorked || 'What Worked'; document.getElementById('headerHindered').value = data.labels.headerHindered || 'What Hindered'; document.getElementById('headerActionPoints').value = data.labels.headerActionPoints || 'Action Points';
+        }
+
         levelSelect.dispatchEvent(new Event('change'));
         setTimeout(() => {
           document.getElementById('sequenceSelect').value = data.sequence || ''; sequenceSelect.dispatchEvent(new Event('change'));
@@ -415,16 +494,16 @@
           setTimeout(() => { document.getElementById('sessionSelect').value = data.session || ''; }, 50);
         }, 100);
         document.getElementById('sessionObjective').value = data.objective || ''; document.getElementById('subsidiaryObjectives').value = data.subsidiaryObjectives || '';
-        document.getElementById('preWritingStage').value = data.preWriting?.stage || 'Pre-Writing'; document.getElementById('preWritingProcedure').innerHTML = data.preWriting?.procedure || ''; document.getElementById('preWritingInteraction').value = data.preWriting?.interaction || ''; document.getElementById('preWritingTime').value = data.preWriting?.time || '';
-        document.getElementById('writingStage').value = data.writing?.stage || 'Writing'; document.getElementById('writingProcedure').innerHTML = data.writing?.procedure || ''; document.getElementById('writingInteraction').value = data.writing?.interaction || ''; document.getElementById('writingTime').value = data.writing?.time || '';
-        document.getElementById('postWritingStage').value = data.postWriting?.stage || 'Post-Writing'; document.getElementById('postWritingProcedure').value = data.postWriting?.procedure || ''; document.getElementById('postWritingInteraction').value = data.postWriting?.interaction || ''; document.getElementById('postWritingTime').value = data.postWriting?.time || '';
+        document.getElementById('preWritingStage').value = data.preWriting?.stage || 'Pre-Writing'; document.getElementById('preWritingFramework').value = data.preWriting?.framework || data.preWriting?.vak || ''; document.getElementById('preWritingProcedure').innerHTML = data.preWriting?.procedure || ''; document.getElementById('preWritingObjectives').value = data.preWriting?.objectives || ''; document.getElementById('preWritingInteraction').value = data.preWriting?.interaction || ''; document.getElementById('preWritingTime').value = data.preWriting?.time || '';
+        document.getElementById('writingStage').value = data.writing?.stage || 'Writing'; document.getElementById('writingFramework').value = data.writing?.framework || data.writing?.vak || ''; document.getElementById('writingProcedure').innerHTML = data.writing?.procedure || ''; document.getElementById('writingObjectives').value = data.writing?.objectives || ''; document.getElementById('writingInteraction').value = data.writing?.interaction || ''; document.getElementById('writingTime').value = data.writing?.time || '';
+        document.getElementById('postWritingStage').value = data.postWriting?.stage || 'Post\nwriting'; document.getElementById('postWritingFramework').value = data.postWriting?.framework || data.postWriting?.vak || ''; document.getElementById('postWritingProcedure').value = data.postWriting?.procedure || ''; document.getElementById('postWritingObjectives').value = data.postWriting?.objectives || ''; document.getElementById('postWritingInteraction').value = data.postWriting?.interaction || ''; document.getElementById('postWritingTime').value = data.postWriting?.time || '';
         document.getElementById('whatWorked').value = data.reflection?.worked || ''; document.getElementById('whatHindered').value = data.reflection?.hindered || ''; document.getElementById('actionPoints').value = data.reflection?.actionPoints || '';
         document.querySelectorAll('textarea').forEach(autoResize); sessionStorage.removeItem('planToLoadId');
       } else { alert("Could not find the lesson plan to load."); sessionStorage.removeItem('planToLoadId'); }
     } catch (error) { console.error("Error loading lesson plan:", error); alert("An error occurred while loading the plan."); }
   }
 
-  const STANDARD_SESSIONS = ["Situation 1 : Initial - PDP lesson(s) (listening & speaking)", "Situation 2 : Learning - PPU/PDP lessons (language & reading and writing)", "Situation 3 : Learning to Integrate – PPU - group work", "Situation 4 : Integration (assessment) – PDP - Solo work"];
+  const STANDARD_SESSIONS = ["Situation 1 : Initial - PDP lesson(s) (listening & speaking)", "Situation 2 : Learning - PPU/PDP lessons (language & reading and writing)", "Situation 3 : Learning to Integrate â€“ PPU - group work", "Situation 4 : Integration (assessment) â€“ PDP - Solo work"];
   const MS1_CORE_SESSIONS = ["Get Ready", " Listen & Interact", "Learning situations", " Listen & Consider", " Read & Interpret", " Read & Consider", " Write Together", " Write Alone",  "Check your Progress"];
   const curriculum = { "MS1": { "Habits and Preferences": MS1_CORE_SESSIONS, "School Life": MS1_CORE_SESSIONS, "Past Holidays and Trips": MS1_CORE_SESSIONS, "Pause": ["Evaluation & Remediation"] }, "MS2": { "1. Me, my Friends and my Family": STANDARD_SESSIONS, "2. Me and my Shopping": STANDARD_SESSIONS, "3. Me and my Health": STANDARD_SESSIONS, "4. Me and my Travels": STANDARD_SESSIONS, "Pause": ["Evaluation & Remediation"] }, "MS3": { "1. Me, My Personality and Life Experiences": STANDARD_SESSIONS, "2. Me: Universal Landmarks and Outstanding Figures in history, Literature and Arts": STANDARD_SESSIONS, "3. Me, My Community and Citizenship": STANDARD_SESSIONS, "Pause": ["Evaluation & Remediation"] }, "MS4": { "1. Me and My Identity": STANDARD_SESSIONS, "2. Me and My Achievements": STANDARD_SESSIONS, "3. Me and My Aspirations": STANDARD_SESSIONS, "Pause": ["Evaluation & Remediation"] } };
   const valuesData = { "MS1": ["National identity", "National conscience", "Citizenship", "Openness to the world"], "MS2": ["National identity", "National conscience", "Citizenship", "Openness to the world"], "MS3": ["National identity", "National conscience", "Citizenship", "Openness to the world"], "MS4": ["National identity", "National conscience", "Citizenship", "Openness to the world"] };
@@ -480,103 +559,64 @@
     sequenceSelect.innerHTML = "<option value=''>Select Sequence</option>"; sessionSelect.innerHTML = "<option value=''>Select Session</option>";
     if (curriculum[levelSelect.value]) { Object.keys(curriculum[levelSelect.value]).forEach(seq => sequenceSelect.add(new Option(seq, seq))); }
     populateCompetencies(levelSelect.value); populateTargetCompetencies(levelSelect.value); populateValues(levelSelect.value); populateDomains(levelSelect.value); populateMaterials(levelSelect.value);
+    
+    // Logic to change Objective label
+    const objectiveLabel = document.getElementById('labelObjective');
+    if (levelSelect.value === 'MS1') {
+        objectiveLabel.textContent = 'Learner Outcome:';
+    } else {
+        objectiveLabel.textContent = 'Objective(s):';
+    }
   });
   sequenceSelect.addEventListener("change", () => { sessionSelect.innerHTML = "<option value=''>Select Session</option>"; const data = curriculum[levelSelect.value]?.[sequenceSelect.value]; if (data) data.forEach(s => sessionSelect.add(new Option(s, s))); });
 
   window.goToMain = () => window.location.href = "index.html";
   window.changeTheme = theme => { document.body.className = theme; localStorage.setItem("lessonTheme", theme); };
   
-  // ******** FIXED and IMPROVED saveAsWord Function Starts Here ********
   window.saveAsWord = () => {
-      // 1. Get current theme and corresponding background image URL.
       const currentTheme = document.body.className || 'default-theme';
       const backgroundUrl = themeBackgrounds[currentTheme];
-
-      // 2. Get all CSS styles from the document for better accuracy.
-      const styles = Array.from(document.styleSheets)
-          .map(styleSheet => {
-              try {
-                  return Array.from(styleSheet.cssRules)
-                      .map(rule => rule.cssText)
-                      .join('');
-              } catch (e) {
-                  console.warn("Could not read stylesheet. Some styles may not be applied.", e);
-                  return '';
-              }
-          }).join('');
-
-      // 3. Deep clone the main lesson plan element to work with a copy.
+      const styles = Array.from(document.styleSheets).map(styleSheet => { try { return Array.from(styleSheet.cssRules).map(rule => rule.cssText).join(''); } catch (e) { console.warn("Could not read stylesheet.", e); return ''; } }).join('');
       const lessonPlanClone = document.querySelector('.lesson-plan').cloneNode(true);
-      
-      // 4. Clean the clone for saving: remove non-print elements and show print-only ones.
       lessonPlanClone.querySelectorAll('.no-print').forEach(el => el.remove());
-      lessonPlanClone.querySelectorAll('.print-only').forEach(el => {
-          el.style.display = 'block';
-          el.classList.remove('print-only');
+      lessonPlanClone.querySelectorAll('.print-only').forEach(el => { el.style.display = 'block'; el.classList.remove('print-only'); });
+      
+      // Replace contenteditable elements with static content
+      lessonPlanClone.querySelectorAll('[contenteditable="true"]').forEach(el => {
+          const staticEl = document.createElement(el.tagName === 'STRONG' ? 'strong' : 'span');
+          staticEl.innerHTML = el.innerHTML;
+          el.parentNode.replaceChild(staticEl, el);
       });
 
-      // 5. Replace interactive form elements with static text values.
       lessonPlanClone.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
           const staticEl = document.createElement('div');
           staticEl.innerHTML = (input.value || '').replace(/\n/g, '<br>');
-          if (input.style.fontWeight) {
-              staticEl.style.fontWeight = input.style.fontWeight;
-          }
+          staticEl.className = input.className; // Preserve classes like stage-textarea
+          if (input.style.fontWeight) { staticEl.style.fontWeight = input.style.fontWeight; }
           input.parentNode.replaceChild(staticEl, input);
       });
-
       lessonPlanClone.querySelectorAll('select').forEach(select => {
           const staticEl = document.createElement('span');
           staticEl.textContent = select.options[select.selectedIndex]?.text || '';
           select.parentNode.replaceChild(staticEl, select);
       });
+      lessonPlanClone.querySelectorAll('.editable-area').forEach(div => {
+          div.removeAttribute('contenteditable');
+          div.removeAttribute('data-placeholder');
+      });
 
-      // 6. Construct the final HTML for the Word document.
       const htmlContent = `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <title>Lesson Plan</title>
-              <style>
-                  @page {
-                      size: A4;
-                      margin: 0.75in;
-                  }
-                  /* Apply background to body for better Word compatibility */
-                  body {
-                      font-family: 'Poppins', 'Roboto', sans-serif;
-                      background-image: url('${backgroundUrl}');
-                      background-repeat: no-repeat;
-                      background-position: center;
-                      background-size: 100% 100%;
-                  }
-                  /* Center the main container using margins */
-                  .lesson-plan {
-                      margin: 0 auto !important;
-                      width: 100% !important;
-                      padding: 0 !important;
-                      box-shadow: none !important;
-                      border: none !important;
-                      background-color: transparent !important;
-                      background-image: none !important; /* Remove background from inner div */
-                  }
-                  
-                  /* Embed all original styles */
-                  ${styles}
-
-                  /* Override styles for better Word output */
-                  .dashboard-table, .procedure-table, .reflection {
-                      background-color: rgba(255, 255, 255, 0.85) !important; /* FIXED TYPO HERE */
-                  }
-              </style>
-          </head>
-          <body class="${currentTheme}">
-              ${lessonPlanClone.outerHTML}
-          </body>
-          </html>`;
+          <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lesson Plan</title>
+          <style>
+              @page { size: A4; margin: 0.75in; }
+              body { font-family: 'Poppins', 'Roboto', sans-serif; background-image: url('${backgroundUrl}'); background-repeat: no-repeat; background-position: center; background-size: 100% 100%; }
+              .lesson-plan { margin: 0 auto !important; width: 100% !important; padding: 0 !important; box-shadow: none !important; border: none !important; background-color: transparent !important; background-image: none !important; }
+              ${styles}
+              .stage-textarea { font-weight: bold; text-align: center; } /* Ensure style is kept in Word */
+              .dashboard-table, .procedure-table, .reflection { background-color: rgba(255, 255, 255, 0.85) !important; }
+          </style></head>
+          <body class="${currentTheme}">${lessonPlanClone.outerHTML}</body></html>`;
           
-      // 7. Create a Blob and trigger the download.
       const blob = new Blob([htmlContent], { type: 'application/msword;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -585,7 +625,6 @@
       link.click();
       document.body.removeChild(link);
   };
-  // ******** FIXED and IMPROVED saveAsWord Function Ends Here ********
 
   window.onload = () => {
     const saved = localStorage.getItem("lessonTheme"); if (saved) { document.body.className = saved; document.getElementById("themeSelect").value = saved; }
