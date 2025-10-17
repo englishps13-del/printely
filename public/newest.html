@@ -460,7 +460,9 @@
       </tr>
       <tr>
         <td>Warmer</td>
-        <td><textarea id="warmerProcedure" placeholder="Write your Warmer procedure here..."></textarea></td>
+        <td>
+          <div id="warmerProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your Warmer procedure here..." style="min-height: 60px; padding: 3px;"></div>
+        </td>
         <td><input type="text" id="warmerInteraction" placeholder="T -> Ls"></td>
         <td><input type="text" id="warmerTime" placeholder="5 min"></td>
       </tr>
@@ -474,7 +476,9 @@
       </tr>
       <tr>
         <td>Assessment</td>
-        <td><textarea id="assessmentProcedure" placeholder="Write your assessment procedure here..."></textarea></td>
+        <td>
+          <div id="assessmentProcedure" class="editable-area" contenteditable="true" data-placeholder="Write your assessment procedure here..." style="min-height: 60px; padding: 3px;"></div>
+        </td>
         <td><input type="text" id="assessmentInteraction" placeholder="Ls -> T"></td>
         <td><input type="text" id="assessmentTime" placeholder="15 min"></td>
       </tr>
@@ -593,7 +597,7 @@
         crossCurricularCompetences: Array.from(document.querySelectorAll('#ccc-multiselect input:checked')).map(cb => cb.closest('label').textContent.trim()),
         materials: Array.from(document.querySelectorAll('#teachingMaterials input:checked')).map(cb => cb.value),
         warmer: {
-          procedure: document.getElementById('warmerProcedure').value,
+          procedure: document.getElementById('warmerProcedure').innerHTML,
           interaction: document.getElementById('warmerInteraction').value,
           time: document.getElementById('warmerTime').value,
         },
@@ -603,7 +607,7 @@
           time: document.getElementById('installTime').value,
         },
         assessment: {
-          procedure: document.getElementById('assessmentProcedure').value,
+          procedure: document.getElementById('assessmentProcedure').innerHTML,
           interaction: document.getElementById('assessmentInteraction').value,
           time: document.getElementById('assessmentTime').value,
         },
@@ -677,13 +681,13 @@
           if (cb) cb.checked = true;
         });
 
-        document.getElementById('warmerProcedure').value = data.warmer?.procedure || '';
+        document.getElementById('warmerProcedure').innerHTML = data.warmer?.procedure || '';
         document.getElementById('warmerInteraction').value = data.warmer?.interaction || '';
         document.getElementById('warmerTime').value = data.warmer?.time || '';
         document.getElementById('installResourcesProcedure').innerHTML = data.install?.procedure || '';
         document.getElementById('installInteraction').value = data.install?.interaction || '';
         document.getElementById('installTime').value = data.install?.time || '';
-        document.getElementById('assessmentProcedure').value = data.assessment?.procedure || '';
+        document.getElementById('assessmentProcedure').innerHTML = data.assessment?.procedure || '';
         document.getElementById('assessmentInteraction').value = data.assessment?.interaction || '';
         document.getElementById('assessmentTime').value = data.assessment?.time || '';
         document.getElementById('whatWorked').value = data.reflection?.worked || '';
@@ -822,9 +826,39 @@
 
   // --- Ribbon Editor & Image Logic ---
   let activeEditor = null;
-  document.addEventListener('focusin', e => { if (e.target.isContentEditable) activeEditor = e.target; });
-  function exec(cmd, val = null) { if (activeEditor) document.execCommand(cmd, false, val); }
-  document.querySelectorAll('[data-cmd]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); exec(btn.dataset.cmd); }));
+  document.addEventListener('focusin', e => { 
+    if (e.target.isContentEditable) {
+      activeEditor = e.target;
+      // Update button states when switching editors
+      updateRibbonState();
+    }
+  });
+  
+  function updateRibbonState() {
+    if (!activeEditor) return;
+    
+    // Update bold button state
+    document.querySelector('[data-cmd="bold"]').classList.toggle('active', document.queryCommandState('bold'));
+    // Update italic button state
+    document.querySelector('[data-cmd="italic"]').classList.toggle('active', document.queryCommandState('italic'));
+    // Update underline button state
+    document.querySelector('[data-cmd="underline"]').classList.toggle('active', document.queryCommandState('underline'));
+    // Update strikethrough button state
+    document.querySelector('[data-cmd="strikeThrough"]').classList.toggle('active', document.queryCommandState('strikeThrough'));
+  }
+  
+  function exec(cmd, val = null) { 
+    if (activeEditor) {
+      document.execCommand(cmd, false, val);
+      updateRibbonState();
+    }
+  }
+  
+  document.querySelectorAll('[data-cmd]').forEach(btn => btn.addEventListener('click', e => { 
+    e.preventDefault(); 
+    exec(btn.dataset.cmd); 
+  }));
+  
   document.getElementById('fontFamily').addEventListener('change', e => exec('fontName', e.target.value));
   document.getElementById('fontSize').addEventListener('change', e => exec('fontSize', e.target.value));
   document.getElementById('foreColor').addEventListener('input', e => exec('foreColor', e.target.value));
