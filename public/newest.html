@@ -76,8 +76,12 @@
     font-family: inherit;
     font-size: 13px;
     padding: 3px;
-    resize: vertical;
+    resize: none; /* Changed from vertical to none */
     appearance: none;
+  }
+  
+  textarea {
+    overflow-y: hidden; /* Added for smooth auto-resizing */
   }
 
   select {
@@ -208,9 +212,10 @@
       border: none !important; background: transparent !important; box-shadow: none !important;
       appearance: none !important; -webkit-appearance: none !important;
       font-size: 12px !important; padding: 0 !important; width: 100% !important;
+      resize: none !important;
     }
     select { background: transparent !important; }
-    .editable-area {
+    .editable-area, textarea {
         min-height: auto !important; resize: none !important; overflow: visible !important;
     }
     .bottom-buttons, .ribbon, .no-print, #image-resize-handle { display: none !important; }
@@ -455,7 +460,7 @@
       </tr>
       <tr>
         <td>Warmer</td>
-        <td><textarea id="warmerProcedure" rows="1" placeholder="Write your Warmer procedure here..."></textarea></td>
+        <td><textarea id="warmerProcedure" placeholder="Write your Warmer procedure here..."></textarea></td>
         <td><input type="text" id="warmerInteraction" placeholder="T -> Ls"></td>
         <td><input type="text" id="warmerTime" placeholder="5 min"></td>
       </tr>
@@ -469,7 +474,7 @@
       </tr>
       <tr>
         <td>Assessment</td>
-        <td><textarea id="assessmentProcedure" rows="1" placeholder="Write your assessment procedure here..."></textarea></td>
+        <td><textarea id="assessmentProcedure" placeholder="Write your assessment procedure here..."></textarea></td>
         <td><input type="text" id="assessmentInteraction" placeholder="Ls -> T"></td>
         <td><input type="text" id="assessmentTime" placeholder="15 min"></td>
       </tr>
@@ -536,6 +541,13 @@
   const cancelSaveBtn = document.getElementById('cancelSaveBtn');
   const projectNameInput = document.getElementById('projectNameInput');
   const authStatusDiv = document.getElementById('authStatus');
+
+  // --- Auto-resize Textareas ---
+  function autoResizeTextarea(textarea) {
+      if (!textarea || typeof textarea.style === 'undefined') return;
+      textarea.style.height = 'auto'; // Reset height to allow shrinking
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+  }
 
   // --- Auth Listener ---
   onAuthStateChanged(auth, user => {
@@ -677,7 +689,12 @@
         document.getElementById('whatWorked').value = data.reflection?.worked || '';
         document.getElementById('whatHindered').value = data.reflection?.hindered || '';
         document.getElementById('actionPoints').value = data.reflection?.actionPoints || '';
+        
         sessionStorage.removeItem('planToLoadId');
+
+        // Trigger resize for all textareas after loading content
+        document.querySelectorAll('textarea').forEach(autoResizeTextarea);
+
       } else {
         alert("Could not find the lesson plan to load.");
         sessionStorage.removeItem('planToLoadId');
@@ -791,6 +808,15 @@
     // Setup print views for checkbox sections
     setupPrintableCheckboxes('targetCompetencies', 'tc-print');
     setupPrintableCheckboxes('teachingMaterials', 'tm-print');
+
+    // Add event listeners for auto-resizing on input
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('input', () => autoResizeTextarea(textarea), false);
+        // Also trigger initial resize in case of browser-cached content
+        if (textarea.value) {
+            autoResizeTextarea(textarea);
+        }
+    });
   });
 
 
