@@ -303,6 +303,16 @@
   body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444; }
   body.theme-gray table th { background: #dddddd; color: #333; }
   body.theme-gray table td { background: #fafafa; }
+  
+  /* New styles for improved layout */
+  .inline-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .inline-label strong {
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body class="default-theme">
@@ -366,43 +376,68 @@
 
     <table>
       <tr>
-        <td style="width:50%"><strong>Primary School:</strong> <input type="text" id="schoolName" placeholder="Enter school name"></td>
-        <td style="width:50%"><strong>Teacher:</strong> <input type="text" id="teacherName" placeholder="Enter teacher name"></td>
-      </tr>
-    </table>
-
-    <table>
-      <tr>
-        <td style="width:33%"><strong>Level:</strong> 
-          <select id="levelSelect">
-            <option value="">-- Select Level --</option>
-            <option value="3PS">3PS</option>
-            <option value="4PS">4PS</option>
-            <option value="5PS">5PS</option>
-          </select>
+        <td style="width:50%">
+          <div class="inline-label">
+            <strong>Primary School:</strong> 
+            <input type="text" id="schoolName" placeholder="Enter school name">
+          </div>
         </td>
-        <td style="width:33%"><strong>Number of learners:</strong> 
-          <input type="number" id="learnerCount" placeholder="0">
-        </td>
-        <td style="width:34%"><strong>Sequence:</strong> 
-          <select id="sequenceSelect">
-            <option value="">-- Select Sequence --</option>
-          </select>
+        <td style="width:50%">
+          <div class="inline-label">
+            <strong>Teacher:</strong> 
+            <input type="text" id="teacherName" placeholder="Enter teacher name">
+          </div>
         </td>
       </tr>
     </table>
 
     <table>
       <tr>
-        <td style="width:50%"><strong>Section:</strong> 
-          <select id="sectionSelect">
-            <option value="">-- Select Section --</option>
-          </select>
+        <td style="width:33%">
+          <div class="inline-label">
+            <strong>Level:</strong> 
+            <select id="levelSelect">
+              <option value="">-- Select Level --</option>
+              <option value="3PS">3PS</option>
+              <option value="4PS">4PS</option>
+              <option value="5PS">5PS</option>
+            </select>
+          </div>
         </td>
-        <td style="width:50%"><strong>Session:</strong> 
-          <select id="sessionSelect">
-            <option value="">-- Select Session --</option>
-          </select>
+        <td style="width:33%">
+          <div class="inline-label">
+            <strong>Number of learners:</strong> 
+            <input type="number" id="learnerCount" placeholder="0">
+          </div>
+        </td>
+        <td style="width:34%">
+          <div class="inline-label">
+            <strong>Sequence:</strong> 
+            <select id="sequenceSelect">
+              <option value="">-- Select Sequence --</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td style="width:50%">
+          <div class="inline-label">
+            <strong>Section:</strong> 
+            <select id="sectionSelect">
+              <option value="">-- Select Section --</option>
+            </select>
+          </div>
+        </td>
+        <td style="width:50%">
+          <div class="inline-label">
+            <strong>Session:</strong> 
+            <select id="sessionSelect">
+              <option value="">-- Select Session --</option>
+            </select>
+          </div>
         </td>
       </tr>
     </table>
@@ -410,8 +445,10 @@
     <table>
       <tr>
         <td>
-          <strong>Session objective(s):</strong> 
-          <input type="text" id="sessionObjective" placeholder="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." style="width:80%">
+          <strong>Session objective(s):</strong>
+          <div style="margin-top: 5px;">
+            <textarea id="sessionObjective" placeholder="By the end of the lesson, L.W.B.A.T ask and answer about name & age correctly." style="min-height: 50px;"></textarea>
+          </div>
         </td>
       </tr>
     </table>
