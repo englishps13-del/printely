@@ -196,23 +196,29 @@
   body.theme-gray .custom-checkbox input:checked ~ span { background-color: #555; border-color: #555; }
   body.theme-gray .bottom-buttons { color: #333; }
 
-  /* Print Styles */
-  @page { size: A4; margin: 0; }
+/* Print Styles */
+  @page { size: A4; margin: 0; } /* Reverted to 0 so the background is completely full-screen! */
+  
+  .print-only-spacer { display: none; } /* Hides the spacers while you edit */
+
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     
+    .print-only-spacer { display: table-row !important; } /* Shows spacers when printing */
+
     html, body {
-        height: 100%;
+        display: block !important;
+        height: auto !important; 
+        min-height: 100%;
         margin: 0 !important;
         padding: 0 !important;
     }
     body {
-        background-repeat: no-repeat !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-attachment: fixed !important; /* This is key for repeating the background on each page */
+        background-repeat: repeat-y !important; 
+        background-size: 100% 297mm !important; 
+        background-position: top center !important;
+        background-attachment: scroll !important; 
     }
-
     /* Add background image for each theme to the body tag for printing */
     body.default-theme { background-image: url('https://i.imgur.com/hUepQCg.jpeg') !important; }
     body.theme-blue { background-image: url('https://i.imgur.com/BX8fkDC.jpeg') !important; }
@@ -223,28 +229,49 @@
     body.theme-gray { background-image: url('https://i.imgur.com/lr6wRZV.jpeg') !important; }
 
     .lesson-plan {
-        width: 210mm !important;
-        min-height: 297mm !important; /* Ensures even a short plan fills page one */
-        height: auto !important; /* Allows content to flow to new pages */
+        display: block !important; 
+        width: 100% !important; 
+        min-height: 297mm !important; 
+        height: auto !important; 
         box-sizing: border-box !important;
-        margin: 0 !important;
-        padding: 10mm !important;
+        margin: 0 auto !important;
+        padding: 15mm 15mm !important; /* Adds margin space to the very top of Page 1 and very bottom of the last page */
         box-shadow: none !important;
         border: none !important;
-        background: transparent !important; /* Make the main container see-through */
+        background: transparent !important; 
     }
 
     .bottom-buttons, .ribbon, .no-print { display: none !important; }
     .print-only { display: block !important; }
     input, textarea, select { border-bottom-color: transparent !important; }
     
-    .dashboard-table, .procedure-table, .reflection {
-        page-break-inside: avoid !important; /* Prevents tables from splitting across pages */
+    .dashboard-table, .reflection {
+        page-break-inside: avoid !important; 
         background-color: rgba(255, 255, 255, 0.85) !important;
     }
-    
-    .dashboard-table, .dashboard-table th, .dashboard-table td, table, th, td { border-width: 1px !important; }
-    
+
+    .procedure-table {
+        page-break-inside: auto !important; 
+        background-color: transparent !important; /* Make wrapper transparent so spacers don't draw white boxes */
+    }
+
+    .procedure-table td {
+        background-color: rgba(255, 255, 255, 0.85) !important; /* Move background directly to cells */
+        -webkit-box-decoration-break: clone !important; /* THIS forces the table to close its borders when it splits! */
+        box-decoration-break: clone !important;
+    }
+
+    .procedure-table tr {
+        page-break-inside: auto !important; 
+        page-break-after: auto !important;
+    }
+
+    .procedure-table thead {
+        display: table-header-group !important; /* Keeps repeating top headers */
+    }
+    .procedure-table tfoot {
+        display: table-footer-group !important; /* Keeps repeating bottom space */
+    }
     /* Theme-specific styles for table borders and headers */
     body.default-theme .dashboard-table, body.default-theme .dashboard-table th, body.default-theme .dashboard-table td, body.default-theme table, body.default-theme th, body.default-theme td { border-color: #000 !important; }
     body.default-theme .dashboard-title, body.default-theme th { background-color: #f3f3f3 !important; color: #000 !important; }
@@ -260,7 +287,9 @@
     body.theme-purple .dashboard-title, body.theme-purple th { background-color: #e6d6ff !important; color: #5e2d91 !important; }
     body.theme-gray .dashboard-table, body.theme-gray .dashboard-table th, body.theme-gray .dashboard-table td, body.theme-gray table, body.theme-gray th, body.theme-gray td { border-color: #444 !important; }
     body.theme-gray .dashboard-title, body.theme-gray th { background-color: #dddddd !important; color: #333 !important; }
+ 
   }
+  
 </style>
 </head>
 <body class="default-theme">
@@ -372,17 +401,21 @@
         </tbody>
     </table>
 
-    <table class="procedure-table">
+<table class="procedure-table">
       <thead>
+          <tr class="print-only-spacer"><td colspan="6" style="border: none !important; height: 3mm; background: transparent !important; padding: 0;"></td></tr>
           <tr>
-              <th style="width:9%"><input type="text" id="headerStages" class="header-input" value="STAGES"></th>
-              <th style="width:12%"><input type="text" id="headerFramework" class="header-input" value="Framework"></th>
-              <th style="width:48%"><input type="text" id="headerProcedure" class="header-input" value="PROCEDURE / TASKS"></th>
+              <th style="width:11%"><input type="text" id="headerStages" class="header-input" value="STAGES"></th>
+              <th style="width:11%"><input type="text" id="headerFramework" class="header-input" value="Framework"></th>
+              <th style="width:47%"><input type="text" id="headerProcedure" class="header-input" value="PROCEDURE / TASKS"></th>
               <th style="width:13%"><input type="text" id="headerObjectives" class="header-input" value="OBJECTIVES"></th>
               <th style="width:11%"><input type="text" id="headerInteraction" class="header-input" value="INTERACTION"></th>
               <th style="width:7%"><input type="text" id="headerTime" class="header-input" value="TIME "></th>
           </tr>
       </thead>
+      <tfoot>
+          <tr class="print-only-spacer"><td colspan="6" style="border: none !important; height: 3mm; background: transparent !important; padding: 0;"></td></tr>
+      </tfoot>
       <tbody>
           <tr>
               <td><textarea id="preWritingStage" rows="1" class="stage-textarea">Pre-Writing</textarea></td>
@@ -673,4 +706,4 @@
 </script>
 </body>
 </html>
-}
+
